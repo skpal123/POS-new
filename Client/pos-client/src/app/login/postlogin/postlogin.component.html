@@ -1,0 +1,6 @@
+<p>
+  postlogin works!  
+</p>
+
+<button *ngFor="let branch of BranchList" (click)="loadModules(branch.Id)">{{branch.BranchName}}</button>  
+<router-outlet></router-outlet>  

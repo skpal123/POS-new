@@ -1,0 +1,61 @@
+
+<div class="tree">
+  <ul *ngFor="let ca of tree">
+      <li [class.pointer]="ca.Children">
+        <span (click)="showCategory(ca.Id)" Class="glyphicon glyphicon-play"></span><input type="checkbox" [(ngModel)]="ca.Checked">
+        <span (click)="selectedNode(ca)">{{ca.Name}}</span>
+        <ul *ngFor="let subca of ca.Children">
+           <li [class.pointer]="subca.Children" *ngIf="subca.Status">
+              <span Class="glyphicon glyphicon-play" (click)="showSubCategory(subca.Id)"></span><input type="checkbox" [(ngModel)]="subca.Checked">
+              <span (click)="selectedNode(subca)" >{{subca.Name}}</span>
+              <ul *ngFor="let item of subca.Children">
+                  <li (click)="showItem(item.Id)" *ngIf="item.Status">
+                    <span (click)="showSubItem(item.Id)" Class="glyphicon glyphicon-play"></span><input type="checkbox" [(ngModel)]="item.Checked">
+                     <span (click)="selectedNode(item)">{{item.Name}}</span>
+                     <ul *ngFor="let subitem of item.Children">
+                      <li (click)="showSubItem(subitem.Id)" *ngIf="subitem.Status">
+                         <input type="checkbox" [(ngModel)]="subitem.Checked">
+                         <span (click)="selectedNode(subitem)">{{subitem.Name}}</span>
+                      </li>
+                  </ul>
+                  </li>
+              </ul>
+           </li>
+        </ul>
+      </li>
+  </ul>
+  
+</div>
+<div class="container">
+    <div class="row">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+                <tr>
+                    <!-- <th *ngFor="let roleControl of roleControlList">{{roleControl.Status?roleControl.Label:""}}</th> -->
+                    <th>Id</th>
+                    <th>Role name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+           <tbody>
+                <!-- <tr *ngFor="let a of roleList;let i=index;">
+                    <td *ngFor="let b of roleControlList; let j=index;">
+                        <span *ngIf="b.Status"> {{roleList[i][b.Name]}}</span>
+                   </td>
+                </tr> -->
+                 <tr *ngFor="let a of roleList;let i=index;">
+                    <td >
+                        {{a.Id}}
+                   </td>
+                   <td >
+                        {{a.RoleName}}
+                   </td>
+                   <td >
+                        {{a.Description}}
+                   </td>
+                </tr>
+           </tbody>
+        </table>
+    </div>
+</div>
+

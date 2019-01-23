@@ -1,0 +1,33 @@
+<p>
+  dynamic-table-entry works!
+</p>
+<h5>Search color</h5>
+<ng2-completer *ngIf="1==2" [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0">
+</ng2-completer>
+<h5>Search captain</h5>
+<ng2-completer [(ngModel)]="captain" [datasource]="captains" [minSearchLength]="0"></ng2-completer>
+<table border="1">
+  <tr>
+    <td *ngFor="let col of ColumnList;let i=index;">
+      {{col.Name}}
+    </td>
+  </tr>
+  <tbody>
+    <tr *ngFor="let data of Datalist;let i=index;">
+      <td *ngFor="let col2 of ColumnList">
+        <div *ngIf="!col2.editable">
+            {{Datalist[i][col2.Name]}}
+        </div>
+        <div *ngIf="col2.editable">
+            <input *ngIf="col2.Type=='text'" [(ngModel)]="Datalist[i][col2.Name]" type="text">
+            <input *ngIf="col2.Type=='number'" [(ngModel)]="Datalist[i][col2.Name]" type="number">
+            <ng2-completer *ngIf="col2.Type=='autocomplete'" (click)="autoCompleteClick(Datalist[i][col2.Name])" [(ngModel)]="Datalist[i][col2.Name]" [datasource]="AutoCompleteDataSource" [minSearchLength]="0"></ng2-completer>
+            <select *ngIf="col2.Type=='select'" (change)="onchange($event)" [(ngModel)]="Datalist[i][col2.Name]">
+              <option [value]="select.Id" *ngFor="let select of selectList">{{select.Name}}</option>
+            </select>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<input type="button" (click)="save()" value="Save">
