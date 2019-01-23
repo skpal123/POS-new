@@ -1,0 +1,15 @@
+E:\My Project\ERP\server\ViewModel\bin\Debug\ViewModel.dll
+E:\My Project\ERP\server\ViewModel\bin\Debug\ViewModel.pdb
+E:\My Project\ERP\server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache
+E:\My Project\ERP\server\ViewModel\obj\Debug\ViewModel.dll
+E:\My Project\ERP\server\ViewModel\obj\Debug\ViewModel.pdb
+E:\My Project\ProjectGit\ERP\server\ViewModel\bin\Debug\ViewModel.dll
+E:\My Project\ProjectGit\ERP\server\ViewModel\bin\Debug\ViewModel.pdb
+E:\My Project\ProjectGit\ERP\server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache
+E:\My Project\ProjectGit\ERP\server\ViewModel\obj\Debug\ViewModel.dll
+E:\My Project\ProjectGit\ERP\server\ViewModel\obj\Debug\ViewModel.pdb
+E:\My Project\ProjectGit\POS\Server\ViewModel\bin\Debug\ViewModel.dll
+E:\My Project\ProjectGit\POS\Server\ViewModel\bin\Debug\ViewModel.pdb
+E:\My Project\ProjectGit\POS\Server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache
+E:\My Project\ProjectGit\POS\Server\ViewModel\obj\Debug\ViewModel.dll
+E:\My Project\ProjectGit\POS\Server\ViewModel\obj\Debug\ViewModel.pdb
