@@ -26,7 +26,7 @@ const routes:Routes=[
     BrowserAnimationsModule,
     RouterModule.forRoot(routes,{useHash:true}),
     HttpModule,FormsModule,ReactiveFormsModule,
-    SharedModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent],

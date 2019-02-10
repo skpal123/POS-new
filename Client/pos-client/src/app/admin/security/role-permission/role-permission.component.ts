@@ -7,6 +7,9 @@ import { Role } from '../../../models/admin/role.model';
 import { RoleControl } from '../../../models/admin/role-control.model';
 import { Subject } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { MatDialog } from '@angular/material';
+import { AddRolePermissionComponent } from '../add-role-permission/add-role-permission.component';
+import { RolePermissionData } from '../../../models/admin/role-permission-data.model';
 @Component({
   selector: 'app-role-permission',
   templateUrl: './role-permission.component.html',
@@ -20,108 +23,26 @@ export class RolePermissionComponent implements OnInit {
   roleList:Role[]=[];
   roleControlList:RoleControl[]=[];
   roleControlViewList:any[][]=[];
-tree:Tree[]=[];
-  constructor(private _securityService:SecurityService,private _alertBox:AlertBoxService) { }
-
+  tree:Tree[]=[];
+  rolePermissionData:RolePermissionData={
+    tree:null,
+    role:{
+      Id:null,RoleName:null,Description:null,Status:true
+    }
+  }
+  newRolePermissionTree:Tree[]=[]
+  constructor(private _securityService:SecurityService,private _alertBox:AlertBoxService,
+  private dialog:MatDialog) { }
   ngOnInit() {
-    debugger
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5
-    };
+    debugger  
     this.getRoleList();
-    //this.getRolePermissons();
   }
-  showCategory(id:number){
-   var position= this.tree.findIndex(fea=>fea.Id==id.toString());
-   if(this.tree[position].IsClicked){
-    this.tree[position].IsClicked=false;
-    this.tree[position].Children.forEach((a,b,array)=>{
-      a.Status=true
-    })
-   }
-   else{
-    this.tree[position].IsClicked=true;
-    this.tree[position].Children.forEach((a,b,array)=>{
-      a.Status=false
-    })
-   }
-   
-  }
-  showSubCategory(id:number){
-    this.isFound=false;
-      this.tree.forEach((subcategory,index,array)=>{
-        if(!this.isFound){
-          var position= subcategory.Children.findIndex(fea=>fea.Id==id.toString());
-          if(position!=-1){
-            this.isFound=true;
-            if(subcategory.Children[position].IsClicked){
-              subcategory.Children[position].IsClicked=false;
-              for(var i=0;i<subcategory.Children[position].Children.length;i++){
-                subcategory.Children[position].Children[i].Status=true;
-              }
-              
-             }
-             else{
-              subcategory.Children[position].IsClicked=true;
-              for(var i=0;i<subcategory.Children[position].Children.length;i++){
-                subcategory.Children[position].Children[i].Status=false;
-              }
-             }
-          }
-        }
-        
-        
-      })
-   
-  }
-  showSubItem(id:number){
-    this.isFound=false;
-      this.tree.forEach((subcategory,index,array)=>{
-        subcategory.Children.forEach((treeitem,index,array)=>{
-          if(!this.isFound){
-            var position= treeitem.Children.findIndex(fea=>fea.Id==id.toString());
-            if(position!=-1){
-              this.isFound=true;
-              if(treeitem.Children[position].IsClicked){
-                treeitem.Children[position].IsClicked=false;
-                for(var i=0;i<treeitem.Children[position].Children.length;i++){
-                  treeitem.Children[position].Children[i].Status=true;
-                }               
-               }
-               else{
-                treeitem.Children[position].IsClicked=true;
-                for(var i=0;i<treeitem.Children[position].Children.length;i++){
-                  treeitem.Children[position].Children[i].Status=false;
-                }
-               }
-            }
-          }
-        })
-      }) 
-  }
-  showItem(id:number){
-
-  }
-  selectedNode(item:any){
-    console.log(item);
-  }
-getRolePermissons(){
-  this._securityService.getRolePermissions().subscribe(response=>{
-    this.tree=response.json();
-    console.log(this.tree);
-  },error=>{
-    var data=new DialogData();
-    var message=error.json();
-    data.message=message.Message;
-    this._alertBox.openDialog(data);
-  })
-}
 getRoleList(){
   this._securityService.getRoleList().subscribe(response=>{
     this.roleList=response.json();
     this.dtTrigger.next();
     this.getRoleControlList();
+    this.getRolePermissons();
   },error=>{
     var data=new DialogData();
     var message=error.json();
@@ -132,7 +53,72 @@ getRoleList(){
 getRoleControlList(){
   this._securityService.getRoleControlList().subscribe(response=>{
     this.roleControlList=response.json();
-    this.getRolePermissons();
+  },error=>{
+    var data=new DialogData();
+    var message=error.json();
+    data.message=message.Message;
+    this._alertBox.openDialog(data);
+  })
+}
+getRolePermissonsById(roleId:string){
+  this._securityService.getRolePermissionsRoleById(roleId).subscribe(response=>{
+    this.tree=response.json();
+    console.log(this.tree);
+  },error=>{
+    var data=new DialogData();
+    var message=error.json();
+    data.message=message.Message;
+    this._alertBox.openDialog(data);
+  })
+}
+getRolePermissons(){
+  this._securityService.getAllRolePermissions().subscribe(response=>{
+    this.newRolePermissionTree=response.json();
+    console.log(this.tree);
+  },error=>{
+    var data=new DialogData();
+    var message=error.json();
+    data.message=message.Message;
+    this._alertBox.openDialog(data);
+  })
+}
+createNewRolePermission(){
+ this.rolePermissionData.tree=this.newRolePermissionTree;
+ this.rolePermissionData.role.Description=null;
+ this.rolePermissionData.role.Id=null;
+ this.rolePermissionData.role.RoleName=null;
+ this.rolePermissionData.role.Status=true;
+ const dialogRef=this.dialog.open(AddRolePermissionComponent,{
+    maxHeight:'600px',
+    width:'500px',
+    maxWidth:'500px',
+    disableClose:true,
+    data:this.rolePermissionData
+  });
+  dialogRef.afterClosed().subscribe(response=>{
+  })
+}
+
+deleteRole(Id:string,Name:string){
+alert(Name)
+}
+getRolePermissionDetailsById(Id:string){
+  this._securityService.getRolePermissionsRoleById(Id).subscribe(response=>{
+    this.tree=response.json();
+    let index=this.roleList.findIndex(role=>role.Id==Id);
+    let role=this.roleList[index];
+    this.rolePermissionData.tree=this.tree
+    this.rolePermissionData.role=role
+    const dialogRef=this.dialog.open(AddRolePermissionComponent,{
+      maxHeight:'700px',
+      width:'700px',
+      maxWidth:'800px',
+      disableClose:true,
+      data: this.rolePermissionData
+    });
+    dialogRef.afterClosed().subscribe(response=>{
+      alert('test'+response);
+    })
   },error=>{
     var data=new DialogData();
     var message=error.json();

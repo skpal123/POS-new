@@ -6,12 +6,17 @@ import { UsersComponent } from './users/users.component';
 import { RolePermissionComponent } from './role-permission/role-permission.component';
 import { SecurityLayoutComponent } from './security-layout/security-layout.component';
 import { RoleListComponent } from './role-list/role-list.component';
+import { AddRolePermissionComponent } from './add-role-permission/add-role-permission.component';
 @NgModule({
   imports: [
     CommonModule,
     SecurityRoutingModule,
     CommonModuleModule
   ],
-  declarations: [UsersComponent, RolePermissionComponent, SecurityLayoutComponent, RoleListComponent]
+  declarations: [UsersComponent, RolePermissionComponent, 
+    SecurityLayoutComponent, 
+    RoleListComponent, 
+    AddRolePermissionComponent],
+  entryComponents:[AddRolePermissionComponent]
 })
 export class SecurityModule { }

@@ -7,7 +7,6 @@ import { MatNativeDateModule, MatDialogModule,MatTableModule,MatSortModule,MatPa
 import { Ng2CompleterModule } from "ng2-completer";
 import { AlertComponent } from '../alert/alert.component';
 import { TestComponent } from 'src/app/test/test.component';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +15,7 @@ import { TestComponent } from 'src/app/test/test.component';
   declarations: [AlertComponent,TestComponent],
   exports:[ FormsModule,ReactiveFormsModule,DataTablesModule, 
     MatNativeDateModule, MatDialogModule,MatTableModule,MatSortModule,MatPaginatorModule,
-    Ng2CompleterModule,TestComponent
+    Ng2CompleterModule,TestComponent,
   ],
  entryComponents:[AlertComponent]
   

@@ -1,0 +1,27 @@
+<div class="container">
+    <ul *ngFor="let t of tree">
+        {{t.name}}
+          <li *ngIf="t.children">
+              <ul *ngFor="let tt of t.children">
+                  <li >
+                    {{tt.name}}
+                    <ul *ngFor="let ttt of tt.children">
+                        <li >
+                          {{ttt.name}}
+                          <ul *ngFor="let tttt of ttt.children">
+                              <li >
+                                {{tttt.name}}
+                                <ul *ngFor="let ttttt of tttt.children">
+                                    <li >
+                                      {{ttttt.name}}                           
+                                    </li>
+                                </ul>                              
+                              </li>
+                          </ul>                        
+                        </li>
+                    </ul>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+</div>

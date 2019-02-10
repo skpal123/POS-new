@@ -4,5 +4,7 @@ export class Tree {
    public Id?:string;
    public Checked?:boolean;
    public IsClicked?:boolean;
+   public IsLeaf?:boolean;
+   public Level?:number;
    public Children?:Tree[];
 }
