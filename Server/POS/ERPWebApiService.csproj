@@ -168,6 +168,7 @@
     <Compile Include="Authentication\UserSession.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataConnection\ConnectionString.cs" />

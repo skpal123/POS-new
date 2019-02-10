@@ -48,6 +48,8 @@
     <Compile Include="Model\PermissionView.cs" />
     <Compile Include="Model\RoleControlView.cs" />
     <Compile Include="Model\RoleInfo.cs" />
+    <Compile Include="Model\RolePermissionDataInfo.cs" />
+    <Compile Include="Model\RolePermissionInfo.cs" />
     <Compile Include="Model\SubMenuView.cs" />
     <Compile Include="Model\UserInfoView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

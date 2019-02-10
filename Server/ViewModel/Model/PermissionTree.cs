@@ -13,6 +13,8 @@ namespace ViewModel.Model
         public Guid Id {set;get;}
         public bool Checked {set;get;}
         public bool IsClicked {set;get;}
+        public bool IsLeaf { set; get; }
+        public int Level { set; get; }
         public List<PermissionTree> Children { set; get; }
     }
 }
