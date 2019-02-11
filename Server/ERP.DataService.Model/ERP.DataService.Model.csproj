@@ -67,7 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
     <Compile Include="Migrations\201808291653552_creating db and userinfo table.cs" />
     <Compile Include="Migrations\201808291653552_creating db and userinfo table.Designer.cs">
       <DependentUpon>201808291653552_creating db and userinfo table.cs</DependentUpon>
@@ -124,8 +123,18 @@
     <Compile Include="Migrations\201901211445429_change role.Designer.cs">
       <DependentUpon>201901211445429_change role.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902101655563_adding chart of account.cs" />
+    <Compile Include="Migrations\201902101655563_adding chart of account.Designer.cs">
+      <DependentUpon>201902101655563_adding chart of account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902101658221_update chart of account.cs" />
+    <Compile Include="Migrations\201902101658221_update chart of account.Designer.cs">
+      <DependentUpon>201902101658221_update chart of account.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\AccountParentChildRelation.cs" />
     <Compile Include="Model\ApplicatonAccessLog.cs" />
+    <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
     <Compile Include="Model\Item.cs" />
@@ -189,6 +198,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901211445429_change role.resx">
       <DependentUpon>201901211445429_change role.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902101655563_adding chart of account.resx">
+      <DependentUpon>201902101655563_adding chart of account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902101658221_update chart of account.resx">
+      <DependentUpon>201902101658221_update chart of account.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -30,5 +30,7 @@ namespace ERP.DataService.Model
         public DbSet<Branch> Branchs { set; get; }
         public DbSet<BranchConfiguration> BranchConfigurations { set; get; }
         public DbSet<RoleControl> RoleControls { set; get; }
+        public DbSet<Account> Accounts { set; get; }
+        public DbSet<AccountParentChildRelation> AccountParentChildRelations { set; get; }
     }
 }

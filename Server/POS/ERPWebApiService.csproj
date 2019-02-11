@@ -166,7 +166,9 @@
     <Compile Include="Authentication\SecurityServices.cs" />
     <Compile Include="Authentication\SessionInfo.cs" />
     <Compile Include="Authentication\UserSession.cs" />
+    <Compile Include="Connection\ConnectionString.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />

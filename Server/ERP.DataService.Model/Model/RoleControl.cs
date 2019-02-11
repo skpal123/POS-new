@@ -16,5 +16,7 @@ namespace ERP.DataService.Model.Model
         [StringLength(100)]
         public string Label { set; get; }
         public bool Status { set; get; }
+        public string FormName { set; get; }
+
     }
 }
