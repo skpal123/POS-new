@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SecurityModule } from '../../admin/security/security.module';
 import { Http, RequestOptions,Headers } from '@angular/http';
 import { DefaultRouteService } from '../common/default-route.service';
 import { HttpService } from '../common/http.service';
-import { RolePermission } from '../../models/admin/role-permission.model';
 import { RolePermissionDataInfo } from '../../models/admin/role-permissionlist.model';
 
 @Injectable({

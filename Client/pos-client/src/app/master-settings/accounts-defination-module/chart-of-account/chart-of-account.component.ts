@@ -1,117 +1,31 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChartOfAccountTree } from '../../../models/master-settings/account-defination/chart-of-account-tree.model';
+import { AccountDefinationService } from '../../../services/master-settings/account-defination.service';
+import { AlertBoxService } from '../../../shared/alert-box.service';
+import { DialogData } from '../../../models/common/dialog-data.model';
+import { FixedAssetDefinationService } from '../../../services/master-settings/fixed-asset-defination.service';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
   styleUrls: ['./chart-of-account.component.css']
 })
 export class ChartOfAccountComponent implements OnInit {
-  tree=[{
-    "name":"grocery",
-    "status":true,
-    "id":1,
-    "checked":true,
-    "isClicked":false,
-    "children":
-     [
-      {
-       "name":"rice",
-       "id":2,
-       "status":true,
-       "checked":true,
-       "isClicked":false,
-       "children":[{
-        "name":"rice-1",
-        "id":2,
-        "status":true,
-        "isClicked":false,
-        "checked":false,
-       }],
-      },
-      {
-        "name":"paddy",
-        "status":true,
-        "id":3,
-        "checked":true,
-        "isClicked":false,
-        "children":[{
-          "name":"paddy-1",
-          "status":true,
-          "checked":false,
-          "isClicked":false
-        }],
-       },
-       {
-        "name":"salt",
-        "status":true,
-        "isClicked":false,
-        "id":4,
-        "checked":false,
-        "children":[{
-          "name":"salt-1",
-          "id":12,
-          "status":true,
-          "isClicked":false,
-          "checked":false,
-        }],
-       }
-     ]
-  },
-  {
-    "name":"vegetables",
-    "status":true,
-    "id":5,
-    "checked":false,
-    "isClicked":false,
-    "children":
-     [
-      {
-       "name":"alu",
-       "status":true,
-       "id":6,
-       "checked":false,
-       "isClicked":false,
-       "children":[{
-        "name":"alu-1",
-        "id":11,
-        "status":true,
-        "isClicked":false,
-        "checked":false,
-       }],
-      },
-      {
-        "name":"potol",
-        "status":true,
-        "id":7,
-        "checked":false,
-        "isClicked":false,
-        "children":[{
-          "name":"potol-1",
-          "id":9,
-          "status":true,
-          "isClicked":false,
-          "checked":false,
-        }],
-       },
-       {
-        "name":"lalsak",
-        "status":true,
-        "isClicked":false,
-        "id":8,
-        "checked":false,
-        "children":[{
-          "name":"lalsak 1",
-          "id":10,
-          "status":true,
-          "isClicked":false,
-          "checked":false
-        }],
-       }
-     ]
-  }
-]
-  constructor(){}
+  chartOfAccountTree:ChartOfAccountTree[]=[];
+  constructor(private _accountDeninationService:AccountDefinationService,
+    private _service:FixedAssetDefinationService,
+  private _alertBoxService:AlertBoxService){}
   ngOnInit(){
-
+    debugger
+    this.getChartOfaccountTreeList();
+  }
+  getChartOfaccountTreeList(){
+    this._service.getChartOfAccountListForTree().subscribe(response=>{
+      this.chartOfAccountTree=response.json();
+    },error=>{
+      var dialogData=new DialogData();
+      dialogData.message=error.json().message;
+      this._alertBoxService.openDialog(dialogData);
+    })
   }
 }
 
