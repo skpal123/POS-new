@@ -6,16 +6,16 @@
     </div>
     <div class="panel-body">
             <form #UserForm="ngForm">
-                    <div class="form-group row" [class.has-success]="RoleNameControl.valid" [class.has-error]="RoleNameControl.invalid&&RoleNameControl.touched">
-                        <label for="RoleName" class="col-sm-2 col-form-label">Role Name</label>
+                <div class="form-group row" [class.has-success]="RoleNameControl.valid" [class.has-error]="RoleNameControl.invalid&&RoleNameControl.touched">
+                    <label for="RoleName" class="col-sm-2 col-form-label">Role Name</label>
                         <div class="col-sm-10">
                             <input #RoleNameControl="ngModel" required name="RoleName" type="text" [(ngModel)]="rolePermissionData.role.RoleName" class="form-control"
                             placeholder="Role Name">
                             <span class="help-block" *ngIf="RoleNameControl.invalid&&RoleNameControl.touched">
                                 Role Name feild is required
-                            </span>        
-                          </div>
-                      </div>
+                           </span>        
+                    </div>
+                </div>
                       <div class="form-group row" [class.has-success]="DescriptionControl.valid" [class.has-error]="DescriptionControl.invalid&&DescriptionControl.touched">
                           <label for="Description" class="col-sm-2 col-form-label">Description</label>
                           <div class="col-sm-10">
@@ -73,9 +73,9 @@
                         <div class="form-group">
                           <input [disabled]="UserForm.invalid" type="button" value="Save" class="btn btn-success" (click)="saveRolePermission()">
                         </div>
-                      </div>
                     </div>
-                </form>
+                </div>
+            </form>
     </div>
 </div>
 

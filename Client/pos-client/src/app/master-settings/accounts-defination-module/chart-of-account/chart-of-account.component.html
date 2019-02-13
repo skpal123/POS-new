@@ -1,23 +1,24 @@
 <div class="container">
-    <ul *ngFor="let t of chartOfAccountTree">
+    <ul *ngFor="let t of chartOfAccountTreeList">
           <li *ngIf="t.Children">
-            <span Class="glyphicon glyphicon-play"></span>
+            <span Class="glyphicon glyphicon-play" [ngClass]="t.Children&&t.Children.length>0?'btn-success': ''" [class.pointer]="t.Children&&t.Children.length>0" (click)="expandAllChildNode(t)"></span>
             {{t.AccountDescription}}
               <ul *ngFor="let tt of t.Children">
-                  <li *ngIf="t.Children">
-                    <span Class="glyphicon glyphicon-play"></span>
+                  <li *ngIf="tt.Status">
+                    <span Class="glyphicon glyphicon-play" [ngClass]="tt.Children&&tt.Children.length>0?'btn-success': ''" [class.pointer]="tt.Children&&tt.Children.length>0" (click)="expandAllChildNode(tt)"></span>
                     {{tt.AccountDescription}}
                     <ul *ngFor="let ttt of tt.Children">
-                        <li *ngIf="tt.Children">
-                          <span Class="glyphicon glyphicon-play"></span>
+                        <li *ngIf="ttt.Status">
+                          <span Class="glyphicon glyphicon-play" [ngClass]="ttt.Children&&ttt.Children.length>0?'btn-success': ''" [class.pointer]="ttt.Children&&ttt.Children.length>0" (click)="expandAllChildNode(ttt)"></span>
                           {{ttt.AccountDescription}}
                           <ul *ngFor="let tttt of ttt.Children">
-                              <li *ngIf="ttt.Children">
-                                <span Class="glyphicon glyphicon-play"></span>
+                              <li *ngIf="tttt.Status">
+                                <span Class="glyphicon glyphicon-play" [ngClass]="tttt.Children&&tttt.Children.length>0?'btn-success': ''" [class.pointer]="tttt.Children&&tttt.Children.length>0" (click)="expandAllChildNode(tttt)"></span>
                                 {{tttt.AccountDescription}}
+                                {{tttt.Children!=null}}
                                 <ul *ngFor="let ttttt of tttt.Children">
-                                    <li *ngIf="tttt.Children">
-                                      <span Class="glyphicon glyphicon-play"></span>
+                                    <li *ngIf="ttttt.Status">
+                                      <span Class="glyphicon glyphicon-play" [ngClass]="ttttt.Children&&ttttt.Children.length>0?'btn-success': ''" [class.pointer]="ttttt.Children&&ttttt.Children.length>0" (click)="expandAllChildNode(ttttt)"></span>
                                       {{ttttt.AccountDescription}}                           
                                     </li>
                                 </ul>                              

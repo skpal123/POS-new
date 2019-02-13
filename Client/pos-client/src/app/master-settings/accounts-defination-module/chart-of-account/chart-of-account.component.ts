@@ -10,7 +10,8 @@ import { FixedAssetDefinationService } from '../../../services/master-settings/f
   styleUrls: ['./chart-of-account.component.css']
 })
 export class ChartOfAccountComponent implements OnInit {
-  chartOfAccountTree:ChartOfAccountTree[]=[];
+  chartOfAccountTreeList:ChartOfAccountTree[]=[];
+  isFound:boolean=false;
   constructor(private _accountDeninationService:AccountDefinationService,
     private _service:FixedAssetDefinationService,
   private _alertBoxService:AlertBoxService){}
@@ -20,11 +21,96 @@ export class ChartOfAccountComponent implements OnInit {
   }
   getChartOfaccountTreeList(){
     this._service.getChartOfAccountListForTree().subscribe(response=>{
-      this.chartOfAccountTree=response.json();
+      this.chartOfAccountTreeList=response.json();
     },error=>{
       var dialogData=new DialogData();
       dialogData.message=error.json().message;
       this._alertBoxService.openDialog(dialogData);
+    })
+  }
+  expandAllChildNode(node:ChartOfAccountTree){
+    this.isFound=false;
+    var position= this.chartOfAccountTreeList.findIndex(fea=>fea.AccountId==node.AccountId);
+    if(position!=-1){
+      this.isFound=true;
+      if(this.chartOfAccountTreeList[position].IsClicked){
+        this.chartOfAccountTreeList[position].IsClicked=false;
+        this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
+          a.Status=true
+        })
+       }
+       else{
+        this.chartOfAccountTreeList[position].IsClicked=true;
+        this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
+          a.Status=false
+        })
+       }
+    }
+    else{
+      this.chartOfAccountTreeList.forEach((chartOfAcc,index,array)=>{
+        let position=chartOfAcc.Children.findIndex(fea=>fea.AccountId==node.AccountId);
+        if(position!=-1){
+          this.isFound=true;
+          if(chartOfAcc.Children[position].IsClicked){
+            chartOfAcc.Children[position].IsClicked=false;
+            chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
+            a.Status=true
+            if(a.Children!=null){
+              this.changeStatus(a.Children,true);
+            }
+          })
+        }
+        else{
+          chartOfAcc.Children[position].IsClicked=true;
+          chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
+          a.Status=false
+           if(a.Children!=null){
+            this.changeStatus(a.Children,false);
+           }
+         })
+        }
+       }
+       else{
+          this.findChildPosition(chartOfAcc.Children,node)
+       }
+      })
+    }
+  }
+  findChildPosition(trees:ChartOfAccountTree[],node:ChartOfAccountTree){
+    trees.forEach((coa,index,array)=>{
+      let position=coa.Children.findIndex(fea=>fea.AccountId==node.AccountId);
+      if(position!=-1){
+          this.isFound=true;
+          if(coa.Children[position].IsClicked){
+            coa.Children[position].IsClicked=false;
+            coa.Children[position].Children.forEach((a,b,array)=>{
+            a.Status=true
+            if(a.Children!=null){
+              this.changeStatus(a.Children,true)
+            }
+          })
+        }
+        else{
+          coa.Children[position].IsClicked=true;
+          coa.Children[position].Children.forEach((a,b,array)=>{
+          a.Status=false
+          if(a.Children!=null){
+            this.changeStatus(a.Children,false)
+          }
+        })
+        }
+      }
+      else{
+        this.findChildPosition(coa.Children,node)
+      }
+    })
+  }
+  changeStatus(tree:ChartOfAccountTree[],status){
+    tree.forEach((a,index,array)=>{
+      a.Status=status;
+      if(a.Children!=null){
+        this.changeStatus(a.Children,status);
+      }
     })
   }
 }

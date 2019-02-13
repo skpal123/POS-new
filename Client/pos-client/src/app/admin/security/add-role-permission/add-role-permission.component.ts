@@ -238,5 +238,5 @@ createRoleAndRolePermission(){
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
-}
+ }
 }
