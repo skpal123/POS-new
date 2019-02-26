@@ -28,5 +28,6 @@ namespace ViewModel.Model
         public Guid? Corporate_Id { set; get; }
         public int? ControlLevelId { set; get; }
         public Guid? ControlLevel_Id { set; get; }
+        public Guid? ParentAccountId { set; get; }
     }
 }

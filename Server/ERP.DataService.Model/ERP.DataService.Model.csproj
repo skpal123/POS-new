@@ -131,12 +131,29 @@
     <Compile Include="Migrations\201902101658221_update chart of account.Designer.cs">
       <DependentUpon>201902101658221_update chart of account.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902180714034_adding voucher.cs" />
+    <Compile Include="Migrations\201902180714034_adding voucher.Designer.cs">
+      <DependentUpon>201902180714034_adding voucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902181035428_adding form control.cs" />
+    <Compile Include="Migrations\201902181035428_adding form control.Designer.cs">
+      <DependentUpon>201902181035428_adding form control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902251623489_adding user control table.cs" />
+    <Compile Include="Migrations\201902251623489_adding user control table.Designer.cs">
+      <DependentUpon>201902251623489_adding user control table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902251628290_adding type in usercontroltable.cs" />
+    <Compile Include="Migrations\201902251628290_adding type in usercontroltable.Designer.cs">
+      <DependentUpon>201902251628290_adding type in usercontroltable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
     <Compile Include="Model\ApplicatonAccessLog.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
+    <Compile Include="Model\FormControlPermssion.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Menu.cs" />
     <Compile Include="Model\Module.cs" />
@@ -147,8 +164,11 @@
     <Compile Include="Model\RolePermission.cs" />
     <Compile Include="Model\SessionManagement.cs" />
     <Compile Include="Model\SubMenu.cs" />
+    <Compile Include="Model\UserFormControl.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Model\UserPermission.cs" />
+    <Compile Include="Model\Voucher.cs" />
+    <Compile Include="Model\VoucherDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SumonERPContext.cs" />
   </ItemGroup>
@@ -204,6 +224,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902101658221_update chart of account.resx">
       <DependentUpon>201902101658221_update chart of account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902180714034_adding voucher.resx">
+      <DependentUpon>201902180714034_adding voucher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902181035428_adding form control.resx">
+      <DependentUpon>201902181035428_adding form control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902251623489_adding user control table.resx">
+      <DependentUpon>201902251623489_adding user control table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902251628290_adding type in usercontroltable.resx">
+      <DependentUpon>201902251628290_adding type in usercontroltable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

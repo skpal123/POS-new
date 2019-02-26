@@ -18,19 +18,12 @@ namespace ViewModel.Model
         public Guid? AgentId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public Guid? EmployeeId { get; set; }
-
         public string UserPassword { get; set; }
-
         public bool UserStatus { get; set; }
-
         public int UserLevel { get; set; }
-
         public Guid? UserLevelId { get; set; }
-
         public RoleInfo UserRole { get; set; }
-
         public string Mobile { get; set; }
-
         public string Email { get; set; }
 
         public string Address { get; set; }

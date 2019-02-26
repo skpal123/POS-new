@@ -13,6 +13,7 @@ namespace ViewModel.Model
         public string AutoAccountCode { set; get; }
         public string ManualAccountCode { set; get; }
         public Guid? AccountId { set; get; }
+        public int? AccountType { set; get; }
         public int? ParentGroupId { set; get; }
         public int? ParentLevelId { set; get; }
         public int? ChildGroupId { set; get; }

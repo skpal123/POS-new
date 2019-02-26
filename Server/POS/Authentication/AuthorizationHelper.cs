@@ -1,5 +1,6 @@
 ﻿using ERP.DataService.Model;
 using ERPWebApiService.Authentication;
+using ERPWebApiService.DataConnection;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,7 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using ViewModel.Model;
-
+using ERPWebApiService.Exceptions;
 namespace ERPWebApiService.Autentication
 {
     public abstract class AuthorizationHelper
@@ -25,7 +26,7 @@ namespace ERPWebApiService.Autentication
             try
             {
                 var userSession = SecurityServices.LookupSession(sessionId);
-                if (!IsSessionExist(sessionId)) throw  new Exceptions.InvalidSessionFailure();
+                if (!IsSessionExist(sessionId)) throw new InvalidSessionFailure();
 
                 var UserId = Convert.ToString(HttpContext.Current.Request.Headers["UserId"]);
                 var Action = Convert.ToString(HttpContext.Current.Request.Headers["ActionName"]);
@@ -115,7 +116,7 @@ namespace ERPWebApiService.Autentication
             var sessionExist = false;
             Guid? loggedsession_id = null;
 
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SumonERPContext"].ConnectionString.ToString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 var sql = "select session_id from SessionManagements where session_Id='" + sessionId + "'";
                 con.Open();

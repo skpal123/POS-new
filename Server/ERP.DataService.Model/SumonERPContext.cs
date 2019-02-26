@@ -32,5 +32,9 @@ namespace ERP.DataService.Model
         public DbSet<RoleControl> RoleControls { set; get; }
         public DbSet<Account> Accounts { set; get; }
         public DbSet<AccountParentChildRelation> AccountParentChildRelations { set; get; }
+        public DbSet<Voucher> Vouchers { set; get; }
+        public DbSet<VoucherDetails> VoucherDetailList { set; get; }
+        public DbSet<FormControlPermssion> FormControlPermssions { set; get; }
+        public DbSet<UserFormControl> UserFormControls { set; get; }
     }
 }

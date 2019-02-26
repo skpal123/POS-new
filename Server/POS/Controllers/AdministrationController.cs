@@ -358,18 +358,19 @@ namespace ERPWebApiService.Controllers
             }
            
         }
-        [Route("getRuleControl")]
+        [Route("getRuleControl/{formName}")]
         [HttpGet]
-        public HttpResponseMessage GetRoleControlList()
+        public HttpResponseMessage GetRoleControlList(string formName)
         {
             try
             {
-                var roleControlList = ERPContext.RoleControls.Select(x => new RoleControlView()
+                var roleControlList = ERPContext.RoleControls.Where(x=>x.FormName==formName).Select(x => new RoleControlView()
                 {
                     Id=x.Id,
                     Name=x.Name,
                     Label=x.Label,
-                    Status=x.Status
+                    Status=x.Status,
+                    FormName=x.FormName
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, roleControlList);
             }
