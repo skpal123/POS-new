@@ -4,6 +4,8 @@ import { AccountDefinationService } from '../../../services/master-settings/acco
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { FixedAssetDefinationService } from '../../../services/master-settings/fixed-asset-defination.service';
+import { ChartOfaccount } from '../../../models/master-settings/account-defination/chart-of-account.model';
+import { AccountDetails } from '../../../models/master-settings/account-defination/account-details.model';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
@@ -11,9 +13,14 @@ import { FixedAssetDefinationService } from '../../../services/master-settings/f
 })
 export class ChartOfAccountComponent implements OnInit {
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
+  accountDetails:AccountDetails;
+  account:ChartOfaccount={
+    AccountType:"0",
+  };
+  Status:string="add";
   isFound:boolean=false;
   constructor(private _accountDeninationService:AccountDefinationService,
-    private _service:FixedAssetDefinationService,
+    private _service:AccountDefinationService,
   private _alertBoxService:AlertBoxService){}
   ngOnInit(){
     debugger
@@ -21,7 +28,8 @@ export class ChartOfAccountComponent implements OnInit {
   }
   getChartOfaccountTreeList(){
     this._service.getChartOfAccountListForTree().subscribe(response=>{
-      this.chartOfAccountTreeList=response.json();
+      this.accountDetails=response.json();
+      this.chartOfAccountTreeList=this.accountDetails.AccountParentChildRelationInfoList;
     },error=>{
       var dialogData=new DialogData();
       dialogData.message=error.json().message;
@@ -112,6 +120,71 @@ export class ChartOfAccountComponent implements OnInit {
         this.changeStatus(a.Children,status);
       }
     })
+  }
+  selectedNode(selectedNode:ChartOfAccountTree){
+    console.log(selectedNode)
+    if(this.Status=="add"){
+      var AutoAccountCode;
+      this.account.Id=null;
+      this._service.getMaxAccidByGroupIdAndLevelId(selectedNode.ChildGroupId,selectedNode.ChildLevelId+1).subscribe(response=>{
+        let maxAccid=response.json();
+        let newAccid=maxAccid+1;
+        let newlevel=selectedNode.ChildLevelId+1;
+        this.account.LevelId=newlevel;
+        this.account.AccId=newAccid;
+        this.account.GroupId=selectedNode.ChildGroupId
+        AutoAccountCode=selectedNode.ChildGroupId+"0"+newlevel+"00"+newAccid.toString();
+        this.account.AutoAccountCode=AutoAccountCode;
+        this.account.ManualAccountCode=AutoAccountCode;
+        this.account.AccountDescription=null;
+        this.account.ParentAccountId=selectedNode.AccountId;
+      },error=>{
+        let message=error.json();
+        var dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBoxService.openDialog(dialogData);
+      })
+    }
+    else{
+      this.account.Id=selectedNode.AccountId;
+      this.account.ManualAccountCode=selectedNode.ManualAccountCode;
+      this.account.AutoAccountCode=selectedNode.AutoAccountCode;
+      this.account.AccountDescription=selectedNode.AccountDescription;
+    }
+  }
+  createChartOfAccount(){
+    if(this.account.Id==null){
+      this._service.CreateChartOfAccount(this.account).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          var dialogData=new DialogData();
+          dialogData.message="Chart of account create succesfully";
+          this._alertBoxService.openDialog(dialogData);
+          this.getChartOfaccountTreeList();
+        }
+      },error=>{
+        let message=error.json();
+        var dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBoxService.openDialog(dialogData);
+      })
+    }
+    else{
+      this._service.UpdateChartOfAccount(this.account).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          var dialogData=new DialogData();
+          dialogData.message="Chart of account updated succesfully";
+          this._alertBoxService.openDialog(dialogData);
+          this.getChartOfaccountTreeList();
+        }
+      },error=>{
+        let message=error.json();
+        var dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBoxService.openDialog(dialogData);
+      })
+    }
   }
 }
 

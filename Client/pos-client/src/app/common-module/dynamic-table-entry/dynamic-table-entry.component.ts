@@ -17,25 +17,13 @@ export class DynamicTableEntryComponent implements OnInit {
   @Input() AutoCompleteList2: any = [];
   @Input() AutoCompleteList3: any = [];
   @Output() AutoCompleteDataSourceClicked:EventEmitter <any>=new EventEmitter <any>();
-  // protected searchStr: string;
-  // protected captain: string;
-  // protected dataService: CompleterData;
-  // protected searchData = [
-  //   { color: 'red', value: '#f00' },
-  //   { color: 'green', value: '#0f0' },
-  //   { color: 'blue', value: '#00f' },
-  //   { color: 'cyan', value: '#0ff' },
-  //   { color: 'magenta', value: '#f0f' },
-  //   { color: 'yellow', value: '#ff0' },
-  //   { color: 'black', value: '#000' }
-  // ];
-  // protected captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
-  constructor(private _alertBox:AlertBoxService) { 
+  constructor() { 
     
   }
   ngOnInit() {
   }
-  autoCompleteClick($data){
+  AutoCompleteClick($data){
+    debugger
     this.AutoCompleteDataSourceClicked.emit($data)
   }
   sendDataToParentComponent() {

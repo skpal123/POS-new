@@ -1,18 +1,11 @@
 <p>
   employee works finaly!
 </p>
-<button (click)="GetAlertBox()">Aler Box</button>
-<!-- <h1>Search color</h1>
-            <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer>
-            <h1>Search captain</h1>
-            <ng2-completer [(ngModel)]="captain" [datasource]="captains" [minSearchLength]="0"></ng2-completer>
-<app-test></app-test> -->
-<app-dynamic-table-entry
+<app-dynamic-form-builder
 [Datalist]="datalist" 
 [ColumnList]="columnlist"
-[selectList]="deptList"
-[AutoCompleteDataSource]="captains"
+[SelectList]="deptList"
 (AutoCompleteDataSourceClicked)="ParentAutoCompleteDataSource($event)"
 >
-</app-dynamic-table-entry>
+</app-dynamic-form-builder>
 <button (click)="CheckData()"> Check Data</button>

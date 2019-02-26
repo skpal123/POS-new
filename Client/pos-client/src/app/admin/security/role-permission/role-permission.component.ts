@@ -51,7 +51,7 @@ getRoleList(){
   })
 }
 getRoleControlList(){
-  this._securityService.getRoleControlList().subscribe(response=>{
+  this._securityService.getRoleControlList('role-permission').subscribe(response=>{
     this.roleControlList=response.json();
   },error=>{
     var data=new DialogData();

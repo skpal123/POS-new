@@ -1,3 +1,57 @@
-<p>
-  voucher-list works!
-</p>
+<div [class.container]="addContainerClass1">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                  <h3 class="panel-title">Voucher List <span *ngIf="addSpanClass1" (click)="createNewVoucher()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></h3>
+              </div>           
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-4 col-md-offset-3">
+                      <div class="form-group row">
+                          <label for="startDate" class="col-sm-5 col-form-label">Start Date</label>
+                          <div class="col-sm-7" id="startDateMargin">
+                            <input type="text" readonly class="form-control" id="startDate" value="Start date">
+                          </div>
+                        </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="form-group row">
+                          <label for="endDate" class="col-sm-5 col-form-label">End Date</label>
+                          <div class="col-sm-7" id="endDateMargin">
+                            <input type="text" readonly class="form-control" id="endDate" value="End Date">
+                          </div>
+                        </div>
+                  </div>
+                </div>
+                      <table class="table table-borderd">
+                              <thead>
+                                  <tr> 
+                                     <th>Voucher No</th>
+                                     <th>Voucher Type</th>
+                                     <th>Description</th>
+                                     <th>Amount</th>
+                                     <th>Status</th>
+                                  </tr>
+                              </thead>
+                             <tbody>
+                                  <tr *ngFor="let voucher of voucherList;let i=index;" id="pointer" (click)="getVoucherDetails(voucher.Id)">
+                                      <!-- <td *ngFor="let b of roleControlList; let j=index;">
+                                          <span id="pointer" (click)="getRolePermissionDetailsById(a.Id)" *ngIf="b.Status&&b.Name!='Delete'"> {{roleList[i][b.Name]}}</span>
+                                          <span id="pointer" *ngIf="b.Status&&b.Name=='Delete'" class="glyphicon glyphicon-trash" (click)="deleteRole(a.Id,a.RoleName)"></span> 
+                                     </td>  -->
+                                     <td>{{voucher.VoucherNo}}</td>
+                                     <td *ngIf="voucher.VoucherType==0">CR</td>
+                                     <td *ngIf="voucher.VoucherType==1">CP</td>
+                                     <td *ngIf="voucher.VoucherType==2">BR</td>
+                                     <td>{{voucher.Particulars}}</td>
+                                     <td>{{voucher.Amount}}</td>
+                                     <td>{{voucher.VoucherStatus}}</td>
+                                  </tr>                 
+                             </tbody>
+                      </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

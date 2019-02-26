@@ -46,8 +46,8 @@ export class SecurityService {
     const options = new RequestOptions({ headers: headers });
     return this._http.get(url,options)
   }
-  getRoleControlList(){
-    var url=this._defaultRoute.administrationService+'getRuleControl';
+  getRoleControlList(formName:string){
+    var url=this._defaultRoute.administrationService+'getRuleControl/'+formName;
     const headers = new Headers();
     headers.append('ActionName', 'get');
     const options = new RequestOptions({ headers: headers });

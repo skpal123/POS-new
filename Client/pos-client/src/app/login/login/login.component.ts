@@ -16,10 +16,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
   login(){
+    debugger
     this._loginService.login(this.Username,this.Password,this.NewPassword,this.IpAddress).subscribe(response=>{
       var loggedData=response.json();
       console.log(JSON.stringify( response.json()))
       sessionStorage.setItem('loggedData',JSON.stringify( response.json()));
+     // sessionStorage.setItem('sessionId',)
       this._router.navigate(['login/postlogin']);  
     },error=>{
 

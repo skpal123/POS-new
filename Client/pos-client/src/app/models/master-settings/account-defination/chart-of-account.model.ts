@@ -5,7 +5,7 @@ export class ChartOfaccount{
     public  AccId?:number;
     public  AccountDescription?:string
     public  CloseingStatus?:boolean
-    public  AccountType?:number;
+    public  AccountType?:string;
     public  ManualAccountCode?:string;
     public  AutoAccountCode?:string;
     public  IsProfitLoss?:boolean;
@@ -19,5 +19,6 @@ export class ChartOfaccount{
     public  Corporate_Id ?:string;
     public  ControlLevelId ?:string;
     public  ControlLevel_Id ?:string;
+    public  ParentAccountId ?:string;
 }
 
