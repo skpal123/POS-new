@@ -3,6 +3,7 @@ import { DefaultRouteService } from '../common/default-route.service';
 import { HttpService } from '../common/http.service';
 import { SessionService } from '../common/session.service';
 import { Http, RequestOptions,Headers } from '@angular/http';
+import { Voucher } from '../../models/regular-operation/finance/voucher.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class AccountsService {
       header.append("UserId",this._sessionService.User_Id);
       return header;
     }
-  public getVoucherList(startDate:string,endDate:string){
-    var url=this._defaultRoute.FinanceService+'getvoucherList/'+startDate+'/'+endDate;
+  public getVoucherList(){
+    var url=this._defaultRoute.FinanceService+'getvoucherList';
     let headers =  this.setCustomHeader();
     headers.append('ActionName', 'get');  
     const options = new RequestOptions({ headers: headers });
@@ -48,5 +49,12 @@ export class AccountsService {
     headers.append('ActionName', 'GET');  
     const options = new RequestOptions({ headers: headers });
     return this._http.get(url,options);
+  }
+  public CreateVoucher(voucher:Voucher){
+    var url=this._defaultRoute.FinanceService+'createVoucher';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'POST');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.post(url,voucher,options);
   }
 }

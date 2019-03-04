@@ -1,0 +1,15 @@
+<table class="table table-borderd">
+  <thead>
+      <tr> 
+          <th *ngFor="let column of ColumnList">{{column.IsEnable?column.LabelName:""}}</th>
+      </tr>
+  </thead>
+ <tbody>
+      <tr *ngFor="let a of DataList;let i=index;" id="pointer">
+          <td *ngFor="let b of ColumnList; let j=index;">
+              <span id="pointer" (click)="getRowDetailsById(a.Id)" > {{DataList[i][b.Name]}}</span>
+              <span id="pointer" *ngIf="b.IsEnable&&b.Name=='Delete'" class="glyphicon glyphicon-trash" (click)="deleteRow(a.Id)"></span> 
+         </td> 
+      </tr>                 
+ </tbody>
+</table>

@@ -6,7 +6,12 @@
                     <h3 class="panel-title">Role List <span (click)="createNewRolePermission()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></h3>
                 </div>
                 <div class="panel-body">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                    <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+                    (EditSelectedRowClicked)="getRolePermissionDetailsById($event)"
+                    (DeleteDataRowClicked)="deleteRole($event)"
+                    >
+                    </app-custom-datatable>
+                        <!-- <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                                 <thead>
                                     <tr> 
                                         <th *ngFor="let roleControl of roleControlList">{{roleControl.Status?roleControl.Label:""}}</th>
@@ -20,7 +25,7 @@
                                        </td> 
                                     </tr>                 
                                </tbody>
-                        </table>
+                        </table> -->
                 </div>
             </div>
         </div>

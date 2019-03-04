@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AcountLayoutComponent } from './acount-layout/acount-layout.component';
 import { ChartOfAccountComponent } from './chart-of-account/chart-of-account.component';
 import { AccountOpeningComponent } from './account-opening/account-opening.component';
+import { SubledgerOpeningComponent } from './subledger-opening/subledger-opening.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,9 @@ const routes: Routes = [
       },
       {
          path:'account-opening',component:AccountOpeningComponent
+      },
+      {
+        path:'subledger-opening',component:SubledgerOpeningComponent
       }
     ]
   },
@@ -29,6 +33,9 @@ const routes: Routes = [
       },
       {
          path:'account-opening',component:AccountOpeningComponent
+      },
+      {
+        path:'subledger-opening',component:SubledgerOpeningComponent
       }
     ]
   }

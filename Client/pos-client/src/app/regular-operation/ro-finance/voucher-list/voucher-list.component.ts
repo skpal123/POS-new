@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output,EventEmitter, ViewChild } from '@angular/core';
 import { Voucher } from '../../../models/regular-operation/finance/voucher.model';
 import { AccountsService } from '../../../services/regular-operation/accounts.service';
 import { MatDialog } from '@angular/material';
@@ -6,6 +6,10 @@ import { AddVoucherDialogComponent } from '../add-voucher-dialog/add-voucher-dia
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { VoucherDeatils } from '../../../models/regular-operation/finance/voucher-details.model';
+import { FormControl } from '@angular/forms';
+import { SubledgerDialogData } from '../../../models/regular-operation/finance/subledger-dialog-data.model';
+import { SubledgerTransactionComponent } from '../subledger-transaction/subledger-transaction.component';
+import { SubledgerTransaction } from '../../../models/regular-operation/finance/subledger-transaction.model';
 
 @Component({
   selector: 'app-voucher-list',
@@ -13,6 +17,16 @@ import { VoucherDeatils } from '../../../models/regular-operation/finance/vouche
   styleUrls: ['./voucher-list.component.css']
 })
 export class VoucherListComponent implements OnInit {
+  @ViewChild('formDateControl') formDateControl:FormControl;
+  @ViewChild('toDateControl') toDateControl:FormControl;
+  subledgerData:SubledgerDialogData={AccountId:null,SubledgerTransactionList:[]}
+  subledgerTransaction:SubledgerTransaction={
+    Id:null,SubLedger_Id:null,Account_Id:null,SubledgerDescription:null,Amount:0
+  };
+  subledgerTransactionist:SubledgerTransaction[]=[];
+  startDate = new Date();
+  formDate:Date=new Date();
+  toDate:Date=new Date();
   @Input() addContainerClass:boolean=true;
   @Input() addSpanClass:boolean=true;
   @Output() VoucherDetalisClicked:EventEmitter <any>=new EventEmitter <any>();
@@ -32,7 +46,7 @@ export class VoucherListComponent implements OnInit {
     this.getVoucherList();
   }
   getVoucherList(){
-    this._accountService.getVoucherList("2017-09-16","2017-09-16").subscribe(response=>{
+    this._accountService.getVoucherList().subscribe(response=>{
       this.voucherList=response.json();
     },error=>{
 
@@ -48,6 +62,7 @@ export class VoucherListComponent implements OnInit {
     })
   }
   getVoucherDetails($data){
+    debugger
       this._accountService.getVoucherDetailsById($data).subscribe(response=>{
         this.voucher=response.json();
         console.log(this.voucher)
@@ -76,6 +91,7 @@ export class VoucherListComponent implements OnInit {
       voucherDetails.Amount=null;
       voucherDetails.Vat=null;
       voucherDetails.Tax=null
+      voucherDetails.SubLedgerTransactions=[];
       voucherDetailsList.push(voucherDetails);
     }
     this.voucher.VoucherDetailsList=voucherDetailsList;
@@ -84,5 +100,17 @@ export class VoucherListComponent implements OnInit {
     this.voucher.BankAccountNo=null;
     this.voucher.BankName=null;
   }
- 
+  open(){
+    this.subledgerTransactionist.push(this.subledgerTransaction);
+    this.subledgerData.SubledgerTransactionList=this.subledgerTransactionist;
+    const dialogRef2=this.matDialog.open(SubledgerTransactionComponent,{
+      data:this.subledgerData,
+      disableClose:true,
+      height:window.screen.height*.6+'px',
+      width:window.screen.width*.4+'px'
+    });
+    dialogRef2.afterClosed().subscribe(response=>{
+      console.log(response);
+    })
+  }
 }

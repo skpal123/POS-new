@@ -7,6 +7,8 @@ import { AcountLayoutComponent } from './acount-layout/acount-layout.component';
 import { ChartOfAccountComponent } from './chart-of-account/chart-of-account.component';
 import { AccountOpeningComponent } from './account-opening/account-opening.component';
 import { CoaTreeComponent } from './coa-tree/coa-tree.component';
+import { SubledgerOpeningComponent } from './subledger-opening/subledger-opening.component';
+import { AddSubledgerComponent } from './add-subledger/add-subledger.component';
 
 @NgModule({
   imports: [
@@ -15,6 +17,8 @@ import { CoaTreeComponent } from './coa-tree/coa-tree.component';
     CommonModuleModule,
     TreeModule.forRoot()
   ],
-  declarations: [AcountLayoutComponent, ChartOfAccountComponent, AccountOpeningComponent, CoaTreeComponent]
+  declarations: [AcountLayoutComponent, ChartOfAccountComponent, AccountOpeningComponent, CoaTreeComponent, SubledgerOpeningComponent, AddSubledgerComponent],
+  entryComponents:[AddSubledgerComponent]
+  
 })
 export class AccountsDefinationModuleModule { }

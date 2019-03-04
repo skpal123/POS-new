@@ -3,9 +3,11 @@ import { ChartOfAccountTree } from '../../../models/master-settings/account-defi
 import { AccountDefinationService } from '../../../services/master-settings/account-defination.service';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
-import { FixedAssetDefinationService } from '../../../services/master-settings/fixed-asset-defination.service';
 import { ChartOfaccount } from '../../../models/master-settings/account-defination/chart-of-account.model';
 import { AccountDetails } from '../../../models/master-settings/account-defination/account-details.model';
+import { Subledger } from '../../../models/master-settings/account-defination/subledger.model';
+import { MatDialog } from '@angular/material';
+import { AddSubledgerComponent } from '../add-subledger/add-subledger.component';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
@@ -14,13 +16,14 @@ import { AccountDetails } from '../../../models/master-settings/account-definati
 export class ChartOfAccountComponent implements OnInit {
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
   accountDetails:AccountDetails;
-  account:ChartOfaccount={
-    AccountType:"0",
-  };
+  account:ChartOfaccount={AccountType:"0",};
+  subledger:Subledger={Id:null,Description:null,SublederCode:null,AccountId:null}
   Status:string="add";
   isFound:boolean=false;
+  IsSubledgerEnable:boolean=false;
   constructor(private _accountDeninationService:AccountDefinationService,
     private _service:AccountDefinationService,
+    private matDialog:MatDialog,
   private _alertBoxService:AlertBoxService){}
   ngOnInit(){
     debugger
@@ -150,6 +153,13 @@ export class ChartOfAccountComponent implements OnInit {
       this.account.ManualAccountCode=selectedNode.ManualAccountCode;
       this.account.AutoAccountCode=selectedNode.AutoAccountCode;
       this.account.AccountDescription=selectedNode.AccountDescription;
+      if(selectedNode.IsLeaf){
+        this.IsSubledgerEnable=true;
+        this.subledger.AccountId=selectedNode.AccountId;
+      }
+      else{
+        this.IsSubledgerEnable=false;
+      }
     }
   }
   createChartOfAccount(){
@@ -185,6 +195,14 @@ export class ChartOfAccountComponent implements OnInit {
         this._alertBoxService.openDialog(dialogData);
       })
     }
+  }
+  addSubleder(){
+      const dialogRef=this.matDialog.open(AddSubledgerComponent,{
+        disableClose:true,
+        data:this.subledger,
+        height:window.screen.height*.6+'px',
+        width:window.screen.width*.6+'px'
+      });
   }
 }
 

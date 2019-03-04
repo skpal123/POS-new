@@ -14,5 +14,6 @@ export class ChartOfAccountTree{
     public ChildAccount_Id?:string;
     public Children:ChartOfAccountTree[];
     public Status?:boolean;
+    public IsLeaf?:boolean;
     public IsClicked?:boolean;
 }

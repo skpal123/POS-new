@@ -2,12 +2,16 @@ import { Component, OnInit,Inject } from '@angular/core';
 import { Voucher } from '../../../models/regular-operation/finance/voucher.model';
 import { AccountsService } from '../../../services/regular-operation/accounts.service';
 import { AlertBoxService } from '../../../shared/alert-box.service';
-import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef,MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { ChartOfaccount } from '../../../models/master-settings/account-defination/chart-of-account.model';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { VoucherDeatils } from '../../../models/regular-operation/finance/voucher-details.model';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
 import { PostLoginService } from '../../../services/common/post-login.service';
+import { SubledgerTransactionComponent } from '../subledger-transaction/subledger-transaction.component';
+import { SubledgerTransaction } from '../../../models/regular-operation/finance/subledger-transaction.model';
+import { SubledgerDialogData } from '../../../models/regular-operation/finance/subledger-dialog-data.model';
+import { SubledgerTransactionDataService } from 'src/app/regular-operation/ro-finance/subledger-transaction-data.service';
 
 @Component({
   selector: 'app-add-voucher-dialog',
@@ -18,12 +22,19 @@ export class AddVoucherDialogComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   account:ChartOfaccount;
   voucherList:Voucher[]=[];
-  startDate = new Date(1990, 0, 1);
+  startDate = new Date();
+  vDate:Date=new Date();
+  cDate:Date=new Date();
   voucher:Voucher={
     Id:null,
-    VoucherDate:null,VoucherNo:null,ChequeDate:null,ChequeNo:null,VoucherType:"0",
+    VoucherDate:new Date(),VoucherNo:null,ChequeDate:new Date(),ChequeNo:null,VoucherType:"0",
     BankName:null,BankAccountNo:null,VoucherDetailsList:[]
   };
+  subledgerDialogData:SubledgerDialogData={AccountId:null,SubledgerTransactionList:[]}
+  subledgerTransaction:SubledgerTransaction={
+    Id:null,SubLedger_Id:null,Account_Id:null,SubledgerDescription:null,Amount:0
+  };
+  subledgerTransactionist:SubledgerTransaction[]=[];
   accountList:ChartOfaccount[]=[];
   debitAcccountList:ChartOfaccount[]=[];
   columnlist:any=[];
@@ -32,7 +43,9 @@ export class AddVoucherDialogComponent implements OnInit {
   DataList:any=[];
   constructor(private _accountService:AccountsService,
     private _alertBox:AlertBoxService,
-    private _loginService:PostLoginService,   
+    private _loginService:PostLoginService,
+    private matDialog:MatDialog,
+    private _subledgerDataService:SubledgerTransactionDataService,
     public dialogRef:MatDialogRef<AddVoucherDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Voucher
 ) 
@@ -80,9 +93,65 @@ export class AddVoucherDialogComponent implements OnInit {
   //   this.columnlist.push({Name:"AccountDescription",LabelName:"Account Code & Description",Type:'Autocomplete',Editable:true,Autocomplete:true})
   //   this.columnlist.push({Name:"Amount",LabelName:"Amount",Type:'number',Editable:true,Autocomplete:false})
   // }
-  ParentAutoCompleteDataSource($event){
+  ParentAutoCompleteDataSource($event:string){
     debugger
+    if($event!=null &&!this._subledgerDataService.isDialogOpen){
+      let accountCode=$event.split('-')[1];
+      let account=this.accountList.filter(acc=>acc.AutoAccountCode==accountCode);
+      let position=this.voucher.VoucherDetailsList.findIndex(acc=>acc.AccountDescription==$event);
+      this.voucher.VoucherDetailsList[position].AccountId=account[0].Id;
+      if(account[0]){
+        if(account[0].HasSubLedger){
+          this._subledgerDataService.isDialogOpen=true
+          if(this.voucher.VoucherDetailsList[position].SubLedgerTransactions.length==0){
+            this.subledgerDialogData.AccountId=account[0].Id
+            var subledgerTransaction=new SubledgerTransaction();
+            subledgerTransaction.SubledgerDescription=null;
+            subledgerTransaction.Amount=0;
+            subledgerTransaction.Account_Id=null;
+            subledgerTransaction.SubLedger_Id=null;
+            this.subledgerTransactionist.push(subledgerTransaction);
+            this.subledgerDialogData.SubledgerTransactionList=this.subledgerTransactionist;
+            this._subledgerDataService.subledgerDialogData=this.subledgerDialogData;
+          }
+          else{
+            this.subledgerDialogData.AccountId=account[0].Id
+            this.subledgerDialogData.SubledgerTransactionList=this.voucher.VoucherDetailsList[position].SubLedgerTransactions;
+            this._subledgerDataService.subledgerDialogData=this.subledgerDialogData;
+          }
+          const dialogRef2=this.matDialog.open(SubledgerTransactionComponent,{
+            data:this.subledgerDialogData,
+            disableClose:true,
+            height:window.screen.height*.6+'px',
+            width:window.screen.width*.4+'px'
+          });
+          dialogRef2.afterClosed().subscribe((response:SubledgerDialogData)=>{
+            this._subledgerDataService.isDialogOpen=false;   
+            let position=this.voucher.VoucherDetailsList.findIndex(x=>x.AccountId==response.AccountId);
+            let sum=this.getTotalSubledgerAmount(response.SubledgerTransactionList);
+            this.voucher.VoucherDetailsList[position].Amount=sum;
+            this.voucher.VoucherDetailsList[position].SubLedgerTransactions=response.SubledgerTransactionList;
+            console.log(this.voucher);
+            this._subledgerDataService.subledgerDialogData.AccountId=null;
+            // this.subledgerTransaction.Account_Id=null;
+            // this.subledgerTransaction.Amount=0;
+            // this.subledgerTransaction.SubledgerDescription=null;
+            // this.subledgerTransaction.SubLedger_Id=null;
+            this.subledgerTransactionist=[];
+            this._subledgerDataService.subledgerDialogData.SubledgerTransactionList=[];
+            console.log(this.voucher)
+          })
+        }
+      }
+    }
     console.log($event)
+  }
+  deleteVoucherDetailsRow(index:number){
+    debugger
+    if(index&&index!=0&&this.voucher.VoucherDetailsList&&this.voucher.VoucherDetailsList.length>2){
+      this.voucher.VoucherDetailsList.splice(index+1,1)
+    }
+    console.log(index)
   }
   getDataList(){
     this.DataList=this.voucher.VoucherDetailsList.filter(fea=>fea.Lineno!=1);
@@ -125,10 +194,38 @@ export class AddVoucherDialogComponent implements OnInit {
   addNewVoucherEntry(){
     let voucherDetails=new VoucherDeatils();
     voucherDetails.Lineno=3;
+    voucherDetails.AccountDescription=null;
     voucherDetails.Amount=null;
     voucherDetails.Vat=null;
     voucherDetails.Tax=null
+    voucherDetails.SubLedgerTransactions=[];
     this.voucher.VoucherDetailsList.push(voucherDetails);
     this.getDataList();
+  }
+  getTotalSubledgerAmount(subledgerTransactionList:SubledgerTransaction[]):number{
+    let sum=0;
+    if(subledgerTransactionList.length>0){
+      subledgerTransactionList.forEach((a,index,array)=>{
+        sum=sum+a.Amount
+      });
+    }
+    return sum;
+  }
+  saveVoucher(){
+    this.voucher.VoucherDate=this.vDate;
+    this.voucher.ChequeDate=this.cDate;
+    this._accountService.CreateVoucher(this.voucher).subscribe(response=>{
+      let result=response.json();
+      if(result){
+        let dialogData=new DialogData();
+        dialogData.message="Voucher created succesfully";
+        this._alertBox.openDialog(dialogData);
+      }
+    },error=>{
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
   }
 }

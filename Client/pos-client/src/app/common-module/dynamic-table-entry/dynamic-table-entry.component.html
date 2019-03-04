@@ -1,14 +1,15 @@
 
 <table class="table table-bordered">
   <tr>
-    <td *ngFor="let col of ColumnList;let i=index;">
-      {{col.LabelName}}
+    <td style="text-align: center" *ngFor="let col of ColumnList;let i=index;">
+      <b>{{col.Type!='none'?col.LabelName:""}}</b>
     </td>
+    <!-- <td><b>Action</b></td> -->
   </tr>
   <tbody>
     <tr *ngFor="let data of Datalist;let i=index;">
       <td *ngFor="let col2 of ColumnList">
-        <div *ngIf="!col2.Editable">
+        <div *ngIf="!col2.Editable&&col2.Type!='none'">
             {{Datalist[i][col2.Name]}}
         </div>
         <div *ngIf="col2.Editable">
@@ -19,8 +20,8 @@
               <option [value]="select.Id" *ngFor="let select of selectList">{{select.Name}}</option>
             </select>
         </div>
-      </td>
+        <span id="pointer" *ngIf="col2.IsEnable&&col2.Name=='Delete'" class="glyphicon glyphicon-trash" (click)="deleteRow(i,data)"></span>
+        </td>
     </tr>
   </tbody>
 </table>
-<input type="button" (click)="save()" value="Save">

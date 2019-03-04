@@ -7,6 +7,7 @@ import { VoucherEntryComponent } from './voucher-entry/voucher-entry.component';
 import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { AddVoucherDialogComponent } from './add-voucher-dialog/add-voucher-dialog.component';
 import { VoucherListInsideVoucherComponent } from './voucher-list-inside-voucher/voucher-list-inside-voucher.component';
+import { SubledgerTransactionComponent } from './subledger-transaction/subledger-transaction.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { VoucherListInsideVoucherComponent } from './voucher-list-inside-voucher
     CommonModuleModule
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [FinanceLayoutComponent,VoucherEntryComponent, VoucherListComponent, AddVoucherDialogComponent, VoucherListInsideVoucherComponent],
-  entryComponents:[AddVoucherDialogComponent]
+  declarations: [FinanceLayoutComponent,VoucherEntryComponent, VoucherListComponent, AddVoucherDialogComponent,
+     VoucherListInsideVoucherComponent, SubledgerTransactionComponent],
+  entryComponents:[AddVoucherDialogComponent,SubledgerTransactionComponent]
 })
 export class RoFinanceModule { }

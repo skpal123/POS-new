@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import { MatDialog } from '@angular/material';
 import { AddRolePermissionComponent } from '../add-role-permission/add-role-permission.component';
 import { RolePermissionData } from '../../../models/admin/role-permission-data.model';
+import { PostLoginService } from '../../../services/common/post-login.service';
 @Component({
   selector: 'app-role-permission',
   templateUrl: './role-permission.component.html',
@@ -24,6 +25,8 @@ export class RolePermissionComponent implements OnInit {
   roleControlList:RoleControl[]=[];
   roleControlViewList:any[][]=[];
   tree:Tree[]=[];
+  DataList:any[]=[];
+  ColumnList:any[]=[];
   rolePermissionData:RolePermissionData={
     tree:null,
     role:{
@@ -31,17 +34,20 @@ export class RolePermissionComponent implements OnInit {
     }
   }
   newRolePermissionTree:Tree[]=[]
-  constructor(private _securityService:SecurityService,private _alertBox:AlertBoxService,
+  constructor(private _securityService:SecurityService,
+    private _alertBox:AlertBoxService,
+    private _postLoginService:PostLoginService,
   private dialog:MatDialog) { }
   ngOnInit() {
     debugger  
     this.getRoleList();
+    this.getRoleControlList();
   }
 getRoleList(){
   this._securityService.getRoleList().subscribe(response=>{
     this.roleList=response.json();
+    this.DataList=this.roleList;
     this.dtTrigger.next();
-    this.getRoleControlList();
     this.getRolePermissons();
   },error=>{
     var data=new DialogData();
@@ -51,8 +57,9 @@ getRoleList(){
   })
 }
 getRoleControlList(){
-  this._securityService.getRoleControlList('role-permission').subscribe(response=>{
+  this._postLoginService.getUserFormControlByFormName('role-permission').subscribe(response=>{
     this.roleControlList=response.json();
+    this.ColumnList=this.roleControlList;
   },error=>{
     var data=new DialogData();
     var message=error.json();
@@ -99,8 +106,8 @@ createNewRolePermission(){
   })
 }
 
-deleteRole(Id:string,Name:string){
-alert(Name)
+deleteRole($event:string){
+  alert($event)
 }
 getRolePermissionDetailsById(Id:string){
   this._securityService.getRolePermissionsRoleById(Id).subscribe(response=>{

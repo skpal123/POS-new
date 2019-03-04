@@ -21,13 +21,13 @@ export class VoucherEntryComponent implements OnInit {
   ngOnInit() {
   //  this.getVoucherList();
   }
-  getVoucherList(){
-    this._accountService.getVoucherList("2-18-2019","2-18-2019").subscribe(response=>{
-      this.voucherList=response.json();
-    },error=>{
+  // getVoucherList(){
+  //   this._accountService.getVoucherList("2-18-2019","2-18-2019").subscribe(response=>{
+  //     this.voucherList=response.json();
+  //   },error=>{
 
-    })
-  }
+  //   })
+  // }
   onNoClick():void{
     //this.dialogRef.close();
   }

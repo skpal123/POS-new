@@ -1,7 +1,4 @@
 import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
-import { CompleterService, CompleterData } from 'ng2-completer';
-import { AlertBoxService } from '../../shared/alert-box.service';
-import { DialogData } from '../../models/common/dialog-data.model';
 @Component({
   selector: 'app-dynamic-table-entry',
   templateUrl: './dynamic-table-entry.component.html',
@@ -17,14 +14,22 @@ export class DynamicTableEntryComponent implements OnInit {
   @Input() AutoCompleteList2: any = [];
   @Input() AutoCompleteList3: any = [];
   @Output() AutoCompleteDataSourceClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   constructor() { 
     
   }
   ngOnInit() {
+    debugger
   }
   AutoCompleteClick($data){
-    debugger
     this.AutoCompleteDataSourceClicked.emit($data)
+  }
+  deleteRow(index:number,$data){
+    debugger
+    if(index&&index!=0&&this.Datalist&&this.Datalist.length>1){
+      this.Datalist.splice(index,1)
+    }
+    this.DeleteDataRowClicked.emit(index);
   }
   sendDataToParentComponent() {
     debugger
