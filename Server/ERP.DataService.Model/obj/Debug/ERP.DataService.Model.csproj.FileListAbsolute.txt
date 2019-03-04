@@ -72,7 +72,6 @@ E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\bin\Debug\Newtonsoft.J
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\bin\Debug\System.Net.Http.Formatting.xml
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\bin\Debug\System.Web.Http.xml
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\bin\Debug\System.Web.Http.Cors.xml
-E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.csprojResolveAssemblyReference.cache
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.creatingdbanduserinfotable.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.userinfotable.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.adding.resources
@@ -96,3 +95,5 @@ E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataServ
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingformcontrol.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingusercontroltable.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingtypeinusercontroltable.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingsubledger.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingdeleteinformcontrol.resources

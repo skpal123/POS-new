@@ -1,0 +1,7 @@
+.dropdown{
+    width: 200px;
+    overflow: hidden;
+}
+#dropdown select option:focus{
+    width: 200px;
+}

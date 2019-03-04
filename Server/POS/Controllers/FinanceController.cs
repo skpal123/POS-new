@@ -37,6 +37,8 @@ namespace ERPWebApiService.Controllers
                                        AccountDescription = acc.AccountDescription,
                                        AutoAccountCode = acc.AutoAccountCode,
                                        ManualAccountCode = acc.ManualAccountCode,
+                                       IsLeaf=acc.IsLeaf,
+                                      // HasSubleder=acc.HasSubLedger,
                                        AccountType=acc.AccountType,
                                        ParentGroupId = pcr.ParentGroupId,
                                        ParentLevelId = pcr.ParentLevelId,
@@ -58,7 +60,9 @@ namespace ERPWebApiService.Controllers
                                               ManualAccountCode = acc.ManualAccountCode,
                                               ChildGroupId=acc.GroupId,
                                               ChildLevelId=acc.LevelId,
-                                              ChildAccId=acc.AccId
+                                              ChildAccId=acc.AccId,
+                                              IsLeaf=acc.IsLeaf,
+                                             // HasSubleder=acc.HasSubLedger
                                           }).ToList();
                 foreach (var account in ChartOfAccountListTree)
                 {
@@ -69,6 +73,8 @@ namespace ERPWebApiService.Controllers
                     ChartOfAccount.ChildGroupId = account.ChildGroupId;
                     ChartOfAccount.ChildLevelId = account.ChildLevelId;
                     ChartOfAccount.ChildAccId = account.ChildAccId;
+                    ChartOfAccount.IsLeaf = account.IsLeaf;
+                    //ChartOfAccount.HasSubleder = account.HasSubleder;
                     ChartOfAccount.Children = genterateAccountTree(accountList, account.AccountId);
                     ChartOfAccountListTree2.Add(ChartOfAccount);
                 }
@@ -108,6 +114,8 @@ namespace ERPWebApiService.Controllers
                     ChildGroupId = x.ChildGroupId,
                     ChildLevelId = x.ChildLevelId,
                     ChildAccount_Id = x.ChildAccount_Id,
+                    IsLeaf=x.IsLeaf,
+                   // HasSubleder=x.HasSubleder,
                     Children = genterateAccountTree(accoountList, x.ChildAccount_Id)
                 }).ToList();
             return accountList2;
@@ -131,7 +139,7 @@ namespace ERPWebApiService.Controllers
                         AccountDescription=accountInfo.AccountDescription,
                         AutoAccountCode=accountInfo.AutoAccountCode,
                         ManualAccountCode=accountInfo.ManualAccountCode,
-                        IsLeaf=false,
+                        IsLeaf=true,
                         IsProfitLoss=accountInfo.IsProfitLoss,
                         IsReciptsPayment=accountInfo.IsProfitLoss,
                         IsSale=accountInfo.IsSale
@@ -139,7 +147,7 @@ namespace ERPWebApiService.Controllers
                     };
                     ERPContext.Accounts.AddOrUpdate(chartOfAccount);
                     ERPContext.SaveChanges();
-                    var parentAccount=ERPContext.Accounts.FirstOrDefault(x=>x.Id==accountInfo.ParentAccountId);
+                    var parentAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == accountInfo.ParentAccountId);
                     var childParentRelation=new AccountParentChildRelation(){
                         Id=Guid.NewGuid(),
                         ParentAccId=parentAccount.AccId,
@@ -154,7 +162,7 @@ namespace ERPWebApiService.Controllers
                     };
                     ERPContext.AccountParentChildRelations.AddOrUpdate(childParentRelation);
                     ERPContext.SaveChanges();
-                    ERPContext.Database.ExecuteSqlCommand("update tblaccount set Isleaf=0 where id='" + accountInfo.ParentAccountId + "'");
+                    ERPContext.Database.ExecuteSqlCommand("update tblaccount set Isleaf=0 where id='" + parentAccount.Id + "'");
                 //}
                 
                 return Request.CreateResponse(HttpStatusCode.OK, true);
@@ -219,14 +227,17 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("getVoucherList/{startDate}/{endDate}")]
+        [Route("getVoucherList")]
         [HttpGet]
-        public HttpResponseMessage GetVoucherListByDateInterval(DateTime startDate, DateTime endDate)
+        public HttpResponseMessage GetVoucherListByDateInterval()
         {
             try
             {
+
+                var date = 1551627350005;
+                var a = new DateTime(1551627350005);
                // var userSession = AuthorizationHelper.GetSession();
-                var voucherList = ERPContext.Vouchers.Where(x => x.Voucherdate >= startDate && x.Voucherdate <= endDate).Select(x => new VoucherInfo()
+                var voucherList = ERPContext.Vouchers.Select(x => new VoucherInfo()
                 {
                     Id=x.Id,
                     VoucherType=x.Vouchertype,
@@ -288,22 +299,29 @@ namespace ERPWebApiService.Controllers
                     PostingStatus = x.PostingStatus,
                     Amount = x.TotalAmount,
                 }).FirstOrDefault();
-                var voucherDeatils = (from acc in ERPContext.Accounts
-                                      join vd in ERPContext.VoucherDetailList on acc.Id equals vd.Account_Id
-                                      where vd.Voucher_Id == voucherid
-                                      orderby vd.Lineno
-                                      select new VoucherDetailInfo()
-                                      {
-                                          Id = vd.Id,
-                                          Lineno = vd.Lineno,
-                                          Vat=vd.Vat??0,
-                                          Tax=vd.Tax??0,
-                                          AccountId = vd.Account_Id,
-                                          Amount = vd.Amount,
-                                          AccountDescription = acc.AccountDescription
-                                      }).ToList();
-
-                voucherInfo.VoucherDetailsList = voucherDeatils;
+                List<VoucherDetailInfo> VoucherDetailList = new List<VoucherDetailInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.GetConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select vd.id,vd.[Lineno],isnull(vd.Amount,0) Amount,isnull(vd.vat,0)Vat,isnull(vd.tax,0)Tax,ac.AccountDescription+'-'+ac.ManualAccountCode AccountDescription,vd.Account_Id from tblAccount ac 
+                                                inner join tblVoucherDetails vd on ac.id=vd.Account_Id where vd.voucher_id=@voucherId order by [Lineno]", con);
+                    cmd.Parameters.AddWithValue("@voucherId", voucherId);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        VoucherDetailInfo voucherDetailInfo = new VoucherDetailInfo();
+                        voucherDetailInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        voucherDetailInfo.Lineno = Convert.ToInt32(rdr["Lineno"].ToString());
+                        voucherDetailInfo.Amount = Convert.ToDouble(rdr["Amount"].ToString());
+                        voucherDetailInfo.Vat = Convert.ToDouble(rdr["Vat"].ToString());
+                        voucherDetailInfo.Tax = Convert.ToDouble(rdr["Tax"].ToString());
+                        voucherDetailInfo.AccountDescription = rdr["AccountDescription"].ToString();
+                        voucherDetailInfo.AccountId =Guid.Parse( rdr["Account_Id"].ToString());
+                        voucherDetailInfo.SubLedgerTransactions = GetSubledgerTransactionListByVoucherDetailsId(voucherDetailInfo.Id);
+                        VoucherDetailList.Add(voucherDetailInfo);
+                    }
+                }
+                voucherInfo.VoucherDetailsList = VoucherDetailList;
                 return Request.CreateResponse(HttpStatusCode.OK, voucherInfo);
             }
             catch (InvalidSessionFailure ex)
@@ -319,6 +337,98 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("createVoucher")]
+        [HttpPost]
+        public HttpResponseMessage CreateVoucher(VoucherInfo voucherInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var voucher = new Voucher()
+                {
+                    Id=Guid.NewGuid(),
+                    Voucherdate=voucherInfo.VoucherDate,
+                    Voucherno=voucherInfo.VoucherNo,
+                    Vouchertype=voucherInfo.VoucherType,
+                    Voucherstatus=false,
+                    Chequedate=voucherInfo.ChequeDate,
+                    Chequeno=voucherInfo.ChequeNo
+                };
+                ERPContext.Vouchers.Add(voucher);
+                ERPContext.SaveChanges();
+                var oVoucher=ERPContext.Vouchers.FirstOrDefault(x=>x.Id==voucher.Id);
+                foreach (var vd in voucherInfo.VoucherDetailsList)
+                {
+                    var account = ERPContext.Accounts.FirstOrDefault(x => x.Id == vd.AccountId);
+                    var voucherDetail = new VoucherDetails()
+                    {
+                        Id=Guid.NewGuid(),
+                        Lineno=vd.Lineno,
+                        Account_Id=vd.AccountId,
+                        AccId=account.AccId,
+                        LevelId=account.LevelId,
+                        GroupId=account.GroupId,
+                        Amount=vd.Amount,
+                        Vat=vd.Vat,
+                        Tax=vd.Tax,
+                        Voucher_Id = oVoucher.Id,
+                        VoucherNo=oVoucher.Voucherno,
+                    };
+                    ERPContext.VoucherDetailList.Add(voucherDetail);
+                    ERPContext.SaveChanges();
+                    foreach (var subledgerTransactionInfo in vd.SubLedgerTransactions)
+                    {
+                        var subledgerTransaction = new SubledgerTransaction() 
+                        { 
+                            Id=Guid.NewGuid(),
+                            Amount=subledgerTransactionInfo.Amount,
+                            Account_Id=account.Id,
+                            Subledger_Id=subledgerTransactionInfo.SubLedger_Id,
+                            Voucher_Id=oVoucher.Id,
+                            Voucher_Detail_Id = voucherDetail.Id
+                        };
+                        ERPContext.SubledgerTransactions.Add(subledgerTransaction);
+                        ERPContext.SaveChanges();
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        private List<SubLedgerTransactionInfo> GetSubledgerTransactionListByVoucherDetailsId(Guid deatilsId)
+        {
+            List<SubLedgerTransactionInfo> subledgerTransactionList = new List<SubLedgerTransactionInfo>();
+            using (SqlConnection con = new SqlConnection(ConnectionString.GetConnectionString()))
+            {
+                SqlCommand cmd = new SqlCommand(@"select st.id,st.Account_Id,s.Description+'-'+s.SubledgerCode Description,st.Subledger_Id,st.Amount  from tblSubledgerTransaction st
+                                                inner join tblSubledger s on s.Id=st.Subledger_Id where Voucher_Detail_Id=@vdId", con);
+                cmd.Parameters.AddWithValue("@vdId", deatilsId);
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    SubLedgerTransactionInfo subLedgerTransactionInfo = new SubLedgerTransactionInfo();
+                    subLedgerTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                    subLedgerTransactionInfo.Account_Id = Guid.Parse(rdr["Account_Id"].ToString());
+                    subLedgerTransactionInfo.SubLedger_Id = Guid.Parse(rdr["Subledger_Id"].ToString());
+                    subLedgerTransactionInfo.Amount = Convert.ToDecimal(rdr["Amount"].ToString());
+                    subLedgerTransactionInfo.SubledgerDescription = rdr["Description"].ToString();
+                    subledgerTransactionList.Add(subLedgerTransactionInfo);
+                }
+            }
+            return subledgerTransactionList;
+        }
         [Route("getChildAccount")]
         [HttpGet]
         public HttpResponseMessage GetAllChildAccount()
@@ -332,7 +442,39 @@ namespace ERPWebApiService.Controllers
                     AccountDescription=x.AccountDescription,
                     AutoAccountCode=x.AutoAccountCode,
                     ManualAccountCode=x.ManualAccountCode,
+                    HasSubLedger=x.HasSubLedger,
                     AccountType=x.AccountType
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, accountList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("getAccountListForopening")]
+        [HttpGet]
+        public HttpResponseMessage GetAllChildAccountForOpening()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var accountList = ERPContext.Accounts.Where(x => x.IsLeaf == true && x.LevelId != 1).Select(x => new AccountOpeningTableView()
+                {
+                    AccountDescription =x.AutoAccountCode+"-"+ x.AccountDescription,
+                    Group = x.GroupId.ToString(),
+                    DebitAmount = 0,
+                    CreditAmount = 0,
+                    AccountType=x.AccountType,
+                    AccountId=x.Id
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, accountList);
             }
@@ -397,9 +539,159 @@ namespace ERPWebApiService.Controllers
                     Autocomplete=x.Autocomplete,
                     IsEnable=x.IsEnable,
                     FormName=x.FormName,
+                    IsDelete=x.IsDelete,
                     Type=x.Type
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, userControlList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("addSubledger")]
+        [HttpPost]
+        public HttpResponseMessage AddSubledger(SubledgerInfo subledgerInfo)
+        {
+            try
+            {
+                if (subledgerInfo != null)
+                {
+                    var subledger = new Subledger()
+                    {
+                        Id=Guid.NewGuid(),
+                        SubledgerCode=subledgerInfo.SublederCode,
+                        Description=subledgerInfo.Description,
+                        Account_Id=subledgerInfo.AccountId
+                    };
+                    ERPContext.Subledgers.Add(subledger);
+                    ERPContext.SaveChanges();
+                    ERPContext.Database.ExecuteSqlCommand("update tblAccount set hasSubledger=1 where id='" + subledgerInfo.AccountId + "'");
+                }
+ 
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("addSubledger/{id}")]
+        [HttpPut]
+        public HttpResponseMessage AddSubledger(string id,SubledgerInfo subledgerInfo)
+        {
+            try
+            {
+                var oSubledger = ERPContext.Subledgers.FirstOrDefault(x => x.Id == subledgerInfo.Id);
+                if (oSubledger != null)
+                {
+                    var subledger = new Subledger()
+                    {
+                        Id = oSubledger.Id,
+                        SubledgerCode = subledgerInfo.SublederCode,
+                        Description = subledgerInfo.Description,
+                        Account_Id = subledgerInfo.AccountId
+                    };
+                    ERPContext.Subledgers.AddOrUpdate(subledger);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("getSubledgerList/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSubledgerList(string id)
+        {
+            try
+            {
+                var accountId = Guid.Parse(id);
+                var subledgerList = ERPContext.Subledgers.Where(x=>x.Account_Id==accountId).Select(x => new SubledgerInfo
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    AccountId = x.Account_Id,
+                    SublederCode = x.SubledgerCode
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, subledgerList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("getSubledgerById/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSubledgerById(string id)
+        {
+            try
+            {
+                var sublederId = Guid.Parse(id);
+                var subledger = ERPContext.Subledgers.Where(x=>x.Id==sublederId).Select(x => new SubledgerInfo
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    AccountId = x.Account_Id,
+                    SublederCode = x.SubledgerCode
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, subledger);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("deleteSubledger/{id}")]
+        [HttpGet]
+        public HttpResponseMessage DeleteSubledeId(string id)
+        {
+            try
+            {
+                ERPContext.Database.ExecuteSqlCommand("delete from tblSubledger where id='" + id + "'");
+                return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (InvalidSessionFailure ex)
             {

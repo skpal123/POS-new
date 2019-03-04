@@ -20,7 +20,7 @@ namespace ViewModel.Model
         public bool IsProfitLoss { set; get; }
         public bool IsLeaf { set; get; }
         public bool IsReciptsPayment { set; get; }
-        public bool HasSubLedger { set; get; }
+        public bool? HasSubLedger { set; get; }
         public string Currency { set; get; }
         public int PackageId { set; get; }
         public bool IsSale { set; get; }

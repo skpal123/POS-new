@@ -21,6 +21,7 @@ namespace ERP.DataService.Model.Model
         public bool Autocomplete { set; get; }
         public bool Editable { set; get; }
         public bool IsEnable { set; get; }
+        public bool IsDelete { set; get; }
           [StringLength(100)]
         public string FormName { set; get; }
     }

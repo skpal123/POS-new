@@ -147,12 +147,25 @@
     <Compile Include="Migrations\201902251628290_adding type in usercontroltable.Designer.cs">
       <DependentUpon>201902251628290_adding type in usercontroltable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902261602422_adding subledger.cs" />
+    <Compile Include="Migrations\201902261602422_adding subledger.Designer.cs">
+      <DependentUpon>201902261602422_adding subledger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902261829243_adding delete in form control.cs" />
+    <Compile Include="Migrations\201902261829243_adding delete in form control.Designer.cs">
+      <DependentUpon>201902261829243_adding delete in form control.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\AccountOpening.cs" />
+    <Compile Include="Model\AccountOpeningTableView.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
     <Compile Include="Model\ApplicatonAccessLog.cs" />
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
+    <Compile Include="Model\SubledgerOpening.cs" />
+    <Compile Include="Model\SubledgerTransaction.cs" />
+    <Compile Include="Model\Subledger.cs" />
     <Compile Include="Model\FormControlPermssion.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Menu.cs" />
@@ -236,6 +249,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902251628290_adding type in usercontroltable.resx">
       <DependentUpon>201902251628290_adding type in usercontroltable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902261602422_adding subledger.resx">
+      <DependentUpon>201902261602422_adding subledger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902261829243_adding delete in form control.resx">
+      <DependentUpon>201902261829243_adding delete in form control.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -35,6 +35,10 @@ namespace ERP.DataService.Model
         public DbSet<Voucher> Vouchers { set; get; }
         public DbSet<VoucherDetails> VoucherDetailList { set; get; }
         public DbSet<FormControlPermssion> FormControlPermssions { set; get; }
+        public DbSet<AccountOpening> AccountOpenings { set; get; }
+        public DbSet<Subledger> Subledgers { set; get; }
+        public DbSet<SubledgerOpening> SubledgerOpenings { set; get; }
+        public DbSet<SubledgerTransaction> SubledgerTransactions { set; get; }
         public DbSet<UserFormControl> UserFormControls { set; get; }
     }
 }
