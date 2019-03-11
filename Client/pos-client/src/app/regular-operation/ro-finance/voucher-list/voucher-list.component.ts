@@ -10,6 +10,8 @@ import { FormControl } from '@angular/forms';
 import { SubledgerDialogData } from '../../../models/regular-operation/finance/subledger-dialog-data.model';
 import { SubledgerTransactionComponent } from '../subledger-transaction/subledger-transaction.component';
 import { SubledgerTransaction } from '../../../models/regular-operation/finance/subledger-transaction.model';
+import { PostLoginService } from '../../../services/common/post-login.service';
+import { UserFormControl } from '../../../models/common/user-form-control.model';
 
 @Component({
   selector: 'app-voucher-list',
@@ -19,16 +21,18 @@ import { SubledgerTransaction } from '../../../models/regular-operation/finance/
 export class VoucherListComponent implements OnInit {
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
+  userControlList:UserFormControl[]=[];
+  columnlist:any[]=[];
+  DataList:any[]=[];
   subledgerData:SubledgerDialogData={AccountId:null,SubledgerTransactionList:[]}
   subledgerTransaction:SubledgerTransaction={
     Id:null,SubLedger_Id:null,Account_Id:null,SubledgerDescription:null,Amount:0
   };
   subledgerTransactionist:SubledgerTransaction[]=[];
+  allCheck:boolean=false;
   startDate = new Date();
   formDate:Date=new Date();
   toDate:Date=new Date();
-  @Input() addContainerClass:boolean=true;
-  @Input() addSpanClass:boolean=true;
   @Output() VoucherDetalisClicked:EventEmitter <any>=new EventEmitter <any>();
   addContainerClass1:boolean=true;
   addSpanClass1:boolean=true;
@@ -39,17 +43,30 @@ export class VoucherListComponent implements OnInit {
     BankName:null,BankAccountNo:null,VoucherDetailsList:[]
   };
   constructor(private _accountService:AccountsService,
-    private matDialog:MatDialog,private _alertBox:AlertBoxService) { }
+    private matDialog:MatDialog,
+    private _loginService:PostLoginService,
+    private _alertBox:AlertBoxService) { }
   ngOnInit() {
-    this.addContainerClass1=this.addContainerClass
-    this.addSpanClass1=this.addSpanClass
     this.getVoucherList();
+    this.getUserFormControlByFormName();
+
   }
   getVoucherList(){
     this._accountService.getVoucherList().subscribe(response=>{
       this.voucherList=response.json();
+      this.voucherList.forEach((voucher,index,array)=>{
+        voucher.Status=voucher.VoucherStatus;
+        voucher.VStatus=voucher.VoucherStatus==true?"Approved":"Not Aprroved";
+        voucher.VType=voucher.VoucherType=="0"?"CR":voucher.VoucherType=="1"?"CP":voucher.VoucherType=="2"?"BR":
+        voucher.VoucherType=="3"?"BP":voucher.VoucherType=="4"?"AR":voucher.VoucherType=="5"?"AP":
+        voucher.VoucherType=="6"?"JV":"Contra"
+      });
+      this.DataList=this.voucherList;
     },error=>{
-
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
     })
   }
   createNewVoucher(){
@@ -59,8 +76,14 @@ export class VoucherListComponent implements OnInit {
       disableClose:true,
       height:window.screen.height*.8+'px',
       width:window.screen.width*1+'px'
+    });
+    dialogRef.afterClosed().subscribe(response=>{
+      if(response){
+        this.getVoucherList();
+      }
     })
   }
+
   getVoucherDetails($data){
     debugger
       this._accountService.getVoucherDetailsById($data).subscribe(response=>{
@@ -71,6 +94,11 @@ export class VoucherListComponent implements OnInit {
           disableClose:true,
           height:window.screen.height*.8+'px',
           width:window.screen.width*.8+'px'
+        });
+        dialogRef.afterClosed().subscribe(response=>{
+          if(response){
+            this.getVoucherList();
+          }
         })
       },error=>{
         let message=error.json();
@@ -78,6 +106,17 @@ export class VoucherListComponent implements OnInit {
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
       })
+  }
+  getUserFormControlByFormName(){
+    this._loginService.getUserFormControlByFormName('voucher-list').subscribe(response=>{
+      this.userControlList=response.json();
+      this.columnlist=this.userControlList;
+    },error=>{
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
   }
   clearVoucherData(){
     let voucherDetailsList:VoucherDeatils[]=[];
@@ -88,9 +127,9 @@ export class VoucherListComponent implements OnInit {
     for(let i=1;i<=2;i++){
       let voucherDetails=new VoucherDeatils();
       voucherDetails.Lineno=i;
-      voucherDetails.Amount=null;
-      voucherDetails.Vat=null;
-      voucherDetails.Tax=null
+      voucherDetails.Amount=0;
+      voucherDetails.Vat=0;
+      voucherDetails.Tax=0
       voucherDetails.SubLedgerTransactions=[];
       voucherDetailsList.push(voucherDetails);
     }
@@ -111,6 +150,28 @@ export class VoucherListComponent implements OnInit {
     });
     dialogRef2.afterClosed().subscribe(response=>{
       console.log(response);
+    })
+  }
+  deleteVoucher($event){
+    this._accountService.deleteVoucher($event).subscribe(response=>{
+     let result=response.json();
+      if(result){
+        let dialogData=new DialogData();
+        dialogData.message="Delete voucher succesfully";
+        this._alertBox.openDialog(dialogData);
+        this.getVoucherList();
+      }
+    },error=>{
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  CheckedAllVoucher(IsChecked:boolean){
+    this.allCheck=IsChecked;
+    this.voucherList.forEach((voucher,index,array)=>{
+      voucher.Status=IsChecked
     })
   }
 }

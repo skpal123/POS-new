@@ -87,6 +87,11 @@ export class SubledgerTransactionComponent implements OnInit,OnDestroy {
     this.dialogRef.close(this.subledgerData);
   }
   createNewSubledger(){
-    
+    var subledgerTransaction=new SubledgerTransaction();
+    subledgerTransaction.Account_Id=this.subledgerData.AccountId;
+    subledgerTransaction.SubLedger_Id=null;
+    subledgerTransaction.Amount=0;
+    subledgerTransaction.SubledgerDescription=null;
+    this.subledgerData.SubledgerTransactionList.push(subledgerTransaction);
   }
 }

@@ -6,6 +6,6 @@ export class UserFormControl{
     public Autocomplete?:boolean
     public Editable?:boolean
     public IsEnable?:boolean
-    public IsDelete?:boolean
+    public IsCheckbox?:boolean
     public FormName?:string
 }

@@ -9,6 +9,7 @@ export class CustomDatatableComponent implements OnInit {
   @Input() ColumnList: any = [];
   @Output() EditSelectedRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() CheckedAllItem:EventEmitter <any>=new EventEmitter <any>();
   constructor() { }
 
   ngOnInit() {
@@ -20,5 +21,9 @@ export class CustomDatatableComponent implements OnInit {
   }
   deleteRow($event){
     this.DeleteDataRowClicked.emit($event);
+  }
+  checkedAllItem($event){
+    console.log($event);
+    this.CheckedAllItem.emit($event.target.checked);
   }
 }

@@ -57,4 +57,18 @@ export class AccountsService {
     const options = new RequestOptions({ headers: headers });
     return this._http.post(url,voucher,options);
   }
+  public UpdateVoucher(voucher:Voucher){
+    var url=this._defaultRoute.FinanceService+'updateVoucher/'+voucher.Id;
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'PUT');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.put(url,voucher,options);
+  }
+  public deleteVoucher(Id:string){
+    var url=this._defaultRoute.FinanceService+'deleteVoucher/'+Id;
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'Delete');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.delete(url,options);
+  }
 }

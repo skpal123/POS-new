@@ -19,6 +19,7 @@ import { SubledgerTransactionDataService } from 'src/app/regular-operation/ro-fi
   styleUrls: ['./add-voucher-dialog.component.css']
 })
 export class AddVoucherDialogComponent implements OnInit {
+  IsSaveButtonClick:boolean=false;
   userControlList:UserFormControl[]=[];
   account:ChartOfaccount;
   voucherList:Voucher[]=[];
@@ -62,7 +63,7 @@ export class AddVoucherDialogComponent implements OnInit {
     this.getDataList();
   }
   onNoClick():void{
-    this.dialogRef.close();
+    this.dialogRef.close(this.IsSaveButtonClick);
   }
   getAccountList(){
     this._accountService.getChildAccountList().subscribe(response=>{
@@ -181,7 +182,7 @@ export class AddVoucherDialogComponent implements OnInit {
     this.getOneSideAccountForVoucher($data)
   }
   getUserFormControlByFormName(){
-    this._loginService.getUserFormControlByFormName('voucher').subscribe(response=>{
+    this._loginService.getUserFormControlByFormName('voucher-entry').subscribe(response=>{
       this.userControlList=response.json();
       this.columnlist=this.userControlList;
     },error=>{
@@ -195,9 +196,9 @@ export class AddVoucherDialogComponent implements OnInit {
     let voucherDetails=new VoucherDeatils();
     voucherDetails.Lineno=3;
     voucherDetails.AccountDescription=null;
-    voucherDetails.Amount=null;
-    voucherDetails.Vat=null;
-    voucherDetails.Tax=null
+    voucherDetails.Amount=0;
+    voucherDetails.Vat=0;
+    voucherDetails.Tax=0
     voucherDetails.SubLedgerTransactions=[];
     this.voucher.VoucherDetailsList.push(voucherDetails);
     this.getDataList();
@@ -212,20 +213,48 @@ export class AddVoucherDialogComponent implements OnInit {
     return sum;
   }
   saveVoucher(){
+    this.IsSaveButtonClick=true;
     this.voucher.VoucherDate=this.vDate;
     this.voucher.ChequeDate=this.cDate;
-    this._accountService.CreateVoucher(this.voucher).subscribe(response=>{
-      let result=response.json();
-      if(result){
+    this.voucher.Amount=this.getVoucherAmount();
+    if(this.voucher.Id==null){
+      this._accountService.CreateVoucher(this.voucher).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          let dialogData=new DialogData();
+          dialogData.message="Voucher created succesfully";
+          this._alertBox.openDialog(dialogData);
+          this.dialogRef.close(this.IsSaveButtonClick)
+        }
+      },error=>{
+        let message=error.json();
         let dialogData=new DialogData();
-        dialogData.message="Voucher created succesfully";
+        dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
-      }
-    },error=>{
-      let message=error.json();
-      let dialogData=new DialogData();
-      dialogData.message=message.Message;
-      this._alertBox.openDialog(dialogData);
-    })
+      })
+    }else{
+      this._accountService.UpdateVoucher(this.voucher).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          let dialogData=new DialogData();
+          dialogData.message="Voucher updated succesfully";
+          this._alertBox.openDialog(dialogData);
+        }
+      },error=>{
+        let message=error.json();
+        let dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBox.openDialog(dialogData);
+      })  
+    }
+  }
+  getVoucherAmount():number{
+    let sum=0;
+    this.voucher.VoucherDetailsList.forEach((a,index,array)=>{
+        if(a.Lineno!=1&&a.Lineno!=0){
+          sum=sum+a.Amount+a.Vat+a.Tax;
+        }
+    });
+    return sum;
   }
 }

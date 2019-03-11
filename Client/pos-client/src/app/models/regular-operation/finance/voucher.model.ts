@@ -5,7 +5,9 @@ export class Voucher{
     public VoucherNo?:string;
     public VoucherDate?:Date;
     public VoucherType?:string;
+    public VType?:string;
     public VoucherStatus?:boolean
+    public VStatus?:string
     public PostingStatus?:boolean;
     public ChequeNo?:string;
     public ChequeDate?:Date;
@@ -21,4 +23,5 @@ export class Voucher{
     public Amount?:number;
     public Vat?:number;
     public Tax?:number;
+    public Status?:boolean;
 }
