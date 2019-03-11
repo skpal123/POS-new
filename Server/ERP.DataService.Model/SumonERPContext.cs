@@ -40,5 +40,10 @@ namespace ERP.DataService.Model
         public DbSet<SubledgerOpening> SubledgerOpenings { set; get; }
         public DbSet<SubledgerTransaction> SubledgerTransactions { set; get; }
         public DbSet<UserFormControl> UserFormControls { set; get; }
+        public DbSet<Unit> Units { set; get; }
+        public DbSet<Location> Locations { set; get; }
+        public DbSet<Category> Categorys { set; get; }
+        public DbSet<Subcategory> Subcategorys { set; get; }
+        public DbSet<InventoryItem> InventoryItems { set; get; }
     }
 }

@@ -155,6 +155,14 @@
     <Compile Include="Migrations\201902261829243_adding delete in form control.Designer.cs">
       <DependentUpon>201902261829243_adding delete in form control.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903051732404_changing delete to checkbox.cs" />
+    <Compile Include="Migrations\201903051732404_changing delete to checkbox.Designer.cs">
+      <DependentUpon>201903051732404_changing delete to checkbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903080906188_adding inventory settings.cs" />
+    <Compile Include="Migrations\201903080906188_adding inventory settings.Designer.cs">
+      <DependentUpon>201903080906188_adding inventory settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -163,6 +171,10 @@
     <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
+    <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\InventoryItem.cs" />
+    <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Subcategory.cs" />
     <Compile Include="Model\SubledgerOpening.cs" />
     <Compile Include="Model\SubledgerTransaction.cs" />
     <Compile Include="Model\Subledger.cs" />
@@ -177,6 +189,7 @@
     <Compile Include="Model\RolePermission.cs" />
     <Compile Include="Model\SessionManagement.cs" />
     <Compile Include="Model\SubMenu.cs" />
+    <Compile Include="Model\Unit.cs" />
     <Compile Include="Model\UserFormControl.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Model\UserPermission.cs" />
@@ -255,6 +268,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902261829243_adding delete in form control.resx">
       <DependentUpon>201902261829243_adding delete in form control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903051732404_changing delete to checkbox.resx">
+      <DependentUpon>201903051732404_changing delete to checkbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903080906188_adding inventory settings.resx">
+      <DependentUpon>201903080906188_adding inventory settings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

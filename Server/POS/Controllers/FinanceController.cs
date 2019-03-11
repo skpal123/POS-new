@@ -1,6 +1,5 @@
 ﻿using ERP.DataService.Model;
 using ERP.DataService.Model.Model;
-using ERPWebApiService.Connection;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -12,6 +11,7 @@ using ViewModel.Model;
 using ERPWebApiService.Autentication;
 using ERPWebApiService.Exceptions;
 using System.Data.Entity.Migrations;
+using ERPWebApiService.DataConnection;
 namespace ERPWebApiService.Controllers
 {
     [RoutePrefix("api/FinanceService")]
@@ -300,7 +300,7 @@ namespace ERPWebApiService.Controllers
                     Amount = x.TotalAmount,
                 }).FirstOrDefault();
                 List<VoucherDetailInfo> VoucherDetailList = new List<VoucherDetailInfo>();
-                using (SqlConnection con = new SqlConnection(ConnectionString.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand(@"select vd.id,vd.[Lineno],isnull(vd.Amount,0) Amount,isnull(vd.vat,0)Vat,isnull(vd.tax,0)Tax,ac.AccountDescription+'-'+ac.ManualAccountCode AccountDescription,vd.Account_Id from tblAccount ac 
                                                 inner join tblVoucherDetails vd on ac.id=vd.Account_Id where vd.voucher_id=@voucherId order by [Lineno]", con);
@@ -337,6 +337,33 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("deleteVoucher/{voucherId}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteVoucher(string voucherId)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@voucherid", voucherId);
+                DatabaseCommand.ExcuteNonQuery(@"delete from tblvoucher where id=@voucherid
+                                                delete from tblVoucherDetails where voucher_id=@voucherid;
+                                                delete from tblSubledgerTransaction where voucher_id=@voucherid", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
         [Route("createVoucher")]
         [HttpPost]
         public HttpResponseMessage CreateVoucher(VoucherInfo voucherInfo)
@@ -350,12 +377,18 @@ namespace ERPWebApiService.Controllers
                     Voucherdate=voucherInfo.VoucherDate,
                     Voucherno=voucherInfo.VoucherNo,
                     Vouchertype=voucherInfo.VoucherType,
+                    TotalAmount=voucherInfo.Amount,
                     Voucherstatus=false,
                     Chequedate=voucherInfo.ChequeDate,
                     Chequeno=voucherInfo.ChequeNo
                 };
                 ERPContext.Vouchers.Add(voucher);
                 ERPContext.SaveChanges();
+                Dictionary<string,string> paramlist=new Dictionary<string,string>();
+                paramlist.Add("@voucherid",voucher.Id.ToString());
+                paramlist.Add("@voucherDate",voucher.Voucherdate.ToString());
+                paramlist.Add("@branch_id",null);
+                DatabaseCommand.ExcuteNonQuery("proc_generate_voucher_no", paramlist, "procedure");
                 var oVoucher=ERPContext.Vouchers.FirstOrDefault(x=>x.Id==voucher.Id);
                 foreach (var vd in voucherInfo.VoucherDetailsList)
                 {
@@ -406,10 +439,88 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("updateVoucher/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateVoucher(Guid id, VoucherInfo voucherInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var ovoucher = ERPContext.Vouchers.FirstOrDefault(x => x.Id == voucherInfo.Id);
+                if (ovoucher != null)
+                {
+                    var voucher = new Voucher()
+                    {
+                        Id = ovoucher.Id,
+                        Voucherdate = voucherInfo.VoucherDate,
+                        Voucherno = voucherInfo.VoucherNo,
+                        Vouchertype = voucherInfo.VoucherType,
+                        TotalAmount=voucherInfo.Amount,
+                        Voucherstatus = false,
+                        Chequedate = voucherInfo.ChequeDate,
+                        Chequeno = voucherInfo.ChequeNo
+                    };
+                    ERPContext.Vouchers.AddOrUpdate(voucher);
+                    ERPContext.SaveChanges();
+                    Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                    paramlist.Add("@voucherid", voucher.Id.ToString());
+                    DatabaseCommand.ExcuteNonQuery("delete from tblVoucherDetails where voucher_id=@voucherid;delete from tblSubledgerTransaction where voucher_id=@voucherid", paramlist, null);
+                    var oVoucher = ERPContext.Vouchers.FirstOrDefault(x => x.Id == voucher.Id);
+                    foreach (var vd in voucherInfo.VoucherDetailsList)
+                    {
+                        var account = ERPContext.Accounts.FirstOrDefault(x => x.Id == vd.AccountId);
+                        var voucherDetail = new VoucherDetails()
+                        {
+                            Id = Guid.NewGuid(),
+                            Lineno = vd.Lineno,
+                            Account_Id = vd.AccountId,
+                            AccId = account.AccId,
+                            LevelId = account.LevelId,
+                            GroupId = account.GroupId,
+                            Amount = vd.Amount,
+                            Vat = vd.Vat,
+                            Tax = vd.Tax,
+                            Voucher_Id = oVoucher.Id,
+                            VoucherNo = oVoucher.Voucherno,
+                        };
+                        ERPContext.VoucherDetailList.AddOrUpdate(voucherDetail);
+                        ERPContext.SaveChanges();
+                        foreach (var subledgerTransactionInfo in vd.SubLedgerTransactions)
+                        {
+                            var subledgerTransaction = new SubledgerTransaction()
+                            {
+                                Id = Guid.NewGuid(),
+                                Amount = subledgerTransactionInfo.Amount,
+                                Account_Id = account.Id,
+                                Subledger_Id = subledgerTransactionInfo.SubLedger_Id,
+                                Voucher_Id = oVoucher.Id,
+                                Voucher_Detail_Id = voucherDetail.Id
+                            };
+                            ERPContext.SubledgerTransactions.Add(subledgerTransaction);
+                            ERPContext.SaveChanges();
+                        }
+                    }
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
         private List<SubLedgerTransactionInfo> GetSubledgerTransactionListByVoucherDetailsId(Guid deatilsId)
         {
             List<SubLedgerTransactionInfo> subledgerTransactionList = new List<SubLedgerTransactionInfo>();
-            using (SqlConnection con = new SqlConnection(ConnectionString.GetConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(@"select st.id,st.Account_Id,s.Description+'-'+s.SubledgerCode Description,st.Subledger_Id,st.Amount  from tblSubledgerTransaction st
                                                 inner join tblSubledger s on s.Id=st.Subledger_Id where Voucher_Detail_Id=@vdId", con);
@@ -499,7 +610,7 @@ namespace ERPWebApiService.Controllers
             {
                 //var userSession = AuthorizationHelper.GetSession();
                 int MaxAccId=0;
-                using (SqlConnection con = new SqlConnection(ConnectionString.GetConnectionString()))
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd=new SqlCommand(@"select isnull(max(accid),0) from tblaccount where groupId=@groupId and LevelId=@levelId",con);
                     cmd.Parameters.AddWithValue("@levelId",levelId);
@@ -539,7 +650,7 @@ namespace ERPWebApiService.Controllers
                     Autocomplete=x.Autocomplete,
                     IsEnable=x.IsEnable,
                     FormName=x.FormName,
-                    IsDelete=x.IsDelete,
+                    IsCheckbox=x.IsCheckbox,
                     Type=x.Type
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, userControlList);
