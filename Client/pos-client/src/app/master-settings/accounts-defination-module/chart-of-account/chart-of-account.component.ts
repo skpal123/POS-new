@@ -8,12 +8,14 @@ import { AccountDetails } from '../../../models/master-settings/account-definati
 import { Subledger } from '../../../models/master-settings/account-defination/subledger.model';
 import { MatDialog } from '@angular/material';
 import { AddSubledgerComponent } from '../add-subledger/add-subledger.component';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
   styleUrls: ['./chart-of-account.component.css']
 })
 export class ChartOfAccountComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
   accountDetails:AccountDetails;
   account:ChartOfaccount={AccountType:"0",};
@@ -30,10 +32,13 @@ export class ChartOfAccountComponent implements OnInit {
     this.getChartOfaccountTreeList();
   }
   getChartOfaccountTreeList(){
+    this.blockUI.start("Loading,Please wait...")
     this._service.getChartOfAccountListForTree().subscribe(response=>{
+      this.blockUI.stop();
       this.accountDetails=response.json();
       this.chartOfAccountTreeList=this.accountDetails.AccountParentChildRelationInfoList;
     },error=>{
+      this.blockUI.stop();
       var dialogData=new DialogData();
       dialogData.message=error.json().message;
       this._alertBoxService.openDialog(dialogData);

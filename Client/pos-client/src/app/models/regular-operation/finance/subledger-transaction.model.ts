@@ -5,5 +5,5 @@ export class SubledgerTransaction{
     public Account_Id?:string;
     public SubLedger_Id?:string;
     public Amount?:number;
-    public FcAmount?:number
+    public FcAmount?:number 
 }

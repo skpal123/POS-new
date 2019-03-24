@@ -11,12 +11,14 @@ import { MatDialog } from '@angular/material';
 import { AddRolePermissionComponent } from '../add-role-permission/add-role-permission.component';
 import { RolePermissionData } from '../../../models/admin/role-permission-data.model';
 import { PostLoginService } from '../../../services/common/post-login.service';
+import { BlockUI,NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-role-permission',
   templateUrl: './role-permission.component.html',
   styleUrls: ['./role-permission.component.css']
 })
 export class RolePermissionComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
   isFound:boolean=false;
@@ -44,12 +46,15 @@ export class RolePermissionComponent implements OnInit {
     this.getRoleControlList();
   }
 getRoleList(){
+  this.blockUI.start("Loading ... Please wait");
   this._securityService.getRoleList().subscribe(response=>{
+    this.blockUI.stop();
     this.roleList=response.json();
     this.DataList=this.roleList;
     this.dtTrigger.next();
     this.getRolePermissons();
   },error=>{
+    this.blockUI.stop();
     var data=new DialogData();
     var message=error.json();
     data.message=message.Message;
@@ -57,10 +62,13 @@ getRoleList(){
   })
 }
 getRoleControlList(){
+  this.blockUI.start("Loading ... Please wait");
   this._postLoginService.getUserFormControlByFormName('role-permission').subscribe(response=>{
+    this.blockUI.stop();
     this.roleControlList=response.json();
     this.ColumnList=this.roleControlList;
   },error=>{
+    this.blockUI.stop();
     var data=new DialogData();
     var message=error.json();
     data.message=message.Message;
@@ -68,10 +76,13 @@ getRoleControlList(){
   })
 }
 getRolePermissonsById(roleId:string){
+  this.blockUI.start("Loading ... Please wait");
   this._securityService.getRolePermissionsRoleById(roleId).subscribe(response=>{
+    this.blockUI.stop();
     this.tree=response.json();
     console.log(this.tree);
   },error=>{
+    this.blockUI.stop();
     var data=new DialogData();
     var message=error.json();
     data.message=message.Message;
@@ -79,10 +90,14 @@ getRolePermissonsById(roleId:string){
   })
 }
 getRolePermissons(){
+  this.blockUI.stop();
+  this.blockUI.start("Loading ... Please wait");
   this._securityService.getAllRolePermissions().subscribe(response=>{
+    this.blockUI.stop();
     this.newRolePermissionTree=response.json();
     console.log(this.tree);
   },error=>{
+    this.blockUI.stop();
     var data=new DialogData();
     var message=error.json();
     data.message=message.Message;
@@ -110,7 +125,9 @@ deleteRole($event:string){
   alert($event)
 }
 getRolePermissionDetailsById(Id:string){
+  this.blockUI.start("Loading ... Please wait");
   this._securityService.getRolePermissionsRoleById(Id).subscribe(response=>{
+    this.blockUI.stop();
     this.tree=response.json();
     let index=this.roleList.findIndex(role=>role.Id==Id);
     let role=this.roleList[index];
@@ -127,6 +144,7 @@ getRolePermissionDetailsById(Id:string){
       alert('test'+response);
     })
   },error=>{
+    this.blockUI.stop();
     var data=new DialogData();
     var message=error.json();
     data.message=message.Message;

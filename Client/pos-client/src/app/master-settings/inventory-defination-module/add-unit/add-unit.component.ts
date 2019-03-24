@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Unit } from '../../../models/master-settings/inventory-defination/unit.model';
+import { NgForm } from '@angular/forms';
+import { AlertBoxService } from '../../../shared/alert-box.service';
+import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
+import { DialogData } from '../../../models/common/dialog-data.model';
 
 @Component({
   selector: 'app-add-unit',
@@ -6,10 +12,51 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-unit.component.css']
 })
 export class AddUnitComponent implements OnInit {
-
-  constructor() { }
+  @ViewChild('unitForm') unitForm:NgForm
+  constructor(public matDialogRef:MatDialogRef<AddUnitComponent>,
+  @Inject(MAT_DIALOG_DATA) public unit:Unit,
+  private _alertBox:AlertBoxService,
+  private _inventotyDefinationService:InventoryDefinationServiceService,
+) { }
 
   ngOnInit() {
-  }
 
+  }
+  onNoClick(){
+    this.matDialogRef.close(false);
+  }
+  saveUnit(){
+    if(this.unit.Id==null){
+      this._inventotyDefinationService.CreateUnit(this.unit).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          this.matDialogRef.close(true);
+          let dialogData=new DialogData();
+          dialogData.message="Save successfully";
+          this._alertBox.openDialog(dialogData);
+        }
+      },error=>{
+        let message=error.json();
+        let dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBox.openDialog(dialogData);
+      })
+    }
+    else{
+      this._inventotyDefinationService.UpdateUnit(this.unit).subscribe(response=>{
+        let result=response.json();
+        if(result){
+          this.matDialogRef.close(true);
+          let dialogData=new DialogData();
+          dialogData.message="Update successfully";
+          this._alertBox.openDialog(dialogData);
+        }
+      },error=>{
+        let message=error.json();
+        let dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBox.openDialog(dialogData);
+      })
+    }
+  }
 }

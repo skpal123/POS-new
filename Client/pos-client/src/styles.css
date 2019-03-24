@@ -1,10 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import '~angular-tree-component/dist/angular-tree-component.css';
 .navbar-nav > li > a, .navbar-brand {padding-top:8px !important; padding-bottom:0 !important; height: 40px; } .navbar {min-height:30px !important;}
 
-
+  
 html, body { height: 100%; }
 body { margin: 0; font-family: 'Roboto', sans-serif; }
 #pointer{
@@ -230,3 +229,6 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
     87.5% { color: #7b1fa2; }
     100%  { color: #6a1b9a; }
   }
+
+
+  

@@ -1,3 +1,35 @@
-<p>
-  add-unit works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5> Unit entry
+            <button type="button" class="close pull-right" (click)="onNoClick()">&times;</button>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <form #unitForm="ngForm">
+            <div class="form-group row" [class.has-success]="unitNameControl.valid" [class.has-error]="unitNameControl.invalid&&unitNameControl.touched">
+                <label for="UnitName" class="col-sm-3 col-form-label">Unit Name</label>
+                <div class="col-sm-9" >
+                    <input class="form-control" required name="UnitName" #unitNameControl="ngModel" id="UnitName" [(ngModel)]="unit.UnitName">
+                    <span class="help-block" *ngIf="unitNameControl.invalid&&unitNameControl.touched">
+                        unit name feild is required
+                    </span>  
+                </div>
+              </div>
+              <div class="form-group row">
+                  <label for="Description" class="col-sm-3 col-form-label">Description</label>
+                  <div class="col-sm-9" >
+                      <input class="form-control" required name="Description" #descriptionControl="ngModel" id="Description" [(ngModel)]="unit.Description">
+                  </div>
+                </div>
+              <div class="row">
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="unitForm.invalid" (click)="saveUnit()" value="Save" class="btn btn-primary">
+                </div>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

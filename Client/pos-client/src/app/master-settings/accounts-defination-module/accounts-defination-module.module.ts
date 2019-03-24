@@ -17,7 +17,9 @@ import { AddSubledgerComponent } from './add-subledger/add-subledger.component';
     CommonModuleModule,
     TreeModule.forRoot()
   ],
-  declarations: [AcountLayoutComponent, ChartOfAccountComponent, AccountOpeningComponent, CoaTreeComponent, SubledgerOpeningComponent, AddSubledgerComponent],
+  declarations: [AcountLayoutComponent, ChartOfAccountComponent, 
+    AccountOpeningComponent, CoaTreeComponent,
+  SubledgerOpeningComponent, AddSubledgerComponent],
   entryComponents:[AddSubledgerComponent]
   
 })

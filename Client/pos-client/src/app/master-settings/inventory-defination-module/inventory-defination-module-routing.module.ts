@@ -8,29 +8,40 @@ import { AddCategoryComponent } from './add-category/add-category.component';
 import { UnitListComponent } from './unit-list/unit-list.component';
 import { InventoryLocationListComponent } from './inventory-location-list/inventory-location-list.component';
 import { ItemListComponent } from './item-list/item-list.component';
+import { ItemCategoryListComponent } from './item-category-list/item-category-list.component';
+import { ItemSubcategoryListComponent } from './item-subcategory-list/item-subcategory-list.component';
+import { SupplierListComponent } from './supplier-list/supplier-list.component';
+import { PartyListComponent } from './party-list/party-list.component';
+import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
 
 const routes: Routes = [
   {
     path:'',
     component:InventoryLayoutComponent,
     children:[
-      {path:'',component:AddCategoryComponent},
-      {path:'add-category',component:AddCategoryComponent},
-      {path:'add-subCategory',component:AddSubcategoryComponent},
+      {path:'',component:ItemCategoryListComponent},
+      {path:'add-category',component:ItemCategoryListComponent},
+      {path:'add-subCategory',component:ItemSubcategoryListComponent},
       {path:'add-unit',component:UnitListComponent},
       {path:'location-entry',component:InventoryLocationListComponent},
-      {path:'item-entry',component:ItemListComponent}
+      {path:'item-entry',component:ItemListComponent},
+      {path:'add-supplier',component:SupplierListComponent},
+      {path:'add-party',component:PartyListComponent},
+      {path:'add-manufacture',component:ManufactureListComponent}
     ]
   },{
     path:'inventory-defination',
     component:InventoryLayoutComponent,
     children:[
-      {path:'',component:AddCategoryComponent},
-      {path:'add-category',component:AddCategoryComponent},
-      {path:'add-subCategory',component:AddSubcategoryComponent},
+      {path:'',component:ItemCategoryListComponent},
+      {path:'add-category',component:ItemCategoryListComponent},
+      {path:'add-subCategory',component:ItemSubcategoryListComponent},
       {path:'add-unit',component:UnitListComponent},
       {path:'location-entry',component:InventoryLocationListComponent},
-      {path:'item-entry',component:ItemListComponent}
+      {path:'item-entry',component:ItemListComponent},
+      {path:'add-supplier',component:SupplierListComponent},
+      {path:'add-party',component:PartyListComponent},
+      {path:'add-manufacture',component:ManufactureListComponent}
     ]
   }
 

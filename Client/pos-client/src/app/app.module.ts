@@ -3,6 +3,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { BlockUIModule } from 'ng-block-ui';
 import {SharedModule} from 'src/app/shared/shared/shared.module'
 import {FormsModule, ReactiveFormsModule,FormControl} from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -26,7 +27,8 @@ const routes:Routes=[
     BrowserAnimationsModule,
     RouterModule.forRoot(routes,{useHash:true}),
     HttpModule,FormsModule,ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    BlockUIModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

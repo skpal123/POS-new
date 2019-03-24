@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { RolePermission } from '../../../models/admin/role-permission.model';
 import { RolePermissionData } from '../../../models/admin/role-permission-data.model';
 import { RolePermissionDataInfo } from '../../../models/admin/role-permissionlist.model';
+import { BlockUI,NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-add-role-permission',
@@ -16,6 +17,7 @@ import { RolePermissionDataInfo } from '../../../models/admin/role-permissionlis
   styleUrls: ['./add-role-permission.component.css']
 })
 export class AddRolePermissionComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   isFound:boolean=false;
   role:Role={
     Status:true
@@ -224,7 +226,9 @@ getRolePermissionList(permissionTree:Tree[]){
 createRoleAndRolePermission(){
   this.rolePermissionDataInfo.roleInfo=this.rolePermissionData.role;
   this.rolePermissionDataInfo.RolePermissionList=this.rolePermissions;
+  this.blockUI.start("Loading ... Please wait");
   this._securityService.saveRolePermission(this.rolePermissionDataInfo).subscribe(response=>{
+    this.blockUI.stop();
     let result=response.json();
     if(result){
       var dialogData=new DialogData();
@@ -233,6 +237,7 @@ createRoleAndRolePermission(){
     }
   },
     error=>{
+      this.blockUI.stop();
       let message=error.json();
       var dialogData=new DialogData();
       dialogData.message=message.Message;
