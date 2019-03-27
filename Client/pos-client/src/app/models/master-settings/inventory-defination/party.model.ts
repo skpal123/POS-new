@@ -3,7 +3,7 @@ export class Party{
     public  PartyId?:string;
     public  ContactPerson?:string;
     public  PartyName?:string;
-    public  PnoneNo?:string;
+    public  PhoneNo?:string;
     public  Email?:string;
     public  Address?:string;
     public  Ledger_Id?:string;

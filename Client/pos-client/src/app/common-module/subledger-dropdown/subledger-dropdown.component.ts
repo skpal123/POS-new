@@ -36,12 +36,16 @@ export class SubledgerDropdownComponent implements OnChanges {
   ngOnChanges(){
     debugger
     if(this.ledgerId!=null && this.ledgerId!="0"){
-      this.getSubLedgerList();
+      this.getSubLedgerList(this.ledgerId);
+    }else if(this.ledgerId==null){
+      this.getSubLedgerList("00000000-0000-0000-0000-000000000000")
+
     }
   }
-  getSubLedgerList(){
+  getSubLedgerList(ledgerId:string){
     this.subledgerDropdownList=[];
-    this._dropdownService.getSubledgerDropdownList(this.ledgerId).subscribe(response=>{
+    this.subledgerSelectedItems=[];
+    this._dropdownService.getSubledgerDropdownList(ledgerId).subscribe(response=>{
       this.subledgerList=response.json();
       if(this.subledgerList.length>0){
         this.subledgerList.forEach((a,index,array)=>{

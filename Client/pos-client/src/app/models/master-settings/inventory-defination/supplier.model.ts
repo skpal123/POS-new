@@ -3,7 +3,7 @@ export class Supplier{
     public  SupplierId?:string;
     public  ContactPerson?:string;
     public  SupplierName?:string;
-    public  PnoneNo?:string;
+    public  PhoneNo?:string;
     public  Email?:string;
     public  Address?:string;
     public  Ledger_Id?:string;

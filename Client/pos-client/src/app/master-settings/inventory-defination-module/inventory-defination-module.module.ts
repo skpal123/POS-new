@@ -39,11 +39,20 @@ import { ManufactureEntryComponent } from './manufacture-entry/manufacture-entry
     ItemListComponent, 
     InventoryLocationListComponent, 
     ItemEntryComponent, 
-    LocationEntryComponent, SupplierListComponent, SupplierEntryComponent, PartyListComponent, PartyEntryComponent, ManufactureListComponent, ManufactureEntryComponent
+    LocationEntryComponent, 
+    SupplierListComponent, 
+    SupplierEntryComponent,
+    PartyListComponent, 
+    PartyEntryComponent, 
+    ManufactureListComponent, 
+    ManufactureEntryComponent
   ],
     entryComponents:[
       AddUnitComponent,AddSubcategoryComponent,
-      ItemEntryComponent,AddCategoryComponent,LocationEntryComponent
+      ItemEntryComponent,AddCategoryComponent,
+      LocationEntryComponent,PartyEntryComponent,
+      SupplierEntryComponent,
+      ManufactureEntryComponent
     ]
 })
 export class InventoryDefinationModuleModule { }
