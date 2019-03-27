@@ -45,5 +45,8 @@ namespace ERP.DataService.Model
         public DbSet<Category> Categorys { set; get; }
         public DbSet<Subcategory> Subcategorys { set; get; }
         public DbSet<InventoryItem> InventoryItems { set; get; }
+        public DbSet<Supplier> Suppliers { set; get; }
+        public DbSet<Party> Partys { set; get; }
+        public DbSet<Manufacture> Manufactures { set; get; }
     }
 }

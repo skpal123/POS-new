@@ -163,6 +163,14 @@
     <Compile Include="Migrations\201903080906188_adding inventory settings.Designer.cs">
       <DependentUpon>201903080906188_adding inventory settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903230736239_adding supplier party and fanufacture.cs" />
+    <Compile Include="Migrations\201903230736239_adding supplier party and fanufacture.Designer.cs">
+      <DependentUpon>201903230736239_adding supplier party and fanufacture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903271447516_update3.cs" />
+    <Compile Include="Migrations\201903271447516_update3.Designer.cs">
+      <DependentUpon>201903271447516_update3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -174,6 +182,8 @@
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\InventoryItem.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Manufacture.cs" />
+    <Compile Include="Model\Party.cs" />
     <Compile Include="Model\Subcategory.cs" />
     <Compile Include="Model\SubledgerOpening.cs" />
     <Compile Include="Model\SubledgerTransaction.cs" />
@@ -189,6 +199,7 @@
     <Compile Include="Model\RolePermission.cs" />
     <Compile Include="Model\SessionManagement.cs" />
     <Compile Include="Model\SubMenu.cs" />
+    <Compile Include="Model\Supplier.cs" />
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Model\UserFormControl.cs" />
     <Compile Include="Model\UserInfo.cs" />
@@ -274,6 +285,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903080906188_adding inventory settings.resx">
       <DependentUpon>201903080906188_adding inventory settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903230736239_adding supplier party and fanufacture.resx">
+      <DependentUpon>201903230736239_adding supplier party and fanufacture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903271447516_update3.resx">
+      <DependentUpon>201903271447516_update3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

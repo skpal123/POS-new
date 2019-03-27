@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using ERPWebApiService.DataConnection;
 using ERPWebApiService.Autentication;
 using ERP.DataService.Model.Model;
+using System.Data;
 namespace ERPWebApiService.Controllers
 {
      [RoutePrefix("api/AdministrationService")]
@@ -384,6 +385,10 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
+                DataTable rolePermissionTable = new DataTable();
+                rolePermissionTable.Columns.Add("Id", typeof(Guid));
+                rolePermissionTable.Columns.Add("Role_Id", typeof(Guid));
+                rolePermissionTable.Columns.Add("Permission_Id", typeof(Guid));
                 var role = ERPContext.Roles.FirstOrDefault(x => x.Id == rolePermissionDataInfo.roleInfo.Id);
                 if (role == null)
                 {
@@ -395,20 +400,13 @@ namespace ERPWebApiService.Controllers
                         Status = true
                     };
                     ERPContext.Roles.AddOrUpdate(newRole);
-                    ERPContext.SaveChanges();
+                    ERPContext.SaveChanges();                  
                     if (rolePermissionDataInfo.RolePermissionList.Any())
                     {
                        
                         foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
                         {
-                            var rolePermission = new RolePermission
-                            {
-                                Id = Guid.NewGuid(),
-                                Permission_Id = rolePermissionInfo.PermissionId,
-                                Role_Id = newRole.Id
-                            };
-                            ERPContext.RolePermissions.AddOrUpdate(rolePermission);
-                            ERPContext.SaveChanges();
+                            rolePermissionTable.Rows.Add(Guid.NewGuid(), newRole.Id, rolePermissionInfo.PermissionId);                         
                         }
                     }
                 }
@@ -422,18 +420,13 @@ namespace ERPWebApiService.Controllers
                         }
                         foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
                         {
-                            var rolePermission = new RolePermission
-                            {
-                                Id = Guid.NewGuid(),
-                                Permission_Id = rolePermissionInfo.PermissionId,
-                                Role_Id = role.Id
-                            };
-                            ERPContext.RolePermissions.AddOrUpdate(rolePermission);
-                            ERPContext.SaveChanges();
+                            rolePermissionTable.Rows.Add(Guid.NewGuid(), role.Id, rolePermissionInfo.PermissionId);
                         }
                     }
                 }
-
+                Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                paramlist.Add("@typeRolePermission", rolePermissionTable);
+                DatabaseCommand.ExcuteObjectNonQuery("proc_saveRolePermission", paramlist, "procedure");
                return Request.CreateResponse(HttpStatusCode.Created, true);
             }
             catch (Exception ex)

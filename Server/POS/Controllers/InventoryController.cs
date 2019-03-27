@@ -1,4 +1,4 @@
-﻿using ERP.DataService.Model;
+﻿using ERP.DataService.Model.Model;
 using ERPWebApiService.Authentication;
 using System;
 using System.Collections.Generic;
@@ -6,39 +6,1008 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using ViewModel.Model;
+using System.Data.Entity.Migrations;
+using ERP.DataService.Model;
+using ERPWebApiService.DataConnection;
+using System.Data.SqlClient;
 namespace ERPWebApiService.Controllers
 {
      [RoutePrefix("api/InventoryService")]
     public class InventoryController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
-        SumonERPContext ErpContext = new SumonERPContext();
+        SumonERPContext ERPContext = new SumonERPContext();
         // GET api/<controller>
-        public HttpResponseMessage Get()
+        [Route("units")]
+        [HttpGet]
+        public HttpResponseMessage GetUnitList()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, true);
+            try
+            {
+                var unitList =ERPContext.Units.Select(x => new UnitInfo
+                {
+                    Id = x.Id,
+                    UnitName = x.UnitName,
+                    Description=x.Description
+                }).OrderBy(x => x.UnitName).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, unitList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
-
-        // GET api/<controller>/5
-        public string Get(int id)
+        [Route("unit")]
+        [HttpPost]
+        public HttpResponseMessage CreateUnit(UnitInfo unitInfo)
         {
-            return "value";
+            try
+            {
+                var unit = new Unit()
+                {
+                    Id = Guid.NewGuid(),
+                    UnitName = unitInfo.UnitName,
+                    Description = unitInfo.Description
+                };
+                ERPContext.Units.Add(unit);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [Route("unit/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateUnit(string id,UnitInfo unitInfo)
         {
+            try
+            {
+                var oUnit = ERPContext.Units.FirstOrDefault(x => x.Id == unitInfo.Id);
+                if (oUnit != null)
+                {
+                    var unit = new ERP.DataService.Model.Model.Unit()
+                    {
+                        Id = oUnit.Id,
+                        UnitName = unitInfo.UnitName,
+                        Description = unitInfo.Description
+                    };
+                    ERPContext.Units.AddOrUpdate(unit);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [Route("unit/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetUnitById(string id)
         {
+            try
+            {
+                var Id = Guid.Parse(id);
+               var unitInfo= ERPContext.Units.Where(x=>x.Id==Id).Select(x => new UnitInfo() { 
+                    Id=x.Id,
+                    UnitName=x.UnitName,
+                    Description=x.Description
+                }).FirstOrDefault();
+               return Request.CreateResponse(HttpStatusCode.OK, unitInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        [Route("unit/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteUnit(string id)
         {
+            try
+            {
+                var Id = Guid.Parse(id);
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", Id.ToString());
+                DatabaseCommand.ExcuteNonQuery("delete from tblUnit where id=@id",paramlist,null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("locations")]
+        [HttpGet]
+        public HttpResponseMessage GetLocationList()
+        {
+            try
+            {
+                var locationList = ERPContext.Locations.Select(x => new InventoryLocationInfo
+                {
+                    Id = x.Id,
+                    LocationId = x.LocationId,
+                    LocationName = x.LocationName,
+                    Description=x.Description
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, locationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("location")]
+        [HttpPost]
+        public HttpResponseMessage CreateInventoryLocation(InventoryLocationInfo inventoryLocationInfo)
+        {
+            try
+            {
+                var location = new Location()
+                {
+                    Id = Guid.NewGuid(),
+                    LocationId = inventoryLocationInfo.LocationId,
+                    LocationName=inventoryLocationInfo.LocationName,
+                    Description = inventoryLocationInfo.Description
+                };
+                ERPContext.Locations.Add(location);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("location/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateLocation(string id, InventoryLocationInfo inventoryLocationInfo)
+        {
+            try
+            {
+                var oLocation = ERPContext.Locations.FirstOrDefault(x => x.Id == inventoryLocationInfo.Id);
+                if (oLocation != null)
+                {
+                    var location = new Location
+                    {
+                        Id =oLocation.Id,
+                        LocationId = inventoryLocationInfo.LocationId,
+                        LocationName = inventoryLocationInfo.LocationName,
+                        Description = inventoryLocationInfo.Description
+                    };
+                    ERPContext.Locations.AddOrUpdate(location);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("location/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetLocationById(string id)
+        {
+            try
+            {
+                var Id = Guid.Parse(id);
+                var locationInfo = ERPContext.Locations.Where(x => x.Id == Id).Select(x => new InventoryLocationInfo()
+                {
+                    Id = x.Id,
+                    LocationId = x.LocationId,
+                    LocationName=x.LocationName,
+                    Description = x.Description
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, locationInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("location/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteLocation(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblItemLocation where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("categories")]
+        [HttpGet]
+        public HttpResponseMessage GetCategoryList()
+        {
+            try
+            {
+                var categoryList = ERPContext.Categorys.Select(x => new CategoryInfo
+                {
+                    Id = x.Id,
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.CategoryName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, categoryList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("category")]
+        [HttpPost]
+        public HttpResponseMessage CreateCategory(CategoryInfo categoryInfo)
+        {
+            try
+            {
+                var category = new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    CategoryId = categoryInfo.CategoryId,
+                    CategoryName = categoryInfo.CategoryName
+                };
+                ERPContext.Categorys.Add(category);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("category/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateCategory(string id, CategoryInfo categoryInfo)
+        {
+            try
+            {
+                var oCategory = ERPContext.Categorys.FirstOrDefault(x => x.Id == categoryInfo.Id);
+                if (oCategory != null)
+                {
+                    var category = new Category
+                    {
+                        Id = oCategory.Id,
+                        CategoryId = categoryInfo.CategoryId,
+                        CategoryName = categoryInfo.CategoryName,
+                    };
+                    ERPContext.Categorys.AddOrUpdate(category);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("category/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetCategoryById(string id)
+        {
+            try
+            {
+                var Id = Guid.Parse(id);
+                var categoryInfo = ERPContext.Categorys.Where(x => x.Id == Id).Select(x => new CategoryInfo()
+                {
+                    Id = x.Id,
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.CategoryName,
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, categoryInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("category/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteCategory(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblcategory where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategories")]
+        [HttpGet]
+        public HttpResponseMessage GetSubCategoryList()
+        {
+            try
+            {
+                var categoryList = ERPContext.Subcategorys.Select(x => new SubCategoryInfo
+                {
+                    Id = x.Id,
+                    SubCategoryId = x.SubCategoryId,
+                    SubCategoryName = x.SubCategoryName,
+                    CategoryName=ERPContext.Categorys.FirstOrDefault(y=>y.Id==x.Category_Id).CategoryName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, categoryList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategory")]
+        [HttpPost]
+        public HttpResponseMessage CreateSubCategory(SubCategoryInfo subCategoryInfo)
+        {
+            try
+            {
+                var subcategory = new Subcategory()
+                {
+                    Id = Guid.NewGuid(),
+                    SubCategoryId = subCategoryInfo.SubCategoryId,
+                    SubCategoryName = subCategoryInfo.SubCategoryName,
+                    Category_Id=subCategoryInfo.Category_Id
+                };
+                ERPContext.Subcategorys.Add(subcategory);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategory/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSubCategory(string id, SubCategoryInfo subcategoryInfo)
+        {
+            try
+            {
+                var osubCategory = ERPContext.Subcategorys.FirstOrDefault(x => x.Id == subcategoryInfo.Id);
+                if (osubCategory != null)
+                {
+                    var subcategory = new Subcategory
+                    {
+                        Id = osubCategory.Id,
+                        SubCategoryId = subcategoryInfo.SubCategoryId,
+                        SubCategoryName = subcategoryInfo.SubCategoryName,
+                        Category_Id=subcategoryInfo.Category_Id
+                    };
+                    ERPContext.Subcategorys.AddOrUpdate(subcategory);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategory/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSubCategoryById(string id)
+        {
+            try
+            {
+                var Id = Guid.Parse(id);
+                var subcategoryInfo = ERPContext.Subcategorys.Where(x => x.Id == Id).Select(x => new SubCategoryInfo()
+                {
+                    Id = x.Id,
+                    CategoryName=ERPContext.Categorys.FirstOrDefault(y=>y.Id==x.Category_Id).CategoryName,
+                    SubCategoryId = x.SubCategoryId,
+                    SubCategoryName = x.SubCategoryName,
+                    Category_Id=x.Category_Id
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, subcategoryInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategory/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteSubCategory(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblSubCategory where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("InventoryItems")]
+        [HttpGet]
+        public HttpResponseMessage GetInventoryItemList()
+        {
+            try
+            {
+                var inventoryItemist = (from item in ERPContext.InventoryItems
+                                        join category in ERPContext.Categorys on item.Category_Id equals category.Id
+                                        join subcategory in ERPContext.Subcategorys on item.SubCategory_Id equals subcategory.Id
+                                        join unit in ERPContext.Units on item.UnitId equals unit.Id
+                                        select new ItemListInfo()
+                                        {
+                                            Id=item.Id,
+                                            ItemName=item.ItemName,
+                                            ItemCode=item.ItemCode,
+                                            ItemId=item.ItemId,
+                                            UnitName=unit.UnitName,
+                                            CategoryName=category.CategoryName,
+                                            SubCategoryName=subcategory.SubCategoryName
+                                        }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, inventoryItemist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("InventoryItem")]
+        [HttpPost]
+        public HttpResponseMessage CreateInventoryItem(InventoryItemInfo inventoryItemInfo)
+        {
+            try
+            {
+                var inventoryItem = new InventoryItem()
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = inventoryItemInfo.ItemId,
+                    ItemCode = inventoryItemInfo.ItemCode,
+                    ItemName = inventoryItemInfo.ItemName,
+                    Category_Id = inventoryItemInfo.Category_Id,
+                    SubCategory_Id = inventoryItemInfo.SubCategory_Id,
+                    UnitId = inventoryItemInfo.UnitId,
+                    Ledger_Id = inventoryItemInfo.Ledger_Id,
+                    SubLedger_Id = inventoryItemInfo.SubLedger_Id,
+                };
+                ERPContext.InventoryItems.Add(inventoryItem);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("InventoryItem/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateInventoryItem(string id, InventoryItemInfo inventoryItemInfo)
+        {
+            try
+            {
+                var oitem = ERPContext.InventoryItems.FirstOrDefault(x => x.Id == inventoryItemInfo.Id);
+                if (oitem != null)
+                {
+                     var inventoryItem = new InventoryItem()
+                     {
+                        Id = oitem.Id,
+                        ItemId = inventoryItemInfo.ItemId,
+                        ItemCode = inventoryItemInfo.ItemCode,
+                        ItemName = inventoryItemInfo.ItemName,
+                        Category_Id = inventoryItemInfo.Category_Id,
+                        SubCategory_Id = inventoryItemInfo.SubCategory_Id,
+                        UnitId = inventoryItemInfo.UnitId,
+                        Ledger_Id = inventoryItemInfo.Ledger_Id,
+                        SubLedger_Id = inventoryItemInfo.SubLedger_Id,
+                    };
+                     ERPContext.InventoryItems.AddOrUpdate(inventoryItem);
+                ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("InventoryItem/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetInventoryItemById(string id)
+        {
+            try
+            {
+                InventoryItemInfo inventoryItemInfo = new InventoryItemInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select i.*,ca.CategoryName,subca.SubCategoryName,ac.AccountDescription+'-'+ac.ManualAccountCode LedgerName,
+                    subl.Description+'-'+subl.SubledgerCode SubledgerName,u.UnitName from tblInventoryItem i
+                    left join tblCategory ca on i.Category_Id=ca.Id
+                    left join tblSubCategory subca on subca.Id=i.SubCategory_Id
+                    left join tblAccount ac on ac.Id=i.Ledger_Id
+                    left join tblUnit u on u.Id=i.UnitId
+                    left join tblSubledger subl on subl.Id=i.SubLedger_Id
+                    where i.Id=@id", con);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        inventoryItemInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryItemInfo.ItemId =rdr["ItemId"]!=DBNull.Value? rdr["ItemId"].ToString():null;
+                        inventoryItemInfo.ItemCode =rdr["ItemCode"]!=DBNull.Value? rdr["ItemCode"].ToString():null;
+                        inventoryItemInfo.ItemName =rdr["ItemName"]!=DBNull.Value? rdr["ItemName"].ToString():null;
+                        inventoryItemInfo.CategoryName = rdr["CategoryName"] != DBNull.Value ? rdr["CategoryName"].ToString() : null;
+                        inventoryItemInfo.SubCategoryName = rdr["SubCategoryName"] != DBNull.Value ? rdr["SubCategoryName"].ToString() : null;
+                        inventoryItemInfo.SubLedgerName =rdr["SubledgerName"]!=DBNull.Value? rdr["SubledgerName"].ToString():null;
+                        inventoryItemInfo.LedgerName =rdr["LedgerName"]!=DBNull.Value? rdr["LedgerName"].ToString():null;
+                        inventoryItemInfo.UnitName =rdr["UnitName"]!=DBNull.Value? rdr["UnitName"].ToString():null;
+                        if (rdr["Category_Id"] != DBNull.Value)
+                        {
+                            inventoryItemInfo.Category_Id = Guid.Parse(rdr["Category_Id"].ToString());
+                        }
+                        if (rdr["SubCategory_Id"] != DBNull.Value)
+                        {
+                            inventoryItemInfo.SubCategory_Id = Guid.Parse(rdr["SubCategory_Id"].ToString());
+                        }
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            inventoryItemInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            inventoryItemInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                        if (rdr["UnitId"] != DBNull.Value)
+                        {
+                            inventoryItemInfo.UnitId = Guid.Parse(rdr["UnitId"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, inventoryItemInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("InventoryItem/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteInventoryItem(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblInventoryItem where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Partys")]
+        [HttpGet]
+        public HttpResponseMessage GetPartyList()
+        {
+            try
+            {
+                List<PartyInfo> partyList = new List<PartyInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblparty p
+                    left join tblAccount ac on p.Ledger_Id=ac.id
+                    left join tblSubledger sl on p.SubLedger_Id=sl.Id", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        PartyInfo partyInfo = new PartyInfo();
+                        partyInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyInfo.PartyId = rdr["PartyId"] != DBNull.Value ? rdr["PartyId"].ToString() : null;
+                        partyInfo.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
+                        partyInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
+                        partyInfo.PhoneNo = rdr["PnoneNo"] != DBNull.Value ? rdr["PnoneNo"].ToString() : null;
+                        partyInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        partyInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        partyInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value ? rdr["AccountDescription"].ToString() : null;
+                        partyInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
+                        partyList.Add(partyInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, partyList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Party")]
+        [HttpPost]
+        public HttpResponseMessage CreateParty(PartyInfo partyInfo)
+        {
+            try
+            {
+                var party = new Party()
+                {
+                    Id = Guid.NewGuid(),
+                    PartyId = partyInfo.PartyId,
+                    PartyName = partyInfo.PartyName,
+                    PnoneNo = partyInfo.PhoneNo,
+                    ContactPerson = partyInfo.ContactPerson,
+                    Email = partyInfo.Email,
+                    Address = partyInfo.Address,
+                    Ledger_Id = partyInfo.Ledger_Id,
+                    SubLedger_Id = partyInfo.SubLedger_Id,
+                };
+                ERPContext.Partys.Add(party);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Party/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateParty(string id, PartyInfo partyInfo)
+        {
+            try
+            {
+                var oParty = ERPContext.Partys.FirstOrDefault(x => x.Id == partyInfo.Id);
+                if (oParty != null)
+                {
+                    var party = new Party()
+                    {
+                        Id = oParty.Id,
+                        PartyId = partyInfo.PartyId,
+                        PartyName = partyInfo.PartyName,
+                        PnoneNo = partyInfo.PhoneNo,
+                        ContactPerson = partyInfo.ContactPerson,
+                        Email = partyInfo.Email,
+                        Address = partyInfo.Address,
+                        Ledger_Id = partyInfo.Ledger_Id,
+                        SubLedger_Id = partyInfo.SubLedger_Id,
+                    };
+                    ERPContext.Partys.AddOrUpdate(party);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Party/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetPartyById(string id)
+        {
+            try
+            {
+                PartyInfo partyInfo = new PartyInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblparty p
+                    left join tblAccount ac on p.Ledger_Id=ac.id
+                    left join tblSubledger sl on p.SubLedger_Id=sl.Id where p.id=@id", con);
+                    cmd.Parameters.AddWithValue("@id",id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        partyInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyInfo.PartyId = rdr["PartyId"] != DBNull.Value ? rdr["PartyId"].ToString() : null;
+                        partyInfo.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
+                        partyInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
+                        partyInfo.PhoneNo = rdr["PnoneNo"] != DBNull.Value ? rdr["PnoneNo"].ToString() : null;
+                        partyInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        partyInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        partyInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value ? rdr["AccountDescription"].ToString() : null;
+                        partyInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            partyInfo.Ledger_Id=Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                         if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            partyInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, partyInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Party/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteParty(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblparty where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Suppliers")]
+        [HttpGet]
+        public HttpResponseMessage GetSupplierList()
+        {
+            try
+            {
+                List<SupplierInfo> supplierInfoList = new List<SupplierInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                   SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblSupplier p
+                    left join tblAccount ac on p.Ledger_Id=ac.id
+                    left join tblSubledger sl on p.SubLedger_Id=sl.Id", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SupplierInfo supplierInfo = new SupplierInfo();
+                        supplierInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierInfo.SupplierId = rdr["SupplierId"] != DBNull.Value ? rdr["SupplierId"].ToString() : null;
+                        supplierInfo.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
+                        supplierInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
+                        supplierInfo.PhoneNo = rdr["PnoneNo"] != DBNull.Value ? rdr["PnoneNo"].ToString() : null;
+                        supplierInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        supplierInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        supplierInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value ? rdr["AccountDescription"].ToString() : null;
+                        supplierInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
+                        supplierInfoList.Add(supplierInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, supplierInfoList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Supplier")]
+        [HttpPost]
+        public HttpResponseMessage CreateSupplier(SupplierInfo supplierInfo)
+        {
+            try
+            {
+                var supplier = new Supplier()
+                {
+                    Id = Guid.NewGuid(),
+                    SupplierId = supplierInfo.SupplierId,
+                    SupplierName = supplierInfo.SupplierName,
+                    PnoneNo = supplierInfo.PhoneNo,
+                    ContactPerson = supplierInfo.ContactPerson,
+                    Email = supplierInfo.Email,
+                    Address = supplierInfo.Address,
+                    Ledger_Id = supplierInfo.Ledger_Id,
+                    SubLedger_Id = supplierInfo.SubLedger_Id,
+                };
+                ERPContext.Suppliers.Add(supplier);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Supplier/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSupplier(string id, SupplierInfo supplierInfo)
+        {
+            try
+            {
+                var oSupplier = ERPContext.Suppliers.FirstOrDefault(x => x.Id == supplierInfo.Id);
+                if (oSupplier != null)
+                {
+                    var supplier = new Supplier()
+                    {
+                        Id = oSupplier.Id,
+                        SupplierId = supplierInfo.SupplierId,
+                        SupplierName = supplierInfo.SupplierName,
+                        PnoneNo = supplierInfo.PhoneNo,
+                        ContactPerson = supplierInfo.ContactPerson,
+                        Email = supplierInfo.Email,
+                        Address = supplierInfo.Address,
+                        Ledger_Id = supplierInfo.Ledger_Id,
+                        SubLedger_Id = supplierInfo.SubLedger_Id
+                    };
+                    ERPContext.Suppliers.AddOrUpdate(supplier);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Supplier/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSupplierById(string id)
+        {
+            try
+            {
+               SupplierInfo supplierInfo = new SupplierInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblSupplier p
+                    left join tblAccount ac on p.Ledger_Id=ac.id
+                    left join tblSubledger sl on p.SubLedger_Id=sl.Id where p.id=@id", con);
+                    cmd.Parameters.AddWithValue("@id",id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        supplierInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierInfo.SupplierId = rdr["SupplierId"] != DBNull.Value ? rdr["SupplierId"].ToString() : null;
+                        supplierInfo.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
+                        supplierInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
+                        supplierInfo.PhoneNo = rdr["PnoneNo"] != DBNull.Value ? rdr["PnoneNo"].ToString() : null;
+                        supplierInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        supplierInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        supplierInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value ? rdr["AccountDescription"].ToString() : null;
+                        supplierInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            supplierInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                         if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            supplierInfo.SubLedger_Id=Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, supplierInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Supplier/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteSupplier(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblSupplier where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Manufactures")]
+        [HttpGet]
+        public HttpResponseMessage GetManufactureList()
+        {
+            try
+            {
+                var manufactureList = ERPContext.Manufactures.Select(x => new ManufactureInfo()
+                {
+                    Id=x.Id,
+                    ManufactureId=x.ManufactureId,
+                    ManufactureName=x.ManufactureName,
+                    Address=x.Address,
+                    Country_Id=x.Country_Id
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, manufactureList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Manufacture")]
+        [HttpPost]
+        public HttpResponseMessage CreateManufacture(ManufactureInfo manufactureInfo)
+        {
+            try
+            {
+                var manufacture = new Manufacture()
+                {
+                    Id = Guid.NewGuid(),
+                    ManufactureId = manufactureInfo.ManufactureId,
+                    ManufactureName = manufactureInfo.ManufactureName,
+                    Address = manufactureInfo.Address,
+                    Country_Id = manufactureInfo.Country_Id,               
+                };
+                manufacture.ManufactureId=DatabaseCommand.GetAutoGeneratedCode("manufacture",null);
+                ERPContext.Manufactures.Add(manufacture);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Manufacture/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateManufacture(string id, ManufactureInfo manufactureInfo)
+        {
+            try
+            {
+                var oManufacture = ERPContext.Manufactures.FirstOrDefault(x => x.Id == manufactureInfo.Id);
+                if (oManufacture != null)
+                {
+                    var manufacture = new Manufacture()
+                    {
+                        Id = oManufacture.Id,
+                        ManufactureId = manufactureInfo.ManufactureId,
+                        ManufactureName = manufactureInfo.ManufactureName,
+                        Address = manufactureInfo.Address,
+                        Country_Id = manufactureInfo.Country_Id, 
+                    };
+                    ERPContext.Manufactures.AddOrUpdate(manufacture);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Manufacture/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetManufactureId(string id)
+        {
+            try
+            {
+                var Id=Guid.Parse(id);
+                var manufacture = ERPContext.Manufactures.Where(x=>x.Id==Id).Select(x => new ManufactureInfo()
+                {
+                    Id = x.Id,
+                    ManufactureId = x.ManufactureId,
+                    ManufactureName = x.ManufactureName,
+                    Address = x.Address,
+                    Country_Id = x.Country_Id
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, manufacture);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Manufacture/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteManufacture(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from Manufactures where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
