@@ -1,12 +1,16 @@
 ﻿using ERP.DataService.Model;
 using ERPWebApiService.Authentication;
+using ERPWebApiService.DataConnection;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ViewModel.Model;
+using ViewModel.Validation;
 
 namespace ERPWebApiService.Controllers
 {
@@ -176,5 +180,25 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("locationDropdown")]
+        [HttpGet]
+        public HttpResponseMessage LocationDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Locations.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.LocationId,
+                    Text = x.LocationName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+  
     }
 }

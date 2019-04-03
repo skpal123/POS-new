@@ -171,6 +171,18 @@
     <Compile Include="Migrations\201903271447516_update3.Designer.cs">
       <DependentUpon>201903271447516_update3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903271745196_update4.cs" />
+    <Compile Include="Migrations\201903271745196_update4.Designer.cs">
+      <DependentUpon>201903271745196_update4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903291203273_purchase item.cs" />
+    <Compile Include="Migrations\201903291203273_purchase item.Designer.cs">
+      <DependentUpon>201903291203273_purchase item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904031552101_change item transaction.cs" />
+    <Compile Include="Migrations\201904031552101_change item transaction.Designer.cs">
+      <DependentUpon>201904031552101_change item transaction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -180,7 +192,10 @@
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
     <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\FormInfo.cs" />
+    <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
+    <Compile Include="Model\ItemTransaction.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
     <Compile Include="Model\Party.cs" />
@@ -291,6 +306,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903271447516_update3.resx">
       <DependentUpon>201903271447516_update3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903271745196_update4.resx">
+      <DependentUpon>201903271745196_update4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903291203273_purchase item.resx">
+      <DependentUpon>201903291203273_purchase item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904031552101_change item transaction.resx">
+      <DependentUpon>201904031552101_change item transaction.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

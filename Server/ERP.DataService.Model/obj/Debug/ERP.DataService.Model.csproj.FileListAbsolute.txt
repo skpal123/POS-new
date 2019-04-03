@@ -102,3 +102,6 @@ E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataServ
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingsupplierpartyandfanufacture.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.csprojResolveAssemblyReference.cache
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.update3.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.update4.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.purchaseitem.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeitemtransaction.resources

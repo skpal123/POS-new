@@ -48,5 +48,8 @@ namespace ERP.DataService.Model
         public DbSet<Supplier> Suppliers { set; get; }
         public DbSet<Party> Partys { set; get; }
         public DbSet<Manufacture> Manufactures { set; get; }
+        public DbSet<FormInfo> FormInfos { set; get; }
+        public DbSet<GroupItem> GroupItems { set; get; }
+        public DbSet<ItemTransaction> ItemTransactions { set; get; }
     }
 }
