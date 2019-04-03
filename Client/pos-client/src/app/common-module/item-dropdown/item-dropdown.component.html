@@ -1,3 +1,8 @@
-<p>
-  item-dropdown works!
-</p>
+<angular2-multiselect 
+[data]="itemDropdownList" 
+[(ngModel)]="itemelectedItems" 
+[settings]="itemDropdownSettings"
+(onSelect)="itemOnItemSelect1($event)" 
+(onDeSelect)="itemOnItemDeSelect1($event)"
+>
+</angular2-multiselect>

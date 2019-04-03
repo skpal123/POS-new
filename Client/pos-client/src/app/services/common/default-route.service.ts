@@ -9,5 +9,6 @@ export class DefaultRouteService {
   administrationService:string="http://localhost:1849//api/AdministrationService/";
   InventoryService:string="http://localhost:1849//api/InventoryService/"
   DropdownService:string="http://localhost:1849//api/DropdownService/"
-  FinanceService:string="http://localhost:1849//api/FinanceService/"
+  FinanceService:string="http://localhost:1849//api/FinanceService/";
+  CommonService:string="http://localhost:1849//api/CommonService/"
 }

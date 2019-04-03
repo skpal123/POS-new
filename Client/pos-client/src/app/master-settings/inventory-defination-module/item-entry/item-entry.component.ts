@@ -11,6 +11,8 @@ import { Category } from '../../../models/master-settings/inventory-defination/c
 import { AddSubcategoryComponent } from '../add-subcategory/add-subcategory.component';
 import { Subcategory } from '../../../models/master-settings/inventory-defination/subcategory.model';
 import { NewDropdownDataService } from '../../../common-module/new-dropdown-data.service';
+import { ValidationService } from '../../../services/common/validation.service';
+import { InventoryItemValidation } from '../../../models/master-settings/inventory-defination/item-validation.model';
 
 @Component({
   selector: 'app-item-entry',
@@ -18,7 +20,7 @@ import { NewDropdownDataService } from '../../../common-module/new-dropdown-data
   styleUrls: ['./item-entry.component.css']
 })
 export class ItemEntryComponent implements OnInit {
-  
+  itemValidation:InventoryItemValidation[]=[];
   @ViewChild('itemForm') itemForm:NgForm
   @ViewChild('categoryIdControl') categoryIdControl:FormControl
   @ViewChild('subcategoryIdControl') subcategoryIdControl:FormControl
@@ -44,6 +46,7 @@ export class ItemEntryComponent implements OnInit {
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   subcategory:Subcategory={Id:null,SubCategoryId:null,SubCategoryName:null,Category_Id:null}
   constructor(public matDialogRef:MatDialogRef<ItemEntryComponent>,
+    private _validationService:ValidationService,
   @Inject(MAT_DIALOG_DATA) public item:InventoryItem,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
@@ -69,6 +72,7 @@ export class ItemEntryComponent implements OnInit {
       this.ledgerSelectedItems.push({id:this.item.Ledger_Id,itemName:this.item.LedgerName})
       this.subledgerSelectedItems.push({id:this.item.SubLedger_Id,itemName:this.item.SubLedgerName})
     }
+    this.getItemFormInfo();
   }
   onNoClick(){
     this.matDialogRef.close(false);
@@ -193,4 +197,14 @@ export class ItemEntryComponent implements OnInit {
        }
      })
    }
+   getItemFormInfo(){
+    this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
+      this.itemValidation=response
+    },error=>{
+      let message=error;
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
 }

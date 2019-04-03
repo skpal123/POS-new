@@ -9,7 +9,9 @@ import { SubcategoryDropdownComponent } from './subcategory-dropdown/subcategory
 import { ItemDropdownComponent } from './item-dropdown/item-dropdown.component';
 import { UnitDropdownComponent } from './unit-dropdown/unit-dropdown.component';
 import { LedgerDropdownComponent } from './ledger-dropdown/ledger-dropdown.component';
-import { SubledgerDropdownComponent } from './subledger-dropdown/subledger-dropdown.component'
+import { SubledgerDropdownComponent } from './subledger-dropdown/subledger-dropdown.component';
+import { FormValidationInfoComponent } from './form-validation-info/form-validation-info.component';
+import { FormDetailsControlComponent } from './form-details-control/form-details-control.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -24,7 +26,7 @@ import { SubledgerDropdownComponent } from './subledger-dropdown/subledger-dropd
     ItemDropdownComponent, 
     UnitDropdownComponent, 
     LedgerDropdownComponent, 
-    SubledgerDropdownComponent
+    SubledgerDropdownComponent, FormValidationInfoComponent, FormDetailsControlComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -36,7 +38,8 @@ import { SubledgerDropdownComponent } from './subledger-dropdown/subledger-dropd
     ItemDropdownComponent,
     UnitDropdownComponent, 
     LedgerDropdownComponent, 
-    SubledgerDropdownComponent
+    SubledgerDropdownComponent,
+    FormDetailsControlComponent
   ]
 })
 export class CommonModuleModule { }

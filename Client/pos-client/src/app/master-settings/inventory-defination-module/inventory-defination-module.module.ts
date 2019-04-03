@@ -20,6 +20,7 @@ import { PartyListComponent } from './party-list/party-list.component';
 import { PartyEntryComponent } from './party-entry/party-entry.component';
 import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
 import { ManufactureEntryComponent } from './manufacture-entry/manufacture-entry.component';
+import { FormDetailsControlComponent } from '../../common-module/form-details-control/form-details-control.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { ManufactureEntryComponent } from './manufacture-entry/manufacture-entry
       ItemEntryComponent,AddCategoryComponent,
       LocationEntryComponent,PartyEntryComponent,
       SupplierEntryComponent,
-      ManufactureEntryComponent
+      ManufactureEntryComponent,
+      FormDetailsControlComponent
     ]
 })
 export class InventoryDefinationModuleModule { }

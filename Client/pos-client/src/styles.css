@@ -9,6 +9,9 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 #pointer{
     cursor: pointer;
 }
+.pointer{
+  cursor: pointer;
+}
 #navigation-menu{
     background-color: bisque
 }
@@ -229,6 +232,8 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
     87.5% { color: #7b1fa2; }
     100%  { color: #6a1b9a; }
   }
-
+.c-btn{
+  height: 30px;
+}
 
   

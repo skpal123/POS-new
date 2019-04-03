@@ -44,7 +44,6 @@ export class SubledgerDropdownComponent implements OnChanges {
   }
   getSubLedgerList(ledgerId:string){
     this.subledgerDropdownList=[];
-    this.subledgerSelectedItems=[];
     this._dropdownService.getSubledgerDropdownList(ledgerId).subscribe(response=>{
       this.subledgerList=response.json();
       if(this.subledgerList.length>0){

@@ -8,6 +8,7 @@ import { PostLoginService } from '../../../services/common/post-login.service';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
 import { AccountDefinationService } from '../../../services/master-settings/account-defination.service';
 import { AccountOpeningView } from '../../../models/master-settings/account-defination/account-opening-view.model';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-account-opening',
@@ -15,6 +16,7 @@ import { AccountOpeningView } from '../../../models/master-settings/account-defi
   styleUrls: ['./account-opening.component.css']
 })
 export class AccountOpeningComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   @ViewChild('openingDateControl') openingDateControl:FormControl;
   @ViewChild('searchAccountCodeControl') searchAccountCodeControl:FormControl;
   openingDate:string;
@@ -34,6 +36,7 @@ export class AccountOpeningComponent implements OnInit {
     this.getUserFormControlByFormName();
   }
   getChildAccountList(){
+    this.blockUI.start("Loading,Please wait...")
     this._accountDefinationService.getAccountListForAccountOpening().subscribe(response=>{
       this.accountOpeningView=response.json();
       this.accountOpeningView.forEach((a,index,array)=>{
@@ -56,8 +59,10 @@ export class AccountOpeningComponent implements OnInit {
         }
       });
       this.DataList= this.accountOpeningView;
+      this.blockUI.stop();
     },
   error=>{
+    this.blockUI.stop();
     let message=error.json();
     let dialogData=new DialogData();
     dialogData.message=message.Message;
@@ -65,10 +70,13 @@ export class AccountOpeningComponent implements OnInit {
   })
   }
   getUserFormControlByFormName(){
+    this.blockUI.start("Loading,Please wait...");
     this._postLoginService.getUserFormControlByFormName('account-opening').subscribe(response=>{
+      this.blockUI.stop();
       this.userControlList=response.json();
       this.columnlist=this.userControlList.filter(control=>control.Type!='none');
     },error=>{
+      this.blockUI.stop();
       let message=error.json();
       let dialogData=new DialogData();
       dialogData.message=message.Message;

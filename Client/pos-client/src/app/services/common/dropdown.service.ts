@@ -62,7 +62,7 @@ export class DropdownService {
     return this._http.get(url,options)
   }
   public getLocationDropdownList(){
-    var url=this._defaultRoute.DropdownService+'SubledgerDropdown';
+    var url=this._defaultRoute.DropdownService+'LocationDropdown';
     let headers =  this.setCustomHeader();
     headers.append('ActionName', 'get');  
     const options = new RequestOptions({ headers: headers });
