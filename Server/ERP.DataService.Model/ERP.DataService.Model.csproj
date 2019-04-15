@@ -179,9 +179,37 @@
     <Compile Include="Migrations\201903291203273_purchase item.Designer.cs">
       <DependentUpon>201903291203273_purchase item.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904031552101_change item transaction.cs" />
-    <Compile Include="Migrations\201904031552101_change item transaction.Designer.cs">
-      <DependentUpon>201904031552101_change item transaction.cs</DependentUpon>
+    <Compile Include="Migrations\201904031639222_update5.cs" />
+    <Compile Include="Migrations\201904031639222_update5.Designer.cs">
+      <DependentUpon>201904031639222_update5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904031642124_update6.cs" />
+    <Compile Include="Migrations\201904031642124_update6.Designer.cs">
+      <DependentUpon>201904031642124_update6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904031645138_update7.cs" />
+    <Compile Include="Migrations\201904031645138_update7.Designer.cs">
+      <DependentUpon>201904031645138_update7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904071700427_add lot no.cs" />
+    <Compile Include="Migrations\201904071700427_add lot no.Designer.cs">
+      <DependentUpon>201904071700427_add lot no.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904071707532_add reason.cs" />
+    <Compile Include="Migrations\201904071707532_add reason.Designer.cs">
+      <DependentUpon>201904071707532_add reason.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904091701011_adding customer update.cs" />
+    <Compile Include="Migrations\201904091701011_adding customer update.Designer.cs">
+      <DependentUpon>201904091701011_adding customer update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904091704246_adding supplier update.cs" />
+    <Compile Include="Migrations\201904091704246_adding supplier update.Designer.cs">
+      <DependentUpon>201904091704246_adding supplier update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904091726345_adding supplier update 2.cs" />
+    <Compile Include="Migrations\201904091726345_adding supplier update 2.Designer.cs">
+      <DependentUpon>201904091726345_adding supplier update 2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
@@ -192,6 +220,7 @@
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
     <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\FormInfo.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
@@ -313,8 +342,29 @@
     <EmbeddedResource Include="Migrations\201903291203273_purchase item.resx">
       <DependentUpon>201903291203273_purchase item.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904031552101_change item transaction.resx">
-      <DependentUpon>201904031552101_change item transaction.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904031639222_update5.resx">
+      <DependentUpon>201904031639222_update5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904031642124_update6.resx">
+      <DependentUpon>201904031642124_update6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904031645138_update7.resx">
+      <DependentUpon>201904031645138_update7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904071700427_add lot no.resx">
+      <DependentUpon>201904071700427_add lot no.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904071707532_add reason.resx">
+      <DependentUpon>201904071707532_add reason.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904091701011_adding customer update.resx">
+      <DependentUpon>201904091701011_adding customer update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904091704246_adding supplier update.resx">
+      <DependentUpon>201904091704246_adding supplier update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904091726345_adding supplier update 2.resx">
+      <DependentUpon>201904091726345_adding supplier update 2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

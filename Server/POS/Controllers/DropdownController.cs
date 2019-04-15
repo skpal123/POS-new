@@ -199,6 +199,62 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-  
+        [Route("supplierDropdown")]
+        [HttpGet]
+        public HttpResponseMessage SupplierDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Suppliers.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.SupplierId,
+                    Text = x.SupplierName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("customerDropdown")]
+        [HttpGet]
+        public HttpResponseMessage CustomerDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Customers.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.CustomerId,
+                    Text = x.CustomerName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("partyDropdown")]
+        [HttpGet]
+        public HttpResponseMessage PartyDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Customers.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.CustomerId,
+                    Text = x.CustomerName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

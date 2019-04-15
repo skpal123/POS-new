@@ -16,6 +16,8 @@ namespace ERP.DataService.Model.Model
         public string TransactionId { set; get; }
         [StringLength(20)]
         public string TransactionType { set; get; }
+        [StringLength(20)]
+        public String Reason { set; get; }
         public int Quantity { set; get; }
         public decimal TotalAmount { set; get; }
         public decimal Vat { set; get; }
@@ -34,10 +36,14 @@ namespace ERP.DataService.Model.Model
         [StringLength(20)]
         public String GrvNo { set; get; }
         public Guid? Supplier_Id { set; get; }
+        public Guid? Party_Id { set; get; }
+        public Guid? Customer_Id { set; get; }
         public DateTime GrvDate { set; get; }
         public Guid? Approver_Id { set; get; }
         public Guid? Ledger_Id { set; get; }
         public Guid? SubLedger_Id { set; get; }
         public int? PaymentMode { set; get; }
+         [StringLength(20)]
+        public string LotNo { set; get; }
     }
 }

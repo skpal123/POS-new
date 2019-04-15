@@ -146,9 +146,9 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("itemPurchaseValidation")]
+        [Route("itemPurchaseSalesValidation/{formName}")]
         [HttpGet]
-        public HttpResponseMessage ItemPurchaseValidation()
+        public HttpResponseMessage ItemPurchaseValidation(string formName)
         {
             try
             {
@@ -156,14 +156,14 @@ namespace ERPWebApiService.Controllers
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
-                    cmd.Parameters.AddWithValue("@formName", "purchase-form");
+                    cmd.Parameters.AddWithValue("@formName", formName);
                     cmd.CommandType = CommandType.StoredProcedure;
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
                         ItemPurchaseValidation itemPurchaseValidation = new ItemPurchaseValidation();
-                        itemPurchaseValidation.UnitSale = Convert.ToBoolean(rdr["UnitSale"]);
+                        itemPurchaseValidation.UnitSale = Convert.ToBoolean(rdr["UnitSale1"]);
                         itemPurchaseValidation.Quantity = Convert.ToBoolean(rdr["Quantity"]);
                         itemPurchaseValidation.Reason = Convert.ToBoolean(rdr["Reason"]);
                         itemPurchaseValidation.TransactionId = Convert.ToBoolean(rdr["TransactionId"]);
@@ -180,12 +180,15 @@ namespace ERPWebApiService.Controllers
                         itemPurchaseValidation.Item_Id = Convert.ToBoolean(rdr["Item_Id"]);
                         itemPurchaseValidation.Location_Id = Convert.ToBoolean(rdr["Location_Id"]);
                         itemPurchaseValidation.Supplier_Id = Convert.ToBoolean(rdr["Supplier_Id"]);
+                        itemPurchaseValidation.Customer_Id = Convert.ToBoolean(rdr["Customer_Id"]);
+                        itemPurchaseValidation.Party_Id = Convert.ToBoolean(rdr["Party_Id"]);
                         itemPurchaseValidation.GrvDate = Convert.ToBoolean(rdr["GrvDate"]);
                         itemPurchaseValidation.Approver_Id = Convert.ToBoolean(rdr["Approver_Id"]);
                         itemPurchaseValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
                         itemPurchaseValidation.Ledger_Id = Convert.ToBoolean(rdr["Ledger_Id"]);
                         itemPurchaseValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
                         itemPurchaseValidation.PaymentMode = Convert.ToBoolean(rdr["PaymentMode"]);
+                        itemPurchaseValidation.QuantityGroup = Convert.ToBoolean(rdr["QuantityGroup"]);
                         itemPurchaseValidation.DiscountRateTransaction = Convert.ToBoolean(rdr["DiscountRateTransaction"]);
                         itemPurchaseValidation.DiscountRateGroup = Convert.ToBoolean(rdr["DiscountRateGroup"]);
                         itemPurchaseValidation.TotalAmountTransaction = Convert.ToBoolean(rdr["TotalAmountTransaction"]);

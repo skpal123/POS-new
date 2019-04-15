@@ -1,4 +1,5 @@
-﻿using ERP.DataService.Model.Model;
+﻿using System.Data;
+using ERP.DataService.Model.Model;
 using ERPWebApiService.Authentication;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using ERPWebApiService.DataConnection;
 using System.Data.SqlClient;
 namespace ERPWebApiService.Controllers
 {
-     [RoutePrefix("api/InventoryService")]
+    [RoutePrefix("api/InventoryService")]
     public class InventoryController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
@@ -25,11 +26,11 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var unitList =ERPContext.Units.Select(x => new UnitInfo
+                var unitList = ERPContext.Units.Select(x => new UnitInfo
                 {
                     Id = x.Id,
                     UnitName = x.UnitName,
-                    Description=x.Description
+                    Description = x.Description
                 }).OrderBy(x => x.UnitName).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, unitList);
             }
@@ -61,7 +62,7 @@ namespace ERPWebApiService.Controllers
         }
         [Route("unit/{id}")]
         [HttpPut]
-        public HttpResponseMessage UpdateUnit(string id,UnitInfo unitInfo)
+        public HttpResponseMessage UpdateUnit(string id, UnitInfo unitInfo)
         {
             try
             {
@@ -91,12 +92,13 @@ namespace ERPWebApiService.Controllers
             try
             {
                 var Id = Guid.Parse(id);
-               var unitInfo= ERPContext.Units.Where(x=>x.Id==Id).Select(x => new UnitInfo() { 
-                    Id=x.Id,
-                    UnitName=x.UnitName,
-                    Description=x.Description
+                var unitInfo = ERPContext.Units.Where(x => x.Id == Id).Select(x => new UnitInfo()
+                {
+                    Id = x.Id,
+                    UnitName = x.UnitName,
+                    Description = x.Description
                 }).FirstOrDefault();
-               return Request.CreateResponse(HttpStatusCode.OK, unitInfo);
+                return Request.CreateResponse(HttpStatusCode.OK, unitInfo);
             }
             catch (Exception ex)
             {
@@ -112,7 +114,7 @@ namespace ERPWebApiService.Controllers
                 var Id = Guid.Parse(id);
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", Id.ToString());
-                DatabaseCommand.ExcuteNonQuery("delete from tblUnit where id=@id",paramlist,null);
+                DatabaseCommand.ExcuteNonQuery("delete from tblUnit where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
@@ -131,7 +133,7 @@ namespace ERPWebApiService.Controllers
                     Id = x.Id,
                     LocationId = x.LocationId,
                     LocationName = x.LocationName,
-                    Description=x.Description
+                    Description = x.Description
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, locationList);
             }
@@ -150,7 +152,7 @@ namespace ERPWebApiService.Controllers
                 {
                     Id = Guid.NewGuid(),
                     LocationId = inventoryLocationInfo.LocationId,
-                    LocationName=inventoryLocationInfo.LocationName,
+                    LocationName = inventoryLocationInfo.LocationName,
                     Description = inventoryLocationInfo.Description
                 };
                 ERPContext.Locations.Add(location);
@@ -173,7 +175,7 @@ namespace ERPWebApiService.Controllers
                 {
                     var location = new Location
                     {
-                        Id =oLocation.Id,
+                        Id = oLocation.Id,
                         LocationId = inventoryLocationInfo.LocationId,
                         LocationName = inventoryLocationInfo.LocationName,
                         Description = inventoryLocationInfo.Description
@@ -199,7 +201,7 @@ namespace ERPWebApiService.Controllers
                 {
                     Id = x.Id,
                     LocationId = x.LocationId,
-                    LocationName=x.LocationName,
+                    LocationName = x.LocationName,
                     Description = x.Description
                 }).FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, locationInfo);
@@ -337,7 +339,7 @@ namespace ERPWebApiService.Controllers
                     Id = x.Id,
                     SubCategoryId = x.SubCategoryId,
                     SubCategoryName = x.SubCategoryName,
-                    CategoryName=ERPContext.Categorys.FirstOrDefault(y=>y.Id==x.Category_Id).CategoryName
+                    CategoryName = ERPContext.Categorys.FirstOrDefault(y => y.Id == x.Category_Id).CategoryName
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, categoryList);
             }
@@ -357,7 +359,7 @@ namespace ERPWebApiService.Controllers
                     Id = Guid.NewGuid(),
                     SubCategoryId = subCategoryInfo.SubCategoryId,
                     SubCategoryName = subCategoryInfo.SubCategoryName,
-                    Category_Id=subCategoryInfo.Category_Id
+                    Category_Id = subCategoryInfo.Category_Id
                 };
                 ERPContext.Subcategorys.Add(subcategory);
                 ERPContext.SaveChanges();
@@ -382,7 +384,7 @@ namespace ERPWebApiService.Controllers
                         Id = osubCategory.Id,
                         SubCategoryId = subcategoryInfo.SubCategoryId,
                         SubCategoryName = subcategoryInfo.SubCategoryName,
-                        Category_Id=subcategoryInfo.Category_Id
+                        Category_Id = subcategoryInfo.Category_Id
                     };
                     ERPContext.Subcategorys.AddOrUpdate(subcategory);
                     ERPContext.SaveChanges();
@@ -404,10 +406,10 @@ namespace ERPWebApiService.Controllers
                 var subcategoryInfo = ERPContext.Subcategorys.Where(x => x.Id == Id).Select(x => new SubCategoryInfo()
                 {
                     Id = x.Id,
-                    CategoryName=ERPContext.Categorys.FirstOrDefault(y=>y.Id==x.Category_Id).CategoryName,
+                    CategoryName = ERPContext.Categorys.FirstOrDefault(y => y.Id == x.Category_Id).CategoryName,
                     SubCategoryId = x.SubCategoryId,
                     SubCategoryName = x.SubCategoryName,
-                    Category_Id=x.Category_Id
+                    Category_Id = x.Category_Id
                 }).FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, subcategoryInfo);
             }
@@ -444,13 +446,13 @@ namespace ERPWebApiService.Controllers
                                         join unit in ERPContext.Units on item.UnitId equals unit.Id
                                         select new ItemListInfo()
                                         {
-                                            Id=item.Id,
-                                            ItemName=item.ItemName,
-                                            ItemCode=item.ItemCode,
-                                            ItemId=item.ItemId,
-                                            UnitName=unit.UnitName,
-                                            CategoryName=category.CategoryName,
-                                            SubCategoryName=subcategory.SubCategoryName
+                                            Id = item.Id,
+                                            ItemName = item.ItemName,
+                                            ItemCode = item.ItemCode,
+                                            ItemId = item.ItemId,
+                                            UnitName = unit.UnitName,
+                                            CategoryName = category.CategoryName,
+                                            SubCategoryName = subcategory.SubCategoryName
                                         }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, inventoryItemist);
             }
@@ -495,8 +497,8 @@ namespace ERPWebApiService.Controllers
                 var oitem = ERPContext.InventoryItems.FirstOrDefault(x => x.Id == inventoryItemInfo.Id);
                 if (oitem != null)
                 {
-                     var inventoryItem = new InventoryItem()
-                     {
+                    var inventoryItem = new InventoryItem()
+                    {
                         Id = oitem.Id,
                         ItemId = inventoryItemInfo.ItemId,
                         ItemCode = inventoryItemInfo.ItemCode,
@@ -507,8 +509,8 @@ namespace ERPWebApiService.Controllers
                         Ledger_Id = inventoryItemInfo.Ledger_Id,
                         SubLedger_Id = inventoryItemInfo.SubLedger_Id,
                     };
-                     ERPContext.InventoryItems.AddOrUpdate(inventoryItem);
-                ERPContext.SaveChanges();
+                    ERPContext.InventoryItems.AddOrUpdate(inventoryItem);
+                    ERPContext.SaveChanges();
                 }
                 return Request.CreateResponse(HttpStatusCode.Created, true);
             }
@@ -540,14 +542,14 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         inventoryItemInfo.Id = Guid.Parse(rdr["Id"].ToString());
-                        inventoryItemInfo.ItemId =rdr["ItemId"]!=DBNull.Value? rdr["ItemId"].ToString():null;
-                        inventoryItemInfo.ItemCode =rdr["ItemCode"]!=DBNull.Value? rdr["ItemCode"].ToString():null;
-                        inventoryItemInfo.ItemName =rdr["ItemName"]!=DBNull.Value? rdr["ItemName"].ToString():null;
+                        inventoryItemInfo.ItemId = rdr["ItemId"] != DBNull.Value ? rdr["ItemId"].ToString() : null;
+                        inventoryItemInfo.ItemCode = rdr["ItemCode"] != DBNull.Value ? rdr["ItemCode"].ToString() : null;
+                        inventoryItemInfo.ItemName = rdr["ItemName"] != DBNull.Value ? rdr["ItemName"].ToString() : null;
                         inventoryItemInfo.CategoryName = rdr["CategoryName"] != DBNull.Value ? rdr["CategoryName"].ToString() : null;
                         inventoryItemInfo.SubCategoryName = rdr["SubCategoryName"] != DBNull.Value ? rdr["SubCategoryName"].ToString() : null;
-                        inventoryItemInfo.SubLedgerName =rdr["SubledgerName"]!=DBNull.Value? rdr["SubledgerName"].ToString():null;
-                        inventoryItemInfo.LedgerName =rdr["LedgerName"]!=DBNull.Value? rdr["LedgerName"].ToString():null;
-                        inventoryItemInfo.UnitName =rdr["UnitName"]!=DBNull.Value? rdr["UnitName"].ToString():null;
+                        inventoryItemInfo.SubLedgerName = rdr["SubledgerName"] != DBNull.Value ? rdr["SubledgerName"].ToString() : null;
+                        inventoryItemInfo.LedgerName = rdr["LedgerName"] != DBNull.Value ? rdr["LedgerName"].ToString() : null;
+                        inventoryItemInfo.UnitName = rdr["UnitName"] != DBNull.Value ? rdr["UnitName"].ToString() : null;
                         if (rdr["Category_Id"] != DBNull.Value)
                         {
                             inventoryItemInfo.Category_Id = Guid.Parse(rdr["Category_Id"].ToString());
@@ -699,7 +701,7 @@ namespace ERPWebApiService.Controllers
                     SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblparty p
                     left join tblAccount ac on p.Ledger_Id=ac.id
                     left join tblSubledger sl on p.SubLedger_Id=sl.Id where p.id=@id", con);
-                    cmd.Parameters.AddWithValue("@id",id);
+                    cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -715,9 +717,9 @@ namespace ERPWebApiService.Controllers
                         partyInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            partyInfo.Ledger_Id=Guid.Parse(rdr["Ledger_Id"].ToString());
+                            partyInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
                         }
-                         if (rdr["SubLedger_Id"] != DBNull.Value)
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
                             partyInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
                         }
@@ -755,7 +757,7 @@ namespace ERPWebApiService.Controllers
                 List<SupplierInfo> supplierInfoList = new List<SupplierInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                   SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblSupplier p
+                    SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblSupplier p
                     left join tblAccount ac on p.Ledger_Id=ac.id
                     left join tblSubledger sl on p.SubLedger_Id=sl.Id", con);
                     con.Open();
@@ -846,13 +848,13 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-               SupplierInfo supplierInfo = new SupplierInfo();
+                SupplierInfo supplierInfo = new SupplierInfo();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand(@"select p.*,ac.AccountDescription,sl.Description from tblSupplier p
                     left join tblAccount ac on p.Ledger_Id=ac.id
                     left join tblSubledger sl on p.SubLedger_Id=sl.Id where p.id=@id", con);
-                    cmd.Parameters.AddWithValue("@id",id);
+                    cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -870,9 +872,9 @@ namespace ERPWebApiService.Controllers
                         {
                             supplierInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
                         }
-                         if (rdr["SubLedger_Id"] != DBNull.Value)
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            supplierInfo.SubLedger_Id=Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            supplierInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
                         }
                     }
                 }
@@ -907,11 +909,11 @@ namespace ERPWebApiService.Controllers
             {
                 var manufactureList = ERPContext.Manufactures.Select(x => new ManufactureInfo()
                 {
-                    Id=x.Id,
-                    ManufactureId=x.ManufactureId,
-                    ManufactureName=x.ManufactureName,
-                    Address=x.Address,
-                    Country_Id=x.Country_Id
+                    Id = x.Id,
+                    ManufactureId = x.ManufactureId,
+                    ManufactureName = x.ManufactureName,
+                    Address = x.Address,
+                    Country_Id = x.Country_Id
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, manufactureList);
             }
@@ -932,9 +934,9 @@ namespace ERPWebApiService.Controllers
                     ManufactureId = manufactureInfo.ManufactureId,
                     ManufactureName = manufactureInfo.ManufactureName,
                     Address = manufactureInfo.Address,
-                    Country_Id = manufactureInfo.Country_Id,               
+                    Country_Id = manufactureInfo.Country_Id,
                 };
-                manufacture.ManufactureId=DatabaseCommand.GetAutoGeneratedCode("manufacture",null);
+                manufacture.ManufactureId = DatabaseCommand.GetAutoGeneratedCode("manufacture", null);
                 ERPContext.Manufactures.Add(manufacture);
                 ERPContext.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.Created, true);
@@ -959,7 +961,7 @@ namespace ERPWebApiService.Controllers
                         ManufactureId = manufactureInfo.ManufactureId,
                         ManufactureName = manufactureInfo.ManufactureName,
                         Address = manufactureInfo.Address,
-                        Country_Id = manufactureInfo.Country_Id, 
+                        Country_Id = manufactureInfo.Country_Id,
                     };
                     ERPContext.Manufactures.AddOrUpdate(manufacture);
                     ERPContext.SaveChanges();
@@ -977,8 +979,8 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id=Guid.Parse(id);
-                var manufacture = ERPContext.Manufactures.Where(x=>x.Id==Id).Select(x => new ManufactureInfo()
+                var Id = Guid.Parse(id);
+                var manufacture = ERPContext.Manufactures.Where(x => x.Id == Id).Select(x => new ManufactureInfo()
                 {
                     Id = x.Id,
                     ManufactureId = x.ManufactureId,
@@ -1009,21 +1011,237 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("GroupItems")]
+        [Route("Customers")]
         [HttpGet]
-        public HttpResponseMessage GetGroupItemList()
+        public HttpResponseMessage GetCustomerList()
         {
             try
             {
-                var manufactureList = ERPContext.Manufactures.Select(x => new ManufactureInfo()
+                List<CustomerInfo> customerList = new List<CustomerInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select c.Id,c.CustomerId,c.CustomerName,c.PhoneNo,c.Email,c.Address,a.AccountDescription,s.Description from tblCustomer c
+                                                    left join tblAccount a on c.Ledger_Id=a.id
+                                                    left join tblSubledger s on c.SubLedger_Id=s.Id", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        CustomerInfo customerInfo = new CustomerInfo();
+                        customerInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        customerInfo.CustomerId = rdr["CustomerId"] != DBNull.Value ? rdr["CustomerId"].ToString() : null;
+                        customerInfo.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
+                        customerInfo.PhoneNo = rdr["PhoneNo"] != DBNull.Value ? rdr["PhoneNo"].ToString() : null;
+                        customerInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        customerInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        customerInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value ? rdr["AccountDescription"].ToString() : null;
+                        customerInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
+                        customerList.Add(customerInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, customerList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Customer")]
+        [HttpPost]
+        public HttpResponseMessage CreateCustomer(CustomerInfo customerInfo)
+        {
+            try
+            {
+                var customer = new Customer()
+                {
+                    Id = Guid.NewGuid(),
+                    CustomerId = customerInfo.CustomerId,
+                    CustomerName = customerInfo.CustomerName,
+                    PhoneNo = customerInfo.PhoneNo,
+                    Address = customerInfo.Address,
+                    Email = customerInfo.Email,
+                    Ledger_Id = customerInfo.Ledger_Id,
+                    SubLedger_Id = customerInfo.SubLedger_Id
+                };
+                //customer.CustomerId = DatabaseCommand.GetAutoGeneratedCode("manufacture", null);
+                ERPContext.Customers.Add(customer);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Customer/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateCustomer(string id, CustomerInfo customerInfo)
+        {
+            try
+            {
+                var oCustomer = ERPContext.Customers.FirstOrDefault(x => x.Id == customerInfo.Id);
+                if (oCustomer != null)
+                {
+                    var customer = new Customer()
+                    {
+                        Id = oCustomer.Id,
+                        CustomerId = customerInfo.CustomerId,
+                        CustomerName = customerInfo.CustomerName,
+                        PhoneNo = customerInfo.PhoneNo,
+                        Address = customerInfo.Address,
+                        Email = customerInfo.Email,
+                        Ledger_Id = customerInfo.Ledger_Id,
+                        SubLedger_Id = customerInfo.SubLedger_Id
+                    };
+                    ERPContext.Customers.AddOrUpdate(customer);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Customer/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetCustomerById(string id)
+        {
+            try
+            {
+                CustomerInfo customerInfo = new CustomerInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select c.*,a.AccountDescription,s.Description from tblCustomer c
+                                                    left join tblAccount a on c.Ledger_Id=a.id
+                                                    left join tblSubledger s on c.SubLedger_Id=s.Id where c.id=@id", con);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        customerInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        customerInfo.CustomerId = rdr["CustomerId"] != DBNull.Value
+                            ? rdr["CustomerId"].ToString()
+                            : null;
+                        customerInfo.CustomerName = rdr["CustomerName"] != DBNull.Value
+                            ? rdr["CustomerName"].ToString()
+                            : null;
+                        customerInfo.PhoneNo = rdr["PhoneNo"] != DBNull.Value ? rdr["PhoneNo"].ToString() : null;
+                        customerInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
+                        customerInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
+                        customerInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value
+                            ? rdr["AccountDescription"].ToString()
+                            : null;
+                        customerInfo.SubLedgerName = rdr["Description"] != DBNull.Value
+                            ? rdr["Description"].ToString()
+                            : null;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            customerInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            customerInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, customerInfo);
+            }            
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Customer/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteCustomer(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblCustomer where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("GroupItems/{transactionType}")]
+        [HttpGet]
+        public HttpResponseMessage GetGroupItemList(string transactionType)
+        {
+            try
+            {   
+                InventoryGroupListInfo inventoryGroupList=new InventoryGroupListInfo();
+                using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd=new SqlCommand(@"select g.Id, g.TransactionId,g.TransactionType,g.Quantity,g.TotalAmount,
+                    g.DiscountRate,g.DiscountAmount,g.vat,g.Tax,g.NetPaidAmount,
+                    g.ChalanNo,g.InvoiceNo,g.Comments,g.TransactionDate,g.GrvNo,g.GrvDate,
+                    s.SupplierName,p.PartyName,c.CustomerName from tblgroupitem g
+                    left join tblSupplier  s on g.Supplier_Id=s.Id
+                    left join tblCustomer c on g.Customer_Id=c.id
+                    left join tblParty p on g.Party_Id=p.Id where TransactionType=@transactionType",con);
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@transactionType", transactionType);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        InventoryGroupListInfo inventoryGroup=new InventoryGroupListInfo();
+                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
+                        inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
+                        inventoryGroup.Quantity = rdr["Quantity"] != DBNull.Value ? Convert.ToInt32(rdr["Quantity"].ToString()) : 0;
+                        inventoryGroup.TotalAmount = rdr["TotalAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["TotalAmount"].ToString()) : 0;
+                        inventoryGroup.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"].ToString()) : 0;
+                        inventoryGroup.DiscountAmount = rdr["DiscountAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountAmount"].ToString()) : 0;
+                        inventoryGroup.Vat = rdr["Vat"] != DBNull.Value ? Convert.ToDecimal(rdr["Vat"].ToString()) : 0;
+                        inventoryGroup.Tax = rdr["Tax"] != DBNull.Value ? Convert.ToDecimal(rdr["Tax"].ToString()) : 0;
+                        inventoryGroup.NetPaidAmount = rdr["NetPaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["NetPaidAmount"].ToString()) : 0;
+                        inventoryGroup.ChalanNo = rdr["ChalanNo"] != DBNull.Value ? rdr["ChalanNo"].ToString() : null;
+                        inventoryGroup.InvoiceNo = rdr["InvoiceNo"] != DBNull.Value ? rdr["InvoiceNo"].ToString() : null;
+                        inventoryGroup.Comments = rdr["Comments"] != DBNull.Value ? rdr["Comments"].ToString() : null;
+                        inventoryGroup.GrvNo = rdr["GrvNo"] != DBNull.Value ? rdr["GrvNo"].ToString() : null;
+                        inventoryGroup.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
+                        inventoryGroup.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
+                        inventoryGroup.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
+                        if (rdr["TransactionDate"] != DBNull.Value)
+                        {
+                            inventoryGroup.TransactionDate = Convert.ToDateTime(rdr["TransactionDate"]);
+                        }
+                        if (rdr["GrvDate"] != DBNull.Value)
+                        {
+                            inventoryGroup.GrvDate = Convert.ToDateTime(rdr["GrvDate"]);
+                        }
+                    }
+                }
+                var groupItemList = ERPContext.GroupItems.Select(x => new InventoryGroupListInfo()
                 {
                     Id = x.Id,
-                    ManufactureId = x.ManufactureId,
-                    ManufactureName = x.ManufactureName,
-                    Address = x.Address,
-                    Country_Id = x.Country_Id
+                    TransactionId = x.TransactionId,
+                    TransactionType = x.TransactionType,
+                    Quantity = x.Quantity,               
+                    TotalAmount = x.TotalAmount,
+                    DiscountRate = x.DiscountRate,
+                    DiscountAmount = x.DiscountAmount,
+                    Vat = x.Vat,                   
+                    Tax = x.Tax,
+                    NetPaidAmount = x.NetPaidAmount,
+                    ChalanNo = x.ChalanNo,
+                    InvoiceNo = x.InvoiceNo,
+                    Comments = x.Comments,
+                    TransactionDate = x.TransactionDate,
+                    GrvNo = x.GrvNo,
+                    SupplierName =
+                        ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id) != null
+                            ? ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id).SupplierName
+                            : null,
+                    GrvDate = x.GrvDate
                 }).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, manufactureList);
+                return Request.CreateResponse(HttpStatusCode.OK, groupItemList);
             }
             catch (Exception ex)
             {
@@ -1032,21 +1250,68 @@ namespace ERPWebApiService.Controllers
         }
         [Route("GroupItem")]
         [HttpPost]
-        public HttpResponseMessage CreateGroupItem(ManufactureInfo manufactureInfo)
+        public HttpResponseMessage CreateGroupItem(GroupItemInfo groupItemInfo)
         {
             try
             {
-                var manufacture = new Manufacture()
+                DataTable dt = new DataTable();
+                var groupItem = new GroupItem()
                 {
                     Id = Guid.NewGuid(),
-                    ManufactureId = manufactureInfo.ManufactureId,
-                    ManufactureName = manufactureInfo.ManufactureName,
-                    Address = manufactureInfo.Address,
-                    Country_Id = manufactureInfo.Country_Id,
+                    TransactionId = groupItemInfo.TransactionId,
+                    TransactionType = groupItemInfo.TransactionType,
+                    Reason = groupItemInfo.Reason,
+                    TransactionDate = groupItemInfo.TransactionDate,
+                    Quantity = groupItemInfo.Quantity,
+                    TotalAmount = groupItemInfo.TotalAmount,
+                    Vat = groupItemInfo.Vat,
+                    Tax = groupItemInfo.Tax,
+                    DiscountRate = groupItemInfo.DiscountRate,
+                    DiscountAmount = groupItemInfo.DiscountAmount,
+                    NetPaidAmount = groupItemInfo.NetPaidAmount,
+                    PaymentMode = groupItemInfo.PaymentMode,
+                    Ledger_Id = groupItemInfo.Ledger_Id,
+                    SubLedger_Id = groupItemInfo.SubLedger_Id,
+                    Comments = groupItemInfo.Comments,
+                    GrvNo = groupItemInfo.GrvNo,
+                    GrvDate = groupItemInfo.GrvDate,
+                    InvoiceNo = groupItemInfo.InvoiceNo,
+                    ChalanNo = groupItemInfo.ChalanNo,
+                    Supplier_Id = groupItemInfo.Supplier_Id,
+                    Approver_Id = groupItemInfo.Approver_Id,
+                    LotNo = groupItemInfo.LotNo
                 };
-                manufacture.ManufactureId = DatabaseCommand.GetAutoGeneratedCode("manufacture", null);
-                ERPContext.Manufactures.Add(manufacture);
+                ERPContext.GroupItems.Add(groupItem);
                 ERPContext.SaveChanges();
+                dt.Columns.Add("Id", typeof(Guid));
+                dt.Columns.Add("TransactionId", typeof(string));
+                dt.Columns.Add("Reason", typeof(string));
+                dt.Columns.Add("TransactionType", typeof(string));
+                dt.Columns.Add("Quantity", typeof(Int32));
+                dt.Columns.Add("UnitCost", typeof(decimal));
+                dt.Columns.Add("UnitSale", typeof(decimal));
+                dt.Columns.Add("Vat", typeof(decimal));
+                dt.Columns.Add("Tax", typeof(decimal));
+                dt.Columns.Add("DiscountAmount", typeof(decimal));
+                dt.Columns.Add("SerialNo", typeof(Int32));
+                dt.Columns.Add("DiscountRate", typeof(decimal));
+                dt.Columns.Add("LotNo", typeof(string));
+                dt.Columns.Add("TransactionDate", typeof(DateTime));
+                dt.Columns.Add("Group_Id", typeof(Guid));
+                dt.Columns.Add("Item_Id", typeof(Guid));
+                dt.Columns.Add("Location_Id", typeof(Guid));
+                if (groupItemInfo.ItemTransactionList.Any())
+                {
+                    foreach (var item in groupItemInfo.ItemTransactionList)
+                    {
+                        dt.Rows.Add(Guid.NewGuid(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
+                            item.UnitSale, item.Vat, item.Tax, item.DiscountAmount, item.SerialNo, item.DiscountRate, item.LotNo,
+                            item.TransactionDate, groupItem.Id, item.Item_Id, item.Location_Id);
+                    }
+                }
+                Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                paramlist.Add("@typeItemTransaction", dt);
+                DatabaseCommand.ExcuteObjectNonQuery("proc_SaveItemTransaction", paramlist, "procedure");
                 return Request.CreateResponse(HttpStatusCode.Created, true);
             }
             catch (Exception ex)
@@ -1056,24 +1321,73 @@ namespace ERPWebApiService.Controllers
         }
         [Route("GroupItem/{id}")]
         [HttpPut]
-        public HttpResponseMessage UpdateGroupItem(string id, ManufactureInfo manufactureInfo)
+        public HttpResponseMessage UpdateGroupItem(string id, GroupItemInfo groupItemInfo)
         {
             try
             {
-                var oManufacture = ERPContext.Manufactures.FirstOrDefault(x => x.Id == manufactureInfo.Id);
-                if (oManufacture != null)
+                var oGroupItem = ERPContext.GroupItems.FirstOrDefault(x => x.Id == groupItemInfo.Id);
+                if (oGroupItem != null)
                 {
-                    var manufacture = new Manufacture()
+                    DataTable dt = new DataTable();
+                    var groupItem = new GroupItem()
                     {
-                        Id = oManufacture.Id,
-                        ManufactureId = manufactureInfo.ManufactureId,
-                        ManufactureName = manufactureInfo.ManufactureName,
-                        Address = manufactureInfo.Address,
-                        Country_Id = manufactureInfo.Country_Id,
+                        Id = oGroupItem.Id,
+                        TransactionId = groupItemInfo.TransactionId,
+                        TransactionType = groupItemInfo.TransactionType,
+                        Reason = groupItemInfo.Reason,
+                        TransactionDate = groupItemInfo.TransactionDate,
+                        Quantity = groupItemInfo.Quantity,
+                        TotalAmount = groupItemInfo.TotalAmount,
+                        Vat = groupItemInfo.Vat,
+                        Tax = groupItemInfo.Tax,
+                        DiscountRate = groupItemInfo.DiscountRate,
+                        DiscountAmount = groupItemInfo.DiscountAmount,
+                        NetPaidAmount = groupItemInfo.NetPaidAmount,
+                        PaymentMode = groupItemInfo.PaymentMode,
+                        Ledger_Id = groupItemInfo.Ledger_Id,
+                        SubLedger_Id = groupItemInfo.SubLedger_Id,
+                        Comments = groupItemInfo.Comments,
+                        GrvNo = groupItemInfo.GrvNo,
+                        GrvDate = groupItemInfo.GrvDate,
+                        InvoiceNo = groupItemInfo.InvoiceNo,
+                        ChalanNo = groupItemInfo.ChalanNo,
+                        Supplier_Id = groupItemInfo.Supplier_Id,
+                        Approver_Id = groupItemInfo.Approver_Id,
+                        LotNo = groupItemInfo.LotNo
                     };
-                    ERPContext.Manufactures.AddOrUpdate(manufacture);
+                    ERPContext.GroupItems.AddOrUpdate(groupItem);
                     ERPContext.SaveChanges();
+                    dt.Columns.Add("Id", typeof(Guid));
+                    dt.Columns.Add("TransactionId", typeof(string));
+                    dt.Columns.Add("Reason", typeof(string));
+                    dt.Columns.Add("TransactionType", typeof(string));
+                    dt.Columns.Add("Quantity", typeof(Int32));
+                    dt.Columns.Add("UnitCost", typeof(decimal));
+                    dt.Columns.Add("UnitSale", typeof(decimal));
+                    dt.Columns.Add("Vat", typeof(decimal));
+                    dt.Columns.Add("Tax", typeof(decimal));
+                    dt.Columns.Add("DiscountAmount", typeof(decimal));
+                    dt.Columns.Add("SerialNo]", typeof(Int32));
+                    dt.Columns.Add("DiscountRate", typeof(decimal));
+                    dt.Columns.Add("LotNo", typeof(string));
+                    dt.Columns.Add("TransactionDate", typeof(DateTime));
+                    dt.Columns.Add("Group_Id", typeof(Guid));
+                    dt.Columns.Add("Item_Id", typeof(Guid));
+                    dt.Columns.Add("Location_Id", typeof(Guid));
+                    if (groupItemInfo.ItemTransactionList.Any())
+                    {
+                        foreach (var item in groupItemInfo.ItemTransactionList)
+                        {
+                            dt.Rows.Add(Guid.NewGuid(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
+                                item.UnitSale, item.Vat, item.Tax, item.DiscountAmount, item.SerialNo, item.DiscountRate, item.LotNo,
+                                item.TransactionDate, oGroupItem.Id, item.Item_Id, item.Location_Id);
+                        }
+                    }
+                    Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                    paramlist.Add("@typeItemTransaction", dt);
+                    DatabaseCommand.ExcuteObjectNonQuery("proc_SaveItemTransaction", paramlist, "procedure");
                 }
+
                 return Request.CreateResponse(HttpStatusCode.Created, true);
             }
             catch (Exception ex)
@@ -1088,13 +1402,55 @@ namespace ERPWebApiService.Controllers
             try
             {
                 var Id = Guid.Parse(id);
-                var manufacture = ERPContext.Manufactures.Where(x => x.Id == Id).Select(x => new ManufactureInfo()
+                var manufacture = ERPContext.GroupItems.Where(x => x.Id == Id).Select(x => new GroupItemInfo()
                 {
                     Id = x.Id,
-                    ManufactureId = x.ManufactureId,
-                    ManufactureName = x.ManufactureName,
-                    Address = x.Address,
-                    Country_Id = x.Country_Id
+                    TransactionId = x.TransactionId,
+                    TransactionType = x.TransactionType,
+                    Reason = x.Reason,
+                    TransactionDate = x.TransactionDate,
+                    Quantity = x.Quantity,
+                    TotalAmount = x.TotalAmount,
+                    Vat = x.Vat,
+                    Tax = x.Tax,
+                    DiscountRate = x.DiscountRate,
+                    DiscountAmount = x.DiscountAmount,
+                    NetPaidAmount = x.NetPaidAmount,
+                    PaymentMode = x.PaymentMode,
+                    Ledger_Id = x.Ledger_Id,
+                    LedgerName  = ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id) != null ? ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id).AccountDescription : null,
+                    SubLedger_Id = x.SubLedger_Id,
+                    SubLedgerName = ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.SubLedger_Id) != null ? ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.Supplier_Id).Description : null,
+                    Comments = x.Comments,
+                    GrvNo = x.GrvNo,
+                    GrvDate = x.GrvDate,
+                    InvoiceNo = x.InvoiceNo,
+                    ChalanNo = x.ChalanNo,
+                    Supplier_Id = x.Supplier_Id,
+                    SupplierName = ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id)!=null?ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id).SupplierName:null,
+                    Approver_Id = x.Approver_Id,
+                    ItemTransactionList = ERPContext.ItemTransactions.Where(y=>y.Group_Id==x.Id).Select(y=>new ItemTransactionInfo()
+                    {
+                        Id=y.Id,
+                        TransactionId=y.TransactionId,
+                        Reason=y.Reason, 
+                        TransactionType=y.TransactionType, 
+                        Quantity=y.Quantity, 
+                        UnitCost=y.UnitCost,                                
+                        UnitSale=y.UnitSale, 
+                        Vat=y.Vat, 
+                        Tax=y.Tax, 
+                        DiscountAmount=y.DiscountAmount, 
+                        SerialNo=y.SerialNo, 
+                        DiscountRate=y.DiscountRate, 
+                        LotNo=y.LotNo,
+                        TransactionDate=y.TransactionDate, 
+                        Group_Id = y.Group_Id, 
+                        Item_Id=y.Item_Id,
+                        ItemName = ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id)!=null?ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id).ItemName:null,
+                        Location_Id=y.Location_Id,
+                        LocationName = ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName : null,
+                    }).ToList()
                 }).FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, manufacture);
             }
@@ -1111,7 +1467,8 @@ namespace ERPWebApiService.Controllers
             {
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
-                DatabaseCommand.ExcuteNonQuery("delete from Manufactures where id=@id", paramlist, null);
+                DatabaseCommand.ExcuteNonQuery(@"delete from tblgroupItem where id=@id;
+                delete from tblItemTransaction where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)

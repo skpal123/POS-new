@@ -22,5 +22,10 @@ namespace ViewModel.Model
         public string SerialNo { set; get; }
         public string LotNo { set; get; }
         public DateTime? TransactionDate { set; get; }
+        public Guid? Group_Id { set; get; }
+        public Guid? Item_Id { set; get; }
+        public string ItemName { set; get; }
+        public Guid? Location_Id { set; get; }
+        public string LocationName { set; get; }
     }
 }

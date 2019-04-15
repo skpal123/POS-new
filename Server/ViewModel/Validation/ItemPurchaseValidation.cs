@@ -26,6 +26,8 @@ namespace ViewModel.Validation
         public bool? Item_Id { set; get; }
         public bool? Location_Id { set; get; }
         public bool? Supplier_Id { set; get; }
+        public bool? Party_Id { set; get; }
+        public bool? Customer_Id { set; get; }
         public bool? GrvDate { set; get; }
         public bool? Approver_Id { set; get; }
         public bool? Ledger_Id { set; get; }
@@ -35,6 +37,7 @@ namespace ViewModel.Validation
         public bool? DiscountRateGroup { set; get; }
         public bool? TotalAmountTransaction { set; get; }
         public bool? TotalAmountGroup { set; get; }
+        public bool? QuantityGroup { set; get; }
         public bool? LotNo { set; get; }
         public bool? DiscountAmountGroup { set; get; }
     }
