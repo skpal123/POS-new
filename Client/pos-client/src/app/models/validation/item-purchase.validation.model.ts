@@ -17,6 +17,8 @@ export class ItemPurchaseValidation{
   public Item_Id?:boolean
   public Location_Id?:boolean
   public Supplier_Id?:boolean
+  public Party_Id?:boolean
+  public Customer_Id?:boolean
   public GrvDate?:boolean
   public Approver_Id?:boolean
   public Ledger_Id?:boolean
@@ -26,6 +28,7 @@ export class ItemPurchaseValidation{
   public DiscountRateGroup?:boolean
   public TotalAmountTransaction?:boolean
   public TotalAmountGroup?:boolean
+  public QuantityGroup?:boolean
   public LotNo?:boolean
   public DiscountAmountGroup?:boolean
 }

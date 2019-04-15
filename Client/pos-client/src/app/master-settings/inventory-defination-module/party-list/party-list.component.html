@@ -6,7 +6,10 @@
                 <h3 style="text-align: center" class="panel-title">Item List <span (click)="createNewItem()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></h3>
             </div>           
             <div class="panel-body">
-              <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+              <app-custom-datatable 
+              [DataList]="DataList" 
+              [reload]="reload"
+              [ColumnList]="ColumnList"
               (EditSelectedRowClicked)="getPartyDetails($event)"
               (DeleteDataRowClicked)="deleteParty($event)"
               >

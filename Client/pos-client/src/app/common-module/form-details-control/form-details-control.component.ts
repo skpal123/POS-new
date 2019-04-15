@@ -15,6 +15,7 @@ export class FormDetailsControlComponent implements OnInit {
     this.dialogRef.close();
   }
   ngOnInit(){
+    debugger
     console.log(this.data);
   }
 

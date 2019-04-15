@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 style="text-align: center" class="panel-title">Customer List <span (click)="createNewCustomer()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></h3>
+            </div>           
+            <div class="panel-body">
+              <app-custom-datatable 
+              [DataList]="DataList" 
+              [reload]="reload"
+              [ColumnList]="ColumnList"
+              (EditSelectedRowClicked)="getCustomerDetails($event)"
+              (DeleteDataRowClicked)="deleteCustomer($event)"
+              >
+              </app-custom-datatable>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

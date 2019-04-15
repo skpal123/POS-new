@@ -14,7 +14,7 @@ import { PartyEntryComponent } from '../party-entry/party-entry.component';
   styleUrls: ['./party-list.component.css']
 })
 export class PartyListComponent implements OnInit {
-
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -48,6 +48,7 @@ export class PartyListComponent implements OnInit {
     this._inventotyDefinationService.getPartyList().subscribe(response=>{
       this.partyList=response.json();
       this.DataList=this.partyList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

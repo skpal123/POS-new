@@ -15,7 +15,7 @@ import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown
   styleUrls: ['./item-subcategory-list.component.css']
 })
 export class ItemSubcategoryListComponent implements OnInit {
-
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -46,6 +46,7 @@ export class ItemSubcategoryListComponent implements OnInit {
     this._inventotyDefinationService.getSubCategoryList().subscribe(response=>{
       this.subcategoryList=response.json();
       this.DataList=this.subcategoryList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

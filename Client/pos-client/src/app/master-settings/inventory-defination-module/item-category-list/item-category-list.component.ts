@@ -14,7 +14,7 @@ import { AddCategoryComponent } from '../add-category/add-category.component';
   styleUrls: ['./item-category-list.component.css']
 })
 export class ItemCategoryListComponent implements OnInit {
-
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -45,6 +45,7 @@ export class ItemCategoryListComponent implements OnInit {
     this._inventotyDefinationService.getCategoryList().subscribe(response=>{
       this.categoryList=response.json();
       this.DataList=this.categoryList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

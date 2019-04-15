@@ -2,7 +2,7 @@ export class ChartOfaccount{
     public Id?:string;
     public  GroupId?:number;
     public  LevelId?:number;
-    public  AccId?:number;
+    public  AccId?:number; 
     public  AccountDescription?:string
     public  CloseingStatus?:boolean
     public  AccountType?:string;

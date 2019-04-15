@@ -309,4 +309,39 @@ export class InventoryDefinationServiceService {
     const options = new RequestOptions({ headers: headers });
     return this._http.delete(url,options);
   }
+  public getCustomerList(){
+    var url=this._defaultRoute.InventoryService+'Customers';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'get');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.get(url,options)
+  }
+  public CreateCustomer(party:Party){
+    var url=this._defaultRoute.InventoryService+'Customer';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'POST');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.post(url,party,options);
+  }
+  public UpdateCustomer(party:Party){
+    var url=this._defaultRoute.InventoryService+'Customer/'+party.Id;
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'PUT');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.put(url,party,options);
+  }
+  public getCustomerById(Id:string){
+    var url=this._defaultRoute.InventoryService+'Customer/'+Id;
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'get');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.get(url,options);
+  }
+  public deleteCustomer(Id:string){
+    var url=this._defaultRoute.InventoryService+'Customer/'+Id;
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'delete');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.delete(url,options);
+  }
 }

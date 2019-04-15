@@ -52,7 +52,7 @@
                   </div>
                   <div class="col-md-1">
                       <span id="pointer" (click)="createNewCategory()" class="glyphicon glyphicon-plus"></span>
-                    </div>
+                  </div>
                 </div>
                 <div class="form-group row" *ngIf="itemValidation[0]?.SubCategory_Id" [class.has-success]="subcategoryIdControl.valid" [class.has-error]="subcategoryIdControl.invalid&&subcategoryTouch">
                   <label for="categoryId" class="col-sm-4 col-form-label">Sub Category Name</label>

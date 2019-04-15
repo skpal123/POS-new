@@ -45,8 +45,8 @@ export class ValidationService {
       headers.append('ActionName', 'get');  
       return this._httpClient.get(url,{headers:headers})
     }
-    public getItemPurchaseValidationData(){
-      var url=this._defaultRoute.CommonService+'itemPurchaseValidation';
+    public getItemPurchaseValidationData(formName:string){
+      var url=this._defaultRoute.CommonService+'itemPurchaseSalesValidation/'+formName;
       let headers =  this.setCustomHeader();
       headers.append('ActionName', 'get');  
       return this._httpClient.get(url,{headers:headers})

@@ -11,7 +11,10 @@ import { UnitDropdownComponent } from './unit-dropdown/unit-dropdown.component';
 import { LedgerDropdownComponent } from './ledger-dropdown/ledger-dropdown.component';
 import { SubledgerDropdownComponent } from './subledger-dropdown/subledger-dropdown.component';
 import { FormValidationInfoComponent } from './form-validation-info/form-validation-info.component';
-import { FormDetailsControlComponent } from './form-details-control/form-details-control.component'
+import { FormDetailsControlComponent } from './form-details-control/form-details-control.component';
+import { SupplierDropdownComponent } from './supplier-dropdown/supplier-dropdown.component';
+import { CustomerDropdownComponent } from './customer-dropdown/customer-dropdown.component';
+import { PartyDropdownComponent } from './party-dropdown/party-dropdown.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -26,7 +29,12 @@ import { FormDetailsControlComponent } from './form-details-control/form-details
     ItemDropdownComponent, 
     UnitDropdownComponent, 
     LedgerDropdownComponent, 
-    SubledgerDropdownComponent, FormValidationInfoComponent, FormDetailsControlComponent
+    SubledgerDropdownComponent, 
+    FormValidationInfoComponent, 
+    FormDetailsControlComponent, 
+    SupplierDropdownComponent, 
+    CustomerDropdownComponent, 
+    PartyDropdownComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -39,7 +47,10 @@ import { FormDetailsControlComponent } from './form-details-control/form-details
     UnitDropdownComponent, 
     LedgerDropdownComponent, 
     SubledgerDropdownComponent,
-    FormDetailsControlComponent
+    FormDetailsControlComponent,
+    SupplierDropdownComponent,
+    PartyDropdownComponent,
+    CustomerDropdownComponent
   ]
 })
 export class CommonModuleModule { }

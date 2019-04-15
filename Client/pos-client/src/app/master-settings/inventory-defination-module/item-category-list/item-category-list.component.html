@@ -5,8 +5,11 @@
               <div class="panel-heading">
                   <h3 style="text-align: center" class="panel-title">Category List <span (click)="createNewCategory()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></h3>
               </div>           
-              <div class="panel-body">
-                <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+              <div class="panel-body" *ngIf="reload">
+                <app-custom-datatable
+                [DataList]="DataList" 
+                [reload]="reload"
+                [ColumnList]="ColumnList"
                 (EditSelectedRowClicked)="getCategoryDetails($event)"
                 (DeleteDataRowClicked)="deleteCategory($event)"
                 >

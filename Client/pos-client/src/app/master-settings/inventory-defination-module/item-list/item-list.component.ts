@@ -15,7 +15,7 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
   styleUrls: ['./item-list.component.css']
 })
 export class ItemListComponent implements OnInit {
-
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -49,6 +49,7 @@ export class ItemListComponent implements OnInit {
     this._inventotyDefinationService.getInventoryItemList().subscribe(response=>{
       this.inventoryItemList=response.json();
       this.DataList=this.inventoryItemList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

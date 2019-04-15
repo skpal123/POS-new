@@ -14,6 +14,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
   styleUrls: ['./unit-list.component.css']
 })
 export class UnitListComponent implements OnInit {
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -44,6 +45,7 @@ export class UnitListComponent implements OnInit {
     this._inventotyDefinationService.getUnitList().subscribe(response=>{
       this.unitList=response.json();
       this.DataList=this.unitList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

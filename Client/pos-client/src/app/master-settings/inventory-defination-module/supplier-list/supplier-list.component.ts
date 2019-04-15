@@ -15,6 +15,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
   styleUrls: ['./supplier-list.component.css']
 })
 export class SupplierListComponent implements OnInit {
+  reload:boolean=false;
   @BlockUI() blockUi:NgBlockUI
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
@@ -54,6 +55,7 @@ export class SupplierListComponent implements OnInit {
       this.blockUi.stop();
       this.supplierList=response.json();
       this.DataList=this.supplierList
+      this.reload=true;
     },error=>{
       this.blockUi.stop();
       let message=error.json();

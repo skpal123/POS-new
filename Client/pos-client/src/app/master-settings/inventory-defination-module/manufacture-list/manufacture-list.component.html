@@ -9,7 +9,10 @@
                 </h3>
             </div>           
             <div class="panel-body">
-              <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+              <app-custom-datatable 
+              [DataList]="DataList" 
+              [reload]="reload"
+              [ColumnList]="ColumnList"
               (EditSelectedRowClicked)="getManufactureDetails($event)"
               (DeleteDataRowClicked)="deleteManufacture($event)"
               >

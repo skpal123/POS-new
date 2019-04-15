@@ -1,15 +1,18 @@
-<div class="container">
-    <div class="row">
+
+    <div class="row" style="margin-left: 10px;margin-right: 10px;margin-top: 0px">
         <div class="col-md-12">
             <div  class="panel panel-success">
                 <div class="panel-heading">
-                    <h3 style="text-align: center;" class="panel-title">Item List 
+                    <h3 style="text-align: center;" class="panel-title">Purchased Item List 
                         <span (click)="controlGroupItemForm()" title="view from control" id="pointer" class="pointer glyphicon glyphicon-plus pull-left" aria-hidden="true"></span>
                       <span (click)="createGroupItem()" title="Create new purchase transaction" id="pointer" class="pointer pull-right" aria-hidden="true"><img height="30px" width="30px" src="./assets/Img/addicon.png"></span>
                     </h3>
                 </div>           
                 <div class="panel-body">
-                  <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+                  <app-custom-datatable
+                   [DataList]="DataList"
+                   [reload]="reload"
+                   [ColumnList]="ColumnList"
                   (EditSelectedRowClicked)="getGroupItemDetails($event)"
                   (DeleteDataRowClicked)="deleteGroupItem($event)"
                   >
@@ -18,4 +21,3 @@
             </div>
         </div>
       </div>  
-</div>

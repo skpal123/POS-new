@@ -16,6 +16,7 @@ export class FormValidationInfoComponent implements OnInit {
   private _alertBox:AlertBoxService) { }
   
   ngOnInit() {
+    debugger
     this.getFormInfoList();
   }
   getFormInfoList(){

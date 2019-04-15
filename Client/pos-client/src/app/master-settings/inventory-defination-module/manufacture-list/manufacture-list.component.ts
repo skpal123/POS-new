@@ -15,7 +15,7 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
   styleUrls: ['./manufacture-list.component.css']
 })
 export class ManufactureListComponent implements OnInit {
-
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -46,6 +46,7 @@ export class ManufactureListComponent implements OnInit {
     this._inventotyDefinationService.getManufactureList().subscribe(response=>{
       this.manufactureList=response.json();
       this.DataList=this.manufactureList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

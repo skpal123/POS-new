@@ -21,6 +21,8 @@ import { PartyEntryComponent } from './party-entry/party-entry.component';
 import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
 import { ManufactureEntryComponent } from './manufacture-entry/manufacture-entry.component';
 import { FormDetailsControlComponent } from '../../common-module/form-details-control/form-details-control.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
+import { CustomerEntryComponent } from './customer-entry/customer-entry.component';
 
 @NgModule({
   imports: [
@@ -46,7 +48,7 @@ import { FormDetailsControlComponent } from '../../common-module/form-details-co
     PartyListComponent, 
     PartyEntryComponent, 
     ManufactureListComponent, 
-    ManufactureEntryComponent
+    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent
   ],
     entryComponents:[
       AddUnitComponent,AddSubcategoryComponent,
@@ -54,7 +56,13 @@ import { FormDetailsControlComponent } from '../../common-module/form-details-co
       LocationEntryComponent,PartyEntryComponent,
       SupplierEntryComponent,
       ManufactureEntryComponent,
-      FormDetailsControlComponent
+      FormDetailsControlComponent,
+      CustomerEntryComponent
+    ],
+    exports:[
+      SupplierEntryComponent,
+      CustomerEntryComponent,
+      PartyEntryComponent
     ]
 })
 export class InventoryDefinationModuleModule { }

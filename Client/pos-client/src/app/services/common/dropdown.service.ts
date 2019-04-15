@@ -68,4 +68,25 @@ export class DropdownService {
     const options = new RequestOptions({ headers: headers });
     return this._http.get(url,options)
   }
+  public getSupplierDropdownList(){
+    var url=this._defaultRoute.DropdownService+'supplierDropdown';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'get');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.get(url,options)
+  }
+  public getCustomerDropdownList(){
+    var url=this._defaultRoute.DropdownService+'customerDropdown';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'get');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.get(url,options)
+  }
+  public getPartyDropdownList(){
+    var url=this._defaultRoute.DropdownService+'partyDropdown';
+    let headers =  this.setCustomHeader();
+    headers.append('ActionName', 'get');  
+    const options = new RequestOptions({ headers: headers });
+    return this._http.get(url,options)
+  }
 }

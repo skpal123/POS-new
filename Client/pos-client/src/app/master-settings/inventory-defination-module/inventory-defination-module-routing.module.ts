@@ -13,6 +13,7 @@ import { ItemSubcategoryListComponent } from './item-subcategory-list/item-subca
 import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { PartyListComponent } from './party-list/party-list.component';
 import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
+import { CustomerListComponent } from './customer-list/customer-list.component';
 
 const routes: Routes = [
   {
@@ -27,22 +28,10 @@ const routes: Routes = [
       {path:'item-entry',component:ItemListComponent},
       {path:'add-supplier',component:SupplierListComponent},
       {path:'add-party',component:PartyListComponent},
-      {path:'add-manufacture',component:ManufactureListComponent}
+      {path:'add-manufacture',component:ManufactureListComponent},
+      {path:'add-customer',component:CustomerListComponent}
     ]
-  // },{
-  //   path:'inventory-defination',
-  //   component:InventoryLayoutComponent,
-  //   children:[
-  //     {path:'',component:ItemCategoryListComponent},
-  //     {path:'add-category',component:ItemCategoryListComponent},
-  //     {path:'add-subCategory',component:ItemSubcategoryListComponent},
-  //     {path:'add-unit',component:UnitListComponent},
-  //     {path:'location-entry',component:InventoryLocationListComponent},
-  //     {path:'item-entry',component:ItemListComponent},
-  //     {path:'add-supplier',component:SupplierListComponent},
-  //     {path:'add-party',component:PartyListComponent},
-  //     {path:'add-manufacture',component:ManufactureListComponent}
-  //   ]
+
   }
 
 ];

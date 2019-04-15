@@ -6,7 +6,6 @@ import { MatDialogRef,MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { ValidationService } from '../../../services/common/validation.service';
 import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
-import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { AddCategoryComponent } from '../../../master-settings/inventory-defination-module/add-category/add-category.component';
 import { AddSubcategoryComponent } from '../../../master-settings/inventory-defination-module/add-subcategory/add-subcategory.component';
@@ -14,6 +13,12 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { DropdownService } from '../../../services/common/dropdown.service';
 import { SelectDropdown } from '../../../models/common/select.dropdown.model';
 import { ItemPurchaseValidation } from '../../../models/validation/item-purchase.validation.model';
+import { InventoryService } from '../../../services/regular-operation/inventory.service';
+import { SupplierDropdownComponent } from '../../../common-module/supplier-dropdown/supplier-dropdown.component';
+import { SupplierEntryComponent } from '../../../master-settings/inventory-defination-module/supplier-entry/supplier-entry.component';
+import { ItemTransaction } from '../../../models/regular-operation/inventory/item-transaction.model';
+import { PartyEntryComponent } from '../../../master-settings/inventory-defination-module/party-entry/party-entry.component';
+import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
 
 @Component({
   selector: 'app-item-purchase',
@@ -25,12 +30,12 @@ export class ItemPurchaseComponent implements OnInit {
   purchaseValidation:ItemPurchaseValidation[]=[];
   ledgerTouch:boolean=false;
   subledgerTouch:boolean=false;
-  categoryNew:boolean=false;
-  subcategoryNew:boolean=false;
-  unitNew:boolean=false;
+  supplierNew:boolean=false;
+  partyNew:boolean=false;
+  customerNew:boolean=false;
   grandTotal:number=0;
   grandQuantity:number=0;
-
+  startDate:Date=new Date();
   ledgerSelectedItems :MultiSelectDropdown[]= [
   ];
   subledgerSelectedItems :MultiSelectDropdown[]= [
@@ -46,6 +51,9 @@ export class ItemPurchaseComponent implements OnInit {
     { id: "0", itemName: "Select" }
   ];
   locationSelectedItems :MultiSelectDropdown[]= [
+    { id: "0", itemName: "Select" }
+  ];
+  supplierSelectedItems :MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
   ];
   locationList:SelectDropdown[];
@@ -67,38 +75,37 @@ export class ItemPurchaseComponent implements OnInit {
     private _alertBox:AlertBoxService,
     private matDialog:MatDialog,
     private fb:FormBuilder,
-    private _inventotyDefinationService:InventoryDefinationServiceService,
+    private _inventotyService:InventoryService,
 ) { }
 
   ngOnInit() {
     debugger
-    this.getItemPurchaseValidationList();
+    this.purchaseValidation=this.groupItem.data;
     this.getItemList("null");
     this.getLocationList();
     this.itemPurchaseForm = this.fb.group({
-      TransactionId: [''],
-      ChalanNo: [''],
-      InvoiceNo: [''],
-      Supplier_Id: [''],
-      Reason: ['0'],
-      TransactionDate: [''],
-      GrvNo: [''],
-      GrvDate: [''],
-      Comments: [''],
-      LotNo: [''],
-      TotalAmount: ['0',1>1?Validators.required:null],
-      Quantity: ['0',Validators.required],
-      DiscountRate: ['0'],
-      DiscountAmount: ['0'],
-      Vat: ['0'],
-      Tax: ['0'],
-      NetPaidAmount: ['0'],
-      Group_Id: [''],
-      Approver_Id: [''],
-      Ledger_Id: ['',Validators.required],
-      SubLedger_Id: [''],
-      PaymentMode: ['0'],
-      TransactionType: [''],
+      TransactionId: [null,this.purchaseValidation[0].TransactionId==true&&this.purchaseValidation[1].TransactionId==true? Validators.required:null],
+      ChalanNo: [null,this.purchaseValidation[0].ChalanNo==true&&this.purchaseValidation[1].ChalanNo==true? Validators.required:null],
+      InvoiceNo: [null,this.purchaseValidation[0].InvoiceNo==true&&this.purchaseValidation[1].InvoiceNo==true? Validators.required:null],
+      Supplier_Id: [null,this.purchaseValidation[0].Supplier_Id==true&&this.purchaseValidation[1].Supplier_Id==true==true? Validators.required:null],
+      Reason: [0,this.purchaseValidation[0].TransactionDate==true&&this.purchaseValidation[1].TransactionDate==true? Validators.required:null],
+      TransactionDate: [new Date(),this.purchaseValidation[0].TransactionDate==true&&this.purchaseValidation[1].TransactionDate==true? Validators.required:null],
+      GrvNo: [null,this.purchaseValidation[0].GrvNo==true&&this.purchaseValidation[1].GrvNo==true? Validators.required:null],
+      GrvDate: [new Date(),this.purchaseValidation[0].GrvDate==true&&this.purchaseValidation[1].GrvDate==true? Validators.required:null],
+      Comments: [null,this.purchaseValidation[0].Comments==true&&this.purchaseValidation[1].Comments==true? Validators.required:null],
+      LotNo: [null,this.purchaseValidation[0].LotNo==true&&this.purchaseValidation[1].LotNo==true? Validators.required:null],
+      TotalAmount: [0,this.purchaseValidation[0].TotalAmountGroup==true&&this.purchaseValidation[1].TotalAmountGroup==true? Validators.required:null],
+      Quantity: [0,this.purchaseValidation[0].QuantityGroup==true&&this.purchaseValidation[1].QuantityGroup==true? Validators.required:null],
+      DiscountRate: [0,this.purchaseValidation[0].DiscountRateGroup==true&&this.purchaseValidation[1].DiscountRateGroup==true? Validators.required:null],
+      DiscountAmount: [0,this.purchaseValidation[0].DiscountAmount==true&&this.purchaseValidation[1].DiscountAmount==true? Validators.required:null],
+      Vat: [0,this.purchaseValidation[0].Vat==true&&this.purchaseValidation[1].Vat==true? Validators.required:null],
+      Tax: [0,this.purchaseValidation[0].Tax==true&&this.purchaseValidation[1].Tax==true? Validators.required:null],
+      NetPaidAmount: [0,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+      Approver_Id: [null,this.purchaseValidation[0].Approver_Id==true&&this.purchaseValidation[1].Approver_Id==true? Validators.required:null],
+      Ledger_Id: [null,this.purchaseValidation[0].Ledger_Id==true&&this.purchaseValidation[1].Ledger_Id==true? Validators.required:null],
+      SubLedger_Id: [null,this.purchaseValidation[0].SubLedger_Id==true&&this.purchaseValidation[1].SubLedger_Id==true? Validators.required:null],
+      PaymentMode: [0,this.purchaseValidation[0].PaymentMode==true&&this.purchaseValidation[1].PaymentMode==true? Validators.required:null],
+      TransactionType: [null,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
       ItemTransactionList: this.fb.array([
         this.addNewItemTransaction()
       ]),
@@ -108,30 +115,90 @@ export class ItemPurchaseComponent implements OnInit {
       this.logValidationMessages(this.itemPurchaseForm)
     })
     this.itemPurchaseForm.get('PaymentMode').valueChanges.subscribe(data=>{
-      alert(data)
+     
     })
     if(this.groupItem.Id==null){
       this.ledgerSelectedItems.push({id:"0",itemName:"SELECT"})
       this.subledgerSelectedItems.push({id:"0",itemName:"SELECT"})
     }
     else{
-      // this.categorySelectedItems.push({id:this.item.Category_Id,itemName:this.item.CategoryName})
-      // this.subcategory.CategoryName=this.item.CategoryName;
-      // this.subcategory.Category_Id=this.item.Category_Id;
-      // this.subcategorySelectedItems.push({id:this.item.SubCategory_Id,itemName:this.item.SubCategoryName})
-      // this.unitSelectedItems.push({id:this.item.UnitId,itemName:this.item.UnitName})
-      // this.ledgerSelectedItems.push({id:this.item.Ledger_Id,itemName:this.item.LedgerName})
-      // this.subledgerSelectedItems.push({id:this.item.SubLedger_Id,itemName:this.item.SubLedgerName})
+      this.supplierSelectedItems=[];
+      this.supplierSelectedItems.push({id:this.groupItem.Supplier_Id,itemName:this.groupItem.SupplierName})
+      this.ledgerSelectedItems=[];
+      this.ledgerSelectedItems.push({id:this.groupItem.Ledger_Id,itemName:this.groupItem.LedgerName})
+      this.itemPurchaseForm.patchValue({
+        TransactionId:this.groupItem.TransactionId,
+        ChalanNo:this.groupItem.ChalanNo,
+        InvoiceNo: this.groupItem.InvoiceNo,
+        Supplier_Id: this.groupItem.Supplier_Id,
+        Reason: this.groupItem.Reason,
+        TransactionDate: this.groupItem.TransactionDate,
+        GrvNo: this.groupItem.GrvNo,
+        GrvDate:this.groupItem.GrvDate,
+        Comments: this.groupItem.Comments,
+        LotNo:this.groupItem.LotNo,
+        TotalAmount: this.groupItem.TotalAmount,
+        Quantity: this.groupItem.Quantity,
+        DiscountRate: this.groupItem.DiscountRate,
+        DiscountAmount: this.groupItem.DiscountAmount,
+        Vat: this.groupItem.Vat,
+        Tax:this.groupItem.Tax,
+        NetPaidAmount: this.groupItem.NetPaidAmount,
+        Approver_Id:this.groupItem.Approver_Id,
+        Ledger_Id:this.groupItem.Ledger_Id,
+        SubLedger_Id:this.groupItem.SubLedger_Id,
+        PaymentMode: this.groupItem.PaymentMode,
+        TransactionType: this.groupItem.TransactionType
+      })
+      this.itemPurchaseForm.setControl('ItemTransactionList',this.setExistingItemPurchase())
+      const control=(<FormArray>this.itemPurchaseForm.get('ItemTransactionList')).controls;
+      this.groupItem.ItemTransactionList.forEach((a,index)=>{
+        control[index].get('ItemId').setValue([{id:a.Item_Id,itemName:a.ItemName}]);
+        control[index].get('LocationId').setValue([{id:a.Location_Id,itemName:a.LocationName}]);
+      });
     }
+  }
+  setExistingItemPurchase():FormArray{
+    const formArray=new FormArray([]);
+    this.groupItem.ItemTransactionList.forEach(itemTransaction=>{
+    //this.itemSelectedItems=[];
+     //this.itemSelectedItems.push({id:itemTransaction.Item_Id,itemName:itemTransaction.ItemName})
+    //this.locationSelectedItems=[];
+    //this.locationSelectedItems.push({id:itemTransaction.Location_Id,itemName:itemTransaction.LocationName})
+    formArray.push( this.fb.group({
+      SerialNo: [itemTransaction.SerialNo],
+      TransactionId: [itemTransaction.TransactionId,this.purchaseValidation[0].TransactionId==true&&this.purchaseValidation[1].TransactionId==true? Validators.required:null],
+      Item_Id: [itemTransaction.Item_Id,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
+      Location_Id: [itemTransaction.Location_Id,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+      ItemId: [null,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
+      LocationId: [null,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+      TransactionType: [itemTransaction.TransactionType,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
+      Quantity: [itemTransaction.Quantity,this.purchaseValidation[0].Quantity==true&&this.purchaseValidation[1].Quantity==true? Validators.required:null],
+      UnitCost: [itemTransaction.UnitCost,this.purchaseValidation[0].UnitCost==true&&this.purchaseValidation[1].UnitCost==true? Validators.required:null],
+      UnitSale: [itemTransaction.UnitSale,this.purchaseValidation[0].UnitSale==true&&this.purchaseValidation[1].UnitSale==true? Validators.required:null],
+      TotalAmount: [this.calulateTotalAmount(itemTransaction),this.purchaseValidation[0].TotalAmountTransaction==true&&this.purchaseValidation[1].TotalAmountTransaction==true? Validators.required:null],
+      DiscountRate: [itemTransaction.DiscountRate,this.purchaseValidation[0].DiscountRateTransaction==true&&this.purchaseValidation[1].DiscountRateTransaction==true? Validators.required:null],
+      DiscountAmount: [itemTransaction.DiscountAmount,this.purchaseValidation[0].DiscountAmount==true&&this.purchaseValidation[1].DiscountAmount==true? Validators.required:null],
+      Vat: [itemTransaction.Vat,this.purchaseValidation[0].Vat==true&&this.purchaseValidation[1].Vat==true? Validators.required:null],
+      Tax: [itemTransaction.Tax,this.purchaseValidation[0].Tax==true&&this.purchaseValidation[1].Tax==true? Validators.required:null]
+      }))
+    })
+    return formArray
+  }
+  calulateTotalAmount(itemTransaction:ItemTransaction):number{
+
+    var totalAmount=0,discountAmount=0;
+    let amount=itemTransaction.UnitCost*itemTransaction.Quantity;
+    if(amount>0){
+      discountAmount=(amount*itemTransaction.DiscountRate)/100
+    }
+    totalAmount=amount-discountAmount;
+    return totalAmount;
   }
   onNoClick(){
     this.matDialogRef.close(false);
   }
-  setValidationDynamicly(){
-
-  }
   getItemList(subCategoryId:string){
-    this.itemSelectedItems=[];
     this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
       this.itemList=response.json();
       if(this.itemList.length>0){
@@ -147,7 +214,6 @@ export class ItemPurchaseComponent implements OnInit {
     })
   }
   getLocationList(){
-    this.locationSelectedItems=[];
     this._dropdownService.getLocationDropdownList().subscribe(response=>{
       this.locationList=response.json();
       if(this.locationList.length>0){
@@ -162,62 +228,26 @@ export class ItemPurchaseComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  saveGroupItem(){
-    debugger
-    if(this.groupItem.Id==null){
-      console.log(this.groupItem);
-      this._inventotyDefinationService.CreateInventoryItem(this.groupItem).subscribe(response=>{
-        let result=response.json();
-        if(result){
-          this.matDialogRef.close(true);
-          let dialogData=new DialogData();
-          dialogData.message="Save successfully";
-          this._alertBox.openDialog(dialogData);
-        }
-      },error=>{
-        let message=error.json();
-        let dialogData=new DialogData();
-        dialogData.message=message.Message;
-        this._alertBox.openDialog(dialogData);
-      })
-    }
-    else{
-      this._inventotyDefinationService.UpdateInventoryItem(this.groupItem).subscribe(response=>{
-        let result=response.json();
-        if(result){
-          this.matDialogRef.close(true);
-          let dialogData=new DialogData();
-          dialogData.message="Update successfully";
-          this._alertBox.openDialog(dialogData);
-        }
-      },error=>{
-        let message=error.json();
-        let dialogData=new DialogData();
-        dialogData.message=message.Message;
-        this._alertBox.openDialog(dialogData);
-      })
-    }
-  }
   itemOnItemSelect($event,index:number){
     debugger
     const control=(<FormGroup>this.itemPurchaseForm.get('ItemTransactionList')).controls[index]
-    const selectedItem=<MultiSelectDropdown[]>control.get('Item_Id').value;
+    const selectedItem=<MultiSelectDropdown[]>control.get('ItemId').value;
     if(selectedItem&&selectedItem[0].id=="0"){
-      control.get('ItemId').setValue('');
+      control.get('Item_Id').setValue('');
     }
     else{
-      control.get('ItemId').setValue(selectedItem);
+      control.get('Item_Id').setValue(selectedItem[0].id);
     }
   }
   locationOnItemSelect($event,index:number){
     debugger
     const control=(<FormGroup>this.itemPurchaseForm.get('ItemTransactionList')).controls[index]
-    const selectedLocation=<MultiSelectDropdown[]>control.get('Location_Id').value;
+    const selectedLocation=<MultiSelectDropdown[]>control.get('LocationId').value;
     if(selectedLocation&&selectedLocation[0].id=="0"){
-      control.get('LocationId').setValue('');
+      control.get('Location_Id').setValue('');
     }
     else{
-      control.get('LocationId').setValue(selectedLocation);
+      control.get('Location_Id').setValue(selectedLocation[0].id);
     }
   }
   ledgerOnSeletedItem($event:MultiSelectDropdown){
@@ -227,6 +257,15 @@ export class ItemPurchaseComponent implements OnInit {
     }
     else{
       this.itemPurchaseForm.get('Ledger_Id').setValue('');
+    }
+  }
+  supplierOnSeletedItem($event:MultiSelectDropdown){
+    if($event.id!="0"){
+      this.itemPurchaseForm.get('Supplier_Id').setValue($event.id);
+      this.groupItem.Ledger_Id=$event.id;
+    }
+    else{
+      this.itemPurchaseForm.get('Supplier_Id').setValue('');
     }
   }
   subledgerOnSeletedItem($event:MultiSelectDropdown){
@@ -293,50 +332,23 @@ export class ItemPurchaseComponent implements OnInit {
   slectedGroupControl(){
     this.getTotalQuantityAndAmount();
   }
-  createNewCategory(){
-     const dialogRef=this.matDialog.open(AddCategoryComponent,{
+  createNewSupplier(){
+     const dialogRef=this.matDialog.open(SupplierEntryComponent,{
        data:this.category,
        disableClose:true,
        height:window.screen.height*.6+'px',
        width:window.screen.width*.4+'px'
      });
      dialogRef.afterClosed().subscribe(result=>{
+       debugger
        if(result){
-         this.categoryNew=true;
+         this.supplierNew=true;
        }
      })
    }
-   createNewSubCategory(){
-    this.subcategoryNew=false;
-     const dialogRef=this.matDialog.open(AddSubcategoryComponent,{
-       data:this.subcategory,
-       disableClose:true,
-       height:window.screen.height*.6+'px',
-       width:window.screen.width*.4+'px'
-     });
-     dialogRef.afterClosed().subscribe(result=>{
-       if(result){
-         this.subcategoryNew=true;
-         this.subcategory.SubCategoryId=null;
-         this.subcategory.SubCategoryName=null;
-       }
-     })
-   }
-  //  getItemFormInfo(){
-  //   this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
-  //     this.itemValidation=response
-  //   },error=>{
-  //     let message=error;
-  //     let dialogData=new DialogData();
-  //     dialogData.message=message.Message;
-  //     this._alertBox.openDialog(dialogData);
-  //   })
-  // }
- 
    logValidationMessages(formGroup:FormGroup){
     Object.keys(formGroup.controls).forEach((key:string)=>{
      const abastractControl=formGroup.get(key);
-     console.log(key)
      if(abastractControl instanceof FormGroup){
        this.logValidationMessages(abastractControl)
      }
@@ -345,9 +357,7 @@ export class ItemPurchaseComponent implements OnInit {
          if(control instanceof FormGroup){
            this.logValidationMessages(control)
          }
-         else{
-          alert(control.value);
-         }
+         
        }
      }
      else{
@@ -367,38 +377,70 @@ export class ItemPurchaseComponent implements OnInit {
     }
   addNewItemTransaction():FormGroup{
   return this.fb.group({
-    SerialNo: [''],
-    TransactionId: ['',Validators.required],
-    Item_Id: [this.itemSelectedItems],
-    Location_Id: [this.locationSelectedItems],
-    ItemId: ['',Validators.required],
-    LocationId: ['',Validators.required],
-    TransactionType: [''],
-    Quantity: ['0',Validators.required],
-    UnitCost: [0],
-    UnitSale: ['0'],
-    TotalAmount: ['0'],
-    DiscountRate: ['0'],
-    DiscountAmount: ['0'],
-    Vat: ['0'],
-    Tax: ['0']
+    SerialNo: [null],
+    TransactionId: [null,this.purchaseValidation[0].TransactionId==true&&this.purchaseValidation[1].TransactionId==true? Validators.required:null],
+    Item_Id: [null,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
+    Location_Id: [null,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+    ItemId: [this.itemSelectedItems,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
+    LocationId: [this.locationSelectedItems,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+    TransactionType: [null,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
+    Quantity: [0,this.purchaseValidation[0].Quantity==true&&this.purchaseValidation[1].Quantity==true? Validators.required:null],
+    UnitCost: [0,this.purchaseValidation[0].UnitCost==true&&this.purchaseValidation[1].UnitCost==true? Validators.required:null],
+    UnitSale: [0,this.purchaseValidation[0].UnitSale==true&&this.purchaseValidation[1].UnitSale==true? Validators.required:null],
+    TotalAmount: [0,this.purchaseValidation[0].TotalAmountTransaction==true&&this.purchaseValidation[1].TotalAmountTransaction==true? Validators.required:null],
+    DiscountRate: [0,this.purchaseValidation[0].DiscountRateTransaction==true&&this.purchaseValidation[1].DiscountRateTransaction==true? Validators.required:null],
+    DiscountAmount: [0,this.purchaseValidation[0].DiscountAmount==true&&this.purchaseValidation[1].DiscountAmount==true? Validators.required:null],
+    Vat: [0,this.purchaseValidation[0].Vat==true&&this.purchaseValidation[1].Vat==true? Validators.required:null],
+    Tax: [0,this.purchaseValidation[0].Tax==true&&this.purchaseValidation[1].Tax==true? Validators.required:null]
   })
  }
  removeItemTransaction(index:number){
   (<FormArray>this.itemPurchaseForm.get('ItemTransactionList')).removeAt(index)
 }
  save(){
-  console.log(this.itemPurchaseForm.value);
   this.logValidationMessages(this.itemPurchaseForm);
 }
-getItemPurchaseValidationList(){
-  this._validationService.getItemPurchaseValidationData().subscribe((response:ItemPurchaseValidation[])=>{
-    this.purchaseValidation=response
-  },error=>{
-    let message=error.json();
-    let dialogData=new DialogData();
-    dialogData.message=message.Message;
-    this._alertBox.openDialog(dialogData);
-  })
+savePurchaseItem(){
+  debugger
+  let id=this.groupItem.Id;
+  this.groupItem=this.itemPurchaseForm.value;
+  this.groupItem.Id=id;
+  if(this.groupItem.ItemTransactionList.length>0){
+    this.groupItem.ItemTransactionList.forEach(item=>{
+      item.TransactionType='Purchase'
+    })
+  };
+  if(this.groupItem.Id==null){
+    this._inventotyService.saveGroupItem(this.groupItem).subscribe(response=>{
+      let result=response
+      if(result){
+        this.matDialogRef.close(true);
+        let dialogData=new DialogData();
+        dialogData.message="Save successfully";
+        this._alertBox.openDialog(dialogData);
+      }
+    },error=>{
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  else{
+    this._inventotyService.UpdateGroupItem(this.groupItem).subscribe(response=>{
+      let result=response
+      if(result){
+        this.matDialogRef.close(true);
+        let dialogData=new DialogData();
+        dialogData.message="Update successfully";
+        this._alertBox.openDialog(dialogData);
+      }
+    },error=>{
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
 }
 }

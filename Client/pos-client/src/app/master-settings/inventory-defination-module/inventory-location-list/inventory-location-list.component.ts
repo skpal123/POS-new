@@ -14,6 +14,7 @@ import { LocationEntryComponent } from '../location-entry/location-entry.compone
   styleUrls: ['./inventory-location-list.component.css']
 })
 export class InventoryLocationListComponent implements OnInit {
+  reload:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -44,6 +45,7 @@ export class InventoryLocationListComponent implements OnInit {
     this._inventotyDefinationService.getLocationList().subscribe(response=>{
       this.locationList=response.json();
       this.DataList=this.locationList
+      this.reload=true;
     },error=>{
       let message=error.json();
       let dialogData=new DialogData();

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-declare var $: any;
+//declare var $: any;
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
