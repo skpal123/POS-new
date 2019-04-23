@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using ERP.DataService.Model.Model;
+using ERPWebApiService.Autentication;
 using ERPWebApiService.Authentication;
 using System;
 using System.Collections.Generic;
@@ -128,6 +129,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
+                //var userSession = AuthorizationHelper.GetSession();
                 var locationList = ERPContext.Locations.Select(x => new InventoryLocationInfo
                 {
                     Id = x.Id,
@@ -1175,7 +1177,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {   
-                InventoryGroupListInfo inventoryGroupList=new InventoryGroupListInfo();
+                List<InventoryGroupListInfo> inventoryGroupList=new List<InventoryGroupListInfo> ();
                 using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd=new SqlCommand(@"select g.Id, g.TransactionId,g.TransactionType,g.Quantity,g.TotalAmount,
@@ -1216,32 +1218,11 @@ namespace ERPWebApiService.Controllers
                         {
                             inventoryGroup.GrvDate = Convert.ToDateTime(rdr["GrvDate"]);
                         }
+                        inventoryGroupList.Add(inventoryGroup);
                     }
                 }
-                var groupItemList = ERPContext.GroupItems.Select(x => new InventoryGroupListInfo()
-                {
-                    Id = x.Id,
-                    TransactionId = x.TransactionId,
-                    TransactionType = x.TransactionType,
-                    Quantity = x.Quantity,               
-                    TotalAmount = x.TotalAmount,
-                    DiscountRate = x.DiscountRate,
-                    DiscountAmount = x.DiscountAmount,
-                    Vat = x.Vat,                   
-                    Tax = x.Tax,
-                    NetPaidAmount = x.NetPaidAmount,
-                    ChalanNo = x.ChalanNo,
-                    InvoiceNo = x.InvoiceNo,
-                    Comments = x.Comments,
-                    TransactionDate = x.TransactionDate,
-                    GrvNo = x.GrvNo,
-                    SupplierName =
-                        ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id) != null
-                            ? ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id).SupplierName
-                            : null,
-                    GrvDate = x.GrvDate
-                }).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, groupItemList);
+
+                return Request.CreateResponse(HttpStatusCode.OK, inventoryGroupList);
             }
             catch (Exception ex)
             {
@@ -1470,6 +1451,110 @@ namespace ERPWebApiService.Controllers
                 DatabaseCommand.ExcuteNonQuery(@"delete from tblgroupItem where id=@id;
                 delete from tblItemTransaction where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("settingSellPrice")]
+        [HttpPost]
+        public HttpResponseMessage SaveSellSettingPrice(List<SettingSellPriceInfo> sellPriceInfos)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Id", typeof(Guid));
+                dt.Columns.Add("ItemCode", typeof(string));
+                dt.Columns.Add("ItemId", typeof(string));
+                dt.Columns.Add("PurchaseDate", typeof(DateTime));
+                dt.Columns.Add("PreviousAmount", typeof(decimal));
+                dt.Columns.Add("Amount", typeof(decimal));             
+                dt.Columns.Add("Item_Id", typeof(Guid));
+                if (sellPriceInfos.Any())
+                {
+                    foreach (var sellPrice in sellPriceInfos)
+                    {
+                        dt.Rows.Add(Guid.NewGuid(), sellPrice.ItemCode,sellPrice.ItemId,sellPrice.PurchaseDate,sellPrice.PreviousAmount,sellPrice.Amount,sellPrice.Item_Id);
+                    }
+                }
+                Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                paramlist.Add("@TypeSettingSellPrice", dt);
+                DatabaseCommand.ExcuteObjectNonQuery("proc_SaveSettingSellPriceType", paramlist, "procedure");
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("settingSellPrice/{methodType}")]
+        [HttpGet]
+        public HttpResponseMessage GetSellSettingPrice(string methodType)
+        {
+            try
+            {
+                List<SettingSellPriceInfo> settingSellPriceInfos=new List<SettingSellPriceInfo>();
+                using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("proc_GetSettingSellPrice", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@methodType", methodType);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SettingSellPriceInfo settingSellPrice=new SettingSellPriceInfo();
+                        settingSellPrice.Id = rdr["Id"] != DBNull.Value ? Guid.Parse(rdr["Id"].ToString()):Guid.Empty;
+                        settingSellPrice.ItemId = rdr["ItemId"] != DBNull.Value ? rdr["ItemId"].ToString() : null;
+                        settingSellPrice.ItemCode = rdr["ItemCode"] != DBNull.Value ? rdr["ItemCode"].ToString() : null;
+                        settingSellPrice.ItemName = rdr["ItemName"] != DBNull.Value ? rdr["ItemName"].ToString() : null;
+                        settingSellPrice.Amount = rdr["Amount"] != DBNull.Value ? Convert.ToInt32(rdr["Amount"]) : 0;
+                        settingSellPrice.PreviousAmount = settingSellPrice.Amount;
+                        if (rdr["PurchaseDate"] != DBNull.Value)
+                        {
+                            settingSellPrice.PurchaseDate = Convert.ToDateTime(rdr["PurchaseDate"].ToString());
+                        }
+                        if (rdr["Item_Id"] != DBNull.Value)
+                        {
+                            settingSellPrice.Item_Id = Guid.Parse(rdr["Item_Id"].ToString());
+                        }
+                        settingSellPriceInfos.Add(settingSellPrice);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, settingSellPriceInfos);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("getItemStock/{itemId}/{locationId}")]
+        [HttpGet]
+        public HttpResponseMessage GetItemStock(string itemId,string locationId)
+        {
+            try
+            {
+                Guid item_id;
+                var isItemId = Guid.TryParse(itemId, out item_id);
+                Guid location_id;
+                var isLocationId = Guid.TryParse(locationId, out location_id);
+                if (isItemId && isLocationId)
+                {
+                     using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                    {
+                        SqlCommand cmd = new SqlCommand("select dbo.func_get_item_stock(@item_id,@location_id)", con);
+                        cmd.Parameters.AddWithValue("@item_id", item_id);
+                        cmd.Parameters.AddWithValue("@location_id", location_id);
+                        con.Open();
+                        return Request.CreateResponse(HttpStatusCode.OK, cmd.ExecuteScalar());
+                    }
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.Created, 0);
+                }
+               
             }
             catch (Exception ex)
             {

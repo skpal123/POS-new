@@ -45,6 +45,7 @@
     <Compile Include="Model\AccountParentChildRelationInfo.cs" />
     <Compile Include="Model\BranchInfo.cs" />
     <Compile Include="Model\CategoryInfo.cs" />
+    <Compile Include="Model\ColumnInfo.cs" />
     <Compile Include="Model\CustomerInfo.cs" />
     <Compile Include="Model\FormInfoView.cs" />
     <Compile Include="Model\GroupItemInfo.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Model\RolePermissionDataInfo.cs" />
     <Compile Include="Model\RolePermissionInfo.cs" />
     <Compile Include="Model\SelectListItem.cs" />
+    <Compile Include="Model\SettingSellPriceInfo.cs" />
     <Compile Include="Model\SubCategoryInfo.cs" />
     <Compile Include="Model\SubledgerInfo.cs" />
     <Compile Include="Model\SubledgerTransactionInfo.cs" />

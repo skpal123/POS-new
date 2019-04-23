@@ -52,5 +52,6 @@ namespace ERP.DataService.Model
         public DbSet<GroupItem> GroupItems { set; get; }
         public DbSet<ItemTransaction> ItemTransactions { set; get; }
         public DbSet<Customer> Customers { set; get; }
+        public DbSet<SettingSellPrice> SettingSellPrices { set; get; }
     }
 }

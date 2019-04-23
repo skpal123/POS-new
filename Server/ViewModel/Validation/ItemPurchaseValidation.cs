@@ -14,6 +14,7 @@ namespace ViewModel.Validation
         public bool? Quantity { set; get; }
         public bool? UnitCost { set; get; }
         public bool? UnitSale{ set; get; }
+        public bool? InStock { set; get; }
         public bool? DiscountAmount { set; get; }
         public bool? Vat { set; get; }
         public bool? Tax { set; get; }

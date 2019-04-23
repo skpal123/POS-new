@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using ERPWebApiService.Exceptions;
 using ViewModel.Model;
 using ViewModel.Validation;
 
@@ -48,31 +49,28 @@ namespace ERPWebApiService.Controllers
         }
         [Route("formInfo/{formName}")]
         [HttpPut]
-        public HttpResponseMessage GetFormInfo(string formName, List<FormInfoView> formInfoList)
+        public HttpResponseMessage CreateFormInfo(string formName, List<FormInfoView> formInfoList)
         {
             try
             {
+                DataTable dt=new DataTable();
+                dt.Columns.Add("Name", typeof(string));
+                dt.Columns.Add("IsEnable", typeof(Boolean));
+                dt.Columns.Add("IsValidationActive", typeof(Boolean));
+                dt.Columns.Add("FormName", typeof(string));
+                dt.Columns.Add("IsMinLength", typeof(Boolean));
+                dt.Columns.Add("IsMaxLength", typeof(Boolean));
+                dt.Columns.Add("IsEmail", typeof(Boolean));
                 if (formInfoList.Any())
                 {
-                    Dictionary<string, string> paramlist = new Dictionary<string, string>();
-                    paramlist.Add("@formName", formName);
-                    DatabaseCommand.ExcuteNonQuery("delete from tblFormInfo where formName=@formName", paramlist, null);
                     foreach (FormInfoView forminfo in formInfoList)
                     {
-                        var oformInfo = new FormInfo
-                        {
-                            Id=forminfo.Id,
-                            FormName=forminfo.FormName,
-                            Name=forminfo.Name,
-                            IsValidationActive=forminfo.IsValidationActive,
-                            IsEnable=forminfo.IsEnable,
-                            IsMaxLength=forminfo.IsMaxLength,
-                            IsMinLength=forminfo.IsMinLength,
-                            IsEmail=forminfo.IsEmail
-                        };
-                        ERPContext.FormInfos.Add(oformInfo);
-                        ERPContext.SaveChanges();
+                        dt.Rows.Add(forminfo.Name, forminfo.IsEnable, forminfo.IsValidationActive, forminfo.FormName,
+                            forminfo.IsMinLength, forminfo.IsMaxLength, forminfo.IsEmail);
                     }
+                    Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                    paramlist.Add("@TypeFormInfo", dt);
+                    DatabaseCommand.ExcuteObjectNonQuery("proc_saveFormInfo", paramlist, "procedure");
                 }               
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
@@ -81,6 +79,77 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("getFormControl/{formName}")]
+        [HttpGet]
+        public HttpResponseMessage GetFormControlByFormName(string formName)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var userControlList = ERPContext.UserFormControls.Where(x => x.FormName == formName).Select(x => new UserFormControlInfo
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    LabelName = x.LabelName,
+                    Editable = x.Editable,
+                    Autocomplete = x.Autocomplete,
+                    IsEnable = x.IsEnable,
+                    FormName = x.FormName,
+                    IsCheckbox = x.IsCheckbox,
+                    Type = x.Type
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, userControlList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("saveColumnInfo/{formName}")]
+        [HttpPut]
+        public HttpResponseMessage CreateUserControlFormInfo(string formName, List<UserFormControlInfo> userFormControls)
+        {
+            try
+            {
+                DataTable dt=new DataTable();
+                dt.Columns.Add("Name", typeof(string));
+                dt.Columns.Add("LabelName", typeof(string));
+                dt.Columns.Add("Autocomplete", typeof(Boolean));
+                dt.Columns.Add("Editable", typeof(Boolean));
+                dt.Columns.Add("IsEnable", typeof(Boolean));
+                dt.Columns.Add("FormName", typeof(string));
+                dt.Columns.Add("Type", typeof(string));
+                dt.Columns.Add("IsCheckbox", typeof(Boolean));
+                if (userFormControls.Any())
+                {                
+                    foreach (UserFormControlInfo forminfo in userFormControls)
+                    {
+                        dt.Rows.Add(forminfo.Name, forminfo.LabelName, forminfo.Autocomplete, forminfo.Editable,
+                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox);
+                    }  Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                     paramlist.Add("@TypeUserFormControl", dt);
+                     DatabaseCommand.ExcuteObjectNonQuery("proc_saveUserFormControl", paramlist, "procedure");
+                   
+                }
+                
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+
+
         [Route("manufactureValidation")]
         [HttpGet]
         public HttpResponseMessage GetManufactureValidation()
@@ -163,8 +232,9 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         ItemPurchaseValidation itemPurchaseValidation = new ItemPurchaseValidation();
-                        itemPurchaseValidation.UnitSale = Convert.ToBoolean(rdr["UnitSale1"]);
+                        itemPurchaseValidation.UnitSale = Convert.ToBoolean(rdr["UnitSale"]);
                         itemPurchaseValidation.Quantity = Convert.ToBoolean(rdr["Quantity"]);
+                        itemPurchaseValidation.InStock = Convert.ToBoolean(rdr["InStock"]);
                         itemPurchaseValidation.Reason = Convert.ToBoolean(rdr["Reason"]);
                         itemPurchaseValidation.TransactionId = Convert.ToBoolean(rdr["TransactionId"]);
                         itemPurchaseValidation.UnitCost = Convert.ToBoolean(rdr["UnitCost"]);

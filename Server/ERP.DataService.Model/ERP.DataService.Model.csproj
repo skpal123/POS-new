@@ -211,6 +211,10 @@
     <Compile Include="Migrations\201904091726345_adding supplier update 2.Designer.cs">
       <DependentUpon>201904091726345_adding supplier update 2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904191242016_Add sell price.cs" />
+    <Compile Include="Migrations\201904191242016_Add sell price.Designer.cs">
+      <DependentUpon>201904191242016_Add sell price.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -228,6 +232,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
     <Compile Include="Model\Party.cs" />
+    <Compile Include="Model\SettingSellPrice.cs" />
     <Compile Include="Model\Subcategory.cs" />
     <Compile Include="Model\SubledgerOpening.cs" />
     <Compile Include="Model\SubledgerTransaction.cs" />
@@ -365,6 +370,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904091726345_adding supplier update 2.resx">
       <DependentUpon>201904091726345_adding supplier update 2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904191242016_Add sell price.resx">
+      <DependentUpon>201904191242016_Add sell price.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

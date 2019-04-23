@@ -112,3 +112,4 @@ E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataServ
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingcustomerupdate.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingsupplierupdate.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingsupplierupdate2.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.Addsellprice.resources

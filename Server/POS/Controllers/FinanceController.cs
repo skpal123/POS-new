@@ -634,40 +634,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("getFormControl/{formName}")]
-        [HttpGet]
-        public HttpResponseMessage GetFormControlByFormName(string formName)
-        {
-            try
-            {
-                //var userSession = AuthorizationHelper.GetSession();
-                var userControlList = ERPContext.UserFormControls.Where(x => x.FormName == formName&&x.IsEnable==true).Select(x => new UserFormControlInfo
-                {
-                    Id=x.Id,
-                    Name=x.Name,
-                    LabelName=x.LabelName,
-                    Editable=x.Editable,
-                    Autocomplete=x.Autocomplete,
-                    IsEnable=x.IsEnable,
-                    FormName=x.FormName,
-                    IsCheckbox=x.IsCheckbox,
-                    Type=x.Type
-                }).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, userControlList);
-            }
-            catch (InvalidSessionFailure ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
+        
         [Route("addSubledger")]
         [HttpPost]
         public HttpResponseMessage AddSubledger(SubledgerInfo subledgerInfo)
