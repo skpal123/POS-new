@@ -4,7 +4,8 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading" style="height: 40px;">
                         <h4 style="text-align: center"> Item Purchase
-                           <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+                            <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px" width="30px" src="./assets/Img/addicon.png"></span>
+                            <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
                         </h4>
                     </div>
                     <div class="panel-body">
@@ -144,11 +145,12 @@
                                 <th *ngIf="purchaseValidation[0]?.Location_Id">Location</th>
                                 <th *ngIf="purchaseValidation[0]?.Quantity">Quantity</th>
                                 <th *ngIf="purchaseValidation[0]?.UnitCost">Unit Cost</th>
-                                <!-- <th>Unit Sale</th> -->
+                                <th *ngIf="purchaseValidation[0]?.UnitSale">Unit Sale</th>
+                                <th *ngIf="purchaseValidation[0]?.InStock">In stock</th>
                                 <th *ngIf="purchaseValidation[0]?.DiscountRateTransaction">Discount Rate</th>
                                 <th *ngIf="purchaseValidation[0]?.DiscountAmount">Discount amount</th>
                                 <th *ngIf="purchaseValidation[0]?.Vat">Vat</th>
-                                <th *ngIf="purchaseValidation[0]?.TotalAmountTransaction">{{purchaseValidation[0]?.TotalAmountTransaction}}Total Amount</th>
+                                <th *ngIf="purchaseValidation[0]?.TotalAmountTransaction">Total Amount</th>
                                 <th >Action</th>
                             </tr>
                             <tr formArrayName="ItemTransactionList" *ngFor="let ItemTransaction of itemPurchaseForm.get('ItemTransactionList').controls;let i=index">
@@ -196,25 +198,30 @@
                                 <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.UnitCost">
                                     <div [class.has-suucess]="ItemTransaction.get('UnitCost').valid" [ngClass]="{'has-error':ItemTransaction.get('UnitCost').invalid&&ItemTransaction.get('UnitCost').touched}">
                                         <input (blur)="selectedFormControl(i)" id="UnitCost{{i}}" formControlName="UnitCost" type="number" class="form-control">
-                                        <span class="help-block" *ngIf="ItemTransaction.get('UnitCost').errors?.required&&ItemTransaction.get('UnitCost').touched">skill name required</span>
+                                        <span class="help-block" *ngIf="ItemTransaction.get('UnitCost').errors?.required&&ItemTransaction.get('UnitCost').touched">Required</span>
                                     </div>
                                 </td>
-                                <!-- <td formGroupName="{{i}}">
+                                <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.UnitSale">
                                   <div [ngClass]="{'has-error':ItemTransaction.get('UnitSale').invalid&&ItemTransaction.get('UnitSale').touched}" >
                                           <input id="UnitSale{{i}}" formControlName="UnitSale" type="text" class="form-control">
-                                          <span class="help-block" *ngIf="ItemTransaction.get('UnitSale').errors?.required&&ItemTransaction.get('UnitSale').touched">skill name required</span>
+                                          <span class="help-block" *ngIf="ItemTransaction.get('UnitSale').errors?.required&&ItemTransaction.get('UnitSale').touched">Required</span>
                                       </div>
-                                  </td> -->
+                                  </td>
+                                  <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.InStock">
+                                        <div >
+                                            <input id="InStock{{i}}" formControlName="InStock" type="text" class="form-control">
+                                        </div>
+                                </td>
                                 <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.DiscountRateTransaction">
                                     <div [class.has-suucess]="ItemTransaction.get('DiscountRate').valid" [ngClass]="{'has-error':ItemTransaction.get('DiscountRate').invalid&&ItemTransaction.get('DiscountRate').touched}">
                                         <input (blur)="selectedFormControl(i)" id="DiscountRate{{i}}" formControlName="DiscountRate" type="number" class="form-control">
-                                        <span class="help-block" *ngIf="ItemTransaction.get('DiscountRate').errors?.required&&ItemTransaction.get('DiscountRate').touched">skill name required</span>
+                                        <span class="help-block" *ngIf="ItemTransaction.get('DiscountRate').errors?.required&&ItemTransaction.get('DiscountRate').touched">Required</span>
                                     </div>
                                 </td>
                                 <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.DiscountAmount">
                                     <div [class.has-suucess]="ItemTransaction.get('DiscountAmount').valid" [ngClass]="{'has-error':ItemTransaction.get('DiscountAmount').invalid&&ItemTransaction.get('DiscountAmount').touched}">
                                         <input id="DiscountAmount{{i}}" (blur)="selectedFormControl(i)" formControlName="DiscountAmount" type="number" class="form-control">
-                                        <span class="help-block" *ngIf="ItemTransaction.get('DiscountAmount').errors?.required&&ItemTransaction.get('DiscountAmount').touched">skill name required</span>
+                                        <span class="help-block" *ngIf="ItemTransaction.get('DiscountAmount').errors?.required&&ItemTransaction.get('DiscountAmount').touched">Required</span>
                                     </div>
                                 </td>
                                 <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.Vat">

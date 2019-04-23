@@ -1,4 +1,4 @@
-import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter, OnChanges } from '@angular/core';
 import { Unit } from '../../models/master-settings/inventory-defination/unit.model';
 import { MultiSelectDropdown } from '../../models/common/multiselect.dropdown.model';
 import { AlertBoxService } from '../../shared/alert-box.service';
@@ -12,8 +12,8 @@ import { DialogData } from '../../models/common/dialog-data.model';
   templateUrl: './unit-dropdown.component.html',
   styleUrls: ['./unit-dropdown.component.css']
 })
-export class UnitDropdownComponent implements OnInit {
-
+export class UnitDropdownComponent implements OnChanges {
+  @Input() IsNewUnitAdd:boolean=false;
   unitList:SelectDropdown[]=[]
   @Input() unitSelectedItems:any=[];
   @Output() unitOnItemSelect:EventEmitter <any>=new EventEmitter <any>();
@@ -35,22 +35,25 @@ export class UnitDropdownComponent implements OnInit {
     private _dropdownService:DropdownService,
   ) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     debugger
-    this.getUnitList();
+    if(this.IsNewUnitAdd){
+      this.getUnitList();
+    }else{
+      this.getUnitList();
+    }
   }
   getUnitList(){
     this._dropdownService.getUnitDropdownList().subscribe(response=>{
-      this.unitList=response.json();
+      this.unitList=response
       if(this.unitList.length>0){
         this.unitList.forEach((a,index,array)=>{
           this.unitDropdownList.push({id:a.Value,itemName:a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error;
       this._alertBox.openDialog(dialogData);
     })
   }

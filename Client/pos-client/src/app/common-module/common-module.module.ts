@@ -14,7 +14,8 @@ import { FormValidationInfoComponent } from './form-validation-info/form-validat
 import { FormDetailsControlComponent } from './form-details-control/form-details-control.component';
 import { SupplierDropdownComponent } from './supplier-dropdown/supplier-dropdown.component';
 import { CustomerDropdownComponent } from './customer-dropdown/customer-dropdown.component';
-import { PartyDropdownComponent } from './party-dropdown/party-dropdown.component'
+import { PartyDropdownComponent } from './party-dropdown/party-dropdown.component';
+import { CustomDatatableControlComponent } from './custom-datatable-control/custom-datatable-control.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -34,7 +35,8 @@ import { PartyDropdownComponent } from './party-dropdown/party-dropdown.componen
     FormDetailsControlComponent, 
     SupplierDropdownComponent, 
     CustomerDropdownComponent, 
-    PartyDropdownComponent
+    PartyDropdownComponent, 
+    CustomDatatableControlComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -50,7 +52,8 @@ import { PartyDropdownComponent } from './party-dropdown/party-dropdown.componen
     FormDetailsControlComponent,
     SupplierDropdownComponent,
     PartyDropdownComponent,
-    CustomerDropdownComponent
+    CustomerDropdownComponent,
+    CustomDatatableControlComponent
   ]
 })
 export class CommonModuleModule { }

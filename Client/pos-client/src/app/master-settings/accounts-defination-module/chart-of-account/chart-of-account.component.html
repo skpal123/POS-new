@@ -103,7 +103,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input class="btn btn-success" [disabled]="accountForm.invalid" (click)="createChartOfAccount()" type="button" value="Save">
+                                    <input class="btn btn-success" [disabled]="accountForm.invalid||accountClicked==false" (click)="createChartOfAccount()" type="button" value="Save">
                                 </div>
                                 <div class="col-md-6"  *ngIf="IsSubledgerEnable">
                                     <input class="btn btn-success" (click)="addSubleder()" type="button" value="Add subleder">

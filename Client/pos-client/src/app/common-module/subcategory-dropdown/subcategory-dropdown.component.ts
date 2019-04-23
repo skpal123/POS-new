@@ -45,16 +45,15 @@ export class SubcategoryDropdownComponent implements OnChanges {
   getSubCategoryList(){
     this.subcategoryDropdownList=[];
     this._dropdownService.getSubCategoryDropdownList(this.categoryId).subscribe(response=>{
-      this.subcategoryList=response.json();
+      this.subcategoryList=response
       if(this.subcategoryList.length>0){
         this.subcategoryList.forEach((a,index,array)=>{
           this.subcategoryDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

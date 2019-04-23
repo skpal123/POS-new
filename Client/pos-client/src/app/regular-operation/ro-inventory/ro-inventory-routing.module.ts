@@ -4,6 +4,8 @@ import { RoInventoryLayoutComponent } from './ro-inventory-layout/ro-inventory-l
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemPurchaseListComponent } from './item-purchase-list/item-purchase-list.component';
 import { ItemSalesListComponent } from './item-sales-list/item-sales-list.component';
+import { SupplierTransactionComponent } from './supplier-transaction/supplier-transaction.component';
+import { CustomerTransactionComponent } from './customer-transaction/customer-transaction.component';
 
 const routes: Routes = [
   {
@@ -12,7 +14,9 @@ const routes: Routes = [
     children:[
       {path:'',component:ItemPurchaseListComponent},
       {path:'add-item',component:ItemPurchaseListComponent},
-      {path:'sales-item',component:ItemSalesListComponent}
+      {path:'sales-item',component:ItemSalesListComponent},
+      {path:'supplier-transaction',component:SupplierTransactionComponent},
+      {path:'customer-transaction',component:CustomerTransactionComponent}
     ]
   }
 ];

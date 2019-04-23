@@ -3,15 +3,15 @@ import { UserFormControl } from '../../../models/common/user-form-control.model'
 import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { PostLoginService } from '../../../services/common/post-login.service';
-import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { ItemPurchaseComponent } from '../item-purchase/item-purchase.component';
-import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { ItemPurchaseValidation } from '../../../models/validation/item-purchase.validation.model';
 import { ValidationService } from '../../../services/common/validation.service';
 import { InventoryService } from '../../../services/regular-operation/inventory.service';
-import { FormInfo } from '../../../models/common/formInfo.model';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CustomDatatableControlComponent } from '../../../common-module/custom-datatable-control/custom-datatable-control.component';
 
 @Component({
   selector: 'app-item-purchase-list',
@@ -19,7 +19,11 @@ import { FormInfo } from '../../../models/common/formInfo.model';
   styleUrls: ['./item-purchase-list.component.css']
 })
 export class ItemPurchaseListComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnChange:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -34,6 +38,7 @@ export class ItemPurchaseListComponent implements OnInit {
     private _postLoginservice:PostLoginService,
     private _validationService:ValidationService,
     private _inventotyService:InventoryService,
+    private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog
   ) { }
   ngOnInit() {
@@ -43,23 +48,32 @@ export class ItemPurchaseListComponent implements OnInit {
     this.getItemPurchaseValidationList()
   }
   getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
     this._postLoginservice.getUserFormControlByFormName('item-group').subscribe(response=>{
-      this.userControlList=response.json();
-      this.ColumnList=this.userControlList
+      this.blockUi.stop();
+      this.userControlList=response
+      this.ColumnList=this.userControlList;
+      this.columnReady=true;
+      this._customDatatableService.ColumnList=this.userControlList;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   
   getGroupItemList(){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.getGroupItemList("Purchase").subscribe((response:GroupItem[])=>{
+      this.blockUi.stop();
       this.groupItemList=response
       this.DataList=this.groupItemList
       this.reload=true;
+      this.dataReady=true;
+      this._customDatatableService.DataList=this.groupItemList;
     },error=>{
+      this.blockUi.stop();
       let message=error.json();
       let dialogData=new DialogData();
       dialogData.message=message.Message;
@@ -68,7 +82,9 @@ export class ItemPurchaseListComponent implements OnInit {
   }
   getGroupItemDetails($event:string){
     debugger
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.getGroupItemById($event).subscribe((response:GroupItem)=>{
+      this.blockUi.stop();
       this.groupItem=response;
       this.groupItem.data=this.itemPurchaseValidationList;
       const dialogRef=this.matDialog.open(ItemPurchaseComponent,{
@@ -83,6 +99,7 @@ export class ItemPurchaseListComponent implements OnInit {
         }
       })
     },error=>{
+      this.blockUi.stop();
       let message=error.json();
       let dialogData=new DialogData();
       dialogData.message=message.Message;
@@ -90,7 +107,9 @@ export class ItemPurchaseListComponent implements OnInit {
     })
   }
   deleteGroupItem($event:string){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.deleteGroupItem($event).subscribe((response:boolean)=>{
+      this.blockUi.stop();
       let result=response;
       if(result){
         this.getGroupItemList();
@@ -99,9 +118,9 @@ export class ItemPurchaseListComponent implements OnInit {
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -145,29 +164,45 @@ export class ItemPurchaseListComponent implements OnInit {
     this.groupItem.TransactionType==null;
     this.groupItem.ItemTransactionList=[];
   }
-  controlGroupItemForm(){
+  getItemPurchaseValidationList(){
     debugger
-    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
-      data:"purchase-form",
+    this.blockUi.start("Loading....,Please wait.")
+    this._validationService.getItemPurchaseValidationData("purchase-form").subscribe((response:ItemPurchaseValidation[])=>{
+      this.blockUi.stop();
+      this.itemPurchaseValidationList=response
+      this.groupItem.data= this.itemPurchaseValidationList;
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  getDatatableControl(){
+    this.columnChange=false;
+    const dialogRef=this.matDialog.open(CustomDatatableControlComponent,{
+      data:this.userControlList,
       disableClose:true,
       height:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){
-       this.getItemPurchaseValidationList()
+      // this.columnChange=true;
      }
     })
   }
-  getItemPurchaseValidationList(){
-    debugger
-    this._validationService.getItemPurchaseValidationData("purchase-form").subscribe((response:ItemPurchaseValidation[])=>{
-      this.itemPurchaseValidationList=response
-      this.groupItem.data= this.itemPurchaseValidationList;
-    },error=>{
-      let dialogData=new DialogData();
-      dialogData.message=error.error.Message;
-      this._alertBox.openDialog(dialogData);
-    })
-  }
+  // getUserFormControlByFormName(){
+  //   this.blockUi.start("Loading....,Please wait.")
+  //   this._postLoginService.getUserFormControlByFormName(this.ColumnList[0].FormName).subscribe(response=>{
+  //     this.blockUi.stop();
+  //     this.ColumnList=response;
+  //     this.dtTrigger.next();
+  //     this.dtTrigger.subscribe();
+  //   },error=>{
+  //     this.blockUi.stop();
+  //     let dialogData=new DialogData();
+  //     dialogData.message=error
+  //     this._alertBox.openDialog(dialogData);
+  //   })
+  // }
 }

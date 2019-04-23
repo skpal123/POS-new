@@ -18,5 +18,7 @@ export class FormDetailsControlComponent implements OnInit {
     debugger
     console.log(this.data);
   }
-
+  saveButtonclicked($event){
+    this.dialogRef.close(true);
+  }
 }

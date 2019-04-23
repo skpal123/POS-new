@@ -50,7 +50,7 @@ export class SupplierEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.CreateSupplier(this.supplier).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -59,7 +59,7 @@ export class SupplierEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -69,7 +69,7 @@ export class SupplierEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.UpdateSupplier(this.supplier).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -78,7 +78,7 @@ export class SupplierEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);

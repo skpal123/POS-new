@@ -79,7 +79,10 @@
                 </div>
               <div class="row">
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="supplierForm.invalid" (click)="saveCustomer()" value="Save" class="btn btn-primary">
+                  <input type="button" [disabled]="supplierForm.invalid" (click)="saveCustomer()" value="{{customer.d==null?'Save':'Update'}}" class="btn btn-primary">
+                </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!supplierForm.dirty" (click)="clearCustomer()" value="Save" class="btn btn-primary">
                 </div>
               </div>
         </form>

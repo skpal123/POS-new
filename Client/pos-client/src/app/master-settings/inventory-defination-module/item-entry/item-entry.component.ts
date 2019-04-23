@@ -13,6 +13,8 @@ import { Subcategory } from '../../../models/master-settings/inventory-definatio
 import { NewDropdownDataService } from '../../../common-module/new-dropdown-data.service';
 import { ValidationService } from '../../../services/common/validation.service';
 import { InventoryItemValidation } from '../../../models/master-settings/inventory-defination/item-validation.model';
+import { Unit } from '../../../models/master-settings/inventory-defination/unit.model';
+import { AddUnitComponent } from '../add-unit/add-unit.component';
 
 @Component({
   selector: 'app-item-entry',
@@ -45,6 +47,7 @@ export class ItemEntryComponent implements OnInit {
   ];
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   subcategory:Subcategory={Id:null,SubCategoryId:null,SubCategoryName:null,Category_Id:null}
+  unit:Unit={Id:null,UnitName:null,Description:null}
   constructor(public matDialogRef:MatDialogRef<ItemEntryComponent>,
     private _validationService:ValidationService,
   @Inject(MAT_DIALOG_DATA) public item:InventoryItem,
@@ -64,6 +67,7 @@ export class ItemEntryComponent implements OnInit {
       this.subledgerSelectedItems.push({id:"0",itemName:"SELECT"})
     }
     else{
+      this.itemForm.control.markAsDirty()
       this.categorySelectedItems.push({id:this.item.Category_Id,itemName:this.item.CategoryName})
       this.subcategory.CategoryName=this.item.CategoryName;
       this.subcategory.Category_Id=this.item.Category_Id;
@@ -82,7 +86,7 @@ export class ItemEntryComponent implements OnInit {
     if(this.item.Id==null){
       console.log(this.item);
       this._inventotyDefinationService.CreateInventoryItem(this.item).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -90,7 +94,7 @@ export class ItemEntryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -98,7 +102,7 @@ export class ItemEntryComponent implements OnInit {
     }
     else{
       this._inventotyDefinationService.UpdateInventoryItem(this.item).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -120,6 +124,7 @@ export class ItemEntryComponent implements OnInit {
       this.item.Category_Id=$event.id;
       this.subcategory.Category_Id=$event.id;
       this.subcategory.CategoryName=$event.itemName;
+      this.itemForm.control.markAsDirty();
       // this._newDropdownService.categorySelectedData.Value=$event.id;
       // this._newDropdownService.categorySelectedData.Text=$event.itemName;
     }
@@ -132,6 +137,7 @@ export class ItemEntryComponent implements OnInit {
     this.subcategoryTouch=true;
     if($event.id!=null&&$event.id!="0"){
       this.item.SubCategory_Id=$event.id;
+      this.itemForm.control.markAsDirty();
       // this._newDropdownService.categorySelectedData.Value=$event.id;
       // this._newDropdownService.categorySelectedData.Text=$event.itemName;
     }
@@ -144,6 +150,7 @@ export class ItemEntryComponent implements OnInit {
     this.unitTouch=true;
     if($event.id!=null&&$event.id!="0"){
       this.item.UnitId=$event.id;
+      this.itemForm.control.markAsDirty();
     }
     else{
       this.item.UnitId=null
@@ -154,6 +161,7 @@ export class ItemEntryComponent implements OnInit {
     this.ledgerTouch=true;
     if($event.id!=null&&$event.id!="0"){
       this.item.Ledger_Id=$event.id;
+      this.itemForm.control.markAsDirty();
     }
     else{
       this.item.Ledger_Id=null
@@ -163,12 +171,15 @@ export class ItemEntryComponent implements OnInit {
     debugger
     if($event.id!=null&&$event.id!="0"){
       this.item.SubLedger_Id=$event.id;
+      this.itemForm.control.markAsDirty();
     }
   }
   OnDeSeletedItem($event){
     console.log($event)
   }
   createNewCategory(){
+    this.clearCategory();
+    this.categoryNew=false;
      const dialogRef=this.matDialog.open(AddCategoryComponent,{
        data:this.category,
        disableClose:true,
@@ -182,6 +193,7 @@ export class ItemEntryComponent implements OnInit {
      })
    }
    createNewSubCategory(){
+    this.clearSubCategory();
     this.subcategoryNew=false;
      const dialogRef=this.matDialog.open(AddSubcategoryComponent,{
        data:this.subcategory,
@@ -197,6 +209,23 @@ export class ItemEntryComponent implements OnInit {
        }
      })
    }
+   createNewUnit(){
+    this.unitNew=false;
+    this.clearUnit();
+     const dialogRef=this.matDialog.open(AddUnitComponent,{
+       data:this.unit,
+       disableClose:true,
+       height:window.screen.height*.6+'px',
+       width:window.screen.width*.4+'px'
+     });
+     dialogRef.afterClosed().subscribe(result=>{
+       if(result){
+         this.unitNew=true;
+         this.subcategory.SubCategoryId=null;
+         this.subcategory.SubCategoryName=null;
+       }
+     })
+   }
    getItemFormInfo(){
     this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
       this.itemValidation=response
@@ -206,5 +235,44 @@ export class ItemEntryComponent implements OnInit {
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
+  }
+  clearUnit(){
+    this.unit.Id=null;
+    this.unit.UnitName=null;
+    this.unit.Description=null;
+  }
+  clearCategory(){
+    this.category.Id=null;
+    this.category.CategoryId=null;
+    this.category.CategoryName=null;
+  }
+  clearSubCategory(){
+    this.subcategory.Id=null;
+    this.subcategory.SubCategoryId=null;
+    this.subcategory.SubCategoryName=null;
+    this.subcategory.Category_Id=null;
+  }
+  clearItem(){
+    this.item.Id=null;
+    this.item.ItemId=null;
+    this.item.ItemCode=null;
+    this.item.ItemName=null;
+    this.item.UnitId=null;
+    this.categorySelectedItems[0].id="0";
+    this.categorySelectedItems[0].itemName="Select";
+    this.categoryNew
+    this.subcategorySelectedItems[0].id="0";
+    this.subcategorySelectedItems[0].itemName="Select";
+    this.ledgerSelectedItems[0].id="0";
+    this.ledgerSelectedItems[0].itemName="Select";
+    this.subledgerSelectedItems[0].id="0";
+    this.subledgerSelectedItems[0].itemName="Select";
+    this.unitSelectedItems[0].id="0";
+    this.unitSelectedItems[0].itemName="Select";
+    this.item.Category_Id=null;
+    this.item.SubCategory_Id=null;
+    this.item.Ledger_Id=null;
+    this.item.SubLedger_Id=null;
+    this.itemForm.reset();
   }
 }

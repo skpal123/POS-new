@@ -10,6 +10,9 @@ import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { ItemSalesComponent } from '../item-sales/item-sales.component';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CustomDatatableControlComponent } from '../../../common-module/custom-datatable-control/custom-datatable-control.component';
 
 @Component({
   selector: 'app-item-sales-list',
@@ -17,7 +20,10 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
   styleUrls: ['./item-sales-list.component.css']
 })
 export class ItemSalesListComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -32,6 +38,7 @@ export class ItemSalesListComponent implements OnInit {
     private _postLoginservice:PostLoginService,
     private _validationService:ValidationService,
     private _inventotyService:InventoryService,
+    private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog
   ) { }
   ngOnInit() {
@@ -40,33 +47,56 @@ export class ItemSalesListComponent implements OnInit {
     this.getUserFormControlByFormName();
     this.getItemSaleFormValidationList()
   }
-  getUserFormControlByFormName(){
-    this._postLoginservice.getUserFormControlByFormName('item-group').subscribe(response=>{
-      this.userControlList=response.json();
-      this.ColumnList=this.userControlList
+  getItemSaleFormValidationList(){
+    debugger
+    this.blockUi.start("Loading....,Please wait.")
+    this._validationService.getItemPurchaseValidationData("sales-form").subscribe((response:ItemPurchaseValidation[])=>{
+      this.blockUi.stop();
+      this.itemSalesValidationList=response
+      this.groupItem.data= this.itemSalesValidationList;
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
+    this._postLoginservice.getUserFormControlByFormName('sales-group').subscribe(response=>{
+      this.blockUi.stop();
+      this.userControlList=response
+      this.ColumnList=this.userControlList;
+      this.columnReady=true;
+      this._customDatatableService.ColumnList=this.userControlList;
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   
   getGroupItemList(){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.getGroupItemList("Sales").subscribe((response:GroupItem[])=>{
+      this.blockUi.stop();
       this.groupItemList=response
       this.DataList=this.groupItemList
       this.reload=true;
+      this.dataReady=true;
+      this._customDatatableService.DataList=this.groupItemList;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getGroupItemDetails($event:string){
     debugger
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.getGroupItemById($event).subscribe((response:GroupItem)=>{
+      this.blockUi.stop();
       this.groupItem=response;
       this.groupItem.data=this.itemSalesValidationList;
       const dialogRef=this.matDialog.open(ItemSalesComponent,{
@@ -81,13 +111,14 @@ export class ItemSalesListComponent implements OnInit {
         }
       })
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   deleteGroupItem($event:string){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyService.deleteGroupItem($event).subscribe((response:boolean)=>{
       let result=response;
       if(result){
@@ -97,9 +128,9 @@ export class ItemSalesListComponent implements OnInit {
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -143,27 +174,18 @@ export class ItemSalesListComponent implements OnInit {
     this.groupItem.TransactionType==null;
     this.groupItem.ItemTransactionList=[];
   }
-  controlGroupItemForm(){
-    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
-      data:"sales-form",
+  getDatatableControl(){
+   // this.columnChange=false;
+    const dialogRef=this.matDialog.open(CustomDatatableControlComponent,{
+      data:this.userControlList,
       disableClose:true,
       height:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){
-       this.getItemSaleFormValidationList()
+      // this.columnChange=true;
      }
-    })
-  }
-  getItemSaleFormValidationList(){
-    this._validationService.getItemPurchaseValidationData("sales-form").subscribe((response:ItemPurchaseValidation[])=>{
-      this.itemSalesValidationList=response
-      this.groupItem.data= this.itemSalesValidationList;
-    },error=>{
-      let dialogData=new DialogData();
-      dialogData.message=error.Message;
-      this._alertBox.openDialog(dialogData);
     })
   }
 

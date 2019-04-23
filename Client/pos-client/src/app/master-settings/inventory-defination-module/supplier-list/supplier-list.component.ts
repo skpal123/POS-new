@@ -8,6 +8,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { MatDialog } from '@angular/material';
 import { SupplierEntryComponent } from '../supplier-entry/supplier-entry.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 
 @Component({
   selector: 'app-supplier-list',
@@ -15,8 +16,10 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
   styleUrls: ['./supplier-list.component.css']
 })
 export class SupplierListComponent implements OnInit {
-  reload:boolean=false;
   @BlockUI() blockUi:NgBlockUI
+  reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -27,6 +30,7 @@ export class SupplierListComponent implements OnInit {
   }
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
     private _inventotyDefinationService:InventoryDefinationServiceService,
   ) { }
@@ -39,13 +43,14 @@ export class SupplierListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._postLoginservice.getUserFormControlByFormName('supplier-list').subscribe(response=>{
       this.blockUi.stop();
-      this.userControlList=response.json();
+      this.userControlList=response
       this.ColumnList=this.userControlList
+      this._customDatatableService.ColumnList=this.userControlList;
+      this.columnReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -53,14 +58,15 @@ export class SupplierListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.getSupplierList().subscribe(response=>{
       this.blockUi.stop();
-      this.supplierList=response.json();
-      this.DataList=this.supplierList
+      this.supplierList=response
+      this.DataList=this.supplierList;
+      this._customDatatableService.DataList=this.supplierList;
       this.reload=true;
+      this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -69,7 +75,7 @@ export class SupplierListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.getSupplierById($event).subscribe(response=>{
       this.blockUi.stop();
-      this.supplier=response.json();
+      this.supplier=response
       const dialogRef=this.matDialog.open(SupplierEntryComponent,{
         data:this.supplier,
         disableClose:true,
@@ -83,9 +89,8 @@ export class SupplierListComponent implements OnInit {
       })
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -93,7 +98,7 @@ export class SupplierListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.deleteSupplier($event).subscribe(response=>{
       this.blockUi.stop();
-      let result=response.json();
+      let result=response
       if(result){
         this.getSupplierList();
         let dialogData=new DialogData();
@@ -102,9 +107,8 @@ export class SupplierListComponent implements OnInit {
       }
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

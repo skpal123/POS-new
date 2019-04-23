@@ -49,16 +49,15 @@ export class PartyDropdownComponent implements OnChanges {
   }
   getPartyList(){
     this._dopdownService.getPartyDropdownList().subscribe(response=>{
-      this.partyList=response.json();
+      this.partyList=response
       if(this.partyList.length>0){
         this.partyList.forEach((category,index,array)=>{
           this.partyDropdownList.push({id:category.Value,itemName:category.Code+'-'+category.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error;
       this._alertBox.openDialog(dialogData);
     })
   }

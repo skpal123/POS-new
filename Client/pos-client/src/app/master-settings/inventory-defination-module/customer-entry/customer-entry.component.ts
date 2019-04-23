@@ -17,7 +17,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 export class CustomerEntryComponent implements OnInit {
 
   @BlockUI() blockUi:NgBlockUI
-  @ViewChild('customerForm') supplierForm:NgForm
+  @ViewChild('customerForm') customerForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
   ledgerTouch:boolean=false;
   ledgerSelectedItems :MultiSelectDropdown[]= [
@@ -50,7 +50,7 @@ export class CustomerEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.CreateCustomer(this.customer).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -59,7 +59,7 @@ export class CustomerEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -69,7 +69,7 @@ export class CustomerEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.UpdateCustomer(this.customer).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -78,7 +78,7 @@ export class CustomerEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -110,5 +110,19 @@ export class CustomerEntryComponent implements OnInit {
   OnDeSeletedItem($event){
     console.log($event)
   }
-
+  clearCustomer(){
+    this.customer.Id=null;
+    this.customer.CustomerId=null;
+    this.customer.CustomerName=null;
+    this.customer.PhoneNo=null;
+    this.customer.Email=null;
+    this.customer.Address=null;
+    this.customer.Ledger_Id=null;
+    this.ledgerSelectedItems[0].id="0";
+    this.ledgerSelectedItems[0].itemName="Select";
+    this.subledgerSelectedItems[0].id="0";
+    this.subledgerSelectedItems[0].itemName="Select";
+    this.customer.SubLedger_Id=null;
+    this.customerForm.reset();
+  }
 }

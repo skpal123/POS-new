@@ -50,16 +50,15 @@ export class CategoryDropdownComponent implements OnChanges {
   }
   getCategoryList(){
     this._dopdownService.getCategoryDropdownList().subscribe(response=>{
-      this.categoryList=response.json();
+      this.categoryList=response
       if(this.categoryList.length>0){
         this.categoryList.forEach((category,index,array)=>{
           this.categoryDropdownList.push({id:category.Value,itemName:category.Code+'-'+category.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

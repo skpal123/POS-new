@@ -7,6 +7,8 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { PartyEntryComponent } from '../party-entry/party-entry.component';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-party-list',
@@ -14,7 +16,10 @@ import { PartyEntryComponent } from '../party-entry/party-entry.component';
   styleUrls: ['./party-list.component.css']
 })
 export class PartyListComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -25,6 +30,7 @@ export class PartyListComponent implements OnInit {
   }
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -34,23 +40,32 @@ export class PartyListComponent implements OnInit {
     this.getUserFormControlByFormName();
   }
   getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
     this._postLoginservice.getUserFormControlByFormName('party-list').subscribe(response=>{
-      this.userControlList=response.json();
+      this.blockUi.stop();
+      this.userControlList=response
       this.ColumnList=this.userControlList
+      this._customDatatableService.ColumnList=this.userControlList;
+      this.columnReady=true;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getPartyList(){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getPartyList().subscribe(response=>{
-      this.partyList=response.json();
-      this.DataList=this.partyList
+      this.blockUi.stop();
+      this.partyList=response
+      this.DataList=this.partyList;
+      this._customDatatableService.DataList=this.partyList;
       this.reload=true;
+      this.dataReady=true;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
@@ -58,8 +73,10 @@ export class PartyListComponent implements OnInit {
   }
   getPartyDetails($event:string){
     debugger
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getPartyById($event).subscribe(response=>{
-      this.party=response.json();
+      this.blockUi.stop();
+      this.party=response
       const dialogRef=this.matDialog.open(PartyEntryComponent,{
         data:this.party,
         disableClose:true,
@@ -72,15 +89,18 @@ export class PartyListComponent implements OnInit {
         }
       })
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
   }
   deleteParty($event:string){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.deleteParty($event).subscribe(response=>{
-      let result=response.json();
+      this.blockUi.stop();
+      let result=response
       if(result){
         this.getPartyList();
         let dialogData=new DialogData();
@@ -88,7 +108,8 @@ export class PartyListComponent implements OnInit {
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);

@@ -7,6 +7,8 @@ import { BlockUIModule } from 'ng-block-ui';
 import {SharedModule} from 'src/app/shared/shared/shared.module'
 import {FormsModule, ReactiveFormsModule,FormControl} from '@angular/forms';
 import { AppComponent } from './app.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpGlobalInterceptor } from './shared/HttpGlobalInterceptor.ineterceptor';
 const routes:Routes=[
   {
     path: 'login',
@@ -30,7 +32,9 @@ const routes:Routes=[
     SharedModule,
     BlockUIModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpGlobalInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
 })

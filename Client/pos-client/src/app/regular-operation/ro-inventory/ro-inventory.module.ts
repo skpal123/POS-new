@@ -13,6 +13,13 @@ import { ItemSalesComponent } from './item-sales/item-sales.component';
 import { ItemSalesListComponent } from './item-sales-list/item-sales-list.component';
 import { CustomerEntryComponent } from '../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
 import { PartyEntryComponent } from '../../master-settings/inventory-defination-module/party-entry/party-entry.component';
+import { CustomerTransactionComponent } from './customer-transaction/customer-transaction.component';
+import { CustomerTransactionListComponent } from './customer-transaction-list/customer-transaction-list.component';
+import { CustomerTransactionEntryComponent } from './customer-transaction-entry/customer-transaction-entry.component';
+import { SupplierTransactionEntryComponent } from './supplier-transaction-entry/supplier-transaction-entry.component';
+import { SupplierTransactionComponent } from './supplier-transaction/supplier-transaction.component';
+import { SupplierTransactionListComponent } from './supplier-transaction-list/supplier-transaction-list.component';
+import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -24,14 +31,15 @@ import { PartyEntryComponent } from '../../master-settings/inventory-defination-
     RoInventoryLayoutComponent,
     AddItemComponent, 
     ItemPurchaseListComponent, 
-    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent
+    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent, CustomerTransactionComponent, CustomerTransactionListComponent, CustomerTransactionEntryComponent, SupplierTransactionEntryComponent, SupplierTransactionComponent, SupplierTransactionListComponent
   ],
   entryComponents:[ItemPurchaseComponent,
     FormDetailsControlComponent,
     SupplierEntryComponent,
     CustomerEntryComponent,
     PartyEntryComponent,
-    ItemSalesComponent
+    ItemSalesComponent,
+    CustomDatatableControlComponent
   ]
 })
 export class RoInventoryModule { }

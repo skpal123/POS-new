@@ -23,6 +23,7 @@ import { ManufactureEntryComponent } from './manufacture-entry/manufacture-entry
 import { FormDetailsControlComponent } from '../../common-module/form-details-control/form-details-control.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerEntryComponent } from './customer-entry/customer-entry.component';
+import { SettingPriceComponent } from './setting-price/setting-price.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,7 @@ import { CustomerEntryComponent } from './customer-entry/customer-entry.componen
     PartyListComponent, 
     PartyEntryComponent, 
     ManufactureListComponent, 
-    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent
+    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent, SettingPriceComponent
   ],
     entryComponents:[
       AddUnitComponent,AddSubcategoryComponent,

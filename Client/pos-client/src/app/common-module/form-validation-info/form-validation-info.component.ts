@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,Output,EventEmitter } from '@angular/core';
 import { FormInfo } from '../../models/common/formInfo.model';
 import { ValidationService } from '../../services/common/validation.service';
 import { DialogData } from '../../models/common/dialog-data.model';
@@ -12,6 +12,7 @@ import { AlertBoxService } from '../../shared/alert-box.service';
 export class FormValidationInfoComponent implements OnInit {
   @Input() formName:string;
   formInfoList:FormInfo[];
+  @Output() saveButtonclicked:EventEmitter <any>=new EventEmitter <any>();
   constructor(private _validationService:ValidationService,
   private _alertBox:AlertBoxService) { }
   
@@ -36,6 +37,7 @@ export class FormValidationInfoComponent implements OnInit {
         let dialogData=new DialogData();
         dialogData.message="Updated successfully"
         this._alertBox.openDialog(dialogData);
+        this.saveButtonclicked.emit(true);
       }
     },error=>{
       let message=error

@@ -1,92 +1,110 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions,Headers } from '@angular/http';
 import { DefaultRouteService } from './default-route.service';
-import { SessionService } from './session.service';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { SelectDropdown } from '../../models/common/select.dropdown.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DropdownService {
-
-  constructor(private _http:Http,
+  constructor(
     private _defaultRoute:DefaultRouteService,
-    private _sessionService:SessionService) 
+    private _httpClient:HttpClient) 
     { }
-    setCustomHeader():Headers{
-      let header =new Headers();
-      header.append('Content-Type', 'application/json');
-      header.append('sessionId', this._sessionService.SessionId);
-      header.append("UserId",this._sessionService.User_Id);
-      return header;
-    }
+    private handleError(error: HttpErrorResponse) {
+      debugger
+
+      if (error.error instanceof ErrorEvent) {
+        console.error('An error occurred:', error.error.message);
+        return throwError(error.error.message) 
+      } 
+      else 
+      {
+        let message=error.error.Message;       
+        return throwError(message+'<br/>'+error.message) 
+      }
+      // return an observable with a user-facing error message
+    };
   public getUnitDropdownList(){
     var url=this._defaultRoute.DropdownService+'UnitDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getCategoryDropdownList(){
     var url=this._defaultRoute.DropdownService+'CategoryDropdown'; 
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getSubCategoryDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'SubCategoryDropdown/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getItemDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'ItemDropdown/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getLedgerDropdownList(){
     var url=this._defaultRoute.DropdownService+'LedgerDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getSubledgerDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'SubledgerDropdown/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getLocationDropdownList(){
     var url=this._defaultRoute.DropdownService+'LocationDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getSupplierDropdownList(){
     var url=this._defaultRoute.DropdownService+'supplierDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getCustomerDropdownList(){
     var url=this._defaultRoute.DropdownService+'customerDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
   public getPartyDropdownList(){
     var url=this._defaultRoute.DropdownService+'partyDropdown';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
   }
 }

@@ -7,6 +7,8 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { LocationEntryComponent } from '../location-entry/location-entry.component';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-inventory-location-list',
@@ -14,7 +16,10 @@ import { LocationEntryComponent } from '../location-entry/location-entry.compone
   styleUrls: ['./inventory-location-list.component.css']
 })
 export class InventoryLocationListComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -22,6 +27,7 @@ export class InventoryLocationListComponent implements OnInit {
   location:InventoryLocation={Id:null,LocationId:null,Description:null}
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -31,32 +37,43 @@ export class InventoryLocationListComponent implements OnInit {
     this.getUserFormControlByFormName();
   }
   getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait")
     this._postLoginservice.getUserFormControlByFormName('location-list').subscribe(response=>{
-      this.userControlList=response.json();
-      this.ColumnList=this.userControlList
+      this.blockUi.stop();
+      this.userControlList=response;
+      this.ColumnList=this.userControlList;
+      this._customDatatableService.ColumnList=this.userControlList;
+      this.columnReady=true;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getLocaionList(){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getLocationList().subscribe(response=>{
-      this.locationList=response.json();
+      this.blockUi.stop();
+      this.locationList=response
       this.DataList=this.locationList
+      this._customDatatableService.DataList=this.locationList;
       this.reload=true;
+      this.dataReady=true;
     },error=>{
-      let message=error.json();
+      debugger
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getLocationDetails($event:string){
     debugger
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getLocationById($event).subscribe(response=>{
-      this.location=response.json();
+      this.blockUi.stop();
+      this.location=response
       const dialogRef=this.matDialog.open(LocationEntryComponent,{
         data:this.location,
         disableClose:true,
@@ -69,15 +86,18 @@ export class InventoryLocationListComponent implements OnInit {
         }
       })
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
   }
   deleteLocation($event:string){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.deleteLocation($event).subscribe(response=>{
-      let result=response.json();
+      this.blockUi.stop();
+      let result=response;
       if(result){
         this.getLocaionList();
         let dialogData=new DialogData();
@@ -85,7 +105,8 @@ export class InventoryLocationListComponent implements OnInit {
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);

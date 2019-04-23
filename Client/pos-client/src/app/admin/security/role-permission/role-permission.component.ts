@@ -12,12 +12,16 @@ import { AddRolePermissionComponent } from '../add-role-permission/add-role-perm
 import { RolePermissionData } from '../../../models/admin/role-permission-data.model';
 import { PostLoginService } from '../../../services/common/post-login.service';
 import { BlockUI,NgBlockUI } from 'ng-block-ui';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 @Component({
   selector: 'app-role-permission',
   templateUrl: './role-permission.component.html',
   styleUrls: ['./role-permission.component.css']
 })
 export class RolePermissionComponent implements OnInit {
+  reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   @BlockUI() blockUI: NgBlockUI;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
@@ -39,6 +43,7 @@ export class RolePermissionComponent implements OnInit {
   constructor(private _securityService:SecurityService,
     private _alertBox:AlertBoxService,
     private _postLoginService:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
   private dialog:MatDialog) { }
   ngOnInit() {
     debugger  
@@ -51,7 +56,9 @@ getRoleList(){
     this.blockUI.stop();
     this.roleList=response.json();
     this.DataList=this.roleList;
-    this.dtTrigger.next();
+    this.reload=true;
+    this.dataReady=true;
+    this._customDatatableService.DataList=this.roleList;
     this.getRolePermissons();
   },error=>{
     this.blockUI.stop();
@@ -65,13 +72,14 @@ getRoleControlList(){
   this.blockUI.start("Loading ... Please wait");
   this._postLoginService.getUserFormControlByFormName('role-permission').subscribe(response=>{
     this.blockUI.stop();
-    this.roleControlList=response.json();
+    this.roleControlList=response;
     this.ColumnList=this.roleControlList;
+    this.columnReady=true;
+    this._customDatatableService.ColumnList=this.roleControlList;
   },error=>{
     this.blockUI.stop();
     var data=new DialogData();
-    var message=error.json();
-    data.message=message.Message;
+    data.message=error
     this._alertBox.openDialog(data);
   })
 }

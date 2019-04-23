@@ -67,7 +67,7 @@ export class AddVoucherDialogComponent implements OnInit {
   }
   getAccountList(){
     this._accountService.getChildAccountList().subscribe(response=>{
-      this.accountList=response.json();
+      this.accountList=response
       this.accountList.forEach((account,index,array)=>{
         this.autoCompleteData.push(account.AccountDescription+"-"+account.AutoAccountCode)
       })
@@ -84,9 +84,8 @@ export class AddVoucherDialogComponent implements OnInit {
       }
     },
   error=>{
-    let message=error.json();
     let dialogData=new DialogData();
-    dialogData.message=message.Message;
+    dialogData.message=error
     this._alertBox.openDialog(dialogData);
   })
   }
@@ -183,12 +182,11 @@ export class AddVoucherDialogComponent implements OnInit {
   }
   getUserFormControlByFormName(){
     this._loginService.getUserFormControlByFormName('voucher-entry').subscribe(response=>{
-      this.userControlList=response.json();
+      this.userControlList=response
       this.columnlist=this.userControlList;
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -219,7 +217,7 @@ export class AddVoucherDialogComponent implements OnInit {
     this.voucher.Amount=this.getVoucherAmount();
     if(this.voucher.Id==null){
       this._accountService.CreateVoucher(this.voucher).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           let dialogData=new DialogData();
           dialogData.message="Voucher created succesfully";
@@ -227,23 +225,21 @@ export class AddVoucherDialogComponent implements OnInit {
           this.dialogRef.close(this.IsSaveButtonClick)
         }
       },error=>{
-        let message=error.json();
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }else{
       this._accountService.UpdateVoucher(this.voucher).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           let dialogData=new DialogData();
           dialogData.message="Voucher updated succesfully";
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })  
     }

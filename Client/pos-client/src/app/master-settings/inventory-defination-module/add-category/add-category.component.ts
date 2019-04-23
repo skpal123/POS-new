@@ -13,7 +13,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 })
 export class AddCategoryComponent implements OnInit {
 
-  @ViewChild('categoryForm') unitForm:NgForm
+  @ViewChild('categoryForm') categoryForm:NgForm
   constructor(public matDialogRef:MatDialogRef<AddCategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public category:Category,
   private _alertBox:AlertBoxService,
@@ -21,7 +21,9 @@ export class AddCategoryComponent implements OnInit {
 ) { }
 
   ngOnInit() {
-
+    if(this.category.Id!=null){
+      this.categoryForm.control.markAsDirty();
+    }
   }
   onNoClick(){
     this.matDialogRef.close(false);
@@ -29,7 +31,7 @@ export class AddCategoryComponent implements OnInit {
   saveCategory(){
     if(this.category.Id==null){
       this._inventotyDefinationService.CreateCategory(this.category).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -37,7 +39,7 @@ export class AddCategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -45,7 +47,7 @@ export class AddCategoryComponent implements OnInit {
     }
     else{
       this._inventotyDefinationService.UpdateCategory(this.category).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -53,12 +55,17 @@ export class AddCategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
       })
     }
   }
-
+  clearCategory(){
+    this.category.Id=null;
+    this.category.CategoryId=null;
+    this.category.CategoryName=null;
+    this.categoryForm.reset();
+  }
 }

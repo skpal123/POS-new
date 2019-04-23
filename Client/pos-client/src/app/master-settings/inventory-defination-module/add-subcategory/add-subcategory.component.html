@@ -34,7 +34,10 @@
                   </div>
                 <div class="row">
                   <div class="col-md-2 pull-right">
-                    <input type="button" [disabled]="subcategoryForm.invalid" (click)="saveSubCategory()" value="Save" class="btn btn-primary">
+                    <input type="button" [disabled]="subcategoryForm.invalid" (click)="saveSubCategory()" value="{{subcategory.Id==null?'Save':'Update'}}" class="btn btn-primary">
+                  </div>
+                  <div class="col-md-2 pull-right">
+                    <input type="button" [disabled]="!subcategoryForm.dirty" (click)="clearSubCategory()" value="Clear" class="btn btn-primary">
                   </div>
                 </div>
           </form>

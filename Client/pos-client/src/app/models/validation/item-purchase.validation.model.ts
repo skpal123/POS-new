@@ -5,6 +5,7 @@ export class ItemPurchaseValidation{
   public Quantity?:boolean
   public UnitCost?:boolean
   public UnitSale?:boolean
+  public InStock?:boolean
   public DiscountAmount?:boolean
   public Vat?:boolean
   public Tax?:boolean

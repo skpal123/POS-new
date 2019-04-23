@@ -6,8 +6,11 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-7">
-        <app-custom-datatable [DataList]="DataList" [ColumnList]="ColumnList"
+      <div class="col-md-7" *ngIf="reload&&columnReady&&dataReady">
+        <app-custom-datatable 
+        [DataList]="DataList" 
+        [ColumnList]="ColumnList"
+        [reload]="reload"
         (EditSelectedRowClicked)="getSubledgerDetailsById($event)"
         (DeleteDataRowClicked)="deleteSubledger($event)"
         >

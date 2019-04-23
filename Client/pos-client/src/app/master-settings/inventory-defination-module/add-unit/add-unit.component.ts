@@ -20,7 +20,7 @@ export class AddUnitComponent implements OnInit {
 ) { }
 
   ngOnInit() {
-
+    this.unitForm.control.markAsDirty();
   }
   onNoClick(){
     this.matDialogRef.close(false);
@@ -28,7 +28,7 @@ export class AddUnitComponent implements OnInit {
   saveUnit(){
     if(this.unit.Id==null){
       this._inventotyDefinationService.CreateUnit(this.unit).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -36,7 +36,7 @@ export class AddUnitComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -44,7 +44,7 @@ export class AddUnitComponent implements OnInit {
     }
     else{
       this._inventotyDefinationService.UpdateUnit(this.unit).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -52,11 +52,17 @@ export class AddUnitComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
       })
     }
+  }
+  clearUnit(){
+    this.unit.Id=null;
+    this.unit.UnitName=null;
+    this.unit.Description=null;
+    this.unitForm.reset();
   }
 }

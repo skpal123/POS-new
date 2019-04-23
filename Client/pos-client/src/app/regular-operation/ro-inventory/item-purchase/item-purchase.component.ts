@@ -9,7 +9,7 @@ import { AlertBoxService } from '../../../shared/alert-box.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { AddCategoryComponent } from '../../../master-settings/inventory-defination-module/add-category/add-category.component';
 import { AddSubcategoryComponent } from '../../../master-settings/inventory-defination-module/add-subcategory/add-subcategory.component';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { DropdownService } from '../../../services/common/dropdown.service';
 import { SelectDropdown } from '../../../models/common/select.dropdown.model';
 import { ItemPurchaseValidation } from '../../../models/validation/item-purchase.validation.model';
@@ -19,6 +19,8 @@ import { SupplierEntryComponent } from '../../../master-settings/inventory-defin
 import { ItemTransaction } from '../../../models/regular-operation/inventory/item-transaction.model';
 import { PartyEntryComponent } from '../../../master-settings/inventory-defination-module/party-entry/party-entry.component';
 import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-item-purchase',
@@ -26,6 +28,7 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
   styleUrls: ['./item-purchase.component.css']
 })
 export class ItemPurchaseComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   itemPurchaseForm:FormGroup
   purchaseValidation:ItemPurchaseValidation[]=[];
   ledgerTouch:boolean=false;
@@ -105,7 +108,7 @@ export class ItemPurchaseComponent implements OnInit {
       Ledger_Id: [null,this.purchaseValidation[0].Ledger_Id==true&&this.purchaseValidation[1].Ledger_Id==true? Validators.required:null],
       SubLedger_Id: [null,this.purchaseValidation[0].SubLedger_Id==true&&this.purchaseValidation[1].SubLedger_Id==true? Validators.required:null],
       PaymentMode: [0,this.purchaseValidation[0].PaymentMode==true&&this.purchaseValidation[1].PaymentMode==true? Validators.required:null],
-      TransactionType: [null,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
+      TransactionType: ["Purchase",this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
       ItemTransactionList: this.fb.array([
         this.addNewItemTransaction()
       ]),
@@ -158,6 +161,33 @@ export class ItemPurchaseComponent implements OnInit {
       });
     }
   }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"purchase-form",
+      disableClose:true,
+      height:window.screen.height*.9+'px',
+      width:window.screen.width*.8+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       this.getItemPurchaseValidationList()
+     }
+    })
+  }
+  getItemPurchaseValidationList(){
+    debugger
+    this.blockUi.start("Loading....,Please wait.")
+    this._validationService.getItemPurchaseValidationData("purchase-form").subscribe((response:ItemPurchaseValidation[])=>{
+      this.blockUi.stop();
+      this.groupItem.data=response
+      //this.groupItem.data= this.itemPurchaseValidationList;
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
   setExistingItemPurchase():FormArray{
     const formArray=new FormArray([]);
     this.groupItem.ItemTransactionList.forEach(itemTransaction=>{
@@ -175,6 +205,7 @@ export class ItemPurchaseComponent implements OnInit {
       TransactionType: [itemTransaction.TransactionType,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
       Quantity: [itemTransaction.Quantity,this.purchaseValidation[0].Quantity==true&&this.purchaseValidation[1].Quantity==true? Validators.required:null],
       UnitCost: [itemTransaction.UnitCost,this.purchaseValidation[0].UnitCost==true&&this.purchaseValidation[1].UnitCost==true? Validators.required:null],
+      InStock: [0],
       UnitSale: [itemTransaction.UnitSale,this.purchaseValidation[0].UnitSale==true&&this.purchaseValidation[1].UnitSale==true? Validators.required:null],
       TotalAmount: [this.calulateTotalAmount(itemTransaction),this.purchaseValidation[0].TotalAmountTransaction==true&&this.purchaseValidation[1].TotalAmountTransaction==true? Validators.required:null],
       DiscountRate: [itemTransaction.DiscountRate,this.purchaseValidation[0].DiscountRateTransaction==true&&this.purchaseValidation[1].DiscountRateTransaction==true? Validators.required:null],
@@ -200,31 +231,29 @@ export class ItemPurchaseComponent implements OnInit {
   }
   getItemList(subCategoryId:string){
     this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
-      this.itemList=response.json();
+      this.itemList=response
       if(this.itemList.length>0){
         this.itemList.forEach((a,index,array)=>{
           this.itemDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getLocationList(){
     this._dropdownService.getLocationDropdownList().subscribe(response=>{
-      this.locationList=response.json();
+      this.locationList=response
       if(this.locationList.length>0){
         this.locationList.forEach((a,index,array)=>{
           this.locationDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -236,7 +265,13 @@ export class ItemPurchaseComponent implements OnInit {
       control.get('Item_Id').setValue('');
     }
     else{
+      var locationId=<MultiSelectDropdown[]>control.get('LocationId').value;
       control.get('Item_Id').setValue(selectedItem[0].id);
+      if(this.purchaseValidation[0].InStock){
+        if(locationId[0].id!="0"||locationId[0].id!=''){
+          this.getItemStockByLocationAndItemId(selectedItem[0].id,locationId[0].id,control)
+        }
+      }
     }
   }
   locationOnItemSelect($event,index:number){
@@ -247,7 +282,13 @@ export class ItemPurchaseComponent implements OnInit {
       control.get('Location_Id').setValue('');
     }
     else{
+      var itemid=<MultiSelectDropdown[]>control.get('ItemId').value;
       control.get('Location_Id').setValue(selectedLocation[0].id);
+      if(this.purchaseValidation[0].InStock){
+        if(itemid[0].id!="0"||itemid[0].id!=''){
+          this.getItemStockByLocationAndItemId(itemid[0].id,selectedLocation[0].id,control)
+        }
+      }
     }
   }
   ledgerOnSeletedItem($event:MultiSelectDropdown){
@@ -386,6 +427,7 @@ export class ItemPurchaseComponent implements OnInit {
     TransactionType: [null,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
     Quantity: [0,this.purchaseValidation[0].Quantity==true&&this.purchaseValidation[1].Quantity==true? Validators.required:null],
     UnitCost: [0,this.purchaseValidation[0].UnitCost==true&&this.purchaseValidation[1].UnitCost==true? Validators.required:null],
+    InStock: [0],
     UnitSale: [0,this.purchaseValidation[0].UnitSale==true&&this.purchaseValidation[1].UnitSale==true? Validators.required:null],
     TotalAmount: [0,this.purchaseValidation[0].TotalAmountTransaction==true&&this.purchaseValidation[1].TotalAmountTransaction==true? Validators.required:null],
     DiscountRate: [0,this.purchaseValidation[0].DiscountRateTransaction==true&&this.purchaseValidation[1].DiscountRateTransaction==true? Validators.required:null],
@@ -442,5 +484,15 @@ savePurchaseItem(){
       this._alertBox.openDialog(dialogData);
     })
   }
+}
+getItemStockByLocationAndItemId(itemId:string,locationId:string,control:AbstractControl){
+  this._inventotyService.gettemStockByLocationAndItemId(itemId,locationId).subscribe(response=>{
+    let result=response
+    control.get('InStock').setValue(response);
+  },error=>{
+    let dialogData=new DialogData();
+    dialogData.message=error
+    this._alertBox.openDialog(dialogData);
+  })
 }
 }

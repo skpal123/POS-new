@@ -47,16 +47,15 @@ export class ItemDropdownComponent implements OnChanges {
     this.itemDropdownList=[];
     this.subledgerSelectedItems=[];
     this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
-      this.itemList=response.json();
+      this.itemList=response
       if(this.itemList.length>0){
         this.itemList.forEach((a,index,array)=>{
           this.itemDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

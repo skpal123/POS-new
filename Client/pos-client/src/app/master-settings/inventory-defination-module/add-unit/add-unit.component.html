@@ -25,7 +25,10 @@
                 </div>
               <div class="row">
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="unitForm.invalid" (click)="saveUnit()" value="Save" class="btn btn-primary">
+                  <input type="button" [disabled]="unitForm.invalid" (click)="saveUnit()" value="{{unit.Id==null?'Save':'Update'}}" class="btn btn-primary">
+                </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!unitForm.dirty" (click)="clearUnit()" value="Save" class="btn btn-primary">
                 </div>
               </div>
         </form>

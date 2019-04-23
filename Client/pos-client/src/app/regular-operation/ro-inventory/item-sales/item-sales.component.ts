@@ -1,5 +1,5 @@
 import { Component, OnInit,Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { ItemPurchaseValidation } from '../../../models/validation/item-purchase.validation.model';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { SelectDropdown } from '../../../models/common/select.dropdown.model';
@@ -16,6 +16,8 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { SupplierEntryComponent } from '../../../master-settings/inventory-defination-module/supplier-entry/supplier-entry.component';
 import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
 import { PartyEntryComponent } from '../../../master-settings/inventory-defination-module/party-entry/party-entry.component';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 
 @Component({
   selector: 'app-item-sales',
@@ -23,7 +25,7 @@ import { PartyEntryComponent } from '../../../master-settings/inventory-definati
   styleUrls: ['./item-sales.component.css']
 })
 export class ItemSalesComponent implements OnInit {
-
+  @BlockUI() blockUi:NgBlockUI
   itemSaleForm:FormGroup
   ItemSaleValidation:ItemPurchaseValidation[]=[];
   ledgerTouch:boolean=false;
@@ -105,7 +107,7 @@ export class ItemSalesComponent implements OnInit {
       Ledger_Id: [null,this.ItemSaleValidation[0].Ledger_Id==true&&this.ItemSaleValidation[1].Ledger_Id==true? Validators.required:null],
       SubLedger_Id: [null,this.ItemSaleValidation[0].SubLedger_Id==true&&this.ItemSaleValidation[1].SubLedger_Id==true? Validators.required:null],
       PaymentMode: [0,this.ItemSaleValidation[0].PaymentMode==true&&this.ItemSaleValidation[1].PaymentMode==true? Validators.required:null],
-      TransactionType: [null,this.ItemSaleValidation[0].TransactionType==true&&this.ItemSaleValidation[1].TransactionType==true? Validators.required:null],
+      TransactionType: ["Sales",this.ItemSaleValidation[0].TransactionType==true&&this.ItemSaleValidation[1].TransactionType==true? Validators.required:null],
       ItemTransactionList: this.fb.array([
         this.addNewItemTransaction()
       ]),
@@ -160,6 +162,33 @@ export class ItemSalesComponent implements OnInit {
       });
     }
   }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"sales-form",
+      disableClose:true,
+      height:window.screen.height*.6+'px',
+      width:window.screen.width*.5+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       this.getItemPurchaseValidationList()
+     }
+    })
+  }
+  getItemPurchaseValidationList(){
+    debugger
+    this.blockUi.start("Loading....,Please wait.")
+    this._validationService.getItemPurchaseValidationData("sales-form").subscribe((response:ItemPurchaseValidation[])=>{
+      this.blockUi.stop();
+      this.groupItem.data=response
+      this.ItemSaleValidation= response;
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
   setExistingItemPurchase():FormArray{
     const formArray=new FormArray([]);
     this.groupItem.ItemTransactionList.forEach(itemTransaction=>{
@@ -178,6 +207,7 @@ export class ItemSalesComponent implements OnInit {
       Quantity: [itemTransaction.Quantity,this.ItemSaleValidation[0].Quantity==true&&this.ItemSaleValidation[1].Quantity==true? Validators.required:null],
       UnitCost: [itemTransaction.UnitCost,this.ItemSaleValidation[0].UnitCost==true&&this.ItemSaleValidation[1].UnitCost==true? Validators.required:null],
       UnitSale: [itemTransaction.UnitSale,this.ItemSaleValidation[0].UnitSale==true&&this.ItemSaleValidation[1].UnitSale==true? Validators.required:null],
+      InStock: [0],
       TotalAmount: [this.calulateTotalAmount(itemTransaction),this.ItemSaleValidation[0].TotalAmountTransaction==true&&this.ItemSaleValidation[1].TotalAmountTransaction==true? Validators.required:null],
       DiscountRate: [itemTransaction.DiscountRate,this.ItemSaleValidation[0].DiscountRateTransaction==true&&this.ItemSaleValidation[1].DiscountRateTransaction==true? Validators.required:null],
       DiscountAmount: [itemTransaction.DiscountAmount,this.ItemSaleValidation[0].DiscountAmount==true&&this.ItemSaleValidation[1].DiscountAmount==true? Validators.required:null],
@@ -202,31 +232,29 @@ export class ItemSalesComponent implements OnInit {
   }
   getItemList(subCategoryId:string){
     this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
-      this.itemList=response.json();
+      this.itemList=response
       if(this.itemList.length>0){
         this.itemList.forEach((a,index,array)=>{
           this.itemDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getLocationList(){
     this._dropdownService.getLocationDropdownList().subscribe(response=>{
-      this.locationList=response.json();
+      this.locationList=response
       if(this.locationList.length>0){
         this.locationList.forEach((a,index,array)=>{
           this.locationDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -238,7 +266,13 @@ export class ItemSalesComponent implements OnInit {
       control.get('Item_Id').setValue('');
     }
     else{
+      var locationId=<MultiSelectDropdown[]>control.get('LocationId').value;
       control.get('Item_Id').setValue(selectedItem[0].id);
+      if(this.ItemSaleValidation[0].InStock){
+        if(locationId[0].id!="0"||locationId[0].id!=''){
+          this.getItemStockByLocationAndItemId(selectedItem[0].id,locationId[0].id,control)
+        }
+      }
     }
   }
   locationOnItemSelect($event,index:number){
@@ -249,7 +283,13 @@ export class ItemSalesComponent implements OnInit {
       control.get('Location_Id').setValue('');
     }
     else{
+      var itemid=<MultiSelectDropdown[]>control.get('ItemId').value;
       control.get('Location_Id').setValue(selectedLocation[0].id);
+      if(this.ItemSaleValidation[0].InStock){
+        if(itemid[0].id!="0"||itemid[0].id!=''){
+          this.getItemStockByLocationAndItemId(itemid[0].id,selectedLocation[0].id,control)
+        }
+      }
     }
   }
   ledgerOnSeletedItem($event:MultiSelectDropdown){
@@ -435,6 +475,7 @@ export class ItemSalesComponent implements OnInit {
     Quantity: [0,this.ItemSaleValidation[0].Quantity==true&&this.ItemSaleValidation[1].Quantity==true? Validators.required:null],
     UnitCost: [0,this.ItemSaleValidation[0].UnitCost==true&&this.ItemSaleValidation[1].UnitCost==true? Validators.required:null],
     UnitSale: [0,this.ItemSaleValidation[0].UnitSale==true&&this.ItemSaleValidation[1].UnitSale==true? Validators.required:null],
+    InStock:[0],
     TotalAmount: [0,this.ItemSaleValidation[0].TotalAmountTransaction==true&&this.ItemSaleValidation[1].TotalAmountTransaction==true? Validators.required:null],
     DiscountRate: [0,this.ItemSaleValidation[0].DiscountRateTransaction==true&&this.ItemSaleValidation[1].DiscountRateTransaction==true? Validators.required:null],
     DiscountAmount: [0,this.ItemSaleValidation[0].DiscountAmount==true&&this.ItemSaleValidation[1].DiscountAmount==true? Validators.required:null],
@@ -491,5 +532,14 @@ savePurchaseItem(){
     })
   }
 }
-
+getItemStockByLocationAndItemId(itemId:string,locationId:string,control:AbstractControl){
+  this._inventotyService.gettemStockByLocationAndItemId(itemId,locationId).subscribe(response=>{
+    let result=response
+    control.get('InStock').setValue(response);
+  },error=>{
+    let dialogData=new DialogData();
+    dialogData.message=error
+    this._alertBox.openDialog(dialogData);
+  })
+}
 }

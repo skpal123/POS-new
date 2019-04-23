@@ -43,12 +43,18 @@
                         <input [ngClass]="allCheck?'btn btn-success': 'btn btn-primary'" type="button" [value]="allCheck==true?'Approved all':'Deapproved all'">
                   </div>
                 </div>
-                <app-custom-datatable [DataList]="DataList" [ColumnList]="columnlist"
-                (EditSelectedRowClicked)="getVoucherDetails($event)"
-                (DeleteDataRowClicked)="deleteVoucher($event)"
-                (CheckedAllItem)="CheckedAllVoucher($event)"
-                >
-                </app-custom-datatable>
+                <div *ngIf="reload&&columnReady&&dataReady">
+                    <app-custom-datatable 
+                    [DataList]="DataList" 
+                    [reload]="reload"
+                    [ColumnList]="columnlist"
+                    (EditSelectedRowClicked)="getVoucherDetails($event)"
+                    (DeleteDataRowClicked)="deleteVoucher($event)"
+                    (CheckedAllItem)="CheckedAllVoucher($event)"
+                    >
+                    </app-custom-datatable>
+                </div>
+
                      <!-- <table class="table table-borderd">
                               <thead>
                                   <tr> 

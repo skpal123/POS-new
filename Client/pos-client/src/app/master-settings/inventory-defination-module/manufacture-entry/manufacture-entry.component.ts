@@ -33,7 +33,7 @@ saveManufacture(){
   debugger
   if(this.manufacture.Id==null){
     this._inventotyDefinationService.CreateManufacture(this.manufacture).subscribe(response=>{
-      let result=response.json();
+      let result=response
       if(result){
         this.matDialogRef.close(true);
         let dialogData=new DialogData();
@@ -49,7 +49,7 @@ saveManufacture(){
   }
   else{
     this._inventotyDefinationService.UpdateManufacture(this.manufacture).subscribe(response=>{
-      let result=response.json();
+      let result=response
       if(result){
         this.matDialogRef.close(true);
         let dialogData=new DialogData();
@@ -57,7 +57,7 @@ saveManufacture(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);

@@ -38,16 +38,15 @@ export class LedgerDropdownComponent implements OnInit {
   }
   getLedgerList(){
     this._dropdownService.getLedgerDropdownList().subscribe(response=>{
-      this.ledgerList=response.json();
+      this.ledgerList=response;
       if(this.ledgerList.length>0){
         this.ledgerList.forEach((a,index,array)=>{
           this.ledgerDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

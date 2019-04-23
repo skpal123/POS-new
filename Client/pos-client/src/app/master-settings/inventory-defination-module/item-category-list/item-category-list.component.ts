@@ -7,6 +7,8 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { AddCategoryComponent } from '../add-category/add-category.component';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-item-category-list',
@@ -14,7 +16,10 @@ import { AddCategoryComponent } from '../add-category/add-category.component';
   styleUrls: ['./item-category-list.component.css']
 })
 export class ItemCategoryListComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -22,6 +27,7 @@ export class ItemCategoryListComponent implements OnInit {
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -31,23 +37,32 @@ export class ItemCategoryListComponent implements OnInit {
     this.getUserFormControlByFormName();
   }
   getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
     this._postLoginservice.getUserFormControlByFormName('category-list').subscribe(response=>{
-      this.userControlList=response.json();
+      this.blockUi.stop();
+      this.userControlList=response;
       this.ColumnList=this.userControlList
+      this._customDatatableService.ColumnList=this.userControlList;
+      this.columnReady=true;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   getCategoryList(){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getCategoryList().subscribe(response=>{
-      this.categoryList=response.json();
+      this.blockUi.stop();
+      this.categoryList=response
       this.DataList=this.categoryList
+      this._customDatatableService.DataList=this.categoryList;
+      this.dataReady=true;
       this.reload=true;
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
@@ -55,8 +70,10 @@ export class ItemCategoryListComponent implements OnInit {
   }
   getCategoryDetails($event:string){
     debugger
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getCategoryById($event).subscribe(response=>{
-      this.category=response.json();
+      this.blockUi.stop();
+      this.category=response
       const dialogRef=this.matDialog.open(AddCategoryComponent,{
         data:this.category,
         disableClose:true,
@@ -69,15 +86,18 @@ export class ItemCategoryListComponent implements OnInit {
         }
       })
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
   }
   deleteCategory($event:string){
+    this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.deleteUnit($event).subscribe(response=>{
-      let result=response.json();
+      this.blockUi.stop();
+      let result=response
       if(result){
         this.getCategoryList();
         let dialogData=new DialogData();
@@ -85,7 +105,8 @@ export class ItemCategoryListComponent implements OnInit {
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      this.blockUi.stop();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);

@@ -28,7 +28,7 @@ onNoClick(){
 saveLocation(){
   if(this.location.Id==null){
     this._inventotyDefinationService.CreateLocation(this.location).subscribe(response=>{
-      let result=response.json();
+      let result=response
       if(result){
         this.matDialogRef.close(true);
         let dialogData=new DialogData();
@@ -36,7 +36,7 @@ saveLocation(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
@@ -44,7 +44,7 @@ saveLocation(){
   }
   else{
     this._inventotyDefinationService.UpdateLocation(this.location).subscribe(response=>{
-      let result=response.json();
+      let result=response
       if(result){
         this.matDialogRef.close(true);
         let dialogData=new DialogData();
@@ -52,7 +52,7 @@ saveLocation(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);

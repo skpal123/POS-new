@@ -46,25 +46,23 @@ export class SubledgerTransactionComponent implements OnInit,OnDestroy {
   }
   getUserFormControlByFormName(){
     this._loginService.getUserFormControlByFormName('subledger-transaction').subscribe(response=>{
-      this.userControlList=response.json();
+      this.userControlList=response
       this.columnlist=this.userControlList;
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
   geSubledgerList(){
     this._accountService.GetSublederList(this.subledgerData.AccountId).subscribe(response=>{
-      this.subledgerList=response.json();
+      this.subledgerList=response
       this.subledgerList.forEach((a,index,array)=>{
         this.autoCompleteData.push(a.Description+'-'+a.SublederCode);
       })
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

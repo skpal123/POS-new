@@ -76,7 +76,11 @@
                   <label for="unitId" class="col-sm-4 col-form-label">Unit Name</label>
                   <div class="col-sm-7" >
                       <input style="display: none;" class="form-control" [required]="itemValidation[0]?.UnitId&&itemValidation[1]?.UnitId" name="UnitId" #unitIdControl="ngModel" [(ngModel)]="item.UnitId">
-                     <app-unit-dropdown (unitOnItemSelect)="unitOnSeletedItem($event)" (unitOnItemDeSelect)="unitOnDeSeletedItem($event)" [unitSelectedItems]="unitSelectedItems">
+                     <app-unit-dropdown 
+                     (unitOnItemSelect)="unitOnSeletedItem($event)"
+                      (unitOnItemDeSelect)="unitOnDeSeletedItem($event)" 
+                      [IsNewUnitAdd]="unitNew"
+                      [unitSelectedItems]="unitSelectedItems">
                      </app-unit-dropdown> 
                      <span class="help-block" *ngIf="unitIdControl.errors?.required&&unitTouch">
                         Unit name is required
@@ -104,7 +108,10 @@
                 </div>
               <div class="row">
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="itemForm.invalid" (click)="saveItem()" value="Save" class="btn btn-primary">
+                  <input type="button" [disabled]="itemForm.invalid" (click)="saveItem()" value="{{item.Id==null?'Save':'Update'}}" class="btn btn-primary">
+                </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!itemForm.dirty" (click)="clearItem()" value="Clear" class="btn btn-primary">
                 </div>
               </div>
         </form>

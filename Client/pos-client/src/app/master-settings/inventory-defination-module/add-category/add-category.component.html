@@ -30,6 +30,9 @@
                 <div class="col-md-2 pull-right">
                   <input type="button" [disabled]="categoryForm.invalid" (click)="saveCategory()" value="{{category.Id==null?'Save':'Update'}}" class="btn btn-primary">
                 </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!categoryForm.dirty" (click)="clearCategory()" value="Clear" class="btn btn-primary">
+                </div>
               </div>
         </form>
       </div>

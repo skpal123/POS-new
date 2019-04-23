@@ -49,16 +49,15 @@ export class SupplierDropdownComponent implements OnChanges {
   }
   getSupplierList(){
     this._dopdownService.getSupplierDropdownList().subscribe(response=>{
-      this.supplierList=response.json();
+      this.supplierList=response
       if(this.supplierList.length>0){
         this.supplierList.forEach((category,index,array)=>{
           this.supplierDropdownList.push({id:category.Value,itemName:category.Code+'-'+category.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

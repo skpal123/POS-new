@@ -15,6 +15,8 @@ export class DynamicTableEntryComponent implements OnInit {
   @Input() AutoCompleteList3: any = [];
   @Output() AutoCompleteDataSourceClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() GetColumnValueClicked:EventEmitter <any>=new EventEmitter <any>();
+  data={value:0,name:"",index:0}
   constructor() { 
     
   }
@@ -30,6 +32,12 @@ export class DynamicTableEntryComponent implements OnInit {
       this.Datalist.splice(index,1)
     }
     this.DeleteDataRowClicked.emit(index);
+  }
+  GetColumnValue(value:number,name:string,index:number){
+    this.data.name=name;
+    this.data.value=value;
+    this.data.index=index;
+    this.GetColumnValueClicked.emit(this.data)
   }
   sendDataToParentComponent() {
     debugger

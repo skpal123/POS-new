@@ -36,12 +36,12 @@ export class HrPayrollLayoutComponent implements OnInit {
       //this.getSubmnenuByMenuSeqId(id);
     })
   }
-  getSubmnenuByMenuSeqId(MenuSeqId:string){
-    this._postLoginService.geSubMenus(MenuSeqId).subscribe(response=>{
-      this.submenus=response.json();
-    },error=>{
-      var errorMessage=error.json();
-      alert(errorMessage.Message);
-    })
-  }
+  // getSubmnenuByMenuSeqId(MenuSeqId:string){
+  //   this._postLoginService.geSubMenus(MenuSeqId).subscribe(response=>{
+  //     this.submenus=response
+  //   },error=>{
+  //     var errorMessage=error.json();
+  //     alert(errorMessage.Message);
+  //   })
+  // }
 }

@@ -2,7 +2,7 @@
     <table datatable class="table table-borderd">
         <thead>
             <tr> 
-                <td *ngFor="let column of ColumnList">
+                <td *ngFor="let column of ColumnList;let i=index;">
                     <span *ngIf="column.IsEnable&&column.Name!='Status'">{{column.LabelName}}</span>
                     <span *ngIf="column.IsEnable&&column.Name=='Status'"><input (change)="checkedAllItem($event)" type="checkbox">Checked all</span>
                 </td>
@@ -11,8 +11,8 @@
        <tbody>
             <tr *ngFor="let a of DataList1;let i=index;" id="pointer">
                 <td *ngFor="let b of ColumnList; let j=index;">
-                      <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type!='date'">{{DataList1[i][b.Name]}}</span>
-                      <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type=='date'">{{DataList1[i][b.Name]|date}}</span>
+                    <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type!='date'">{{DataList1[i][b.Name]}}</span>
+                    <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type=='date'">{{DataList1[i][b.Name]|date}}</span>
                     <input id="pointer" type="checkbox"  *ngIf="b.IsEnable&&b.Name=='Status'" [(ngModel)]="DataList1[i][b.Name]">
                     <span id="pointer" title="Edit" *ngIf="b.IsEnable&&b.Name=='Edit'" (click)="getRowDetailsById(a.Id)" class="glyphicon glyphicon-edit"></span>
                     <span id="pointer" title="Delete" *ngIf="b.IsEnable&&b.Name=='Delete'" class="glyphicon glyphicon-trash" (click)="deleteRow(a.Id)"></span> 

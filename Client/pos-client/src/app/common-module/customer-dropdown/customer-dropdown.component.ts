@@ -49,16 +49,15 @@ export class CustomerDropdownComponent implements OnChanges {
   }
   getCustomerList(){
     this._dopdownService.getCustomerDropdownList().subscribe(response=>{
-      this.customerList=response.json();
+      this.customerList=response
       if(this.customerList.length>0){
         this.customerList.forEach((category,index,array)=>{
           this.customerDropdownList.push({id:category.Value,itemName:category.Code+'-'+category.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

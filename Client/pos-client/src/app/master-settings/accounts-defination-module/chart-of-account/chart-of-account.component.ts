@@ -9,13 +9,16 @@ import { Subledger } from '../../../models/master-settings/account-defination/su
 import { MatDialog } from '@angular/material';
 import { AddSubledgerComponent } from '../add-subledger/add-subledger.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
   styleUrls: ['./chart-of-account.component.css']
 })
 export class ChartOfAccountComponent implements OnInit {
+  @ViewChild('accountForm') accountForm:NgForm
   @BlockUI() blockUI: NgBlockUI;
+  accountClicked:boolean=false;
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
   accountDetails:AccountDetails;
   account:ChartOfaccount={AccountType:"0",};
@@ -35,12 +38,12 @@ export class ChartOfAccountComponent implements OnInit {
     this.blockUI.start("Loading,Please wait...")
     this._service.getChartOfAccountListForTree().subscribe(response=>{
       this.blockUI.stop();
-      this.accountDetails=response.json();
+      this.accountDetails=response
       this.chartOfAccountTreeList=this.accountDetails.AccountParentChildRelationInfoList;
     },error=>{
       this.blockUI.stop();
       var dialogData=new DialogData();
-      dialogData.message=error.json().message;
+      dialogData.message=error;
       this._alertBoxService.openDialog(dialogData);
     })
   }
@@ -131,11 +134,12 @@ export class ChartOfAccountComponent implements OnInit {
   }
   selectedNode(selectedNode:ChartOfAccountTree){
     console.log(selectedNode)
+    this.accountClicked=true;
     if(this.Status=="add"){
       var AutoAccountCode;
       this.account.Id=null;
       this._service.getMaxAccidByGroupIdAndLevelId(selectedNode.ChildGroupId,selectedNode.ChildLevelId+1).subscribe(response=>{
-        let maxAccid=response.json();
+        let maxAccid=response
         let newAccid=maxAccid+1;
         let newlevel=selectedNode.ChildLevelId+1;
         this.account.LevelId=newlevel;
@@ -147,9 +151,8 @@ export class ChartOfAccountComponent implements OnInit {
         this.account.AccountDescription=null;
         this.account.ParentAccountId=selectedNode.AccountId;
       },error=>{
-        let message=error.json();
         var dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBoxService.openDialog(dialogData);
       })
     }
@@ -170,7 +173,9 @@ export class ChartOfAccountComponent implements OnInit {
   createChartOfAccount(){
     if(this.account.Id==null){
       this._service.CreateChartOfAccount(this.account).subscribe(response=>{
-        let result=response.json();
+        let result=response;
+        this.clearChartOfAccountForm();
+        this.accountClicked=false;
         if(result){
           var dialogData=new DialogData();
           dialogData.message="Chart of account create succesfully";
@@ -178,15 +183,16 @@ export class ChartOfAccountComponent implements OnInit {
           this.getChartOfaccountTreeList();
         }
       },error=>{
-        let message=error.json();
         var dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBoxService.openDialog(dialogData);
       })
     }
     else{
       this._service.UpdateChartOfAccount(this.account).subscribe(response=>{
-        let result=response.json();
+        let result=response;
+        this.accountClicked=false;
+        this.clearChartOfAccountForm();
         if(result){
           var dialogData=new DialogData();
           dialogData.message="Chart of account updated succesfully";
@@ -194,9 +200,8 @@ export class ChartOfAccountComponent implements OnInit {
           this.getChartOfaccountTreeList();
         }
       },error=>{
-        let message=error.json();
         var dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBoxService.openDialog(dialogData);
       })
     }
@@ -208,6 +213,11 @@ export class ChartOfAccountComponent implements OnInit {
         height:window.screen.height*.6+'px',
         width:window.screen.width*.6+'px'
       });
+  }
+  clearChartOfAccountForm(){
+    this.account.AccountDescription=null;
+    this.account.AutoAccountCode=null;
+    this.account.ManualAccountCode=null;
   }
 }
 

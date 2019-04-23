@@ -5,92 +5,93 @@ import { HttpService } from '../common/http.service';
 import { SessionService } from '../common/session.service';
 import { ChartOfaccount } from '../../models/master-settings/account-defination/chart-of-account.model';
 import { Subledger } from '../../models/master-settings/account-defination/subledger.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AccountOpeningView } from '../../models/master-settings/account-defination/account-opening-view.model';
+import { AccountDetails } from '../../models/master-settings/account-defination/account-details.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountDefinationService {
 
-  constructor(private _http:Http,
-    private _defaultRoute:DefaultRouteService,
-    private _httpService:HttpService,
-    private _sessionService:SessionService) 
+  constructor(private _httpClient:HttpClient,
+    private _defaultRoute:DefaultRouteService
+  ) 
     { }
-    setCustomHeader():Headers{
-      let header =new Headers();
-      header.append('Content-Type', 'application/json');
-      header.append('sessionId', this._sessionService.SessionId);
-      header.append("UserId",this._sessionService.User_Id);
-      return header;
-    }
   public getChartOfAccountListForTree(){
     var url=this._defaultRoute.FinanceService+'getChartOfAccountList/';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get<AccountDetails>(url).pipe(
+      catchError(this.handleError)
+    )
   }
   public CreateChartOfAccount(account:ChartOfaccount){
     var url=this._defaultRoute.FinanceService+'createChartOfAccount';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'POST');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.post(url,account,options);
+    return this._httpClient.post<boolean>(url,account).pipe(
+      catchError(this.handleError)
+    )
   }
   public UpdateChartOfAccount(account:ChartOfaccount){
     var url=this._defaultRoute.FinanceService+'createChartOfAccount/'+account.Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'PUT');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.post(url,account,options);
+    return this._httpClient.post<boolean>(url,account).pipe(
+      catchError(this.handleError)
+    )
   }
   public getMaxAccidByGroupIdAndLevelId(groupId:number,levelId:number){
     var url=this._defaultRoute.FinanceService+'getMaxAccid/'+levelId+"/"+groupId;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options);
+    return this._httpClient.get<number>(url).pipe(
+      catchError(this.handleError)
+    )
   }
   public getAccountListForAccountOpening(){
     var url=this._defaultRoute.FinanceService+'getAccountListForopening';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options);
+    return this._httpClient.get<AccountOpeningView[]>(url).pipe(
+      catchError(this.handleError)
+    )
   }
   public AddSubleder(subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger';
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'POST');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.post(url,subledger,options);
+    return this._httpClient.post<boolean>(url,subledger).pipe(
+      catchError(this.handleError)
+    )
   }
   public UpdateSubleder(Id:string,subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'PUT');
-    const options = new RequestOptions({ headers: headers });
-    return this._http.put(url,subledger,options);
+    return this._httpClient.put<boolean>(url,subledger).pipe(
+      catchError(this.handleError)
+    )
   }
   public GetSublederList(Id:string){
     var url=this._defaultRoute.FinanceService+'getSubledgerList/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options);
+    return this._httpClient.get<Subledger[]>(url).pipe(
+      catchError(this.handleError)
+    )
   }
   public GetSublederById(Id:string){
     var url=this._defaultRoute.FinanceService+'getSubledgerById/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options);
+    return this._httpClient.get<Subledger>(url).pipe(
+      catchError(this.handleError)
+    )
   }
   public DeleteGetSublederById(Id:string){
     var url=this._defaultRoute.FinanceService+'deleteSubledger/'+Id;
-    let headers =  this.setCustomHeader();
-    headers.append('ActionName', 'get');  
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options);
+    return this._httpClient.get<boolean>(url).pipe(
+      catchError(this.handleError)
+    )
   }
+  private handleError(error: HttpErrorResponse) {
+    debugger
+
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+      return throwError(error.error.message) 
+    } 
+    else 
+    {
+      let message=error.error.Message;       
+      return throwError(message+'<br/>'+error.message) 
+    }
+    // return an observable with a user-facing error message
+  };
 }

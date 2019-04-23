@@ -20,27 +20,7 @@ export class PostloginComponent implements OnInit {
     this.BranchList=this._sessionService.BranchList;
   }  
   loadModules(Id:string){
-  //   debugger
-  //  this._postLoginService.getMainMenus().subscribe(response=>{
-  //   console.log(response.json());
-  //   sessionStorage.setItem('modules',JSON.stringify( response.json()));
-  //   this.getMainMenuSubMenus();
-  //  },error=>{
-  //   var dialog=new DialogData();
-  //   dialog.message=(error.json()).Message;
-  //   this._alertBox.openDialog(dialog);
-  //  })
     this._router.navigate(['login/mainlayout']);
-  }
-  getMainMenuSubMenus(){
-    this._postLoginService.getMenusSubMenus().subscribe(response=>{
-      console.log(response.json());
-      sessionStorage.setItem('menus',JSON.stringify( response.json()));
-     },error=>{
-      var dialog=new DialogData();
-      dialog.message=(error.json()).Message;
-      this._alertBox.openDialog(dialog);
-     })
   }
 }
 

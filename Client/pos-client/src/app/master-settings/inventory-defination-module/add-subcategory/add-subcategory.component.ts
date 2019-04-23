@@ -14,7 +14,7 @@ import { NewDropdownDataService } from '../../../common-module/new-dropdown-data
   styleUrls: ['./add-subcategory.component.css']
 })
 export class AddSubcategoryComponent implements OnInit {
-  @ViewChild('subcategoryForm') unitForm:NgForm
+  @ViewChild('subcategoryForm') subcategoryForm:NgForm
   categorySelectedItems :MultiSelectDropdown[]= [
   ];
   constructor(public matDialogRef:MatDialogRef<AddSubcategoryComponent>,
@@ -27,12 +27,14 @@ export class AddSubcategoryComponent implements OnInit {
   ngOnInit() {
     debugger
     if(this.subcategory.Id==null&&this.subcategory.Category_Id!=null){
+      this.subcategoryForm.control.markAsDirty();
       this.categorySelectedItems.push({id:this.subcategory.Category_Id,itemName:this.subcategory.CategoryName}) 
     }
     else if(this.subcategory.Id==null){
       this.categorySelectedItems.push({id:"0",itemName:"SELECT"})   
     }
     else{
+      this.subcategoryForm.control.markAsDirty();
       this.categorySelectedItems.push({id:this.subcategory.Category_Id,itemName:this.subcategory.CategoryName})
     }
   }
@@ -44,7 +46,7 @@ export class AddSubcategoryComponent implements OnInit {
     if(this.subcategory.Id==null){
       console.log(this.subcategory);
       this._inventotyDefinationService.CreateSubCategory(this.subcategory).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -52,7 +54,7 @@ export class AddSubcategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -60,7 +62,7 @@ export class AddSubcategoryComponent implements OnInit {
     }
     else{
       this._inventotyDefinationService.UpdateSubCategory(this.subcategory).subscribe(response=>{
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -68,7 +70,7 @@ export class AddSubcategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -81,5 +83,14 @@ export class AddSubcategoryComponent implements OnInit {
   }
   OnDeSeletedItem($event){
     console.log($event)
+  }
+  clearSubCategory(){
+    this.subcategory.Id=null;
+    this.categorySelectedItems[0].id="0";
+    this.categorySelectedItems[0].itemName="Select"
+    this.subcategory.SubCategoryId=null;
+    this.subcategory.SubCategoryName=null;
+    this.subcategory.Category_Id=null;
+    this.subcategoryForm.reset();
   }
 }

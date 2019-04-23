@@ -37,14 +37,14 @@ export class MasterSettingsMenuComponent implements OnInit {
     }
     })
   }
-  getMenusByModule(moduleSeqId:string){
-    this._postLoginService.getMenusSubMenus().subscribe(response=>{
-      this.menus=response.json();
-      this.menuAlreadyLoad=true;
-    },error=>{
-      var errorMessage=error.json();
-      alert(errorMessage.Message);
-    })
-  }
+  // getMenusByModule(moduleSeqId:string){
+  //   this._postLoginService.getMenusSubMenus().subscribe(response=>{
+  //     this.menus=response
+  //     this.menuAlreadyLoad=true;
+  //   },error=>{
+  //     var errorMessage=error.json();
+  //     alert(errorMessage.Message);
+  //   })
+  // }
 
 }

@@ -45,16 +45,15 @@ export class SubledgerDropdownComponent implements OnChanges {
   getSubLedgerList(ledgerId:string){
     this.subledgerDropdownList=[];
     this._dropdownService.getSubledgerDropdownList(ledgerId).subscribe(response=>{
-      this.subledgerList=response.json();
+      this.subledgerList=response
       if(this.subledgerList.length>0){
         this.subledgerList.forEach((a,index,array)=>{
           this.subledgerDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
         })
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

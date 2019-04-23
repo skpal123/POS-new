@@ -51,7 +51,7 @@ export class PartyEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.CreateParty(this.party).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -60,7 +60,7 @@ export class PartyEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);
@@ -70,7 +70,7 @@ export class PartyEntryComponent implements OnInit {
       this.blockUi.start("Loading....,Please wait")
       this._inventotyDefinationService.UpdateParty(this.party).subscribe(response=>{
         this.blockUi.stop();
-        let result=response.json();
+        let result=response
         if(result){
           this.matDialogRef.close(true);
           let dialogData=new DialogData();
@@ -79,7 +79,7 @@ export class PartyEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error.json();
+        let message=error
         let dialogData=new DialogData();
         dialogData.message=message.Message;
         this._alertBox.openDialog(dialogData);

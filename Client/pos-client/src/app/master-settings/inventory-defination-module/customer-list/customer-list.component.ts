@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { CustomerEntryComponent } from '../customer-entry/customer-entry.component';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -17,6 +18,8 @@ import { CustomerEntryComponent } from '../customer-entry/customer-entry.compone
 export class CustomerListComponent implements OnInit {
   @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
+  columnReady:boolean=false;
+  dataReady:boolean=false;
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
@@ -27,6 +30,7 @@ export class CustomerListComponent implements OnInit {
   }
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
     private _inventotyDefinationService:InventoryDefinationServiceService,
   ) { }
@@ -39,14 +43,14 @@ export class CustomerListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._postLoginservice.getUserFormControlByFormName('customer-list').subscribe(response=>{
       this.blockUi.stop();
-      this.userControlList=response.json();
-      this.ColumnList=this.userControlList
-      this.reload=true;
+      this.userControlList=response;
+      this.ColumnList=this.userControlList;
+      this._customDatatableService.ColumnList=this.userControlList;
+      this.columnReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -54,8 +58,11 @@ export class CustomerListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.getCustomerList().subscribe(response=>{
       this.blockUi.stop();
-      this.customerList=response.json();
-      this.DataList=this.customerList
+      this.customerList=response
+      this.DataList=this.customerList;
+      this._customDatatableService.DataList=this.customerList;
+      this.reload=true;
+      this.dataReady=true;
     },error=>{
       this.blockUi.stop();
       let message=error.json();
@@ -69,7 +76,7 @@ export class CustomerListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.getCustomerById($event).subscribe(response=>{
       this.blockUi.stop();
-      this.customer=response.json();
+      this.customer=response
       const dialogRef=this.matDialog.open(CustomerEntryComponent,{
         data:this.customer,
         disableClose:true,
@@ -93,7 +100,7 @@ export class CustomerListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._inventotyDefinationService.deleteCustomer($event).subscribe(response=>{
       this.blockUi.stop();
-      let result=response.json();
+      let result=response
       if(result){
         this.getCustomerList();
         let dialogData=new DialogData();

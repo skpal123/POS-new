@@ -16,6 +16,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
   styleUrls: ['./account-opening.component.css']
 })
 export class AccountOpeningComponent implements OnInit {
+  reload:boolean=false;
   @BlockUI() blockUI: NgBlockUI;
   @ViewChild('openingDateControl') openingDateControl:FormControl;
   @ViewChild('searchAccountCodeControl') searchAccountCodeControl:FormControl;
@@ -38,7 +39,7 @@ export class AccountOpeningComponent implements OnInit {
   getChildAccountList(){
     this.blockUI.start("Loading,Please wait...")
     this._accountDefinationService.getAccountListForAccountOpening().subscribe(response=>{
-      this.accountOpeningView=response.json();
+      this.accountOpeningView=response
       this.accountOpeningView.forEach((a,index,array)=>{
         if(a.Group=="1"){
           a.Group="Asset";
@@ -59,6 +60,7 @@ export class AccountOpeningComponent implements OnInit {
         }
       });
       this.DataList= this.accountOpeningView;
+      this.reload=true;
       this.blockUI.stop();
     },
   error=>{
@@ -73,13 +75,12 @@ export class AccountOpeningComponent implements OnInit {
     this.blockUI.start("Loading,Please wait...");
     this._postLoginService.getUserFormControlByFormName('account-opening').subscribe(response=>{
       this.blockUI.stop();
-      this.userControlList=response.json();
+      this.userControlList=response
       this.columnlist=this.userControlList.filter(control=>control.Type!='none');
     },error=>{
       this.blockUI.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

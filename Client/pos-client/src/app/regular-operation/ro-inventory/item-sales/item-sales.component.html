@@ -4,6 +4,7 @@
           <div class="panel panel-primary">
               <div class="panel-heading" style="height: 40px;">
                   <h4 style="text-align: center"> Sales form
+                    <span (click)="controlGroupItemForm()" title="view from control" id="pointer" class="pointer glyphicon glyphicon-plus pull-left" aria-hidden="true"></span>
                      <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
                   </h4>
               </div>
@@ -12,7 +13,7 @@
                       <div class="col-md-6">
                           <div *ngIf="ItemSaleValidation[0]?.TransactionId">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('TransactionId').valid" [ngClass]="{'has-error':itemSaleForm.get('TransactionId').invalid&&itemSaleForm.get('TransactionId').touched}">
-                                  <label class="col-sm-4 control-label" for="TransactionId">Transaction Id <span style="color: red;margin-left: 10px; size: 15px">*</span></label>
+                                  <label class="col-sm-4 control-label" for="TransactionId">Transaction Id <span *ngIf="ItemSaleValidation[1]?.TransactionId" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="TransactionId" formControlName="TransactionId" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('TransactionId').invalid&&itemSaleForm.get('TransactionId').touched">Required</span>
@@ -21,7 +22,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.ChalanNo">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('ChalanNo').valid" [ngClass]="{'has-error':itemSaleForm.get('ChalanNo').invalid&&itemSaleForm.get('ChalanNo').touched}">
-                                  <label class="col-sm-4 control-label" for="ChalanNo">Chalan No<span style="color: red;margin-left: 10px; size: 30px">*</span></label>
+                                  <label class="col-sm-4 control-label" for="ChalanNo">Chalan No<span *ngIf="ItemSaleValidation[1]?.ChalanNo" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="ChalanNo" formControlName="ChalanNo" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('ChalanNo').invalid&&itemSaleForm.get('ChalanNo').touched">Required</span>
@@ -30,7 +31,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.InvoiceNo">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('InvoiceNo').valid" [ngClass]="{'has-error':itemSaleForm.get('InvoiceNo').invalid&&itemSaleForm.get('InvoiceNo').touched}">
-                                  <label class="col-sm-4 control-label" for="InvoiceNo">Invoice No</label>
+                                  <label class="col-sm-4 control-label" for="InvoiceNo">Invoice No<span *ngIf="ItemSaleValidation[1]?.InvoiceNo" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="InvoiceNo" formControlName="InvoiceNo" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('InvoiceNo').invalid&&itemSaleForm.get('InvoiceNo').touched">Required</span>
@@ -39,7 +40,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.Supplier_Id">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Supplier_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Supplier_Id').invalid}">
-                                  <label class="col-sm-4 control-label" for="Supplier_Id">Supplier name</label>
+                                  <label class="col-sm-4 control-label" for="Supplier_Id">Supplier name<span *ngIf="ItemSaleValidation[1]?.Supplier_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input style="display: none;" class="form-control" formControlName="Supplier_Id">
                                       <app-supplier-dropdown 
@@ -56,7 +57,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.Party_Id">
                             <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Party_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Party_Id').invalid}">
-                                <label class="col-sm-4 control-label" for="Party_Id">Party name</label>
+                                <label class="col-sm-4 control-label" for="Party_Id">Party name<span *ngIf="ItemSaleValidation[1]?.Party_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                 <div class="col-sm-7">
                                     <input style="display: none;" class="form-control" formControlName="Party_Id">
                                     <app-party-dropdown 
@@ -73,7 +74,7 @@
                         </div>
                         <div *ngIf="ItemSaleValidation[0]?.Customer_Id">
                             <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Customer_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Customer_Id').invalid}">
-                                <label class="col-sm-4 control-label" for="Customer_Id">Customer name</label>
+                                <label class="col-sm-4 control-label" for="Customer_Id">Customer name<span *ngIf="ItemSaleValidation[1]?.Customer_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                 <div class="col-sm-7">
                                     <input style="display: none;" class="form-control" formControlName="Customer_Id">
                                     <app-customer-dropdown 
@@ -90,7 +91,7 @@
                         </div>
                           <div *ngIf="ItemSaleValidation[0]?.Reason">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Reason').valid" [ngClass]="{'has-error':itemSaleForm.get('Reason').invalid&&itemSaleForm.get('Reason').touched}">
-                                  <label class="col-sm-4 control-label" for="Reason">Reason</label>
+                                  <label class="col-sm-4 control-label" for="Reason">Reason<span *ngIf="ItemSaleValidation[1]?.Reason" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <select id="Reason" formControlName="Reason" class="form-control">
                                           <option value="0">SELECT</option>
@@ -107,7 +108,7 @@
                           <div *ngIf="ItemSaleValidation[0]?.TransactionDate">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('TransactionDate').valid" [ngClass]="{'has-error':itemSaleForm.get('TransactionDate').invalid&&itemSaleForm.get('TransactionDate').touched}">
                                      
-                                  <label class="col-sm-4 control-label" for="TransactionDate">Transaction Date</label>
+                                  <label class="col-sm-4 control-label" for="TransactionDate">Transaction Date<span *ngIf="ItemSaleValidation[1]?.TransactionDate" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-8">
                                       <div class="row">
                                           <div class="col-md-10">
@@ -125,7 +126,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.GrvNo">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('GrvNo').valid" [ngClass]="{'has-error':itemSaleForm.get('GrvNo').invalid&&itemSaleForm.get('GrvNo').touched}">
-                                  <label class="col-sm-4 control-label" for="GrvNo">Grv No</label>
+                                  <label class="col-sm-4 control-label" for="GrvNo">Grv No<span *ngIf="ItemSaleValidation[1]?.GrvNo" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="GrvNo" formControlName="GrvNo" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('GrvNo').invalid&&itemSaleForm.get('GrvNo').touched">Required</span>
@@ -134,7 +135,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.GrvDate">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('GrvDate').valid" [ngClass]="{'has-error':itemSaleForm.get('GrvDate').invalid&&itemSaleForm.get('GrvDate').touched}">
-                                  <label class="col-sm-4 control-label" for="GrvDate">Grv Date</label>
+                                  <label class="col-sm-4 control-label" for="GrvDate">Grv Date<span *ngIf="ItemSaleValidation[1]?.GrvDate" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-8">
                                       <div class="row">
                                           <div class="col-md-10">
@@ -151,16 +152,16 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.Comments">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Comments').valid" [ngClass]="{'has-error':itemSaleForm.get('Comments').invalid&&itemSaleForm.get('Comments').touched}">
-                                  <label class="col-sm-4 control-label" for="Comments">Comments</label>
+                                  <label class="col-sm-4 control-label" for="Comments">Comments<span *ngIf="ItemSaleValidation[1]?.Comments" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="Comments" formControlName="Comments" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('Comments').invalid&&itemSaleForm.get('Comments').touched">Required</span>
                                   </div>
                               </div>
                           </div>
-                          <div *ngIf="ItemSaleValidation[0]?.Supplier_Id">
+                          <div *ngIf="ItemSaleValidation[0]?.LotNo">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('LotNo').valid" [ngClass]="{'has-error':itemSaleForm.get('LotNo').invalid&&itemSaleForm.get('LotNo').touched}">
-                                  <label class="col-sm-4 control-label" for="LotNo">Lot No</label>
+                                  <label class="col-sm-4 control-label" for="LotNo">Lot No<span *ngIf="ItemSaleValidation[1]?.LotNo" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="LotNo" formControlName="LotNo" type="text" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('LotNo').invalid&&itemSaleForm.get('LotNo').touched">Required</span>
@@ -174,15 +175,16 @@
                       <tr>
                           <th>Sl No</th>
                           <!-- <th>TransactionId</th> -->
-                          <th *ngIf="ItemSaleValidation[0]?.Item_Id">Item Name</th>
-                          <th *ngIf="ItemSaleValidation[0]?.Location_Id">Location</th>
-                          <th *ngIf="ItemSaleValidation[0]?.Quantity">Quantity</th>
-                          <th *ngIf="ItemSaleValidation[0]?.UnitCost">Unit Cost</th>
-                          <!-- <th>Unit Sale</th> -->
-                          <th *ngIf="ItemSaleValidation[0]?.DiscountRateTransaction">Discount Rate</th>
-                          <th *ngIf="ItemSaleValidation[0]?.DiscountAmount">Discount amount</th>
-                          <th *ngIf="ItemSaleValidation[0]?.Vat">Vat</th>
-                          <th *ngIf="ItemSaleValidation[0]?.TotalAmountTransaction">{{ItemSaleValidation[0]?.TotalAmountTransaction}}Total Amount</th>
+                          <th *ngIf="ItemSaleValidation[0]?.Item_Id">Item Name <span *ngIf="ItemSaleValidation[1]?.Item_Id" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.Location_Id">Location<span *ngIf="ItemSaleValidation[1]?.Location_Id" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.Quantity">Quantity<span *ngIf="ItemSaleValidation[1]?.Quantity" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.UnitCost">Unit Cost<span *ngIf="ItemSaleValidation[1]?.UnitCost" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.UnitSale">Unit Sale<span *ngIf="ItemSaleValidation[1]?.UnitSale" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.InStock">In Stock</th>
+                          <th *ngIf="ItemSaleValidation[0]?.DiscountRateTransaction">Discount Rate<span *ngIf="ItemSaleValidation[1]?.DiscountRateTransaction" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.DiscountAmount">Discount amount<span *ngIf="ItemSaleValidation[1]?.DiscountAmount" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.Vat">Vat<span *ngIf="ItemSaleValidation[1]?.Vat" style="color: red;margin-left: 10px; size: 15px">*</span></th>
+                          <th *ngIf="ItemSaleValidation[0]?.TotalAmountTransaction">Total Amount<span *ngIf="ItemSaleValidation[1]?.TotalAmountTransaction" style="color: red;margin-left: 10px; size: 15px">*</span></th>
                           <th >Action</th>
                       </tr>
                       <tr formArrayName="ItemTransactionList" *ngFor="let ItemTransaction of itemSaleForm.get('ItemTransactionList').controls;let i=index">
@@ -233,12 +235,17 @@
                                   <span class="help-block" *ngIf="ItemTransaction.get('UnitCost').errors?.required&&ItemTransaction.get('UnitCost').touched">skill name required</span>
                               </div>
                           </td>
-                          <!-- <td formGroupName="{{i}}">
+                          <td formGroupName="{{i}}" *ngIf="ItemSaleValidation[0]?.UnitSale">
                             <div [ngClass]="{'has-error':ItemTransaction.get('UnitSale').invalid&&ItemTransaction.get('UnitSale').touched}" >
                                     <input id="UnitSale{{i}}" formControlName="UnitSale" type="text" class="form-control">
                                     <span class="help-block" *ngIf="ItemTransaction.get('UnitSale').errors?.required&&ItemTransaction.get('UnitSale').touched">skill name required</span>
                                 </div>
-                            </td> -->
+                            </td>
+                            <td formGroupName="{{i}}" *ngIf="ItemSaleValidation[0]?.InStock">
+                                    <div >
+                                        <input id="InStock{{i}}" formControlName="InStock" type="text" class="form-control">
+                                    </div>
+                            </td>
                           <td formGroupName="{{i}}" *ngIf="ItemSaleValidation[0]?.DiscountRateTransaction">
                               <div [class.has-suucess]="ItemTransaction.get('DiscountRate').valid" [ngClass]="{'has-error':ItemTransaction.get('DiscountRate').invalid&&ItemTransaction.get('DiscountRate').touched}">
                                   <input (blur)="selectedFormControl(i)" id="DiscountRate{{i}}" formControlName="DiscountRate" type="number" class="form-control">
@@ -285,7 +292,7 @@
                       <div class="col-md-6">
                           <div *ngIf="ItemSaleValidation[0]?.QuantityGroup">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Quantity').valid" [ngClass]="{'has-error':itemSaleForm.get('Quantity').invalid&&itemSaleForm.get('Quantity').touched}">
-                                  <label class="col-sm-4 control-label" for="Quantity">Quantity</label>
+                                  <label class="col-sm-4 control-label" for="Quantity">Quantity<span *ngIf="ItemSaleValidation[1]?.QuantityGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="Quantity" formControlName="Quantity" type="number" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('Quantity').invalid&&itemSaleForm.get('Quantity').touched">
@@ -296,7 +303,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.DiscountRateGroup">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('DiscountRate').valid" [ngClass]="{'has-error':itemSaleForm.get('DiscountRate').invalid&&itemSaleForm.get('DiscountRate').touched}">
-                                  <label class="col-sm-4 control-label" for="DiscountRate">Discount Rate</label>
+                                  <label class="col-sm-4 control-label" for="DiscountRate">Discount Rate<span *ngIf="ItemSaleValidation[1]?.DiscountRateGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="DiscountRate" type="number" (blur)="slectedGroupControl()" formControlName="DiscountRate" class="form-control">
                                       <span *ngIf="itemSaleForm.get('DiscountRate').invalid&&itemSaleForm.get('DiscountRate').touched" class="help-block">
@@ -307,7 +314,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.DiscountAmountGroup">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('DiscountAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('DiscountAmount').invalid&&itemSaleForm.get('DiscountAmount').touched}">
-                                  <label class="col-sm-4 control-label" for="DiscountAmount">Discount Amount</label>
+                                  <label class="col-sm-4 control-label" for="DiscountAmount">Discount Amount<span *ngIf="ItemSaleValidation[1]?.DiscountAmountGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="DiscountAmount" formControlName="DiscountAmount" type="number" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('DiscountAmount').invalid&&itemSaleForm.get('DiscountAmount').touched">
@@ -318,7 +325,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.TotalAmountGroup">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('TotalAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched}">
-                                  <label class="col-sm-4 control-label" for="Vat">Total Amount</label>
+                                  <label class="col-sm-4 control-label" for="Vat">Total Amount<span *ngIf="ItemSaleValidation[1]?.TotalAmountGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="Vat" type="number" formControlName="TotalAmount" class="form-control">
                                       <span *ngIf="itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched" class="help-block">
@@ -329,7 +336,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.NetPaidAmount">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('NetPaidAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('NetPaidAmount').invalid&&itemSaleForm.get('NetPaidAmount').touched}">
-                                  <label class="col-sm-4 control-label" for="NetPaidAmount">Net Paid Amount</label>
+                                  <label class="col-sm-4 control-label" for="NetPaidAmount">Net Paid Amount<span *ngIf="ItemSaleValidation[1]?.NetPaidAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input id="NetPaidAmount" formControlName="NetPaidAmount" type="number" class="form-control">
                                       <span class="help-block" *ngIf="itemSaleForm.get('NetPaidAmount').invalid&&itemSaleForm.get('NetPaidAmount').touched">Required</span>
@@ -338,7 +345,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.PaymentMode">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('PaymentMode').valid" [ngClass]="{'has-error':itemSaleForm.get('PaymentMode').invalid&&itemSaleForm.get('PaymentMode').touched}">
-                                  <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode</label>
+                                  <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode<span *ngIf="ItemSaleValidation[1]?.PaymentMode" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <select id="Reason" formControlName="PaymentMode" class="form-control">
                                           <option value="0">SELECT</option>
@@ -352,7 +359,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.Ledger_Id">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Ledger_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Ledger_Id').invalid}">
-                                  <label class="col-sm-4 control-label" for="Ledger_Id">Ledger name</label>
+                                  <label class="col-sm-4 control-label" for="Ledger_Id">Ledger name<span *ngIf="ItemSaleValidation[1]?.Ledger_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input style="display: none;" class="form-control" formControlName="Ledger_Id">
                                       <app-ledger-dropdown (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" [ledgerSelectedItems]="ledgerSelectedItems">
@@ -363,7 +370,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.SubLedger_Id">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('SubLedger_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('SubLedger_Id').invalid}">
-                                  <label class="col-sm-4 control-label" for="SubLedger_Id">Subledger name</label>
+                                  <label class="col-sm-4 control-label" for="SubLedger_Id">Subledger name<span *ngIf="ItemSaleValidation[1]?.SubLedger_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input style="display: none;" class="form-control" formControlName="SubLedger_Id">
                                       <app-subledger-dropdown [ledgerId]="groupItem.Ledger_Id" (subledgerOnItemSelect)="subledgerOnSeletedItem($event)" [subledgerSelectedItems]="subledgerSelectedItems">
@@ -378,7 +385,7 @@
                   <div class="row">
                       <div class="col-md-4">
                           <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Approver_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Approver_Id').invalid&&itemSaleForm.get('Approver_Id').touched}">
-                              <label class="col-sm-4 control-label" for="Approver_Id">Approver</label>
+                              <label class="col-sm-4 control-label" for="Approver_Id">Approver<span *ngIf="ItemSaleValidation[1]?.Approver_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                               <div class="col-sm-8">
                                   <input id="Approver_Id" (blur)="save()" formControlName="Approver_Id" type="text" class="form-control">
                                   <span class="help-block" *ngIf="itemSaleForm.get('Approver_Id').invalid&&itemSaleForm.get('Approver_Id').touched">Required</span>

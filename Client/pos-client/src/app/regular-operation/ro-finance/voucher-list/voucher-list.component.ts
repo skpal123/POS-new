@@ -12,6 +12,7 @@ import { SubledgerTransactionComponent } from '../subledger-transaction/subledge
 import { SubledgerTransaction } from '../../../models/regular-operation/finance/subledger-transaction.model';
 import { PostLoginService } from '../../../services/common/post-login.service';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
+import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 
 @Component({
   selector: 'app-voucher-list',
@@ -19,6 +20,9 @@ import { UserFormControl } from '../../../models/common/user-form-control.model'
   styleUrls: ['./voucher-list.component.css']
 })
 export class VoucherListComponent implements OnInit {
+  columnReady:boolean=false;
+  dataReady:boolean=false;
+  reload:boolean=false;
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
   userControlList:UserFormControl[]=[];
@@ -45,6 +49,7 @@ export class VoucherListComponent implements OnInit {
   constructor(private _accountService:AccountsService,
     private matDialog:MatDialog,
     private _loginService:PostLoginService,
+    private _customDatatableService:CustomDatatableService,
     private _alertBox:AlertBoxService) { }
   ngOnInit() {
     this.getVoucherList();
@@ -53,7 +58,7 @@ export class VoucherListComponent implements OnInit {
   }
   getVoucherList(){
     this._accountService.getVoucherList().subscribe(response=>{
-      this.voucherList=response.json();
+      this.voucherList=response
       this.voucherList.forEach((voucher,index,array)=>{
         voucher.Status=voucher.VoucherStatus;
         voucher.VStatus=voucher.VoucherStatus==true?"Approved":"Not Aprroved";
@@ -62,10 +67,12 @@ export class VoucherListComponent implements OnInit {
         voucher.VoucherType=="6"?"JV":"Contra"
       });
       this.DataList=this.voucherList;
+      this.reload=true;
+      this.dataReady=true;
+      this._customDatatableService.DataList=this.voucherList;
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -87,7 +94,7 @@ export class VoucherListComponent implements OnInit {
   getVoucherDetails($data){
     debugger
       this._accountService.getVoucherDetailsById($data).subscribe(response=>{
-        this.voucher=response.json();
+        this.voucher=response
         console.log(this.voucher)
         const dialogRef=this.matDialog.open(AddVoucherDialogComponent,{
           data:this.voucher,
@@ -101,20 +108,20 @@ export class VoucherListComponent implements OnInit {
           }
         })
       },error=>{
-        let message=error.json();
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
   }
   getUserFormControlByFormName(){
     this._loginService.getUserFormControlByFormName('voucher-list').subscribe(response=>{
-      this.userControlList=response.json();
+      this.userControlList=response
       this.columnlist=this.userControlList;
+      this.columnReady=true;
+      this._customDatatableService.ColumnList=this.userControlList;
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -154,7 +161,7 @@ export class VoucherListComponent implements OnInit {
   }
   deleteVoucher($event){
     this._accountService.deleteVoucher($event).subscribe(response=>{
-     let result=response.json();
+     let result=response
       if(result){
         let dialogData=new DialogData();
         dialogData.message="Delete voucher succesfully";
@@ -162,9 +169,8 @@ export class VoucherListComponent implements OnInit {
         this.getVoucherList();
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

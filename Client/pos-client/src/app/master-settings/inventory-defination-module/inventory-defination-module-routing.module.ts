@@ -14,6 +14,7 @@ import { SupplierListComponent } from './supplier-list/supplier-list.component';
 import { PartyListComponent } from './party-list/party-list.component';
 import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
+import { SettingPriceComponent } from './setting-price/setting-price.component';
 
 const routes: Routes = [
   {
@@ -29,7 +30,8 @@ const routes: Routes = [
       {path:'add-supplier',component:SupplierListComponent},
       {path:'add-party',component:PartyListComponent},
       {path:'add-manufacture',component:ManufactureListComponent},
-      {path:'add-customer',component:CustomerListComponent}
+      {path:'add-customer',component:CustomerListComponent},
+      {path:'setting-price',component:SettingPriceComponent}
     ]
 
   }

@@ -1,53 +1,65 @@
 import { Injectable } from '@angular/core';
-import {HttpClient,HttpHeaders,HttpRequest} from '@angular/common/http'
+import {HttpClient,HttpHeaders,HttpRequest, HttpErrorResponse} from '@angular/common/http'
 import { Http } from '@angular/http';
 import { SessionService } from '../common/session.service';
 import { DefaultRouteService } from '../common/default-route.service';
 import { GroupItem } from '../../models/regular-operation/inventory/group-item.model';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
-  constructor(private _http:Http,
+  constructor(
     private _defaultRoute:DefaultRouteService,
-    private _httpClient:HttpClient,
-    private _sessionService:SessionService) 
+    private _httpClient:HttpClient) 
     { }
-    setCustomHeader():HttpHeaders{
-      let header =new HttpHeaders();
-      header.append('Content-Type', 'application/json');
-      header.append('sessionId', this._sessionService.SessionId);
-      header.append("UserId",this._sessionService.User_Id);
-      return header;
-    }
     public getGroupItemList(transactionType:string){
       var url=this._defaultRoute.InventoryService+'GroupItems/'+transactionType;
-      let headers =  this.setCustomHeader();
-      headers.append('ActionName', 'get');  
-      return this._httpClient.get(url,{headers:headers})
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
     }
     public saveGroupItem(groupItem:GroupItem){
       var url=this._defaultRoute.InventoryService+'GroupItem';
-      let headers =  this.setCustomHeader();
-      headers.append('ActionName', 'POST');  
-      return this._httpClient.post(url,groupItem,{headers:headers})
+      return this._httpClient.post<boolean>(url,groupItem).pipe(
+        catchError(this.handleError)
+      )
     }
     public UpdateGroupItem(groupItem:GroupItem){
       var url=this._defaultRoute.InventoryService+'GroupItem/'+groupItem.Id;
-      let headers =  this.setCustomHeader();
-      headers.append('ActionName', 'get');  
-      return this._httpClient.put(url,groupItem,{headers:headers})
+      return this._httpClient.put<boolean>(url,groupItem).pipe(
+        catchError(this.handleError)
+      )
     }
     public getGroupItemById(Id:string){
       var url=this._defaultRoute.InventoryService+'GroupItem/'+Id;
-      let headers =  this.setCustomHeader();
-      headers.append('ActionName', 'get');  
-      return this._httpClient.get(url,{headers:headers})
+      return this._httpClient.get<GroupItem>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public gettemStockByLocationAndItemId(itemId:string,locationId:string){
+      var url=this._defaultRoute.InventoryService+'getItemStock/'+itemId+'/'+locationId;
+      return this._httpClient.get<number>(url).pipe(
+        catchError(this.handleError)
+      )
     }
     public deleteGroupItem(Id:string){
       var url=this._defaultRoute.InventoryService+'GroupItem/'+Id;
-      let headers =  this.setCustomHeader();
-      headers.append('ActionName', 'get');  
-      return this._httpClient.delete(url,{headers:headers})
+      return this._httpClient.delete<boolean>(url).pipe(
+        catchError(this.handleError)
+      )
     }
+    private handleError(error: HttpErrorResponse) {
+      if (error.error instanceof ErrorEvent) {
+        console.error('An error occurred:', error.error.message);
+        return throwError(error.error.message) 
+      } 
+      else 
+      {
+        let message=error.error.Message;       
+        return throwError(message+'<br/>'+error.message) 
+      }
+      // return an observable with a user-facing error message
+    };
 }
