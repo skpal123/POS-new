@@ -14,7 +14,7 @@ namespace ERPWebApiService.Authentication
 {
     public static class SecurityServices
     {
-        public static SumonERPContext ErpContext = new SumonERPContext();
+        public static SumonEComerceERPContext ErpContext = new SumonEComerceERPContext();
         private static readonly TimeSpan? DefaultSessionTimeout = null;
 
         private static readonly ISessionManager<UserSession> UserSessionManager;

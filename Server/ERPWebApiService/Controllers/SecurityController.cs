@@ -20,7 +20,7 @@ namespace ERPWebApiService.Controllers
     public class SecurityController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
-        SumonERPContext ErpContext = new SumonERPContext();
+        SumonEComerceERPContext ErpContext = new SumonEComerceERPContext();
 
         [Route("login/{UserName}/{Password}")]
         [HttpGet]
@@ -92,7 +92,7 @@ namespace ERPWebApiService.Controllers
             try
             {
                 Guid? loggedsession_id = null;
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SumonERPContext"].ConnectionString.ToString()))
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     var sql = "select session_id from sessionManagements where user_id='" + user_id + "' and Password ='" + pass + "'";
                     SqlCommand cmd = new SqlCommand(sql, con);
@@ -394,8 +394,7 @@ namespace ERPWebApiService.Controllers
         public List<ModuleView> getModules()
         {
             List<ModuleView> modules = new List<ModuleView>();
-            ConnectionString conString = new ConnectionString();
-            using (SqlConnection con = new SqlConnection(conString.getConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(@"select distinct mo.Id,mo.Name,mo.RouterPath,mo.SequencesId from RolePermissions rp
                     inner join Permissions p on rp.Permission_Id=p.Id
@@ -420,7 +419,6 @@ namespace ERPWebApiService.Controllers
         public List<MenuView> getMenus(int? ModuleSeqId)
         {
             List<MenuView> menuViews = new List<MenuView>();
-            ConnectionString conString = new ConnectionString();
             StringBuilder sb = new StringBuilder();
             sb.Append(@"select distinct m.Id,m.Name,m.RouterPath,m.MenuSqenceId,m.ModuleSeqId,m.ImagePath  from RolePermissions rp 
                 inner join Permissions p on rp.Permission_Id=p.Id
@@ -430,7 +428,7 @@ namespace ERPWebApiService.Controllers
             if(ModuleSeqId!=null){
                 sb.Append("where m.ModuleSeqId=" + ModuleSeqId + "");
             }
-            using (SqlConnection con = new SqlConnection(conString.getConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(sb.ToString(), con);
                 con.Open();
@@ -452,7 +450,6 @@ namespace ERPWebApiService.Controllers
         public List<SubMenuView> getSubMenus(int? MenuSeqId)
         {
             List<SubMenuView> submenus = new List<SubMenuView>();
-            ConnectionString conString = new ConnectionString();
              StringBuilder sb = new StringBuilder();
             sb.Append(@"select distinct m.Id,sm.Name,sm.RouterPath,sm.SubMenuSqId,sm.MenuSqId,sm.ItemName  from RolePermissions rp 
                 inner join Permissions p on rp.Permission_Id=p.Id
@@ -462,7 +459,7 @@ namespace ERPWebApiService.Controllers
             if(MenuSeqId!=null){
                 sb.Append(" where sm.MenuSqId=" + MenuSeqId + "");
             }
-            using (SqlConnection con = new SqlConnection(conString.getConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(sb.ToString(), con);
                 con.Open();

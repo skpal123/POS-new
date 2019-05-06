@@ -5,11 +5,11 @@ using System.Web;
 using System.Configuration;
 namespace ERPWebApiService.DataConnection
 {
-    public class ConnectionString
+    public static class ConnectionString
     {
-        public string getConnectionString()
+        public static string getConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["SumonERPContext"].ConnectionString.ToString();
+            return ConfigurationManager.ConnectionStrings["SumonEComerceERPContext"].ConnectionString.ToString();
         }
     }
 }

@@ -7,16 +7,20 @@ using System.Net.Http;
 using System.Web.Http;
 using ERP.DataService.Model;
 using ViewModel.Model;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using ERPWebApiService.Authentication;
 using System.Data.SqlClient;
 using ERPWebApiService.DataConnection;
 using ERPWebApiService.Autentication;
+using ERP.DataService.Model.Model;
+using System.Data;
 namespace ERPWebApiService.Controllers
 {
      [RoutePrefix("api/AdministrationService")]
     public class AdministrationController : ApiController
     {
-        SumonERPContext ERPContext = new SumonERPContext();
+        SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
         [Route("getModules")]
         [HttpGet]
         public HttpResponseMessage getModules()
@@ -27,7 +31,7 @@ namespace ERPWebApiService.Controllers
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    RouterPath = x.RouterPath,
+                    //RouterPath = x.RouterPath,
                     SequenceId = x.SequencesId
                 }).OrderBy(x => x.Name).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, modules);
@@ -103,7 +107,7 @@ namespace ERPWebApiService.Controllers
                 {
                     Id=x.Id,
                     Name=x.Name,
-                    RouterPath=x.RouterPath,
+                    //RouterPath=x.RouterPath,
                     SequenceId=x.SequencesId,
                     Menus = ERPContext.Menus.Where(y => y.Module_Id == x.Id).Select(y=>new MenuView
                     {
@@ -141,16 +145,55 @@ namespace ERPWebApiService.Controllers
             try
             {
                 List<PermissionView> permissions = new List<PermissionView>();
-                ConnectionString conString = new ConnectionString();
-                using(SqlConnection con=new SqlConnection(conString.getConnectionString()))
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd = new SqlCommand("select * from func_getPermissionTreeSubmenusByRoleId('8293AA03-0079-481B-9ADC-8B253577D116',null) order by SequencesId,MenuSqenceId,SubMenuSqId", con);
+                    SqlCommand cmd = new SqlCommand("select * from func_getPermissionTree() order by SequencesId,MenuSqenceId,SubMenuSqId", con);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
                         PermissionView permission = new PermissionView();
-                        permission.Id = Guid.Parse(rdr["PermissionId"].ToString());
+                        permission.PermissionId = Guid.Parse(rdr["PermissionId"].ToString());
+                        permission.ModuleId = Guid.Parse(rdr["ModuleId"].ToString());
+                        permission.MenuId = Guid.Parse(rdr["MenuId"].ToString());
+                        permission.SubmenuId = Guid.Parse(rdr["SubmenuId"].ToString());
+                        permission.ModuleName = rdr["ModuleName"].ToString();
+                        permission.MenuName = rdr["MenuName"].ToString();
+                        permission.SubMenuName = rdr["SubmenuName"].ToString();
+                        permission.ModuleSeqId = Convert.ToInt32(rdr["SequencesId"]);
+                        permission.MenuSeqId = Convert.ToInt32(rdr["MenuSqenceId"]);
+                        permission.SubmenuSeqId = Convert.ToInt32(rdr["SubMenuSqId"]);
+                        permission.PermissionName = rdr["PermissionName"].ToString();
+                        permission.IsPermission = Convert.ToBoolean(rdr["IsCheck"]);
+                        permissions.Add(permission);
+                    }
+                }
+
+                var newPermissions = getNewPermissionTree(permissions);
+                return Request.CreateResponse(HttpStatusCode.OK, newPermissions);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+        [Route("getRolePermissionsByRoleId/{roleId}")]
+        [HttpGet]
+        public HttpResponseMessage GetRolePermissionsByRoleId(Guid roleId)
+        {
+            try
+            {
+                List<PermissionView> permissions = new List<PermissionView>();
+                using(SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("select * from func_getPermissionTreeByRoleId('"+roleId+"') order by SequencesId,MenuSqenceId,SubMenuSqId", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        PermissionView permission = new PermissionView();
+                        permission.PermissionId = Guid.Parse(rdr["PermissionId"].ToString());
                         permission.ModuleId = Guid.Parse(rdr["ModuleId"].ToString());
                         permission.MenuId = Guid.Parse(rdr["MenuId"].ToString());
                         permission.SubmenuId = Guid.Parse(rdr["SubmenuId"].ToString());
@@ -166,15 +209,7 @@ namespace ERPWebApiService.Controllers
                     }
                 }
 
-                var newPermissions = permissions.DistinctBy(x=>x.ModuleName).Select(x => new PermissionTree
-                {
-                    Id = x.ModuleId,
-                    Name = x.ModuleName,
-                    IsClicked = false,
-                    Status = false,
-                    Checked = x.IsPermission,
-                    Children = buildMenuPermissionTree(permissions,x.ModuleSeqId)
-                }).ToList();
+                var newPermissions = getNewPermissionTree(permissions);
                 return Request.CreateResponse(HttpStatusCode.OK, newPermissions);
             }
             catch (Exception ex)
@@ -182,6 +217,20 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
 
+        }
+        private List<PermissionTree> getNewPermissionTree(List<PermissionView> newPermission)
+        {
+            return newPermission.DistinctBy(x => x.ModuleName).Select(x => new PermissionTree
+            {
+                Id = x.ModuleId,
+                Name = x.ModuleName,
+                IsClicked = false,
+                Status = true,
+                Checked = x.IsPermission,
+                IsLeaf=false,
+                Level=1,
+                Children = buildMenuPermissionTree(newPermission, x.ModuleSeqId)
+            }).ToList();
         }
         private List<PermissionTree> buildMenuPermissionTree(List<PermissionView> permissions, int moduleSeqId)
         {
@@ -191,8 +240,10 @@ namespace ERPWebApiService.Controllers
                 Id = x.MenuId,
                 Name = x.MenuName,
                 IsClicked = false,
-                Status = false,
+                Status = true,
                 Checked = x.IsPermission,
+                IsLeaf=false,
+                Level=2,
                 Children = buildSubMenuPermissionTree(permissions, x.MenuSeqId)
             }).ToList();
             return newPermissions;
@@ -205,8 +256,10 @@ namespace ERPWebApiService.Controllers
                 Id = x.SubmenuId,
                 Name = x.SubMenuName,
                 IsClicked = false,
-                Status = false,
+                Status = true,
                 Checked = x.IsPermission,
+                IsLeaf=false,
+                Level=3,
                 Children = buildPermissionTree(permissions, x.SubmenuSeqId)
             }).ToList();
             return newPermissions;
@@ -218,43 +271,17 @@ namespace ERPWebApiService.Controllers
                 Id = x.PermissionId,
                 Name = x.PermissionName,
                 IsClicked = false,
-                Status = false,
+                IsLeaf=true,
+                Status = true,
+                Level=4,
                 Checked = x.IsPermission
             }).ToList();
             return newPermissions;
         }
-//        public List<PermissionTree> getMenusPermissionTree()
-//        {
-//            List<PermissionTree> menuViews = new List<PermissionTree>();
-//            ConnectionString conString = new ConnectionString();
-//            using(SqlConnection con=new SqlConnection(conString.getConnectionString()))
-//            {
-//                SqlCommand cmd = new SqlCommand(@"select distinct m.Id,m.Name,m.RouterPath,m.MenuSqenceId,m.ModuleSeqId,m.ImagePath  from RolePermissions rp 
-//                inner join Permissions p on rp.Permission_Id=p.Id
-//                inner join SubMenus sm on p.SubMenu_id=sm.Id
-//                inner join Menus m on sm.Menu_Id=m.Id
-//                inner join Modules mo on m.Module_Id=mo.Id", con);
-//                con.Open();
-//                SqlDataReader rdr = cmd.ExecuteReader();
-//                while (rdr.Read())
-//                {
-//                    MenuView menu = new MenuView();
-//                    menu.Id = Guid.Parse(rdr["Id"].ToString());
-//                    menu.Name = rdr["Name"].ToString();
-//                    menu.RouterPath = rdr["RouterPath"].ToString();
-//                    menu.MenuSqenceId = Convert.ToInt32(rdr["MenuSqenceId"]);
-//                    menu.ModuleSeqId = Convert.ToInt32(rdr["ModuleSeqId"]);
-//                    menu.SubMenus = getSubMenus(menu.MenuSqenceId);
-//                    menuViews.Add(menu);
-//                }
-//            }
-//            return menuViews;
-//        }
         public List<SubMenuView> getSubMenus(int? MenuSeqId)
         {
             List<SubMenuView> submenus = new List<SubMenuView>();
-            ConnectionString conString = new ConnectionString();
-            using (SqlConnection con = new SqlConnection(conString.getConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(@"select distinct m.Id,sm.Name,sm.RouterPath,sm.SubMenuSqId,sm.MenuSqId,sm.ItemName  from RolePermissions rp 
                 inner join Permissions p on rp.Permission_Id=p.Id
@@ -279,8 +306,7 @@ namespace ERPWebApiService.Controllers
         public List<MenuView> getMenus(int ModuleSeqId)
         {
             List<MenuView> menuViews = new List<MenuView>();
-            ConnectionString conString = new ConnectionString();
-            using (SqlConnection con = new SqlConnection(conString.getConnectionString()))
+            using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand(@"select distinct m.Id,m.Name,m.RouterPath,m.MenuSqenceId,m.ModuleSeqId,m.ImagePath  from RolePermissions rp 
                 inner join Permissions p on rp.Permission_Id=p.Id
@@ -302,6 +328,111 @@ namespace ERPWebApiService.Controllers
                 }
             }
             return menuViews;
+        }
+        [Route("getRules")]
+        [HttpGet]
+        public HttpResponseMessage GetRoleList()
+        {
+            List<RoleInfo> roleList = new List<RoleInfo>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select * from Roles", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        RoleInfo role = new RoleInfo();
+                        role.Id = Guid.Parse(rdr["Id"].ToString());
+                        role.RoleName = rdr["RoleName"].ToString();
+                        role.Description = rdr["Description"].ToString();
+                        role.Status =Convert.ToBoolean( rdr["Status"].ToString());
+                        roleList.Add(role);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, roleList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+           
+        }
+        [Route("getRuleControl/{formName}")]
+        [HttpGet]
+        public HttpResponseMessage GetRoleControlList(string formName)
+        {
+            try
+            {
+                var roleControlList = ERPContext.RoleControls.Where(x=>x.FormName==formName).Select(x => new RoleControlView()
+                {
+                    Id=x.Id,
+                    Name=x.Name,
+                    Label=x.Label,
+                    Status=x.Status,
+                    FormName=x.FormName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, roleControlList);
+            }
+            catch(Exception ex){
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            } 
+        }
+        [Route("saveRolePermission")]
+        [HttpPost]
+        public HttpResponseMessage SaveRolePermission(RolePermissionDataInfo rolePermissionDataInfo)
+        {
+            try
+            {
+                DataTable rolePermissionTable = new DataTable();
+                rolePermissionTable.Columns.Add("Id", typeof(Guid));
+                rolePermissionTable.Columns.Add("Role_Id", typeof(Guid));
+                rolePermissionTable.Columns.Add("Permission_Id", typeof(Guid));
+                var role = ERPContext.Roles.FirstOrDefault(x => x.Id == rolePermissionDataInfo.roleInfo.Id);
+                if (role == null)
+                {
+                    var newRole = new Role()
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleName = rolePermissionDataInfo.roleInfo.RoleName,
+                        Description = rolePermissionDataInfo.roleInfo.Description,
+                        Status = true
+                    };
+                    ERPContext.Roles.AddOrUpdate(newRole);
+                    ERPContext.SaveChanges();                  
+                    if (rolePermissionDataInfo.RolePermissionList.Any())
+                    {
+                       
+                        foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
+                        {
+                            rolePermissionTable.Rows.Add(Guid.NewGuid(), newRole.Id, rolePermissionInfo.PermissionId);                         
+                        }
+                    }
+                }
+                else
+                {                 
+                    if (rolePermissionDataInfo.RolePermissionList.Any())
+                    {
+                        if (role != null)
+                        {
+                            ERPContext.Database.ExecuteSqlCommand("delete from RolePermissions where role_id='" + role.Id + "'");
+                        }
+                        foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
+                        {
+                            rolePermissionTable.Rows.Add(Guid.NewGuid(), role.Id, rolePermissionInfo.PermissionId);
+                        }
+                    }
+                }
+                Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                paramlist.Add("@typeRolePermission", rolePermissionTable);
+                DatabaseCommand.ExcuteObjectNonQuery("proc_saveRolePermission", paramlist, "procedure");
+               return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

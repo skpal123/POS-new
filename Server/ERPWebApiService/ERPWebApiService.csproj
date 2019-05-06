@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Connection\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -167,10 +168,15 @@
     <Compile Include="Authentication\SessionInfo.cs" />
     <Compile Include="Authentication\UserSession.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\DropdownController.cs" />
+    <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DataConnection\ConnectionString.cs" />
+    <Compile Include="DataConnection\DatabaseCommand.cs" />
     <Compile Include="Exceptions\InvalidSessionFailure.cs" />
     <Compile Include="Exceptions\SessionCreationFailure.cs" />
     <Compile Include="Global.asax.cs">
