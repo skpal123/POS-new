@@ -3,15 +3,25 @@
       <div class="panel panel-success">
         <div class="panel-heading">
           <h5> Sub Category entry
-              <button type="button" class="close pull-right" (click)="onNoClick()">&times;</button>
+              <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
           </h5>
         </div>
         <div class="panel-body">
           <form #subcategoryForm="ngForm">
               <div class="form-group row">
                   <label for="categoryId" class="col-sm-3 col-form-label">Category Name</label>
-                  <div class="col-sm-9" >
-                     <app-category-dropdown (categoryOnItemSelect)="OnSeletedItem($event)" (categoryOnItemDeSelect)="OnDeSeletedItem($event)" [categorySelectedItems]="categorySelectedItems"></app-category-dropdown> 
+                  <div class="col-sm-8" >
+                     <app-category-dropdown 
+                     (categoryOnItemSelect)="OnSeletedItem($event)" 
+                     (categoryOnItemDeSelect)="OnDeSeletedItem($event)" 
+                     [IsNewCategoryAdd]="categoryNew"
+                     [categorySelectedItems]="categorySelectedItems">
+                    </app-category-dropdown> 
+                  </div>
+                  <div class="col-sm-1">
+                      <span class="pull-right" (click)="createNewCategory()" id="pointer">
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                        </span>
                   </div>
                 </div>
                 <div class="form-group row" [class.has-success]="subcategoryIdControl.valid" [class.has-error]="subcategoryIdControl.invalid&&subcategoryIdControl.touched">

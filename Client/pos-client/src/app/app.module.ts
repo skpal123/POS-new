@@ -15,8 +15,12 @@ const routes:Routes=[
     loadChildren: 'src/app/login/login.module#LoginModule'  
   },
   {
+    path: 'ecommerce',
+    loadChildren: 'src/app/ecommerce-module/ecommerce-module.module#EcommerceModuleModule'  
+  },
+  {
     path: '',  
-    redirectTo: 'login',
+    redirectTo: 'ecommerce',
     pathMatch: 'full'
   }
 ]

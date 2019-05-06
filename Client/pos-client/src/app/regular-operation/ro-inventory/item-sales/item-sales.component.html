@@ -4,8 +4,8 @@
           <div class="panel panel-primary">
               <div class="panel-heading" style="height: 40px;">
                   <h4 style="text-align: center"> Sales form
-                    <span (click)="controlGroupItemForm()" title="view from control" id="pointer" class="pointer glyphicon glyphicon-plus pull-left" aria-hidden="true"></span>
-                     <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+                        <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px" width="30px" src="./assets/Img/settings.png"></span>
+                        <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
                   </h4>
               </div>
               <div class="panel-body">
@@ -185,8 +185,8 @@
                           <th *ngIf="ItemSaleValidation[0]?.DiscountAmount">Discount amount<span *ngIf="ItemSaleValidation[1]?.DiscountAmount" style="color: red;margin-left: 10px; size: 15px">*</span></th>
                           <th *ngIf="ItemSaleValidation[0]?.Vat">Vat<span *ngIf="ItemSaleValidation[1]?.Vat" style="color: red;margin-left: 10px; size: 15px">*</span></th>
                           <th *ngIf="ItemSaleValidation[0]?.TotalAmountTransaction">Total Amount<span *ngIf="ItemSaleValidation[1]?.TotalAmountTransaction" style="color: red;margin-left: 10px; size: 15px">*</span></th>
-                          <th >Action</th>
-                      </tr>
+                          <th >{{itemSaleForm.get('ItemTransactionList')?.length>1?'Add/Delete':'Action'}}</th>
+                        </tr>
                       <tr formArrayName="ItemTransactionList" *ngFor="let ItemTransaction of itemSaleForm.get('ItemTransactionList').controls;let i=index">
                           <td>{{i+1}}</td>
                           <!-- <td formGroupName="{{i}}">

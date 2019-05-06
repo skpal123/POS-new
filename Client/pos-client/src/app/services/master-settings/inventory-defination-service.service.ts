@@ -54,7 +54,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateLocation(location:InventoryLocation){
     var url=this._defaultRoute.InventoryService+'location';
-    return this._httpClient.post(url,location)
+    return this._httpClient.post<InventoryLocation>(url,location)
     .pipe(
       catchError(this.handleError)
     )
@@ -86,7 +86,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateUnit(unit:Unit){
     var url=this._defaultRoute.InventoryService+'unit';
-    return this._httpClient.post(url,unit).pipe(
+    return this._httpClient.post<Unit>(url,unit).pipe(
       catchError(this.handleError)
     )
   }
@@ -116,7 +116,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateCategory(category:Category){
     var url=this._defaultRoute.InventoryService+'category';
-    return this._httpClient.post(url,category).pipe(
+    return this._httpClient.post<Category>(url,category).pipe(
       catchError(this.handleError)
     )
   }
@@ -145,7 +145,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateSubCategory(subcategory:Subcategory){
     var url=this._defaultRoute.InventoryService+'subcategory';
-    return this._httpClient.post(url,subcategory).pipe(
+    return this._httpClient.post<Subcategory>(url,subcategory).pipe(
       catchError(this.handleError)
     )
   }
@@ -177,7 +177,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateInventoryItem(inventoryItem:InventoryItem){
     var url=this._defaultRoute.InventoryService+'InventoryItem';
-    return this._httpClient.post(url,inventoryItem).pipe(
+    return this._httpClient.post<InventoryItem>(url,inventoryItem).pipe(
       catchError(this.handleError)
     )
   }
@@ -207,7 +207,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateSupplier(supplier:Supplier){
     var url=this._defaultRoute.InventoryService+'Supplier';
-    return this._httpClient.post(url,supplier).pipe(
+    return this._httpClient.post<Supplier>(url,supplier).pipe(
       catchError(this.handleError)
     )
   }
@@ -237,7 +237,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateManufacture(manufacture:Manufacture){
     var url=this._defaultRoute.InventoryService+'Manufacture';
-    return this._httpClient.post(url,manufacture).pipe(
+    return this._httpClient.post<Manufacture>(url,manufacture).pipe(
       catchError(this.handleError)
     )
   }
@@ -267,7 +267,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateParty(party:Party){
     var url=this._defaultRoute.InventoryService+'Party';
-    return this._httpClient.post(url,party).pipe(
+    return this._httpClient.post<Party>(url,party).pipe(
       catchError(this.handleError)
     )
   }
@@ -297,7 +297,7 @@ export class InventoryDefinationServiceService {
   }
   public CreateCustomer(customer:Customer){
     var url=this._defaultRoute.InventoryService+'Customer';
-    return this._httpClient.post(url,customer).pipe(
+    return this._httpClient.post<Customer>(url,customer).pipe(
       catchError(this.handleError)
     )
   }

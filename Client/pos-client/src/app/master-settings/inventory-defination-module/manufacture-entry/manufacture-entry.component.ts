@@ -51,7 +51,7 @@ saveManufacture(){
     this._inventotyDefinationService.UpdateManufacture(this.manufacture).subscribe(response=>{
       let result=response
       if(result){
-        this.matDialogRef.close(true);
+        this.matDialogRef.close(response);
         let dialogData=new DialogData();
         dialogData.message="Update successfully";
         this._alertBox.openDialog(dialogData);

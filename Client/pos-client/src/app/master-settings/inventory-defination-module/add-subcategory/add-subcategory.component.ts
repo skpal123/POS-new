@@ -1,12 +1,14 @@
 import { Component, OnInit,ViewChild ,Inject} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import { Subcategory } from '../../../models/master-settings/inventory-defination/subcategory.model';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { NewDropdownDataService } from '../../../common-module/new-dropdown-data.service';
+import { Category } from '../../../models/master-settings/inventory-defination/category.model';
+import { AddCategoryComponent } from '../add-category/add-category.component';
 
 @Component({
   selector: 'app-add-subcategory',
@@ -17,10 +19,12 @@ export class AddSubcategoryComponent implements OnInit {
   @ViewChild('subcategoryForm') subcategoryForm:NgForm
   categorySelectedItems :MultiSelectDropdown[]= [
   ];
+  categoryNew:boolean=false;
+  category:Category={Id:null,CategoryId:null,CategoryName:null}
   constructor(public matDialogRef:MatDialogRef<AddSubcategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public subcategory:Subcategory,
   private _alertBox:AlertBoxService,
-  private _newDropdownData:NewDropdownDataService,
+  private matDialog:MatDialog,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
 
@@ -48,7 +52,7 @@ export class AddSubcategoryComponent implements OnInit {
       this._inventotyDefinationService.CreateSubCategory(this.subcategory).subscribe(response=>{
         let result=response
         if(result){
-          this.matDialogRef.close(true);
+          this.matDialogRef.close(response);
           let dialogData=new DialogData();
           dialogData.message="Save successfully";
           this._alertBox.openDialog(dialogData);
@@ -92,5 +96,27 @@ export class AddSubcategoryComponent implements OnInit {
     this.subcategory.SubCategoryName=null;
     this.subcategory.Category_Id=null;
     this.subcategoryForm.reset();
+  }
+  createNewCategory(){
+    this.clearCategory();
+    this.categoryNew=false;
+     const dialogRef=this.matDialog.open(AddCategoryComponent,{
+       data:this.category,
+       disableClose:true,
+       height:window.screen.height*.6+'px',
+       width:window.screen.width*.4+'px'
+     });
+     dialogRef.afterClosed().subscribe((result:Category)=>{
+       if(result){
+         this.categoryNew=true;
+         this.categorySelectedItems=[];
+         this.categorySelectedItems.push({id:result.Id,itemName:result.CategoryId+'-'+result.CategoryName})
+       }
+     })
+   }
+   clearCategory(){
+    this.category.Id=null;
+    this.category.CategoryId=null;
+    this.category.CategoryName=null;
   }
 }

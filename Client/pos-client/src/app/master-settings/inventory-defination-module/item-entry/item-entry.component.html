@@ -3,7 +3,7 @@
     <div class="panel panel-success">
       <div class="panel-heading">
         <h5> Item entry
-            <button type="button" class="close pull-right" (click)="onNoClick()">&times;</button>
+            <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
         </h5>
       </div>
       <div class="panel-body">
@@ -51,7 +51,9 @@
                     </span>  
                   </div>
                   <div class="col-md-1">
-                      <span id="pointer" (click)="createNewCategory()" class="glyphicon glyphicon-plus"></span>
+                      <span id="pointer" (click)="createNewCategory()">
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                      </span>
                   </div>
                 </div>
                 <div class="form-group row" *ngIf="itemValidation[0]?.SubCategory_Id" [class.has-success]="subcategoryIdControl.valid" [class.has-error]="subcategoryIdControl.invalid&&subcategoryTouch">
@@ -69,7 +71,9 @@
                     </span>  
                   </div>
                   <div class="col-md-1">
-                      <span id="pointer" (click)="createNewSubCategory()" class="glyphicon glyphicon-plus"></span>
+                      <span id="pointer" (click)="createNewSubCategory()" >
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                      </span>
                     </div>
                 </div>
                 <div class="form-group row" *ngIf="itemValidation[0]?.UnitId" [class.has-success]="unitIdControl.valid" [class.has-error]="unitIdControl.invalid&&unitTouch">
@@ -87,7 +91,9 @@
                     </span>  
                   </div>
                   <div class="col-md-1">
-                      <span id="pointer" (click)="createNewUnit()" class="glyphicon glyphicon-plus"></span>
+                      <span id="pointer" (click)="createNewUnit()" >
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                      </span>
                     </div>
                 </div>
                 <div class="form-group row" *ngIf="itemValidation[0]?.Ledger_Id" [class.has-success]="ledgerIdControl.valid" [class.has-error]="ledgerIdControl.invalid&&ledgerTouch">
@@ -96,7 +102,7 @@
                       <input style="display: none;" class="form-control" [required]="itemValidation[0]?.Ledger_Id&&itemValidation[1]?.Ledger_Id" name="ledgerIdControl" #ledgerIdControl="ngModel" [(ngModel)]="item.Ledger_Id">
                      <app-ledger-dropdown (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" [ledgerSelectedItems]="ledgerSelectedItems"></app-ledger-dropdown> 
                      <span class="help-block" *ngIf="ledgerIdControl.errors?.required&&ledgerTouch">
-                        Unit name is required
+                        Ledger name is required
                     </span> 
                   </div>
                 </div>

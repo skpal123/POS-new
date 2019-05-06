@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5> Code format
+            <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <form [formGroup]="codeFormaterForm">
+              <div class="form-group row"  [class.has-success]="codeFormaterForm.get('Name').valid" [ngClass]="{'has-error':codeFormaterForm.get('Name').invalid&&codeFormaterForm.get('Name').touched}">
+                  <label for="Name" class="col-sm-4 col-form-label">Name</label>
+                  <div class="col-sm-7" >
+                      <input id="Name" class="form-control" type="text" formControlName="Name">
+                      <span class="help-block" *ngIf="codeFormaterForm.get('Name').errors?.required&&codeFormaterForm.get('Name').touched">
+                        Name feild is required
+                      </span>  
+                  </div>
+                </div>
+                <div class="form-group row" >
+                  <label for="ItemName" class="col-sm-4 col-form-label">ItemName</label>
+                  <div class="col-sm-7" >
+                      <input id="ItemName" type="text" (blur)="itemNameChange($event)" class="form-control" formControlName="ItemName"> 
+                  </div>
+                </div>
+                <div class="form-group row has-success" >
+                  <label for="ItemLength" class="col-sm-4 col-form-label">Item Length</label>
+                  <div class="col-sm-7" >
+                      <input id="ItemLength" type="number" class="form-control" formControlName="ItemLength">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="IsSerial" class="col-sm-4 col-form-label">Is Serial</label>
+                  <div class="col-sm-7" >
+                      <input id="IsSerial" type="checkbox"  formControlName="IsSerial">
+                  </div>
+                </div>
+                <div class="form-group row" >
+                  <label for="IsTodaysDate" class="col-sm-4 col-form-label">IsTodaysDate</label>
+                  <div class="col-sm-7" >
+                      <input id="IsTodaysDate" type="checkbox" formControlName="IsTodaysDate">  
+                  </div>
+                </div>
+                <div class="form-group row has-success" >
+                  <label for="IsSymbol" class="col-sm-4 col-form-label">Is Symbol</label>
+                  <div class="col-sm-7" >
+                      <input id="IsSymbol" (change)="changeIsSymbol($event)" type="checkbox" formControlName="IsSymbol"> 
+                  </div>
+                </div>
+                <div class="form-group row" [class.has-success]="codeFormaterForm.get('SymbolName').valid" [ngClass]="{'has-error':codeFormaterForm.get('SymbolName').invalid}">
+                  <label for="SymbolName" class="col-sm-4 col-form-label">SymbolName</label>
+                  <div class="col-sm-7" >
+                    <select id="SymbolName" class="form-control" formControlName="SymbolName">
+                      <option value="0">Select</option>
+                      <option value="hifen">Hifen(-)</option>
+                      <option value="underscore">Underscore(_)</option>
+                      <option value="unknown">Unknown</option>
+                    </select>
+                      <span class="help-block" *ngIf="codeFormaterForm.get('SymbolName').errors?.required">
+                          Symbol Name is required
+                        </span>
+                  </div>
+                </div>
+                <div class="form-group row" [class.has-success]="codeFormaterForm.get('Prefix').valid" [ngClass]="{'has-error':codeFormaterForm.get('Prefix').invalid}">
+                    <label for="Prefix" class="col-sm-4 col-form-label">Prefix</label>
+                    <div class="col-sm-7" >
+                        <input id="Prefix" type="text" (blur)="prefixChange($event)" class="form-control" formControlName="Prefix">
+                        <span class="help-block" *ngIf="codeFormaterForm.get('Prefix').errors?.required">
+                            Prefix is required
+                          </span>
+                    </div>
+                  </div>
+                <div class="form-group row">
+                  <label for="StartPossition" class="col-sm-4 col-form-label">StartPossition</label>
+                  <div class="col-sm-7" >
+                      <input id="StartPossition" type="number" class="form-control" formControlName="StartPossition">  
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="LastNumber" class="col-sm-4 col-form-label">LastNumber</label>
+                  <div class="col-sm-7" >
+                      <input id="LastNumber" type="number" class="form-control" formControlName="LastNumber">
+                  </div>
+                </div>
+                <div class="form-group row"  [class.has-success]="codeFormaterForm.get('StringLength').valid" [ngClass]="{'has-error':codeFormaterForm.get('StringLength').invalid&&codeFormaterForm.get('StringLength').touched}">
+                  <label for="StringLength" class="col-sm-4 col-form-label">StringLength</label>
+                  <div class="col-sm-7" >
+                      <input id="StringLength" type="number" class="form-control" formControlName="StringLength">
+                      <span class="help-block" *ngIf="codeFormaterForm.get('StringLength').errors?.required&&codeFormaterForm.get('StringLength').touched">
+                        String Length feild is required
+                      </span>  
+                  </div>
+                </div>
+              <div class="row" style="margin-top: 10px">
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="codeFormaterForm.invalid" (click)="saveCodeFormater()" value="{{codeFormater.Id==null?'Save':'Update'}}" class="btn btn-primary">
+                </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!codeFormaterForm.dirty" (click)="clearCodeFormater()" value="Clear" class="btn btn-primary">
+                </div>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,7 +3,7 @@
     <div class="panel panel-success">
       <div class="panel-heading">
         <h5> Customer entry
-            <button type="button" class="close pull-right" (click)="onNoClick()">&times;</button>
+            <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
         </h5>
       </div>
       <div class="panel-body">
@@ -79,10 +79,10 @@
                 </div>
               <div class="row">
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="supplierForm.invalid" (click)="saveCustomer()" value="{{customer.d==null?'Save':'Update'}}" class="btn btn-primary">
+                  <input type="button" [disabled]="customerForm.invalid" (click)="saveCustomer()" value="{{customer.Id==null?'Save':'Update'}}" class="btn btn-primary">
                 </div>
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="!supplierForm.dirty" (click)="clearCustomer()" value="Save" class="btn btn-primary">
+                  <input type="button" [disabled]="!customerForm.dirty" (click)="clearCustomer()" value="Save" class="btn btn-primary">
                 </div>
               </div>
         </form>

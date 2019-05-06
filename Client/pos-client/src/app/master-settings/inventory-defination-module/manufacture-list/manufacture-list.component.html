@@ -4,8 +4,9 @@
         <div class="panel panel-success">
             <div class="panel-heading">
                 <h3  style="text-align: center" class="panel-title">Manufacture List 
-                  <span (click)="createMaufactureForm()" id="pointer" class="glyphicon glyphicon-plus pull-left" aria-hidden="true"></span>
-                  <span (click)="createNewManufacture()" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+                  <span class="pull-right" (click)="createMaufactureForm()" id="pointer" >
+                      <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                  </span>
                 </h3>
             </div>           
             <div class="panel-body" *ngIf="reload&&columnReady&&dataReady">

@@ -68,7 +68,12 @@ export class ItemEntryComponent implements OnInit {
     }
     else{
       this.itemForm.control.markAsDirty()
-      this.categorySelectedItems.push({id:this.item.Category_Id,itemName:this.item.CategoryName})
+      if(this.item.Category_Id!=null){
+        this.categorySelectedItems.push({id:this.item.Category_Id,itemName:this.item.CategoryName})
+      }
+      else{
+        this.categorySelectedItems.push({id:"0",itemName:"SELECT"})
+      }
       this.subcategory.CategoryName=this.item.CategoryName;
       this.subcategory.Category_Id=this.item.Category_Id;
       this.subcategorySelectedItems.push({id:this.item.SubCategory_Id,itemName:this.item.SubCategoryName})
@@ -88,7 +93,7 @@ export class ItemEntryComponent implements OnInit {
       this._inventotyDefinationService.CreateInventoryItem(this.item).subscribe(response=>{
         let result=response
         if(result){
-          this.matDialogRef.close(true);
+          this.matDialogRef.close(response);
           let dialogData=new DialogData();
           dialogData.message="Save successfully";
           this._alertBox.openDialog(dialogData);
@@ -186,9 +191,11 @@ export class ItemEntryComponent implements OnInit {
        height:window.screen.height*.6+'px',
        width:window.screen.width*.4+'px'
      });
-     dialogRef.afterClosed().subscribe(result=>{
+     dialogRef.afterClosed().subscribe((result:Category)=>{
        if(result){
          this.categoryNew=true;
+         this.categorySelectedItems=[];
+         this.categorySelectedItems.push({id:result.Id,itemName:result.CategoryId+'-'+result.CategoryName})
        }
      })
    }
@@ -201,8 +208,11 @@ export class ItemEntryComponent implements OnInit {
        height:window.screen.height*.6+'px',
        width:window.screen.width*.4+'px'
      });
-     dialogRef.afterClosed().subscribe(result=>{
+     dialogRef.afterClosed().subscribe((result:Subcategory)=>{
+       debugger
        if(result){
+        this.subcategorySelectedItems=[];
+        this.subcategorySelectedItems.push({id:result.Id,itemName:result.SubCategoryId+'-'+result.SubCategoryName})
          this.subcategoryNew=true;
          this.subcategory.SubCategoryId=null;
          this.subcategory.SubCategoryName=null;
@@ -218,8 +228,10 @@ export class ItemEntryComponent implements OnInit {
        height:window.screen.height*.6+'px',
        width:window.screen.width*.4+'px'
      });
-     dialogRef.afterClosed().subscribe(result=>{
+     dialogRef.afterClosed().subscribe((result:Unit)=>{
        if(result){
+        this.unitSelectedItems=[];
+        this.unitSelectedItems.push({id:result.Id,itemName:result.UnitName})
          this.unitNew=true;
          this.subcategory.SubCategoryId=null;
          this.subcategory.SubCategoryName=null;

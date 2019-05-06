@@ -6,6 +6,8 @@ import { DefaultRouteService } from '../common/default-route.service';
 import { GroupItem } from '../../models/regular-operation/inventory/group-item.model';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { SupplierTransaction } from '../../models/regular-operation/inventory/supplier-transaction.model';
+import { CustomerTransaction } from '../../models/regular-operation/inventory/customer-transaction.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -47,6 +49,66 @@ export class InventoryService {
     public deleteGroupItem(Id:string){
       var url=this._defaultRoute.InventoryService+'GroupItem/'+Id;
       return this._httpClient.delete<boolean>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getSupplierTranscationList(){
+      var url=this._defaultRoute.InventoryService+'SupplierTransactions';
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public saveSupplierTransaction(supplierTransaction:SupplierTransaction){
+      var url=this._defaultRoute.InventoryService+'SupplierTransaction';
+      return this._httpClient.post<boolean>(url,supplierTransaction).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public UpdateSupplierTransaction(supplierTransaction:SupplierTransaction){
+      var url=this._defaultRoute.InventoryService+'SupplierTransaction/'+supplierTransaction.Id;
+      return this._httpClient.put<boolean>(url,supplierTransaction).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getSupplierTransactionById(Id:string){
+      var url=this._defaultRoute.InventoryService+'SupplierTransaction/'+Id;
+      return this._httpClient.get<GroupItem>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public deleteSupplierTransactionById(Id:string){
+      var url=this._defaultRoute.InventoryService+'SupplierTransaction/'+Id;
+      return this._httpClient.delete<GroupItem>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getPartyTransactionList(){
+      var url=this._defaultRoute.InventoryService+'PartyTransactions';
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public savePartyTransaction(supplierTransaction:SupplierTransaction){
+      var url=this._defaultRoute.InventoryService+'PartyTransaction';
+      return this._httpClient.post<boolean>(url,supplierTransaction).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public UpdatePartyTransaction(customerTransaction:CustomerTransaction){
+      var url=this._defaultRoute.InventoryService+'PartyTransaction/'+customerTransaction.Id;
+      return this._httpClient.put<boolean>(url,customerTransaction).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getPartyTransactionById(Id:string){
+      var url=this._defaultRoute.InventoryService+'PartyTransaction/'+Id;
+      return this._httpClient.get<GroupItem>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public deletePartyTransactionById(Id:string){
+      var url=this._defaultRoute.InventoryService+'PartyTransaction/'+Id;
+      return this._httpClient.delete<GroupItem>(url).pipe(
         catchError(this.handleError)
       )
     }

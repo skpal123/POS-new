@@ -33,7 +33,7 @@ export class AddCategoryComponent implements OnInit {
       this._inventotyDefinationService.CreateCategory(this.category).subscribe(response=>{
         let result=response
         if(result){
-          this.matDialogRef.close(true);
+          this.matDialogRef.close(response);
           let dialogData=new DialogData();
           dialogData.message="Save successfully";
           this._alertBox.openDialog(dialogData);

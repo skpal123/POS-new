@@ -139,8 +139,10 @@ export class ItemSalesListComponent implements OnInit {
     const dialogRef=this.matDialog.open(ItemSalesComponent,{
       data:this.groupItem,
       disableClose:true,
-      height:window.screen.height*.95+'px',
-      width:window.screen.width*1.2+'px'
+      maxWidth:'100vw',
+      maxHeight:'100vh',
+      height:'100%',
+      width:'95%'
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){

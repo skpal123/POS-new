@@ -17,6 +17,10 @@ const routes: Routes = [
         {
           path:'support/:id',
           loadChildren:'src/app/admin/support-module/support-module.module#SupportModuleModule'
+        },
+        {
+          path:'general-settings/:id',
+          loadChildren:'src/app/admin/general-settings/general-settings.module#GeneralSettingsModule'
         }
     ]
   },

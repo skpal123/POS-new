@@ -12,6 +12,13 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 .pointer{
   cursor: pointer;
 }
+.form-control{
+  height: 29px;
+}
+.row{
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
 #navigation-menu{
     background-color: bisque
 }

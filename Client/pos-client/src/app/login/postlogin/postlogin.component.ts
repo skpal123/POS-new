@@ -20,7 +20,10 @@ export class PostloginComponent implements OnInit {
     this.BranchList=this._sessionService.BranchList;
   }  
   loadModules(Id:string){
-    this._router.navigate(['login/mainlayout']);
+     this._router.navigate(['login/mainlayout']);
+  }
+  loadEcommerceAdminPanel(){
+    this._router.navigate(['ecommerce/mainlayout']);
   }
 }
 

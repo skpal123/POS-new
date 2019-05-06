@@ -21,6 +21,7 @@ import { PartyEntryComponent } from '../../../master-settings/inventory-definati
 import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { Supplier } from '../../../models/master-settings/inventory-defination/supplier.model';
 
 @Component({
   selector: 'app-item-purchase',
@@ -70,6 +71,10 @@ export class ItemPurchaseComponent implements OnInit {
     
   };
   category:Category={Id:null,CategoryId:null,CategoryName:null}
+  supplier:Supplier={
+    Id:null,SupplierId:null,SupplierName:null,ContactPerson:null,PhoneNo:null,Email:null,
+    Ledger_Id:null,SubLedger_Id:null,LedgerName:null,SubLedgerName:null,Address:null
+  }
   subcategory:Subcategory={Id:null,SubCategoryId:null,SubCategoryName:null,Category_Id:null}
   constructor(public matDialogRef:MatDialogRef<ItemPurchaseComponent>,
     private _validationService:ValidationService,
@@ -375,7 +380,7 @@ export class ItemPurchaseComponent implements OnInit {
   }
   createNewSupplier(){
      const dialogRef=this.matDialog.open(SupplierEntryComponent,{
-       data:this.category,
+       data:this.supplier,
        disableClose:true,
        height:window.screen.height*.6+'px',
        width:window.screen.width*.4+'px'
@@ -384,6 +389,7 @@ export class ItemPurchaseComponent implements OnInit {
        debugger
        if(result){
          this.supplierNew=true;
+         
        }
      })
    }
