@@ -1674,7 +1674,7 @@ namespace ERPWebApiService.Controllers
         }
         [Route("Customer/{id}")]
         [HttpDelete]
-        public HttpResponseMessage DeleteCustomer(string id)
+        public HttpResponseMessage DeleteCustomerTransaction(string id)
         {
             try
             {
