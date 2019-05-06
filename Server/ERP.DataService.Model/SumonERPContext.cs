@@ -53,5 +53,8 @@ namespace ERP.DataService.Model
         public DbSet<ItemTransaction> ItemTransactions { set; get; }
         public DbSet<Customer> Customers { set; get; }
         public DbSet<SettingSellPrice> SettingSellPrices { set; get; }
+        public DbSet<CodeFormater> CodeFormaters { set; get; }
+        public DbSet<SupplierTransaction> SupplierTransactions { set; get; }
+        public DbSet<PartyTransaction> PartyTransactions { set; get; }
     }
 }

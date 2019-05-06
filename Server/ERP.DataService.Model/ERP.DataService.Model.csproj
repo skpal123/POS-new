@@ -215,6 +215,22 @@
     <Compile Include="Migrations\201904191242016_Add sell price.Designer.cs">
       <DependentUpon>201904191242016_Add sell price.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904241507284_remove formater.cs" />
+    <Compile Include="Migrations\201904241507284_remove formater.Designer.cs">
+      <DependentUpon>201904241507284_remove formater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904241510061_change formater.cs" />
+    <Compile Include="Migrations\201904241510061_change formater.Designer.cs">
+      <DependentUpon>201904241510061_change formater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904281228285_party supplier.cs" />
+    <Compile Include="Migrations\201904281228285_party supplier.Designer.cs">
+      <DependentUpon>201904281228285_party supplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905051508286_adding side menurouter path.cs" />
+    <Compile Include="Migrations\201905051508286_adding side menurouter path.Designer.cs">
+      <DependentUpon>201905051508286_adding side menurouter path.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -224,6 +240,7 @@
     <Compile Include="Model\Branch.cs" />
     <Compile Include="Model\BranchConfiguration.cs" />
     <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\CodeFormater.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\FormInfo.cs" />
     <Compile Include="Model\GroupItem.cs" />
@@ -232,6 +249,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
     <Compile Include="Model\Party.cs" />
+    <Compile Include="Model\PartyTransaction.cs" />
     <Compile Include="Model\SettingSellPrice.cs" />
     <Compile Include="Model\Subcategory.cs" />
     <Compile Include="Model\SubledgerOpening.cs" />
@@ -249,6 +267,7 @@
     <Compile Include="Model\SessionManagement.cs" />
     <Compile Include="Model\SubMenu.cs" />
     <Compile Include="Model\Supplier.cs" />
+    <Compile Include="Model\SupplierTransaction.cs" />
     <Compile Include="Model\Unit.cs" />
     <Compile Include="Model\UserFormControl.cs" />
     <Compile Include="Model\UserInfo.cs" />
@@ -373,6 +392,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904191242016_Add sell price.resx">
       <DependentUpon>201904191242016_Add sell price.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904241507284_remove formater.resx">
+      <DependentUpon>201904241507284_remove formater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904241510061_change formater.resx">
+      <DependentUpon>201904241510061_change formater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904281228285_party supplier.resx">
+      <DependentUpon>201904281228285_party supplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905051508286_adding side menurouter path.resx">
+      <DependentUpon>201905051508286_adding side menurouter path.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

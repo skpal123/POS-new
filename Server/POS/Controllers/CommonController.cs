@@ -1,4 +1,5 @@
-﻿using ERP.DataService.Model;
+﻿using System.Security.Cryptography.X509Certificates;
+using ERP.DataService.Model;
 using ERP.DataService.Model.Model;
 using ERPWebApiService.Authentication;
 using ERPWebApiService.DataConnection;
@@ -269,6 +270,185 @@ namespace ERPWebApiService.Controllers
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, itemPurchaseValidations);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("CodeFormater")]
+        [HttpPost]
+        public HttpResponseMessage CreateCodeFormater(CodeFormaterInfo codeFormaterInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var codeformater = new CodeFormater()
+                {
+                    Name = codeFormaterInfo.Name,
+                    ItemName =codeFormaterInfo.ItemName,
+                    ItemLength = codeFormaterInfo.ItemLength,
+                    IsSerial = codeFormaterInfo.IsSerial,
+                    IsTodaysDate = codeFormaterInfo.IsTodaysDate,
+                    IsSymbol = codeFormaterInfo.IsSymbol,
+                    SymbolName = codeFormaterInfo.SymbolName,
+                    StartPossition = codeFormaterInfo.StartPossition,
+                    LastNumber = codeFormaterInfo.LastNumber,
+                    Prefix = codeFormaterInfo.Prefix,
+                    StringLength = codeFormaterInfo.StringLength
+                };
+                ERPContext.CodeFormaters.Add(codeformater);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, codeformater);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("CodeFormater/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateCodeFormater(int id,CodeFormaterInfo codeFormaterInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id.ToString());
+                DatabaseCommand.ExcuteNonQuery(@"delete from tblcodeformater where id=@id;", paramlist, null);
+                var codeformater = new CodeFormater()
+                {
+                    Name = codeFormaterInfo.Name,
+                    ItemName = codeFormaterInfo.ItemName,
+                    ItemLength = codeFormaterInfo.ItemLength,
+                    IsSerial = codeFormaterInfo.IsSerial,
+                    IsTodaysDate = codeFormaterInfo.IsTodaysDate,
+                    IsSymbol = codeFormaterInfo.IsSymbol,
+                    SymbolName = codeFormaterInfo.SymbolName,
+                    StartPossition = codeFormaterInfo.StartPossition,
+                    LastNumber = codeFormaterInfo.LastNumber,
+                    Prefix = codeFormaterInfo.Prefix,
+                    StringLength = codeFormaterInfo.StringLength
+                };
+                ERPContext.CodeFormaters.Add(codeformater);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, codeformater);
+                return Request.CreateResponse(HttpStatusCode.OK, false);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("CodeFormaters")]
+        [HttpGet]
+        public HttpResponseMessage GetCodeFormaterList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var codeformaterList =ERPContext.CodeFormaters.Select(x=> new CodeFormaterInfo()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ItemName = x.ItemName,
+                    ItemLength = x.ItemLength,
+                    IsSerial = x.IsSerial,
+                    IsTodaysDate = x.IsTodaysDate,
+                    IsSymbol = x.IsSymbol,
+                    SymbolName = x.SymbolName,
+                    StartPossition = x.StartPossition,
+                    LastNumber = x.LastNumber,
+                    Prefix = x.Prefix,
+                    StringLength = x.StringLength
+                }).ToList();               
+                return Request.CreateResponse(HttpStatusCode.OK, codeformaterList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("CodeFormater/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetCodeFormaterById(int id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                var codeformater = ERPContext.CodeFormaters.Where(x=>x.Id==id).Select(x => new CodeFormaterInfo()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ItemName = x.ItemName,
+                    ItemLength = x.ItemLength,
+                    IsSerial = x.IsSerial,
+                    IsTodaysDate = x.IsTodaysDate,
+                    IsSymbol = x.IsSymbol,
+                    SymbolName = x.SymbolName,
+                    StartPossition = x.StartPossition,
+                    LastNumber = x.LastNumber,
+                    Prefix = x.Prefix,
+                    StringLength = x.StringLength
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, codeformater);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("CodeFormater/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteCodeFormaterById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery(@"delete from tblcodeformater where id=@id;", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);         
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
             }
             catch (Exception ex)
             {

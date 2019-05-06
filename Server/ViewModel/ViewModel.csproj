@@ -45,6 +45,7 @@
     <Compile Include="Model\AccountParentChildRelationInfo.cs" />
     <Compile Include="Model\BranchInfo.cs" />
     <Compile Include="Model\CategoryInfo.cs" />
+    <Compile Include="Model\CodeFormaterInfo.cs" />
     <Compile Include="Model\ColumnInfo.cs" />
     <Compile Include="Model\CustomerInfo.cs" />
     <Compile Include="Model\FormInfoView.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Model\MenuView.cs" />
     <Compile Include="Model\ModuleView.cs" />
     <Compile Include="Model\PartyInfo.cs" />
+    <Compile Include="Model\PartyTransactionInfo.cs" />
     <Compile Include="Model\PermissionTree.cs" />
     <Compile Include="Model\PermissionView.cs" />
     <Compile Include="Model\InventoryGroupListInfo.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Model\SubledgerTransactionInfo.cs" />
     <Compile Include="Model\SubMenuView.cs" />
     <Compile Include="Model\SupplierInfo.cs" />
+    <Compile Include="Model\SupplierTransactionInfo.cs" />
     <Compile Include="Model\UnitInfo.cs" />
     <Compile Include="Model\UserFormControlInfo.cs" />
     <Compile Include="Model\UserInfoView.cs" />
