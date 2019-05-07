@@ -20,7 +20,7 @@ namespace ERPWebApiService.Controllers
     public class SecurityController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
-        SumonEComerceERPContext ErpContext = new SumonEComerceERPContext();
+        SumonERPContext ErpContext = new SumonERPContext();
 
         [Route("login/{UserName}/{Password}")]
         [HttpGet]
@@ -420,7 +420,7 @@ namespace ERPWebApiService.Controllers
         {
             List<MenuView> menuViews = new List<MenuView>();
             StringBuilder sb = new StringBuilder();
-            sb.Append(@"select distinct m.Id,m.Name,m.RouterPath,m.MenuSqenceId,m.ModuleSeqId,m.ImagePath  from RolePermissions rp 
+            sb.Append(@"select distinct m.Id,m.Name,m.RouterPath,m.SideMenuRouterPath,m.MenuSqenceId,m.ModuleSeqId,m.ImagePath  from RolePermissions rp 
                 inner join Permissions p on rp.Permission_Id=p.Id
                 inner join SubMenus sm on p.SubMenu_id=sm.Id
                 inner join Menus m on sm.Menu_Id=m.Id
@@ -439,6 +439,7 @@ namespace ERPWebApiService.Controllers
                     menu.Id = Guid.Parse(rdr["Id"].ToString());
                     menu.Name = rdr["Name"].ToString();
                     menu.RouterPath = rdr["RouterPath"].ToString();
+                    menu.SideMenuRouterPath = rdr["SideMenuRouterPath"].ToString();
                     menu.MenuSqenceId = Convert.ToInt32(rdr["MenuSqenceId"]);
                     menu.ModuleSeqId = Convert.ToInt32(rdr["ModuleSeqId"]);
                     menu.SubMenus = getSubMenus(menu.MenuSqenceId);

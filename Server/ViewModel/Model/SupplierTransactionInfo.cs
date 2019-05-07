@@ -13,6 +13,7 @@ namespace ViewModel.Model
         public string InvoiceNo { set; get; }
         public string OrderNo { set; get; }
         public Guid? Group_Id { set; get; }
+        public Guid? Supplier_Id { set; get; }
         public int? PaymentMode { set; get; }
         public DateTime? PaymentDate { set; get; }
         public Guid? Ledger_Id { set; get; }

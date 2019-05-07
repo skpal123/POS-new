@@ -22,7 +22,7 @@ namespace ERPWebApiService.Controllers
     public class CommonController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
-        SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+        SumonERPContext ERPContext = new SumonERPContext();
         
         [Route("getFormInfo/{formName}")]
         [HttpGet]

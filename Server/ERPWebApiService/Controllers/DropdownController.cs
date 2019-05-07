@@ -18,7 +18,7 @@ namespace ERPWebApiService.Controllers
     public class DropdownController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
-        SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+        SumonERPContext ERPContext = new SumonERPContext();
         // GET api/<controller>
         [Route("UnitDropdown")]
         [HttpGet]

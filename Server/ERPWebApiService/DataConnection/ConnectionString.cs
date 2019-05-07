@@ -9,7 +9,7 @@ namespace ERPWebApiService.DataConnection
     {
         public static string getConnectionString()
         {
-            return ConfigurationManager.ConnectionStrings["SumonEComerceERPContext"].ConnectionString.ToString();
+            return ConfigurationManager.ConnectionStrings["SumonPOSContext"].ConnectionString.ToString();
         }
     }
 }

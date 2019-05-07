@@ -17,7 +17,7 @@ namespace ERPWebApiService.Controllers
     [RoutePrefix("api/FinanceService")]
     public class FinanceController : ApiController
     {
-        SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+        SumonERPContext ERPContext = new SumonERPContext();
         [Route("getChartOfAccountList")]
         [HttpGet]
         public HttpResponseMessage getChartParentChildAccountList()

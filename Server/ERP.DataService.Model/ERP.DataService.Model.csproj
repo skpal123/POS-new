@@ -231,6 +231,14 @@
     <Compile Include="Migrations\201905051508286_adding side menurouter path.Designer.cs">
       <DependentUpon>201905051508286_adding side menurouter path.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905071430464_add customerId and supplierId.cs" />
+    <Compile Include="Migrations\201905071430464_add customerId and supplierId.Designer.cs">
+      <DependentUpon>201905071430464_add customerId and supplierId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905071512248_update8.cs" />
+    <Compile Include="Migrations\201905071512248_update8.Designer.cs">
+      <DependentUpon>201905071512248_update8.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -404,6 +412,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905051508286_adding side menurouter path.resx">
       <DependentUpon>201905051508286_adding side menurouter path.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905071430464_add customerId and supplierId.resx">
+      <DependentUpon>201905071430464_add customerId and supplierId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905071512248_update8.resx">
+      <DependentUpon>201905071512248_update8.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

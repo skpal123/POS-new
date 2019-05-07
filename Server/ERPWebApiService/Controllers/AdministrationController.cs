@@ -20,7 +20,7 @@ namespace ERPWebApiService.Controllers
      [RoutePrefix("api/AdministrationService")]
     public class AdministrationController : ApiController
     {
-        SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+        SumonERPContext ERPContext = new SumonERPContext();
         [Route("getModules")]
         [HttpGet]
         public HttpResponseMessage getModules()

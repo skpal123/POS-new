@@ -16,7 +16,7 @@ namespace ERPWebApiService.Autentication
     {
         public static UserSession GetSession()
         {
-            SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+            SumonERPContext ERPContext = new SumonERPContext();
             var requestObj = HttpContext.Current.Request.Headers.GetValues("sessionId");
             var sessionId = HttpContext.Current.Request.Headers != null ? HttpContext.Current.Request.Headers.Get("sessionid") : null;
             if (sessionId == null)
@@ -49,7 +49,7 @@ namespace ERPWebApiService.Autentication
         }
         public static List<PermissionView> GetActionPermissions(string userId, string itemName, string actionName)
         {
-            SumonEComerceERPContext ERPContext = new SumonEComerceERPContext();
+            SumonERPContext ERPContext = new SumonERPContext();
             List<PermissionView> permissions = new List<PermissionView>();
             //var logMessage = new LogMessage(EnumLogLevel.Info);
             //serviceLogger.Log(EnumLogLevel.Debug, "Call Get Action Permission list .");
