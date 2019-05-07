@@ -83,8 +83,8 @@ export class InventoryService {
       )
     }
     public getPartyTransactionList(){
-      var url=this._defaultRoute.InventoryService+'PartyTransactions';
-      return this._httpClient.get<GroupItem[]>(url).pipe(
+      var url=this._defaultRoute.InventoryService+'PartyTransactions/1/2/2';
+      return this._httpClient.get<CustomerTransaction[]>(url).pipe(
         catchError(this.handleError)
       )
     }
@@ -102,7 +102,7 @@ export class InventoryService {
     }
     public getPartyTransactionById(Id:string){
       var url=this._defaultRoute.InventoryService+'PartyTransaction/'+Id;
-      return this._httpClient.get<GroupItem>(url).pipe(
+      return this._httpClient.get<CustomerTransaction>(url).pipe(
         catchError(this.handleError)
       )
     }
