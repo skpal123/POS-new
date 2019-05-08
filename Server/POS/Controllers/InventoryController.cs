@@ -1149,7 +1149,7 @@ namespace ERPWebApiService.Controllers
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, customerInfo);
-            }            
+            }
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
@@ -1176,23 +1176,23 @@ namespace ERPWebApiService.Controllers
         public HttpResponseMessage GetGroupItemList(string transactionType)
         {
             try
-            {   
-                List<InventoryGroupListInfo> inventoryGroupList=new List<InventoryGroupListInfo> ();
-                using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+            {
+                List<InventoryGroupListInfo> inventoryGroupList = new List<InventoryGroupListInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd=new SqlCommand(@"select g.Id, g.TransactionId,g.TransactionType,g.Quantity,g.TotalAmount,
+                    SqlCommand cmd = new SqlCommand(@"select g.Id, g.TransactionId,g.TransactionType,g.Quantity,g.TotalAmount,
                     g.DiscountRate,g.DiscountAmount,g.vat,g.Tax,g.NetPaidAmount,
                     g.ChalanNo,g.InvoiceNo,g.Comments,g.TransactionDate,g.GrvNo,g.GrvDate,
                     s.SupplierName,p.PartyName,c.CustomerName from tblgroupitem g
                     left join tblSupplier  s on g.Supplier_Id=s.Id
                     left join tblCustomer c on g.Customer_Id=c.id
-                    left join tblParty p on g.Party_Id=p.Id where TransactionType=@transactionType",con);
+                    left join tblParty p on g.Party_Id=p.Id where TransactionType=@transactionType", con);
                     con.Open();
                     cmd.Parameters.AddWithValue("@transactionType", transactionType);
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        InventoryGroupListInfo inventoryGroup=new InventoryGroupListInfo();
+                        InventoryGroupListInfo inventoryGroup = new InventoryGroupListInfo();
                         inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
                         inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
                         inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
@@ -1399,7 +1399,7 @@ namespace ERPWebApiService.Controllers
                     NetPaidAmount = x.NetPaidAmount,
                     PaymentMode = x.PaymentMode,
                     Ledger_Id = x.Ledger_Id,
-                    LedgerName  = ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id) != null ? ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id).AccountDescription : null,
+                    LedgerName = ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id) != null ? ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id).AccountDescription : null,
                     SubLedger_Id = x.SubLedger_Id,
                     SubLedgerName = ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.SubLedger_Id) != null ? ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.Supplier_Id).Description : null,
                     Comments = x.Comments,
@@ -1408,28 +1408,28 @@ namespace ERPWebApiService.Controllers
                     InvoiceNo = x.InvoiceNo,
                     ChalanNo = x.ChalanNo,
                     Supplier_Id = x.Supplier_Id,
-                    SupplierName = ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id)!=null?ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id).SupplierName:null,
+                    SupplierName = ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id) != null ? ERPContext.Suppliers.FirstOrDefault(y => y.Id == x.Supplier_Id).SupplierName : null,
                     Approver_Id = x.Approver_Id,
-                    ItemTransactionList = ERPContext.ItemTransactions.Where(y=>y.Group_Id==x.Id).Select(y=>new ItemTransactionInfo()
+                    ItemTransactionList = ERPContext.ItemTransactions.Where(y => y.Group_Id == x.Id).Select(y => new ItemTransactionInfo()
                     {
-                        Id=y.Id,
-                        TransactionId=y.TransactionId,
-                        Reason=y.Reason, 
-                        TransactionType=y.TransactionType, 
-                        Quantity=y.Quantity, 
-                        UnitCost=y.UnitCost,                                
-                        UnitSale=y.UnitSale, 
-                        Vat=y.Vat, 
-                        Tax=y.Tax, 
-                        DiscountAmount=y.DiscountAmount, 
-                        SerialNo=y.SerialNo, 
-                        DiscountRate=y.DiscountRate, 
-                        LotNo=y.LotNo,
-                        TransactionDate=y.TransactionDate, 
-                        Group_Id = y.Group_Id, 
-                        Item_Id=y.Item_Id,
-                        ItemName = ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id)!=null?ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id).ItemName:null,
-                        Location_Id=y.Location_Id,
+                        Id = y.Id,
+                        TransactionId = y.TransactionId,
+                        Reason = y.Reason,
+                        TransactionType = y.TransactionType,
+                        Quantity = y.Quantity,
+                        UnitCost = y.UnitCost,
+                        UnitSale = y.UnitSale,
+                        Vat = y.Vat,
+                        Tax = y.Tax,
+                        DiscountAmount = y.DiscountAmount,
+                        SerialNo = y.SerialNo,
+                        DiscountRate = y.DiscountRate,
+                        LotNo = y.LotNo,
+                        TransactionDate = y.TransactionDate,
+                        Group_Id = y.Group_Id,
+                        Item_Id = y.Item_Id,
+                        ItemName = ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id) != null ? ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id).ItemName : null,
+                        Location_Id = y.Location_Id,
                         LocationName = ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName : null,
                     }).ToList()
                 }).FirstOrDefault();
@@ -1469,13 +1469,13 @@ namespace ERPWebApiService.Controllers
                 dt.Columns.Add("ItemId", typeof(string));
                 dt.Columns.Add("PurchaseDate", typeof(DateTime));
                 dt.Columns.Add("PreviousAmount", typeof(decimal));
-                dt.Columns.Add("Amount", typeof(decimal));             
+                dt.Columns.Add("Amount", typeof(decimal));
                 dt.Columns.Add("Item_Id", typeof(Guid));
                 if (sellPriceInfos.Any())
                 {
                     foreach (var sellPrice in sellPriceInfos)
                     {
-                        dt.Rows.Add(Guid.NewGuid(), sellPrice.ItemCode,sellPrice.ItemId,sellPrice.PurchaseDate,sellPrice.PreviousAmount,sellPrice.Amount,sellPrice.Item_Id);
+                        dt.Rows.Add(Guid.NewGuid(), sellPrice.ItemCode, sellPrice.ItemId, sellPrice.PurchaseDate, sellPrice.PreviousAmount, sellPrice.Amount, sellPrice.Item_Id);
                     }
                 }
                 Dictionary<string, object> paramlist = new Dictionary<string, object>();
@@ -1494,8 +1494,8 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                List<SettingSellPriceInfo> settingSellPriceInfos=new List<SettingSellPriceInfo>();
-                using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+                List<SettingSellPriceInfo> settingSellPriceInfos = new List<SettingSellPriceInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand("proc_GetSettingSellPrice", con);
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -1504,8 +1504,8 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        SettingSellPriceInfo settingSellPrice=new SettingSellPriceInfo();
-                        settingSellPrice.Id = rdr["Id"] != DBNull.Value ? Guid.Parse(rdr["Id"].ToString()):Guid.Empty;
+                        SettingSellPriceInfo settingSellPrice = new SettingSellPriceInfo();
+                        settingSellPrice.Id = rdr["Id"] != DBNull.Value ? Guid.Parse(rdr["Id"].ToString()) : Guid.Empty;
                         settingSellPrice.ItemId = rdr["ItemId"] != DBNull.Value ? rdr["ItemId"].ToString() : null;
                         settingSellPrice.ItemCode = rdr["ItemCode"] != DBNull.Value ? rdr["ItemCode"].ToString() : null;
                         settingSellPrice.ItemName = rdr["ItemName"] != DBNull.Value ? rdr["ItemName"].ToString() : null;
@@ -1531,7 +1531,7 @@ namespace ERPWebApiService.Controllers
         }
         [Route("getItemStock/{itemId}/{locationId}")]
         [HttpGet]
-        public HttpResponseMessage GetItemStock(string itemId,string locationId)
+        public HttpResponseMessage GetItemStock(string itemId, string locationId)
         {
             try
             {
@@ -1541,7 +1541,7 @@ namespace ERPWebApiService.Controllers
                 var isLocationId = Guid.TryParse(locationId, out location_id);
                 if (isItemId && isLocationId)
                 {
-                     using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                    using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                     {
                         SqlCommand cmd = new SqlCommand("select dbo.func_get_item_stock(@item_id,@location_id)", con);
                         cmd.Parameters.AddWithValue("@item_id", item_id);
@@ -1554,7 +1554,7 @@ namespace ERPWebApiService.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.Created, 0);
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -1573,6 +1573,7 @@ namespace ERPWebApiService.Controllers
                     ChalanNo = partyTransactionInfo.ChalanNo,
                     InvoiceNo = partyTransactionInfo.InvoiceNo,
                     OrderNo = partyTransactionInfo.OrderNo,
+                    Customer_Id = partyTransactionInfo.Customer_Id,
                     Group_Id = partyTransactionInfo.Group_Id,
                     PaymentMode = partyTransactionInfo.PaymentMode,
                     PaymentDate = partyTransactionInfo.PaymentDate,
@@ -1606,6 +1607,7 @@ namespace ERPWebApiService.Controllers
                         InvoiceNo = partyTransactionInfo.InvoiceNo,
                         OrderNo = partyTransactionInfo.OrderNo,
                         Group_Id = partyTransactionInfo.Group_Id,
+                        Customer_Id = partyTransactionInfo.Customer_Id,
                         PaymentMode = partyTransactionInfo.PaymentMode,
                         PaymentDate = partyTransactionInfo.PaymentDate,
                         Ledger_Id = partyTransactionInfo.Ledger_Id,
@@ -1622,50 +1624,114 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("PartyTransaction/{id}")]
+        [Route("PartyTransactions/{startDate}/{endDate}/{customerId}")]
         [HttpGet]
-        public HttpResponseMessage GetCustomerTransacionById(string id)
+        public HttpResponseMessage GetCustomerTransacions(string startDate, string endDate, string customerId)
         {
             try
             {
-                CustomerInfo customerInfo = new CustomerInfo();
+                DateTime? convertedStartDate = startDate.GetDateTime();
+                DateTime? convertedEndDate = endDate.GetDateTime();
+                Guid CustomerId = Guid.Empty;
+                bool isCustomerId = Guid.TryParse(customerId, out CustomerId);
+                List<PartyTransactionInfo> customerInfoList = new List<PartyTransactionInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd = new SqlCommand(@"select c.*,a.AccountDescription,s.Description from tblCustomer c
-                                                    left join tblAccount a on c.Ledger_Id=a.id
-                                                    left join tblSubledger s on c.SubLedger_Id=s.Id where c.id=@id", con);
+                    SqlCommand cmd = new SqlCommand("proc_getPartyTransaction", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@StartDate", convertedStartDate);
+                    cmd.Parameters.AddWithValue("@EndDate", convertedEndDate);
+                    cmd.Parameters.AddWithValue("@customer_id", isCustomerId == true ? CustomerId.ToString() : null);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        PartyTransactionInfo partyTransactionInfo = new PartyTransactionInfo();
+                        partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                            ? rdr["ChalanNo"].ToString()
+                            : null;
+                        partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
+                            ? rdr["OrderNo"].ToString()
+                            : null;
+                        if (rdr["PhoneNo"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                        }
+                        if (rdr["PaymentDate"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
+                        }
+                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
+                        partyTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                        customerInfoList.Add(partyTransactionInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, customerInfoList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("PartyTransaction/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetCustomerTransacionsById(string id)
+        {
+            try
+            {
+                DateTime? convertedStartDate = DateTime.Now;
+                DateTime? convertedEndDate = DateTime.Now;
+                PartyTransactionInfo partyTransactionInfo = new PartyTransactionInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select pt.Id,ChalanNo,InvoiceNo,OrderNo,Group_Id,PaymentMode,paymentDate,PaidAmount,AccountDescription LedgerName,sl.Description SubledgerName from tblpartytransaction pt
+                                                    left join tblAccount ac on pt.Ledger_Id= ac.id
+                                                    left join tblSubledger sl on pt.subledger_id=sl.Id
+                                                    where pt.id=@id", con);
                     cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        customerInfo.Id = Guid.Parse(rdr["Id"].ToString());
-                        customerInfo.CustomerId = rdr["CustomerId"] != DBNull.Value
-                            ? rdr["CustomerId"].ToString()
+                        partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                            ? rdr["ChalanNo"].ToString()
                             : null;
-                        customerInfo.CustomerName = rdr["CustomerName"] != DBNull.Value
-                            ? rdr["CustomerName"].ToString()
+                        partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
+                            ? rdr["OrderNo"].ToString()
                             : null;
-                        customerInfo.PhoneNo = rdr["PhoneNo"] != DBNull.Value ? rdr["PhoneNo"].ToString() : null;
-                        customerInfo.Email = rdr["Email"] != DBNull.Value ? rdr["Email"].ToString() : null;
-                        customerInfo.Address = rdr["Address"] != DBNull.Value ? rdr["Address"].ToString() : null;
-                        customerInfo.LedgerName = rdr["AccountDescription"] != DBNull.Value
-                            ? rdr["AccountDescription"].ToString()
-                            : null;
-                        customerInfo.SubLedgerName = rdr["Description"] != DBNull.Value
-                            ? rdr["Description"].ToString()
-                            : null;
+                        if (rdr["PhoneNo"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                        }
+                        if (rdr["PaymentDate"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
+                        }
+                        partyTransactionInfo.LedgerName = rdr["LedgerName"] != DBNull.Value ? rdr["LedgerName"].ToString() : null;
+                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
+                        partyTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
+                        partyTransactionInfo.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            customerInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            customerInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            partyTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
                         }
                     }
                 }
-                return Request.CreateResponse(HttpStatusCode.OK, customerInfo);
+                return Request.CreateResponse(HttpStatusCode.OK, partyTransactionInfo);
             }
             catch (Exception ex)
             {
@@ -1681,6 +1747,201 @@ namespace ERPWebApiService.Controllers
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
                 DatabaseCommand.ExcuteNonQuery("delete from tblCustomer where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("PartyTransaction")]
+        [HttpPost]
+        public HttpResponseMessage CreateSupplierTransaction(SupplierTransactionInfo supplierTransactionInfo)
+        {
+            try
+            {
+                var supplierTransaction = new SupplierTransaction()
+                {
+                    Id = Guid.NewGuid(),
+                    ChalanNo = supplierTransactionInfo.ChalanNo,
+                    InvoiceNo = supplierTransactionInfo.InvoiceNo,
+                    OrderNo = supplierTransactionInfo.OrderNo,
+                    Supplier_Id = supplierTransactionInfo.Supplier_Id,
+                    Group_Id = supplierTransactionInfo.Group_Id,
+                    PaymentMode = supplierTransactionInfo.PaymentMode,
+                    PaymentDate = supplierTransactionInfo.PaymentDate,
+                    Ledger_Id = supplierTransactionInfo.Ledger_Id,
+                    SubLedger_Id = supplierTransactionInfo.SubLedger_Id,
+                    PaidAmount = supplierTransactionInfo.PaidAmount,
+                };
+                //customer.CustomerId = DatabaseCommand.GetAutoGeneratedCode("manufacture", null);
+                ERPContext.SupplierTransactions.Add(supplierTransaction);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, supplierTransaction);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("PartyTransaction/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateSupplierTransaction(string id, SupplierTransactionInfo supplierTransactionInfo)
+        {
+            try
+            {
+                var oPartyTransaction = ERPContext.PartyTransactions.FirstOrDefault(x => x.Id == supplierTransactionInfo.Id);
+                if (oPartyTransaction != null)
+                {
+                    var supplierTransaction = new SupplierTransaction()
+                    {
+                        Id = oPartyTransaction.Id,
+                        ChalanNo = supplierTransactionInfo.ChalanNo,
+                        InvoiceNo = supplierTransactionInfo.InvoiceNo,
+                        OrderNo = supplierTransactionInfo.OrderNo,
+                        Group_Id = supplierTransactionInfo.Group_Id,
+                        Supplier_Id = supplierTransactionInfo.Supplier_Id,
+                        PaymentMode = supplierTransactionInfo.PaymentMode,
+                        PaymentDate = supplierTransactionInfo.PaymentDate,
+                        Ledger_Id = supplierTransactionInfo.Ledger_Id,
+                        SubLedger_Id = supplierTransactionInfo.SubLedger_Id,
+                        PaidAmount = supplierTransactionInfo.PaidAmount,
+                    };
+                    ERPContext.SupplierTransactions.AddOrUpdate(supplierTransaction);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("PartyTransactions/{startDate}/{endDate}/{supplierId}")]
+        [HttpGet]
+        public HttpResponseMessage GetSupplierTransacions(string startDate, string endDate, string supplierId)
+        {
+            try
+            {
+                DateTime? convertedStartDate = startDate.GetDateTime();
+                DateTime? convertedEndDate = endDate.GetDateTime();
+                Guid SupplierId = Guid.Empty;
+                bool isSupplierId = Guid.TryParse(supplierId, out SupplierId);
+                List<SupplierTransactionInfo> supplierInfoList = new List<SupplierTransactionInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("proc_getSupplierTransaction", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@StartDate", convertedStartDate);
+                    cmd.Parameters.AddWithValue("@EndDate", convertedEndDate);
+                    cmd.Parameters.AddWithValue("@supplier_id", isSupplierId == true ? SupplierId.ToString() : null);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SupplierTransactionInfo supplierTransactionInfo = new SupplierTransactionInfo();
+                        supplierTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                            ? rdr["ChalanNo"].ToString()
+                            : null;
+                        supplierTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
+                            ? rdr["OrderNo"].ToString()
+                            : null;
+                        if (rdr["PhoneNo"] != DBNull.Value)
+                        {
+                            supplierTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                        }
+                        if (rdr["PaymentDate"] != DBNull.Value)
+                        {
+                            supplierTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
+                        }
+                        supplierTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
+                        supplierTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            supplierTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            supplierTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                        supplierInfoList.Add(supplierTransactionInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, supplierInfoList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("PartyTransaction/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSupplierTransacionsById(string id)
+        {
+            try
+            {
+                SupplierTransactionInfo supplierTransaction = new SupplierTransactionInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select pt.Id,ChalanNo,InvoiceNo,OrderNo,Group_Id,PaymentMode,paymentDate,PaidAmount,AccountDescription LedgerName,sl.Description SubledgerName from tblpartytransaction pt
+                                                    left join tblAccount ac on pt.Ledger_Id= ac.id
+                                                    left join tblSubledger sl on pt.subledger_id=sl.Id
+                                                    where pt.id=@id", con);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        supplierTransaction.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierTransaction.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                            ? rdr["ChalanNo"].ToString()
+                            : null;
+                        supplierTransaction.OrderNo = rdr["OrderNo"] != DBNull.Value
+                            ? rdr["OrderNo"].ToString()
+                            : null;
+                        if (rdr["PhoneNo"] != DBNull.Value)
+                        {
+                            supplierTransaction.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                        }
+                        if (rdr["PaymentDate"] != DBNull.Value)
+                        {
+                            supplierTransaction.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
+                        }
+                        //supplierTransaction.l = rdr["LedgerName"] != DBNull.Value ? rdr["LedgerName"].ToString() : null;
+                        supplierTransaction.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
+                        supplierTransaction.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
+                        //supplierTransaction.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            supplierTransaction.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            supplierTransaction.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                        if (rdr["Supplier_Id"] != DBNull.Value)
+                        {
+                            supplierTransaction.Supplier_Id = Guid.Parse(rdr["Supplier_Id"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, supplierTransaction);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Customer/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteSupplierTransaction(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblSupplierTransaction where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
