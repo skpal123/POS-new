@@ -18,6 +18,7 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
 })
 export class CustomerTransactionEntryComponent implements OnInit {
   customerNew:boolean=false
+  paymentType:string="payment";
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerTransactionForm') itemForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -56,6 +57,9 @@ export class CustomerTransactionEntryComponent implements OnInit {
   }
   saveCustomerTransaction(){
     debugger
+    if(this.paymentType=="refund"){
+      this.customerTransaction.PaidAmount*-1;
+    }
     if(this.customerTransaction.Id==null){
       this.blockUi.start("Loading....,Please wait")
       this._inventotyService.savePartyTransaction(this.customerTransaction).subscribe(response=>{
@@ -135,4 +139,5 @@ export class CustomerTransactionEntryComponent implements OnInit {
       }
     })
   }
+
 }
