@@ -18,6 +18,6 @@ namespace ViewModel.Model
         public DateTime? PaymentDate { set; get; }
         public Guid? Ledger_Id { set; get; }
         public Guid? SubLedger_Id { set; get; }
-        public Guid? PaidAmount { set; get; }
+        public decimal PaidAmount { set; get; }
     }
 }
