@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,ViewChild, Input, OnChanges} from '@angular/core';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { CustomerTransaction } from '../../../models/regular-operation/inventory/customer-transaction.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
@@ -8,13 +8,21 @@ import { MatDialog } from '@angular/material';
 import { InventoryService } from '../../../services/regular-operation/inventory.service';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
+import { FormControl } from '@angular/forms';
+import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
 
 @Component({
   selector: 'app-customer-transaction-list',
   templateUrl: './customer-transaction-list.component.html',
   styleUrls: ['./customer-transaction-list.component.css']
 })
-export class CustomerTransactionListComponent implements OnInit {
+export class CustomerTransactionListComponent implements OnChanges {
+  @Input() customerId:string;
+  @ViewChild('formDateControl') formDateControl:FormControl;
+  @ViewChild('toDateControl') toDateControl:FormControl;
+  formDate:Date=new Date();
+  toDate:Date=new Date();
+  startDate:Date=new Date()
   @BlockUI() blockUi:NgBlockUI
   reload:boolean=false;
   columnReady:boolean=false;
@@ -22,6 +30,7 @@ export class CustomerTransactionListComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
+  groupItemList:GroupItem[]=[];
   customerTransactionList:CustomerTransaction[]=[];
   customerTransaction:CustomerTransaction={
     
@@ -32,19 +41,16 @@ export class CustomerTransactionListComponent implements OnInit {
     private matDialog:MatDialog,
     private _inventotyService:InventoryService,
   ) { }
-  ngOnInit() {
+  ngOnChanges() {
     debugger
-    this.getCustomerList();
-    this.getUserFormControlByFormName();
+    this.GetSalesTransactionList();
   }
-  getUserFormControlByFormName(){
-    this.blockUi.start("Loading....,Please wait.")
-    this._postLoginservice.getUserFormControlByFormName('customer-transaction-list').subscribe(response=>{
+  GetSalesTransactionList(){
+    debugger
+    this.blockUi.start("Loading....,Please wait")
+    this._inventotyService.GetSalesTransactionList("Sales",this.customerId).subscribe(response=>{
       this.blockUi.stop();
-      this.userControlList=response;
-      this.ColumnList=this.userControlList;
-      this._customDatatableService.ColumnList=this.userControlList;
-      this.columnReady=true;
+      this.groupItemList=response
     },error=>{
       this.blockUi.stop();
       let dialogData=new DialogData();
@@ -54,7 +60,7 @@ export class CustomerTransactionListComponent implements OnInit {
   }
   getCustomerList(){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionList().subscribe(response=>{
+    this._inventotyService.getPartyTransactionList(this.formDate,this.toDate,this.customerId).subscribe(response=>{
       this.blockUi.stop();
       this.customerTransactionList=response
       this.DataList=this.customerTransactionList;

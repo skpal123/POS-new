@@ -24,7 +24,8 @@ namespace ERP.DataService.Model.Model
         public decimal Tax { set; get; }
         public decimal DiscountRate { set; get; }
         public decimal DiscountAmount { set; get; }
-        public decimal NetPaidAmount { set; get; }
+        public decimal NetPayableAmount { set; get; }
+        public decimal PaidAmount { set; get; }
         public Guid? Group_Id { set; get; }
         [StringLength(20)]
         public string ChalanNo { set; get; }

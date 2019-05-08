@@ -41,8 +41,12 @@
             </div>
           </div>
         </div>
-        <app-custom-datatable [DataList]="DataList" [reload]="reload" [ColumnList]="ColumnList"
-          (EditSelectedRowClicked)="getPartyDetails($event)" (DeleteDataRowClicked)="deleteParty($event)">
+        <app-custom-datatable 
+          [DataList]="DataList" 
+          [reload]="reload" 
+          [ColumnList]="ColumnList"
+          (EditSelectedRowClicked)="getPartyDetails($event)" 
+          (DeleteDataRowClicked)="deleteParty($event)">
         </app-custom-datatable>
       </div>
     </div>

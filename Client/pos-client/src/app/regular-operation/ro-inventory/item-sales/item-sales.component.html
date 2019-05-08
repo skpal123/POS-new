@@ -237,7 +237,7 @@
                           </td>
                           <td formGroupName="{{i}}" *ngIf="ItemSaleValidation[0]?.UnitSale">
                             <div [ngClass]="{'has-error':ItemTransaction.get('UnitSale').invalid&&ItemTransaction.get('UnitSale').touched}" >
-                                    <input id="UnitSale{{i}}" formControlName="UnitSale" type="text" class="form-control">
+                                    <input id="UnitSale{{i}}" (blur)="selectedFormControl(i)" formControlName="UnitSale" type="text" class="form-control">
                                     <span class="help-block" *ngIf="ItemTransaction.get('UnitSale').errors?.required&&ItemTransaction.get('UnitSale').touched">skill name required</span>
                                 </div>
                             </td>
@@ -301,6 +301,17 @@
                                   </div>
                               </div>
                           </div>
+                          <div *ngIf="ItemSaleValidation[0]?.TotalAmountGroup">
+                                <div class="form-group row" [class.has-suucess]="itemSaleForm.get('TotalAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched}">
+                                    <label class="col-sm-4 control-label" for="Vat">Total Amount<span *ngIf="ItemSaleValidation[1]?.TotalAmountGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
+                                    <div class="col-sm-7">
+                                        <input id="Vat" type="number" formControlName="TotalAmount" class="form-control">
+                                        <span *ngIf="itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched" class="help-block">
+                                            Total amount is Required
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                           <div *ngIf="ItemSaleValidation[0]?.DiscountRateGroup">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('DiscountRate').valid" [ngClass]="{'has-error':itemSaleForm.get('DiscountRate').invalid&&itemSaleForm.get('DiscountRate').touched}">
                                   <label class="col-sm-4 control-label" for="DiscountRate">Discount Rate<span *ngIf="ItemSaleValidation[1]?.DiscountRateGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
@@ -323,26 +334,26 @@
                                   </div>
                               </div>
                           </div>
-                          <div *ngIf="ItemSaleValidation[0]?.TotalAmountGroup">
-                              <div class="form-group row" [class.has-suucess]="itemSaleForm.get('TotalAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched}">
-                                  <label class="col-sm-4 control-label" for="Vat">Total Amount<span *ngIf="ItemSaleValidation[1]?.TotalAmountGroup" style="color: red;margin-left: 10px; size: 15px">*</span></label>
+                          <div *ngIf="ItemSaleValidation[0]?.NetPayableAmount">
+                              <div class="form-group row" [class.has-suucess]="itemSaleForm.get('NetPayableAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('NetPayableAmount').invalid&&itemSaleForm.get('NetPayableAmount').touched}">
+                                  <label class="col-sm-4 control-label" for="NetPayableAmount">Net Paid Amount<span *ngIf="ItemSaleValidation[1]?.NetPayableAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
-                                      <input id="Vat" type="number" formControlName="TotalAmount" class="form-control">
-                                      <span *ngIf="itemSaleForm.get('TotalAmount').invalid&&itemSaleForm.get('TotalAmount').touched" class="help-block">
-                                          Total amount is Required
-                                      </span>
+                                      <input id="NetPayableAmount" formControlName="NetPayableAmount" type="number" class="form-control">
+                                      <span class="help-block" *ngIf="itemSaleForm.get('NetPayableAmount').invalid&&itemSaleForm.get('NetPayableAmount').touched">Required</span>
                                   </div>
                               </div>
                           </div>
-                          <div *ngIf="ItemSaleValidation[0]?.NetPaidAmount">
-                              <div class="form-group row" [class.has-suucess]="itemSaleForm.get('NetPaidAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('NetPaidAmount').invalid&&itemSaleForm.get('NetPaidAmount').touched}">
-                                  <label class="col-sm-4 control-label" for="NetPaidAmount">Net Paid Amount<span *ngIf="ItemSaleValidation[1]?.NetPaidAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
-                                  <div class="col-sm-7">
-                                      <input id="NetPaidAmount" formControlName="NetPaidAmount" type="number" class="form-control">
-                                      <span class="help-block" *ngIf="itemSaleForm.get('NetPaidAmount').invalid&&itemSaleForm.get('NetPaidAmount').touched">Required</span>
-                                  </div>
-                              </div>
-                          </div>
+                          <div *ngIf="ItemSaleValidation[0]?.PaidAmount">
+                                <div class="form-group row" [class.has-suucess]="itemSaleForm.get('PaidAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('PaidAmount').invalid&&itemSaleForm.get('PaidAmount').touched}">
+                                    <label class="col-sm-4 control-label" for="Vat">Total Amount<span *ngIf="ItemSaleValidation[1]?.PaidAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
+                                    <div class="col-sm-7">
+                                        <input id="Vat" type="number" formControlName="PaidAmount" class="form-control">
+                                        <span *ngIf="itemSaleForm.get('PaidAmount').invalid&&itemSaleForm.get('PaidAmount').touched" class="help-block">
+                                                Paid Amount is Required
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                           <div *ngIf="ItemSaleValidation[0]?.PaymentMode">
                               <div class="form-group row" [class.has-suucess]="itemSaleForm.get('PaymentMode').valid" [ngClass]="{'has-error':itemSaleForm.get('PaymentMode').invalid&&itemSaleForm.get('PaymentMode').touched}">
                                   <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode<span *ngIf="ItemSaleValidation[1]?.PaymentMode" style="color: red;margin-left: 10px; size: 15px">*</span></label>
@@ -394,7 +405,7 @@
                       </div>
                       <div class="col-md-4">
                           <div class="form-group row" [class.has-suucess]="itemSaleForm.get('PaymentMode').valid" [ngClass]="{'has-error':itemSaleForm.get('PaymentMode').invalid&&itemSaleForm.get('PaymentMode').touched}">
-                              <label class="col-sm-4 control-label" for="NetPaidAmount">Subledger name</label>
+                              <label class="col-sm-4 control-label" for="NetPayableAmount">Subledger name</label>
                               <div class="col-sm-8">
                                   <input id="PaymentMode" formControlName="PaymentMode" type="text" class="form-control">
                                   <span class="help-block" *ngIf="itemSaleForm.get('PaymentMode').invalid&&itemSaleForm.get('PaymentMode').touched">Required</span>

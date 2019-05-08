@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { InventoryService } from '../../../services/regular-operation/inventory.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { FormControl } from '@angular/forms';
+import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
 
 @Component({
   selector: 'app-supplier-transaction-list',
@@ -29,6 +30,7 @@ export class SupplierTransactionListComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
+  groupItemList:GroupItem[]=[];
   supplierTransactionList:SupplierTransaction[]=[];
   supplierTransaction:SupplierTransaction={
     
@@ -42,16 +44,13 @@ export class SupplierTransactionListComponent implements OnInit {
   ngOnInit() {
     debugger
     this.getSupplierTransactionList();
-    this.getUserFormControlByFormName();
   }
-  getUserFormControlByFormName(){
-    this.blockUi.start("Loading....,Please wait.")
-    this._postLoginservice.getUserFormControlByFormName('supplier-transaction-list').subscribe(response=>{
+  GetPurchaseTransactionList(){
+    debugger
+    this.blockUi.start("Loading....,Please wait")
+    this._inventotyService.GetPurchaseTransactionList("Purchase",this.supplierId).subscribe(response=>{
       this.blockUi.stop();
-      this.userControlList=response;
-      this.ColumnList=this.userControlList;
-      this._customDatatableService.ColumnList=this.userControlList;
-      this.columnReady=true;
+      this.groupItemList=response
     },error=>{
       this.blockUi.stop();
       let dialogData=new DialogData();
