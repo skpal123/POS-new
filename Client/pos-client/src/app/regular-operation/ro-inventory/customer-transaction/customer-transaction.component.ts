@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CustomerTransactionComponent implements OnInit {
   customerId:string=null;
+  specificAmountShow:boolean=false;
   constructor() { }
 
   ngOnInit() {
@@ -15,5 +16,14 @@ export class CustomerTransactionComponent implements OnInit {
   getCustomerId($event:string){
     debugger
     this.customerId=$event;
+  }
+  parentDueAmountPaymentMethodChange($event:string){
+    debugger
+    if($event=="specific"){
+      this.specificAmountShow=true;
+    }
+    else{
+      this.specificAmountShow=false;
+    }
   }
 }

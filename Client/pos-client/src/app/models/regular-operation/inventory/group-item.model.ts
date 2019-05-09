@@ -34,6 +34,7 @@ export class GroupItem{
     public PartyName?:string;
     public Customer_Id?:string;
     public CustomerName?:string;
+    public PayAmount?:number;
     public LotNo?:string;
     public ItemTransactionList?:ItemTransaction[];
     public data?:ItemPurchaseValidation[];

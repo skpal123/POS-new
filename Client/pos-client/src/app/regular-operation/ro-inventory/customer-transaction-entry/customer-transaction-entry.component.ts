@@ -18,8 +18,10 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
 })
 export class CustomerTransactionEntryComponent implements OnInit {
   @Output() customerIdClick:EventEmitter <any>=new EventEmitter <any>();
+  @Output() dueAmountPaymentMethodChange:EventEmitter <any>=new EventEmitter <any>();
   customerNew:boolean=false
   paymentType:string="payment";
+  paymentMethod:string="general";
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerTransactionForm') itemForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -141,5 +143,9 @@ export class CustomerTransactionEntryComponent implements OnInit {
         this.customerNew=true;
       }
     })
+  }
+  dueAmountPaymentMethod(paymentMethod){
+    debugger
+    this.dueAmountPaymentMethodChange.emit(paymentMethod);
   }
 }

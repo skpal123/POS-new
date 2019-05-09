@@ -1,10 +1,10 @@
 <div style="margin-left: 10px;margin-right: 10px">
   <div class="row">
     <div class="col-md-8">
-      <app-customer-transaction-list [customerId]="customerId"></app-customer-transaction-list>
+      <app-customer-transaction-list [customerId]="customerId" [specificAmountShow]="specificAmountShow"></app-customer-transaction-list>
     </div>
     <div class="col-md-4">
-      <app-customer-transaction-entry (customerIdClick)="getCustomerId($event)"></app-customer-transaction-entry>
+      <app-customer-transaction-entry (dueAmountPaymentMethodChange)="parentDueAmountPaymentMethodChange($event)" (customerIdClick)="getCustomerId($event)"></app-customer-transaction-entry>
     </div>
   </div>
 </div>

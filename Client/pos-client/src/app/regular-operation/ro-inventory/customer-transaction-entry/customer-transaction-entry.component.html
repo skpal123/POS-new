@@ -9,16 +9,16 @@
       <div class="panel-body">
         <form #customerTransactionForm="ngForm">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4 col-md-offset-2">
               <label class="radio-inline">
                 <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
-                  [(ngModel)]="paymentType" #voucherTypeControl="ngModel" value="payment">Payment<br>
+                  [(ngModel)]="paymentType" #paymentTypeControl="ngModel" value="payment">Payment<br>
               </label>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="radio-inline">
                 <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
-                  [(ngModel)]="paymentType" #voucherTypeControl="ngModel" value="refund">Refund<br>
+                  [(ngModel)]="paymentType" #paymentTypeControl="ngModel" value="refund">Refund<br>
               </label>
             </div>
           </div>
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="PaymentDate" class="col-sm-4 col-form-label">From Date</label>
+            <label for="PaymentDate" class="col-sm-4 col-form-label">Payment Date</label>
             <div class="col-sm-7" id="startDateMargin">
               <div class="row">
                 <div class="col-md-10">
@@ -95,6 +95,20 @@
                 (subledgerOnItemSelect)="subledgerOnSeletedItem($event)"
                 (subledgerOnItemDeSelect)="subledgerOnDeSeletedItem($event)"
                 [subledgerSelectedItems]="subledgerSelectedItems"></app-subledger-dropdown>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-2">
+              <label class="radio-inline">
+                <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                  [(ngModel)]="paymentMethod" #paymentMethodControl="ngModel" value="general">General<br>
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label class="radio-inline">
+                <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                  [(ngModel)]="paymentMethod" #paymentMethodControl="ngModel" value="specific">Specific<br>
+              </label>
             </div>
           </div>
           <div class="row">

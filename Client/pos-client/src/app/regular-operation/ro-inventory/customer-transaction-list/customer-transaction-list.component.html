@@ -52,6 +52,7 @@
                                             <th>Payment Date</th>
                                             <th>Total Payable Amount</th>
                                             <th>Paid Amount</th>
+                                            <th *ngIf="specificAmountShow">Pay Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -62,6 +63,9 @@
                                             <td>{{group.TransactionDate|date}}</td>
                                             <td>{{group.NetPayableAmount}}</td>
                                             <td>{{group.PaidAmount}}</td>
+                                            <td *ngIf="specificAmountShow">
+                                              <input class="form-control" type="number" [(ngModel)]="group.PayAmount">
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

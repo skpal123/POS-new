@@ -18,6 +18,7 @@ import { GroupItem } from '../../../models/regular-operation/inventory/group-ite
 })
 export class CustomerTransactionListComponent implements OnChanges {
   @Input() customerId:string;
+  @Input() specificAmountShow:boolean
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
   formDate:Date=new Date();
@@ -47,12 +48,15 @@ export class CustomerTransactionListComponent implements OnChanges {
   }
   GetSalesTransactionList(){
     debugger
-    this.blockUi.start("Loading....,Please wait")
+    //this.blockUi.start("Loading....,Please wait")
     this._inventotyService.GetSalesTransactionList("Sales",this.customerId).subscribe(response=>{
       this.blockUi.stop();
       this.groupItemList=response
+      this.groupItemList.forEach(a=>{
+        a.PayAmount=a.NetPayableAmount-a.PaidAmount
+      })
     },error=>{
-      this.blockUi.stop();
+      //this.blockUi.stop();
       let dialogData=new DialogData();
       dialogData.message=error
       this._alertBox.openDialog(dialogData);
