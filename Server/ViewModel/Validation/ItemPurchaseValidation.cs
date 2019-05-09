@@ -39,6 +39,8 @@ namespace ViewModel.Validation
         public bool? TotalAmountTransaction { set; get; }
         public bool? TotalAmountGroup { set; get; }
         public bool? QuantityGroup { set; get; }
+        public bool? NetPayableAmount { set; get; }
+        public bool? PaidAmount { set; get; }
         public bool? LotNo { set; get; }
         public bool? DiscountAmountGroup { set; get; }
     }

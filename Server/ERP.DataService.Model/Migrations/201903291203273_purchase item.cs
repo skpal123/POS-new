@@ -20,7 +20,7 @@ namespace ERP.DataService.Model.Migrations
                         Tax = c.Decimal(nullable: false, precision: 18, scale: 2),
                         DiscountRate = c.Decimal(nullable: false, precision: 18, scale: 2),
                         DiscountAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        NetPaidAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        NetPayableAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Group_Id = c.Guid(),
                     })
                 .PrimaryKey(t => t.Id);

@@ -12,7 +12,8 @@ export class GroupItem{
     public Tax?:number
     public DiscountRate?:number
     public DiscountAmount?:number
-    public NetPaidAmount?:number
+    public NetPayableAmount?:number
+    public PaidAmount?:number
     public PaymentMode?:number;
     public Ledger_Id?:string;
     public LedgerName?:string;

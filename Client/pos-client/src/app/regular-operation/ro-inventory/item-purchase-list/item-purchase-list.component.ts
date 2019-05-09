@@ -32,7 +32,7 @@ export class ItemPurchaseListComponent implements OnInit {
   groupItem:GroupItem={
     Id:null,TransactionId:null,TransactionType:null,Quantity:null,data:[],
     TotalAmount:null,Ledger_Id:null,SubLedger_Id:null,LedgerId:null,SubLedgerId:null,PaymentMode:0,
-    Vat:null,Tax:null,DiscountAmount:null,DiscountRate:null,NetPaidAmount:null,ItemTransactionList:[]
+    Vat:null,Tax:null,DiscountAmount:null,DiscountRate:null,NetPayableAmount:null,ItemTransactionList:[]
   }
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
@@ -158,7 +158,7 @@ export class ItemPurchaseListComponent implements OnInit {
     this.groupItem.DiscountAmount=0
     this.groupItem.Vat=0
     this.groupItem.Tax=0
-    this.groupItem.NetPaidAmount=0
+    this.groupItem.NetPayableAmount=0
     this.groupItem.Approver_Id=null
     this.groupItem.Ledger_Id=null
     this.groupItem.SubLedger_Id=null

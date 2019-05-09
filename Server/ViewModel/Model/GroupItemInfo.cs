@@ -18,13 +18,15 @@ namespace ViewModel.Model
         public decimal Tax { set; get; }
         public decimal DiscountRate { set; get; }
         public decimal DiscountAmount { set; get; }
-        public decimal NetPaidAmount { set; get; }
+        public decimal NetPayableAmount { set; get; }
+        public decimal PaidAmount { set; get; }
         public string ChalanNo { set; get; }
         public string InvoiceNo { set; get; }
         public string Comments { set; get; }
         public DateTime? TransactionDate { set; get; }
         public String GrvNo { set; get; }
         public Guid? Supplier_Id { set; get; }
+        public Guid? Customer_Id { set; get; }
         public string SupplierName { set; get; }
         public DateTime GrvDate { set; get; }
         public Guid? Approver_Id { set; get; }

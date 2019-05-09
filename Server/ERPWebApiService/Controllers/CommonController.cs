@@ -263,6 +263,8 @@ namespace ERPWebApiService.Controllers
                         itemPurchaseValidation.DiscountRateTransaction = Convert.ToBoolean(rdr["DiscountRateTransaction"]);
                         itemPurchaseValidation.DiscountRateGroup = Convert.ToBoolean(rdr["DiscountRateGroup"]);
                         itemPurchaseValidation.TotalAmountTransaction = Convert.ToBoolean(rdr["TotalAmountTransaction"]);
+                        itemPurchaseValidation.PaidAmount = Convert.ToBoolean(rdr["PaidAmount"]);
+                        itemPurchaseValidation.NetPayableAmount = Convert.ToBoolean(rdr["NetPayableAmount"]);
                         itemPurchaseValidation.TotalAmountGroup = Convert.ToBoolean(rdr["TotalAmountGroup"]);
                         itemPurchaseValidation.LotNo = Convert.ToBoolean(rdr["LotNo"]);
                         itemPurchaseValidation.DiscountAmountGroup = Convert.ToBoolean(rdr["DiscountAmountGroup"]);

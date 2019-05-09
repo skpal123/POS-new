@@ -239,6 +239,14 @@
     <Compile Include="Migrations\201905071512248_update8.Designer.cs">
       <DependentUpon>201905071512248_update8.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905081631113_change natpaidamount to netpayableamount.cs" />
+    <Compile Include="Migrations\201905081631113_change natpaidamount to netpayableamount.Designer.cs">
+      <DependentUpon>201905081631113_change natpaidamount to netpayableamount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905081718369_add paidamount.cs" />
+    <Compile Include="Migrations\201905081718369_add paidamount.Designer.cs">
+      <DependentUpon>201905081718369_add paidamount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -418,6 +426,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905071512248_update8.resx">
       <DependentUpon>201905071512248_update8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905081631113_change natpaidamount to netpayableamount.resx">
+      <DependentUpon>201905081631113_change natpaidamount to netpayableamount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905081718369_add paidamount.resx">
+      <DependentUpon>201905081718369_add paidamount.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

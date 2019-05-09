@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild,Output,EventEmitter } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgForm, FormControl } from '@angular/forms';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
@@ -17,6 +17,7 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
   styleUrls: ['./customer-transaction-entry.component.css']
 })
 export class CustomerTransactionEntryComponent implements OnInit {
+  @Output() customerIdClick:EventEmitter <any>=new EventEmitter <any>();
   customerNew:boolean=false
   paymentType:string="payment";
   @BlockUI() blockUi:NgBlockUI
@@ -118,6 +119,8 @@ export class CustomerTransactionEntryComponent implements OnInit {
     }
   }
   customerOnSeletedItem($event:MultiSelectDropdown){
+    debugger
+    this.customerIdClick.emit($event.id);
     if($event.id!="0"){
       this.customerTransaction.Customer_Id=$event.id;
     }
@@ -139,5 +142,4 @@ export class CustomerTransactionEntryComponent implements OnInit {
       }
     })
   }
-
 }

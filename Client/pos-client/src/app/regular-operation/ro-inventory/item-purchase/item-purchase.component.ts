@@ -108,7 +108,8 @@ export class ItemPurchaseComponent implements OnInit {
       DiscountAmount: [0,this.purchaseValidation[0].DiscountAmount==true&&this.purchaseValidation[1].DiscountAmount==true? Validators.required:null],
       Vat: [0,this.purchaseValidation[0].Vat==true&&this.purchaseValidation[1].Vat==true? Validators.required:null],
       Tax: [0,this.purchaseValidation[0].Tax==true&&this.purchaseValidation[1].Tax==true? Validators.required:null],
-      NetPaidAmount: [0,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
+      NetPayableAmount: [0,this.purchaseValidation[0].NetPayableAmount==true&&this.purchaseValidation[1].NetPayableAmount==true? Validators.required:0],
+      PaidAmount: [0,this.purchaseValidation[0].PaidAmount==true&&this.purchaseValidation[1].PaidAmount==true? Validators.required:null],
       Approver_Id: [null,this.purchaseValidation[0].Approver_Id==true&&this.purchaseValidation[1].Approver_Id==true? Validators.required:null],
       Ledger_Id: [null,this.purchaseValidation[0].Ledger_Id==true&&this.purchaseValidation[1].Ledger_Id==true? Validators.required:null],
       SubLedger_Id: [null,this.purchaseValidation[0].SubLedger_Id==true&&this.purchaseValidation[1].SubLedger_Id==true? Validators.required:null],
@@ -151,7 +152,8 @@ export class ItemPurchaseComponent implements OnInit {
         DiscountAmount: this.groupItem.DiscountAmount,
         Vat: this.groupItem.Vat,
         Tax:this.groupItem.Tax,
-        NetPaidAmount: this.groupItem.NetPaidAmount,
+        NetPayableAmount: this.groupItem.NetPayableAmount,
+        PaidAmount:this.groupItem.PaidAmount,
         Approver_Id:this.groupItem.Approver_Id,
         Ledger_Id:this.groupItem.Ledger_Id,
         SubLedger_Id:this.groupItem.SubLedger_Id,
@@ -371,8 +373,8 @@ export class ItemPurchaseComponent implements OnInit {
     if(this.itemPurchaseForm.get('TotalAmount')){
       this.itemPurchaseForm.get('TotalAmount').setValue(this.grandTotal);
     }
-    if( this.itemPurchaseForm.get('NetPaidAmount')){
-      this.itemPurchaseForm.get('NetPaidAmount').setValue(this.grandTotal-discountAmount);
+    if( this.itemPurchaseForm.get('NetPayableAmount')){
+      this.itemPurchaseForm.get('NetPayableAmount').setValue(this.grandTotal-discountAmount);
     }
   }
   slectedGroupControl(){

@@ -182,3 +182,5 @@ E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.Data
 E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.csproj.GenerateResource.Cache
 E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.dll
 E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changenatpaidamounttonetpayableamount.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addpaidamount.resources

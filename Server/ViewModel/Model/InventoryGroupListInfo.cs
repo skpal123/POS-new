@@ -17,7 +17,7 @@ namespace ViewModel.Model
         public decimal Tax { set; get; }
         public decimal DiscountRate { set; get; }
         public decimal DiscountAmount { set; get; }
-        public decimal NetPaidAmount { set; get; }
+        public decimal NetPayableAmount { set; get; }
         public string ChalanNo { set; get; }
         public string InvoiceNo { set; get; }
         public string Comments { set; get; }

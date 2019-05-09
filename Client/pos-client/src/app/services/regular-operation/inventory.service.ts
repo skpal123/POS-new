@@ -112,7 +112,18 @@ export class InventoryService {
         catchError(this.handleError)
       )
     }
-    
+    public GetSalesTransactionList(transactionType:string,customerId:string){
+      var url=this._defaultRoute.InventoryService+'SalesTransactions/'+transactionType+'/'+customerId;
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public GetPurchaseTransactionList(transactionType:string,supplierId:string){
+      var url=this._defaultRoute.InventoryService+'PurchaseTransactions/'+transactionType+'/'+supplierId;
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
     private handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
         console.error('An error occurred:', error.error.message);

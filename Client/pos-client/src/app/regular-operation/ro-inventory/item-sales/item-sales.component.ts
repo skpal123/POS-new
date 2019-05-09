@@ -102,7 +102,8 @@ export class ItemSalesComponent implements OnInit {
       DiscountAmount: [0,this.ItemSaleValidation[0].DiscountAmount==true&&this.ItemSaleValidation[1].DiscountAmount==true? Validators.required:null],
       Vat: [0,this.ItemSaleValidation[0].Vat==true&&this.ItemSaleValidation[1].Vat==true? Validators.required:null],
       Tax: [0,this.ItemSaleValidation[0].Tax==true&&this.ItemSaleValidation[1].Tax==true? Validators.required:null],
-      NetPaidAmount: [0,this.ItemSaleValidation[0].Location_Id==true&&this.ItemSaleValidation[1].Location_Id==true? Validators.required:null],
+      NetPayableAmount: [0,this.ItemSaleValidation[0].NetPayableAmount==true&&this.ItemSaleValidation[1].NetPayableAmount==true? Validators.required:null],
+      PaidAmount: [0,this.ItemSaleValidation[0].PaidAmount==true&&this.ItemSaleValidation[1].PaidAmount==true? Validators.required:null],
       Approver_Id: [null,this.ItemSaleValidation[0].Approver_Id==true&&this.ItemSaleValidation[1].Approver_Id==true? Validators.required:null],
       Ledger_Id: [null,this.ItemSaleValidation[0].Ledger_Id==true&&this.ItemSaleValidation[1].Ledger_Id==true? Validators.required:null],
       SubLedger_Id: [null,this.ItemSaleValidation[0].SubLedger_Id==true&&this.ItemSaleValidation[1].SubLedger_Id==true? Validators.required:null],
@@ -147,7 +148,7 @@ export class ItemSalesComponent implements OnInit {
         DiscountAmount: this.groupItem.DiscountAmount,
         Vat: this.groupItem.Vat,
         Tax:this.groupItem.Tax,
-        NetPaidAmount: this.groupItem.NetPaidAmount,
+        NetPayableAmount: this.groupItem.NetPayableAmount,
         Approver_Id:this.groupItem.Approver_Id,
         Ledger_Id:this.groupItem.Ledger_Id,
         SubLedger_Id:this.groupItem.SubLedger_Id,
@@ -220,7 +221,7 @@ export class ItemSalesComponent implements OnInit {
   calulateTotalAmount(itemTransaction:ItemTransaction):number{
 
     var totalAmount=0,discountAmount=0;
-    let amount=itemTransaction.UnitCost*itemTransaction.Quantity;
+    let amount=itemTransaction.UnitSale*itemTransaction.Quantity;
     if(amount>0){
       discountAmount=(amount*itemTransaction.DiscountRate)/100
     }
@@ -340,9 +341,9 @@ export class ItemSalesComponent implements OnInit {
     var discountRateControl=control.get('DiscountRate');
     var discountAmountControl=control.get('DiscountAmount');
     var TotalAmountControl=control.get('TotalAmount');
-    var unitCostControl=control.get('UnitCost');
-    if(quantityControl&&quantityControl.value!="" &&unitCostControl&&unitCostControl.value!=""){
-      totalAmount=Number(quantityControl.value)*Number(unitCostControl.value);
+    var unitSaleControl=control.get('UnitSale');
+    if(quantityControl&&quantityControl.value!="" &&unitSaleControl&&unitSaleControl.value!=""){
+      totalAmount=Number(quantityControl.value)*Number(unitSaleControl.value);
       TotalAmountControl.setValue(totalAmount);
     }
     if(discountRateControl&&discountRateControl.value!=""){
@@ -385,8 +386,8 @@ export class ItemSalesComponent implements OnInit {
     if(this.itemSaleForm.get('TotalAmount')){
       this.itemSaleForm.get('TotalAmount').setValue(this.grandTotal);
     }
-    if( this.itemSaleForm.get('NetPaidAmount')){
-      this.itemSaleForm.get('NetPaidAmount').setValue(this.grandTotal-discountAmount);
+    if( this.itemSaleForm.get('NetPayableAmount')){
+      this.itemSaleForm.get('NetPayableAmount').setValue(this.grandTotal-discountAmount);
     }
   }
   slectedGroupControl(){
@@ -509,9 +510,8 @@ savePurchaseItem(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -525,9 +525,8 @@ savePurchaseItem(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

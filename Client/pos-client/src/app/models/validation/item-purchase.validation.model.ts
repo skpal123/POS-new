@@ -29,6 +29,8 @@ export class ItemPurchaseValidation{
   public DiscountRateGroup?:boolean
   public TotalAmountTransaction?:boolean
   public TotalAmountGroup?:boolean
+  public NetPayableAmount?:boolean
+  public PaidAmount?:boolean
   public QuantityGroup?:boolean
   public LotNo?:boolean
   public DiscountAmountGroup?:boolean
