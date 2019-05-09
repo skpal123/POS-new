@@ -22,6 +22,7 @@ import { SupplierTransactionListComponent } from './supplier-transaction-list/su
 import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
 import { SepecificCustomerTransactionEntryComponent } from './sepecific-customer-transaction-entry/sepecific-customer-transaction-entry.component';
 import { SepecificSupplierTransactionEntryComponent } from './sepecific-supplier-transaction-entry/sepecific-supplier-transaction-entry.component';
+import { ItemTransactionDetailsComponent } from './item-transaction-details/item-transaction-details.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,7 +34,7 @@ import { SepecificSupplierTransactionEntryComponent } from './sepecific-supplier
     RoInventoryLayoutComponent,
     AddItemComponent, 
     ItemPurchaseListComponent, 
-    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent, CustomerTransactionComponent, CustomerTransactionListComponent, CustomerTransactionEntryComponent, SupplierTransactionEntryComponent, SupplierTransactionComponent, SupplierTransactionListComponent, SepecificCustomerTransactionEntryComponent, SepecificSupplierTransactionEntryComponent
+    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent, CustomerTransactionComponent, CustomerTransactionListComponent, CustomerTransactionEntryComponent, SupplierTransactionEntryComponent, SupplierTransactionComponent, SupplierTransactionListComponent, SepecificCustomerTransactionEntryComponent, SepecificSupplierTransactionEntryComponent, ItemTransactionDetailsComponent
   ],
   entryComponents:[ItemPurchaseComponent,
     FormDetailsControlComponent,
@@ -41,7 +42,8 @@ import { SepecificSupplierTransactionEntryComponent } from './sepecific-supplier
     CustomerEntryComponent,
     PartyEntryComponent,
     ItemSalesComponent,
-    CustomDatatableControlComponent
+    CustomDatatableControlComponent,
+    ItemTransactionDetailsComponent
   ]
 })
 export class RoInventoryModule { }

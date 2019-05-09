@@ -2181,5 +2181,49 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("ItemTransactionDetails/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetItemTrnsactionByGroupId(string id)
+        {
+            try
+            {
+                var Id = Guid.Parse(id);
+                var itemTransactionList =
+                    ERPContext.ItemTransactions.Where(y => y.Group_Id == Id)
+                        .Select(y => new ItemTransactionInfo()
+                        {
+                            Id = y.Id,
+                            TransactionId = y.TransactionId,
+                            Reason = y.Reason,
+                            TransactionType = y.TransactionType,
+                            Quantity = y.Quantity,
+                            UnitCost = y.UnitCost,
+                            UnitSale = y.UnitSale,
+                            Vat = y.Vat,
+                            Tax = y.Tax,
+                            DiscountAmount = y.DiscountAmount,
+                            SerialNo = y.SerialNo,
+                            DiscountRate = y.DiscountRate,
+                            LotNo = y.LotNo,
+                            TransactionDate = y.TransactionDate,
+                            Group_Id = y.Group_Id,
+                            Item_Id = y.Item_Id,
+                            ItemName =
+                                ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id) != null
+                                    ? ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id).ItemName
+                                    : null,
+                            Location_Id = y.Location_Id,
+                            LocationName =
+                                ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null
+                                    ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName
+                                    : null,
+                        }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, itemTransactionList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }           
+        }
     }
 }

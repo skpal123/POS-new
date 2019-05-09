@@ -124,6 +124,12 @@ export class InventoryService {
         catchError(this.handleError)
       )
     }
+    public GetItemTransactionDetails(Id:string){
+      var url=this._defaultRoute.InventoryService+'ItemTransactionDetails/'+Id;
+      return this._httpClient.get<GroupItem[]>(url).pipe(
+        catchError(this.handleError)
+      )
+    }
     private handleError(error: HttpErrorResponse) {
       if (error.error instanceof ErrorEvent) {
         console.error('An error occurred:', error.error.message);

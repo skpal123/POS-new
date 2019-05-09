@@ -43,28 +43,34 @@
                       </div>
                       <div class="row">
                             <div class="col-md-12">
-                                <table class="table">
+                                <table class="table" datatable [dtOptions]="dtOptions" dtTrigger="dtTrigger">
                                     <thead>
                                         <tr>
                                             <th>Invoice No</th>
-                                            <th>Order No</th>
                                             <th>Supplier Name</th>
                                             <th>Payment Date</th>
                                             <th>Total Payable Amount</th>
                                             <th>Paid Amount</th>
                                             <th *ngIf="specificAmountShow">Pay Amount</th>
+                                            <th>Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let group of groupItemList">
                                             <td>{{group.InvoiceNo}}</td>
-                                            <td>{{group.OrderNo}}</td>
                                             <td>{{group.CustomerName}}</td>
                                             <td>{{group.TransactionDate|date}}</td>
                                             <td>{{group.NetPayableAmount}}</td>
                                             <td>{{group.PaidAmount}}</td>
                                             <td *ngIf="specificAmountShow">
                                               <input class="form-control" type="number" [(ngModel)]="group.PayAmount">
+                                            </td>
+                                            <td>
+                                              <input type="button" value="View transactions" class="btn btn-success" (click)="getItemTransactionDetails(group.Id)">
+                                            </td>
+                                            <td>
+                                              <input type="button" value="View history" class="btn btn-success" (click)="getCustomerTransactionDetails(group.Customer_Id)">
                                             </td>
                                         </tr>
                                     </tbody>

@@ -10,6 +10,8 @@ import { UserFormControl } from '../../../models/common/user-form-control.model'
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { FormControl } from '@angular/forms';
 import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
+import { Subject } from 'rxjs';
+import { ItemTransactionDetailsComponent } from '../item-transaction-details/item-transaction-details.component';
 
 @Component({
   selector: 'app-customer-transaction-list',
@@ -21,6 +23,8 @@ export class CustomerTransactionListComponent implements OnChanges {
   @Input() specificAmountShow:boolean
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
+  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: DataTables.Settings = {};
   formDate:Date=new Date();
   toDate:Date=new Date();
   startDate:Date=new Date()
@@ -44,6 +48,10 @@ export class CustomerTransactionListComponent implements OnChanges {
   ) { }
   ngOnChanges() {
     debugger
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10
+    };
     this.GetSalesTransactionList();
   }
   GetSalesTransactionList(){
@@ -55,27 +63,12 @@ export class CustomerTransactionListComponent implements OnChanges {
       this.groupItemList.forEach(a=>{
         a.PayAmount=a.NetPayableAmount-a.PaidAmount
       })
+      this.dtTrigger.next();
+      this.dtTrigger.complete();
     },error=>{
       //this.blockUi.stop();
       let dialogData=new DialogData();
       dialogData.message=error
-      this._alertBox.openDialog(dialogData);
-    })
-  }
-  getCustomerList(){
-    this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionList(this.formDate,this.toDate,this.customerId).subscribe(response=>{
-      this.blockUi.stop();
-      this.customerTransactionList=response
-      this.DataList=this.customerTransactionList;
-      this._customDatatableService.DataList=this.customerTransactionList;
-      this.reload=true;
-      this.dataReady=true;
-    },error=>{
-      this.blockUi.stop();
-      let message=error.json();
-      let dialogData=new DialogData();
-      dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -123,5 +116,37 @@ export class CustomerTransactionListComponent implements OnChanges {
       this._alertBox.openDialog(dialogData);
     })
   }
+  getItemTransactionDetails(Id:string){
+    const dialogRef=this.matDialog.open(ItemTransactionDetailsComponent,{
+      data:Id,
+      disableClose:true,
+      maxWidth:'100vw',
+      maxHeight:'100vh',
+      height:'70%',
+      width:'80%'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+      
+    })
+  }
+  getCustomerTransactionDetails(customerId:string){
 
+  }
+  getCustomerList(){
+    this.blockUi.start("Loading....,Please wait")
+    this._inventotyService.getPartyTransactionList(this.formDate,this.toDate,this.customerId).subscribe(response=>{
+      this.blockUi.stop();
+      this.customerTransactionList=response
+      this.DataList=this.customerTransactionList;
+      this._customDatatableService.DataList=this.customerTransactionList;
+      this.reload=true;
+      this.dataReady=true;
+    },error=>{
+      this.blockUi.stop();
+      let message=error.json();
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
 }
