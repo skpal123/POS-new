@@ -58,8 +58,8 @@
                                         <tr *ngFor="let group of groupItemList">
                                             <td>{{group.InvoiceNo}}</td>
                                             <td>{{group.OrderNo}}</td>
-                                            <td>{{group.SupplierName}}</td>
-                                            <td>{{group.PaymentDate}}</td>
+                                            <td>{{group.CustomerName}}</td>
+                                            <td>{{group.TransactionDate|date}}</td>
                                             <td>{{group.NetPayableAmount}}</td>
                                             <td>{{group.PaidAmount}}</td>
                                         </tr>

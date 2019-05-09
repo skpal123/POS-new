@@ -38,40 +38,6 @@
                                   </div>
                               </div>
                           </div>
-                          <div *ngIf="ItemSaleValidation[0]?.Supplier_Id">
-                              <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Supplier_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Supplier_Id').invalid}">
-                                  <label class="col-sm-4 control-label" for="Supplier_Id">Supplier name<span *ngIf="ItemSaleValidation[1]?.Supplier_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
-                                  <div class="col-sm-7">
-                                      <input style="display: none;" class="form-control" formControlName="Supplier_Id">
-                                      <app-supplier-dropdown 
-                                      [IsNewSupplierAdd]="supplierNew"
-                                      (supplierOnItemSelect)="supplierOnSeletedItem($event)" 
-                                      [supplierSelectedItems]="supplierSelectedItems">
-                                      </app-supplier-dropdown>
-                                      <span class="help-block" *ngIf="itemSaleForm.get('Supplier_Id').invalid">Required</span>
-                                  </div>
-                                  <div class="col-md-1">
-                                          <span id="pointer" (click)="createNewSupplier()" class="glyphicon glyphicon-plus"></span>
-                                  </div>
-                              </div>
-                          </div>
-                          <div *ngIf="ItemSaleValidation[0]?.Party_Id">
-                            <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Party_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Party_Id').invalid}">
-                                <label class="col-sm-4 control-label" for="Party_Id">Party name<span *ngIf="ItemSaleValidation[1]?.Party_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
-                                <div class="col-sm-7">
-                                    <input style="display: none;" class="form-control" formControlName="Party_Id">
-                                    <app-party-dropdown 
-                                    [IsNewPartyAdd]="partyNew"
-                                    (partyrOnItemSelect)="partyOnSeletedItem($event)" 
-                                    [partySelectedItems]="partySelectedItems">
-                                    </app-party-dropdown>
-                                    <span class="help-block" *ngIf="itemSaleForm.get('Party_Id').invalid">Required</span>
-                                </div>
-                                <div class="col-md-1">
-                                        <span id="pointer" (click)="createNewParty()" class="glyphicon glyphicon-plus"></span>
-                                </div>
-                            </div>
-                        </div>
                         <div *ngIf="ItemSaleValidation[0]?.Customer_Id">
                             <div class="form-group row" [class.has-suucess]="itemSaleForm.get('Customer_Id').valid" [ngClass]="{'has-error':itemSaleForm.get('Customer_Id').invalid}">
                                 <label class="col-sm-4 control-label" for="Customer_Id">Customer name<span *ngIf="ItemSaleValidation[1]?.Customer_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>

@@ -184,3 +184,5 @@ E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.Data
 E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changenatpaidamounttonetpayableamount.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addpaidamount.resources
+E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changenatpaidamounttonetpayableamount.resources
+E:\development_Sumon\POS\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addpaidamount.resources

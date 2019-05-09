@@ -26,8 +26,9 @@ namespace ViewModel.Model
         public DateTime? TransactionDate { set; get; }
         public String GrvNo { set; get; }
         public Guid? Supplier_Id { set; get; }
-        public Guid? Customer_Id { set; get; }
         public string SupplierName { set; get; }
+        public Guid? Customer_Id { set; get; }
+        public string CustomerName { set; get; }
         public DateTime GrvDate { set; get; }
         public Guid? Approver_Id { set; get; }
         public Guid? Ledger_Id { set; get; }
