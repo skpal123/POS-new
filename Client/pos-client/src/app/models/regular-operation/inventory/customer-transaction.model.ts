@@ -10,6 +10,9 @@ export class CustomerTransaction{
     public Ledger_Id?:string;
     public LedgerName?:string;
     public SubLedger_Id?:string;
-    public SubLedgerName?:string;
     public PaidAmount?:number;
+    public SubLedgerName?:string;
+    public PaymentType?:string;
+    public PaymentMethod?:string;
+    public TotalDueAdvanceAmount?:number;
 }

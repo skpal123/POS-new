@@ -256,5 +256,24 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("getLedgerByPaymentMode/{paymentMode}")]
+        [HttpGet]
+        public HttpResponseMessage GetLedgerDropdownListByPamentMode(int paymentMode)
+        {
+            try
+            {
+                var datalist = ERPContext.Accounts.Where(x=>x.AccountType==paymentMode).Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.ManualAccountCode,
+                    Text = x.AccountDescription
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

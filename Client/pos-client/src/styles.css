@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-/* @import '~bootstrap/dist/css/bootstrap.min.css'; */
+@import '~bootstrap/dist/css/bootstrap.min.css'; 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 .navbar-nav > li > a, .navbar-brand {padding-top:8px !important; padding-bottom:0 !important; height: 40px; } .navbar {min-height:30px !important;}
 

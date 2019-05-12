@@ -1180,13 +1180,7 @@ namespace ERPWebApiService.Controllers
                 List<InventoryGroupListInfo> inventoryGroupList=new List<InventoryGroupListInfo> ();
                 using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd=new SqlCommand(@"select g.Id, g.TransactionId,g.TransactionType,g.Quantity,g.TotalAmount,
-                    g.DiscountRate,g.DiscountAmount,g.vat,g.Tax,g.NetPayableAmount,
-                    g.ChalanNo,g.InvoiceNo,g.Comments,g.TransactionDate,g.GrvNo,g.GrvDate,
-                    s.SupplierName,p.PartyName,c.CustomerName from tblgroupitem g
-                    left join tblSupplier  s on g.Supplier_Id=s.Id
-                    left join tblCustomer c on g.Customer_Id=c.id
-                    left join tblParty p on g.Party_Id=p.Id where TransactionType=@transactionType",con);
+                    SqlCommand cmd = new SqlCommand(@"select * from func_GetGroupItemList(@transactionType)", con);
                     con.Open();
                     cmd.Parameters.AddWithValue("@transactionType", transactionType);
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -1203,12 +1197,13 @@ namespace ERPWebApiService.Controllers
                         inventoryGroup.Vat = rdr["Vat"] != DBNull.Value ? Convert.ToDecimal(rdr["Vat"].ToString()) : 0;
                         inventoryGroup.Tax = rdr["Tax"] != DBNull.Value ? Convert.ToDecimal(rdr["Tax"].ToString()) : 0;
                         inventoryGroup.NetPayableAmount = rdr["NetPayableAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["NetPayableAmount"].ToString()) : 0;
+                        inventoryGroup.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"].ToString()) : 0;
                         inventoryGroup.ChalanNo = rdr["ChalanNo"] != DBNull.Value ? rdr["ChalanNo"].ToString() : null;
                         inventoryGroup.InvoiceNo = rdr["InvoiceNo"] != DBNull.Value ? rdr["InvoiceNo"].ToString() : null;
                         inventoryGroup.Comments = rdr["Comments"] != DBNull.Value ? rdr["Comments"].ToString() : null;
                         inventoryGroup.GrvNo = rdr["GrvNo"] != DBNull.Value ? rdr["GrvNo"].ToString() : null;
                         inventoryGroup.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
-                        inventoryGroup.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
+                        //inventoryGroup.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
                         inventoryGroup.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
                         if (rdr["TransactionDate"] != DBNull.Value)
                         {
@@ -1308,7 +1303,7 @@ namespace ERPWebApiService.Controllers
                         PaymentDate = groupItemInfo.TransactionDate,
                         Ledger_Id = groupItemInfo.Ledger_Id,
                         SubLedger_Id = groupItemInfo.SubLedger_Id,
-                        PaidAmount = groupItemInfo.NetPayableAmount
+                        PaidAmount = groupItemInfo.PaidAmount
                     };
                     ERPContext.SupplierTransactions.Add(supplierTransaction);
                     ERPContext.SaveChanges();
@@ -1326,7 +1321,7 @@ namespace ERPWebApiService.Controllers
                         PaymentDate = groupItemInfo.TransactionDate,
                         Ledger_Id = groupItemInfo.Ledger_Id,
                         SubLedger_Id = groupItemInfo.SubLedger_Id,
-                        PaidAmount = groupItemInfo.NetPayableAmount
+                        PaidAmount = groupItemInfo.PaidAmount
                     };
                     ERPContext.PartyTransactions.Add(customerTransaction);
                     ERPContext.SaveChanges();
@@ -1467,58 +1462,97 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
-                var manufacture = ERPContext.GroupItems.Where(x => x.Id == Id).Select(x => new GroupItemInfo()
+                GroupItemInfo inventoryGroup = new GroupItemInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    Id = x.Id,
-                    TransactionId = x.TransactionId,
-                    TransactionType = x.TransactionType,
-                    Reason = x.Reason,
-                    TransactionDate = x.TransactionDate,
-                    Quantity = x.Quantity,
-                    TotalAmount = x.TotalAmount,
-                    Vat = x.Vat,
-                    Tax = x.Tax,
-                    DiscountRate = x.DiscountRate,
-                    DiscountAmount = x.DiscountAmount,
-                    NetPayableAmount = x.NetPayableAmount,
-                    PaymentMode = x.PaymentMode,
-                    Ledger_Id = x.Ledger_Id,
-                    LedgerName  = ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id) != null ? ERPContext.Accounts.FirstOrDefault(y => y.Id == x.Ledger_Id).AccountDescription : null,
-                    SubLedger_Id = x.SubLedger_Id,
-                    SubLedgerName = ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.SubLedger_Id) != null ? ERPContext.Subledgers.FirstOrDefault(y => y.Id == x.Supplier_Id).Description : null,
-                    Comments = x.Comments,
-                    GrvNo = x.GrvNo,
-                    GrvDate = x.GrvDate,
-                    InvoiceNo = x.InvoiceNo,
-                    ChalanNo = x.ChalanNo,
-                    Supplier_Id = x.Supplier_Id,
-                    SupplierName = ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id)!=null?ERPContext.Suppliers.FirstOrDefault(y=>y.Id==x.Supplier_Id).SupplierName:null,
-                    Approver_Id = x.Approver_Id,
-                    ItemTransactionList = ERPContext.ItemTransactions.Where(y=>y.Group_Id==x.Id).Select(y=>new ItemTransactionInfo()
+                    SqlCommand cmd = new SqlCommand(@"select * from func_GetGroupItemIdById(@id)", con);
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
                     {
-                        Id=y.Id,
-                        TransactionId=y.TransactionId,
-                        Reason=y.Reason, 
-                        TransactionType=y.TransactionType, 
-                        Quantity=y.Quantity, 
-                        UnitCost=y.UnitCost,                                
-                        UnitSale=y.UnitSale, 
-                        Vat=y.Vat, 
-                        Tax=y.Tax, 
-                        DiscountAmount=y.DiscountAmount, 
-                        SerialNo=y.SerialNo, 
-                        DiscountRate=y.DiscountRate, 
-                        LotNo=y.LotNo,
-                        TransactionDate=y.TransactionDate, 
-                        Group_Id = y.Group_Id, 
-                        Item_Id=y.Item_Id,
-                        ItemName = ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id)!=null?ERPContext.InventoryItems.FirstOrDefault(m=>m.Id==y.Item_Id).ItemName:null,
-                        Location_Id=y.Location_Id,
-                        LocationName = ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName : null,
-                    }).ToList()
-                }).FirstOrDefault();
-                return Request.CreateResponse(HttpStatusCode.OK, manufacture);
+                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
+                        inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
+                        inventoryGroup.Reason = rdr["Reason"] != DBNull.Value ? rdr["Reason"].ToString() : null;
+                        inventoryGroup.Quantity = rdr["Quantity"] != DBNull.Value ? Convert.ToInt32(rdr["Quantity"].ToString()) : 0;
+                        inventoryGroup.TotalAmount = rdr["TotalAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["TotalAmount"].ToString()) : 0;
+                        inventoryGroup.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"].ToString()) : 0;
+                        inventoryGroup.DiscountAmount = rdr["DiscountAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountAmount"].ToString()) : 0;
+                        inventoryGroup.Vat = rdr["Vat"] != DBNull.Value ? Convert.ToDecimal(rdr["Vat"].ToString()) : 0;
+                        inventoryGroup.Tax = rdr["Tax"] != DBNull.Value ? Convert.ToDecimal(rdr["Tax"].ToString()) : 0;
+                        inventoryGroup.NetPayableAmount = rdr["NetPayableAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["NetPayableAmount"].ToString()) : 0;
+                        inventoryGroup.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"].ToString()) : 0;
+                        inventoryGroup.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"].ToString()) : 0;
+                        inventoryGroup.ChalanNo = rdr["ChalanNo"] != DBNull.Value ? rdr["ChalanNo"].ToString() : null;
+                        inventoryGroup.InvoiceNo = rdr["InvoiceNo"] != DBNull.Value ? rdr["InvoiceNo"].ToString() : null;
+                        inventoryGroup.Comments = rdr["Comments"] != DBNull.Value ? rdr["Comments"].ToString() : null;
+                        inventoryGroup.GrvNo = rdr["GrvNo"] != DBNull.Value ? rdr["GrvNo"].ToString() : null;
+                        inventoryGroup.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
+                        inventoryGroup.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
+                        inventoryGroup.LedgerName = rdr["LedgerName"] != DBNull.Value ? rdr["LedgerName"].ToString() : null;
+                        inventoryGroup.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
+                        if (rdr["TransactionDate"] != DBNull.Value)
+                        {
+                            inventoryGroup.TransactionDate = Convert.ToDateTime(rdr["TransactionDate"]);
+                        }
+                        if (rdr["GrvDate"] != DBNull.Value)
+                        {
+                            inventoryGroup.GrvDate = Convert.ToDateTime(rdr["GrvDate"]);
+                        }
+                        if (rdr["Customer_Id"] != DBNull.Value)
+                        {
+                            inventoryGroup.Customer_Id = Guid.Parse(rdr["Customer_Id"].ToString());
+                        }
+                        if (rdr["Supplier_Id"] != DBNull.Value)
+                        {
+                            inventoryGroup.Supplier_Id = Guid.Parse(rdr["Supplier_Id"].ToString());
+                        }
+                        if (rdr["Ledger_Id"] != DBNull.Value)
+                        {
+                            inventoryGroup.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                        }
+                        if (rdr["SubLedger_Id"] != DBNull.Value)
+                        {
+                            inventoryGroup.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                        }
+                        if (rdr["Approver_Id"] != DBNull.Value)
+                        {
+                            inventoryGroup.Approver_Id = Guid.Parse(rdr["Approver_Id"].ToString());
+                        }
+                    }
+                }
+                inventoryGroup.ItemTransactionList =
+                    ERPContext.ItemTransactions.Where(y => y.Group_Id == inventoryGroup.Id)
+                        .Select(y => new ItemTransactionInfo()
+                        {
+                            Id = y.Id,
+                            TransactionId = y.TransactionId,
+                            Reason = y.Reason,
+                            TransactionType = y.TransactionType,
+                            Quantity = y.Quantity,
+                            UnitCost = y.UnitCost,
+                            UnitSale = y.UnitSale,
+                            Vat = y.Vat,
+                            Tax = y.Tax,
+                            DiscountAmount = y.DiscountAmount,
+                            SerialNo = y.SerialNo,
+                            DiscountRate = y.DiscountRate,
+                            LotNo = y.LotNo,
+                            TransactionDate = y.TransactionDate,
+                            Group_Id = y.Group_Id,
+                            Item_Id = y.Item_Id,
+                            ItemName =
+                                ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id) != null
+                                    ? ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id).ItemName
+                                    : null,
+                            Location_Id = y.Location_Id,
+                            LocationName =
+                                ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null
+                                    ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName
+                                    : null,
+                        }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, inventoryGroup);
             }
             catch (Exception ex)
             {
@@ -2034,22 +2068,25 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("PurchaseTransactions/{transactionType}/{supplierid}")]
+        [Route("PurchaseTransactions/{supplierid}/{formDate}/{toDate}")]
         [HttpGet]
-        public HttpResponseMessage GetPurchaseTransactionList(string transactionType, string supplierid)
+        public HttpResponseMessage GetPurchaseTransactionList(string supplierid, string formDate, string toDate)
         {
             try
             {
                 Guid supplierId;
                 bool isSupplierId = Guid.TryParse(supplierid, out supplierId);
                 supplierid = isSupplierId ? supplierId.ToString() : null;
+                DateTime? startDate = formDate.GetDateTime();
+                DateTime? endDate = toDate.GetDateTime();
                 List<InventoryGroupListInfo> inventoryGroupList = new List<InventoryGroupListInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand(@"proc_GetPurchaseTransactionListByTransactionTypeId", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@transactionType", transactionType);
                     cmd.Parameters.AddWithValue("@supplierId", supplierid);
+                    cmd.Parameters.AddWithValue("@formDate", startDate);
+                    cmd.Parameters.AddWithValue("@toDate", endDate);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -2091,22 +2128,25 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("SalesTransactions/{transactionType}/{customerid}")]
+        [Route("SalesTransactions/{customerid}/{formDate}/{toDate}")]
         [HttpGet]
-        public HttpResponseMessage GetSalesTransactionList(string transactionType, string customerid)
+        public HttpResponseMessage GetSalesTransactionList(string customerid, string formDate,string toDate)
         {
             try
             {
                 Guid customerId;
                 bool isCustomerId = Guid.TryParse(customerid, out customerId);
                 customerid = isCustomerId ? customerId.ToString() : null;
+                DateTime? startDate = formDate.GetDateTime();
+                DateTime? endDate = toDate.GetDateTime();
                 List<InventoryGroupListInfo> inventoryGroupList = new List<InventoryGroupListInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand(@"proc_GetSalesTransactionListByTransactionTypeId", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@transactionType", transactionType);
                     cmd.Parameters.AddWithValue("@customerId", customerid);
+                    cmd.Parameters.AddWithValue("@formDate", startDate);
+                    cmd.Parameters.AddWithValue("@toDate", endDate);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -2122,12 +2162,11 @@ namespace ERPWebApiService.Controllers
                         inventoryGroup.Vat = rdr["Vat"] != DBNull.Value ? Convert.ToDecimal(rdr["Vat"].ToString()) : 0;
                         inventoryGroup.Tax = rdr["Tax"] != DBNull.Value ? Convert.ToDecimal(rdr["Tax"].ToString()) : 0;
                         inventoryGroup.NetPayableAmount = rdr["NetPayableAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["NetPayableAmount"].ToString()) : 0;
+                        inventoryGroup.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"].ToString()) : 0;
                         inventoryGroup.ChalanNo = rdr["ChalanNo"] != DBNull.Value ? rdr["ChalanNo"].ToString() : null;
                         inventoryGroup.InvoiceNo = rdr["InvoiceNo"] != DBNull.Value ? rdr["InvoiceNo"].ToString() : null;
                         inventoryGroup.Comments = rdr["Comments"] != DBNull.Value ? rdr["Comments"].ToString() : null;
                         inventoryGroup.GrvNo = rdr["GrvNo"] != DBNull.Value ? rdr["GrvNo"].ToString() : null;
-                        inventoryGroup.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
-                        inventoryGroup.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
                         inventoryGroup.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
                         if (rdr["TransactionDate"] != DBNull.Value)
                         {
@@ -2147,6 +2186,50 @@ namespace ERPWebApiService.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
+        [Route("ItemTransactionDetails/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetItemTrnsactionByGroupId(string id)
+        {
+            try
+            {
+                var Id = Guid.Parse(id);
+                var itemTransactionList =
+                    ERPContext.ItemTransactions.Where(y => y.Group_Id == Id)
+                        .Select(y => new ItemTransactionInfo()
+                        {
+                            Id = y.Id,
+                            TransactionId = y.TransactionId,
+                            Reason = y.Reason,
+                            TransactionType = y.TransactionType,
+                            Quantity = y.Quantity,
+                            UnitCost = y.UnitCost,
+                            UnitSale = y.UnitSale,
+                            Vat = y.Vat,
+                            Tax = y.Tax,
+                            DiscountAmount = y.DiscountAmount,
+                            SerialNo = y.SerialNo,
+                            DiscountRate = y.DiscountRate,
+                            LotNo = y.LotNo,
+                            TransactionDate = y.TransactionDate,
+                            Group_Id = y.Group_Id,
+                            Item_Id = y.Item_Id,
+                            ItemName =
+                                ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id) != null
+                                    ? ERPContext.InventoryItems.FirstOrDefault(m => m.Id == y.Item_Id).ItemName
+                                    : null,
+                            Location_Id = y.Location_Id,
+                            LocationName =
+                                ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id) != null
+                                    ? ERPContext.Locations.FirstOrDefault(m => m.Id == y.Location_Id).LocationName
+                                    : null,
+                        }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, itemTransactionList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }           
         }
     }
 }

@@ -107,4 +107,12 @@ export class DropdownService {
       )
     )
   }
+  public getLedgerDropdownListByPaymentMode(paymentMode:string){
+    var url=this._defaultRoute.DropdownService+'getLedgerByPaymentMode/'+paymentMode;
+    return this._httpClient.get<SelectDropdown[]>(url).pipe(
+      catchError(
+        this.handleError
+      )
+    )
+  }
 }

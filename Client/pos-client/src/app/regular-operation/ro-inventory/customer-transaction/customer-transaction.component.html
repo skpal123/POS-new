@@ -1,10 +1,238 @@
 <div style="margin-left: 10px;margin-right: 10px">
   <div class="row">
     <div class="col-md-8">
-      <app-customer-transaction-list [customerId]="customerId"></app-customer-transaction-list>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 style="text-align: center" class="panel-title">Party Transaction List</h3>
+                    </div>           
+                    <div class="panel-body" >
+                          <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group row">
+                                      <label for="formDate" class="col-sm-3 col-form-label">From Date</label>
+                                      <div class="col-sm-9" id="startDateMargin">
+                                        <div class="row">
+                                          <div class="col-md-10">
+                                            <input class="form-control" name="formDate" #formDateControl="ngModel" id="formDate"
+                                              [(ngModel)]="formDate" matInput [matDatepicker]="formDatePicker">
+                                          </div>
+                                          <div class="col-md-1">
+                                            <mat-datepicker-toggle matSuffix [for]="formDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #formDatePicker [startAt]="startDate"> </mat-datepicker>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6" style="margin-left: 100">
+                                    <div class="form-group row">
+                                      <label for="toDate" class="col-sm-3 col-form-label">To Date</label>
+                                      <div class="col-sm-9" id="endDateMargin">
+                                        <div class="row">
+                                          <div class="col-md-10">
+                                            <input class="form-control"  name="toDate" #toDateControl="ngModel" id="toDate" [(ngModel)]="toDate"
+                                              matInput [matDatepicker]="toDatePicker">
+                                          </div>
+                                          <div class="col-md-2">
+                                            <mat-datepicker-toggle  matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #toDatePicker [startAt]="startDate"> </mat-datepicker>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                      <div class="col-md-12">
+                                          <table datatable class="table" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                              <thead>
+                                                  <tr>
+                                                      <td>Invoice No</td>
+                                                      <td>Supplier</td>
+                                                      <td>Payment Date</td>
+                                                      <td>Payable Amount</td>
+                                                      <td>Paid Amount</td>
+                                                      <td>Pay Amount</td>
+                                                      <td *ngIf="customerTransaction.PaymentMethod=='specific'">Choose</td>
+                                                      <td>View</td>
+                                                      <td>History</td>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <tr *ngFor="let group of groupItemList;let i=index;">
+                                                      <td>{{group.InvoiceNo}}</td>
+                                                      <td>{{group.CustomerName}}</td>
+                                                      <td>{{group.TransactionDate|date}}</td>
+                                                      <td>{{group.NetPayableAmount}}</td>
+                                                      <td>{{group.PaidAmount}}</td>
+                                                      <td >
+                                                        <input class="form-control" (blur)="changePaidAmount(i)" type="number" [(ngModel)]="group.PayAmount">
+                                                      </td>
+                                                      <td *ngIf="customerTransaction.PaymentMethod=='specific'">
+                                                        <input type="checkbox" (change)="changeChoose($event,i)" [(ngModel)]="checkedItems[i].IsChecked">
+                                                      </td>
+                                                      <td>
+                                                        <input type="button" value="View" class="btn btn-success" (click)="getItemTransactionDetails(group.Id)">
+                                                      </td>
+                                                      <td>
+                                                        <input type="button" value="history" class="btn btn-success" (click)="getCustomerTransactionDetails(group.Customer_Id)">
+                                                      </td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                </div>
+                      <!-- <app-custom-datatable 
+                      [DataList]="DataList" 
+                      [reload]="reload"
+                      [ColumnList]="ColumnList"
+                      (EditSelectedRowClicked)="getPartyDetails($event)"
+                      (DeleteDataRowClicked)="deleteParty($event)"
+                      >
+                      </app-custom-datatable> -->
+                    </div>
+                </div>
+            </div>
+          </div>
     </div>
     <div class="col-md-4">
-      <app-customer-transaction-entry (customerIdClick)="getCustomerId($event)"></app-customer-transaction-entry>
+        <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-success">
+                <div class="panel-heading">
+                  <h5> Customer transaction entry
+                    <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+                  </h5>
+                </div>
+                <div class="panel-body">
+                  <form #customerTransactionForm="ngForm">
+                      <div class="form-group row" [class.has-suucess]="CustomerIdControl.valid"
+                      [ngClass]="{'has-error':CustomerIdControl.invalid}">
+                      <label class="col-sm-4 control-label" for="Customer_Id">Customer name </label>
+                      <div class="col-sm-7">
+                        <input style="display: none;" name="CustomerId" required #CustomerIdControl="ngModel"
+                          [(ngModel)]="customerTransaction.Customer_Id" class="form-control">
+                        <app-customer-dropdown [IsNewCustomerAdd]="customerNew"
+                          (customerOnItemSelect)="customerOnSeletedItem($event)" [customerSelectedItems]="customerSelectedItems">
+                        </app-customer-dropdown>
+                        <span class="help-block" *ngIf="CustomerIdControl.invalid">Required</span>
+                      </div>
+                      <div class="col-md-1">
+                        <span id="pointer" (click)="createNewCustomer()" class="glyphicon glyphicon-plus"></span>
+                      </div>
+                    </div>
+                    <div class="form-group row" style="margin-top: 10px;margin-bottom: 10px">
+                      <label class="col-sm-4  control-label" for="PaidAmount">Payment type</label>
+                      <div class="col-sm-7">
+                        <label class="radio-inline">
+                          <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
+                            [(ngModel)]="customerTransaction.PaymentType" #paymentTypeControl="ngModel" value="payment">Payment<br>
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
+                            [(ngModel)]="customerTransaction.PaymentType" #paymentTypeControl="ngModel" value="refund">Refund<br>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group row" [class.has-suucess]="PaidAmountControl.valid"
+                    [ngClass]="{'has-error':PaidAmountControl.invalid&&PaidAmountControl.touched}">
+                      <label class="col-sm-4  control-label" for="PaidAmount">{{totalBalance1>0?'Total Due amount':'Total Advance amount'}}</label>
+                      <div class="col-sm-7">
+                          <input required name="balance" #totalBalanceControl="ngModel"
+                            [(ngModel)]="customerTransaction.TotalDueAdvanceAmount" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group row" [class.has-suucess]="PaidAmountControl.valid"
+                        [ngClass]="{'has-error':PaidAmountControl.invalid&&PaidAmountControl.touched}">
+                    <label class="col-sm-4 control-label" for="PaidAmount">Pay Amount</label>
+                    <div class="col-sm-7">
+                      <input id="PaidAmount" required name="PaidAmount" #PaidAmountControl="ngModel"
+                        [(ngModel)]="customerTransaction.PaidAmount" class="form-control">
+                      <span class="help-block" *ngIf="PaidAmountControl.invalid&&PaidAmountControl.touched">Required</span>
+                    </div>
+                  </div>
+                    <div class="form-group row">
+                      <label for="PaymentDate" class="col-sm-4 col-form-label">Payment Date</label>
+                      <div class="col-sm-7">
+                        <div class="row">
+                          <div class="col-md-10">
+                            <input class="form-control" name="PaymentDate" #PaymentDateControl="ngModel" id="formDate"
+                              [(ngModel)]="customerTransaction.PaymentDate" matInput [matDatepicker]="PaymentDatePicker">
+                          </div>
+                          <div class="col-md-2">
+                            <mat-datepicker-toggle matSuffix [for]="PaymentDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #PaymentDatePicker [startAt]="startDate"> </mat-datepicker>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row" [class.has-suucess]="PaymentModeControl.valid"
+                      [ngClass]="{'has-error':PaymentModeControl.invalid&&PaymentModeControl.touched}">
+                      <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode</label>
+                      <div class="col-sm-7">
+                        <select id="PaymentMode" required name="PaymentMode" #PaymentModeControl="ngModel"
+                          [(ngModel)]="customerTransaction.PaymentMode" class="form-control">
+                          <option value="-1">SELECT</option>
+                          <option value="1">Cash</option>
+                          <option value="2">Bank</option>
+                          <option value="0">Other</option>
+                        </select>
+                        <span class="help-block" *ngIf="PaymentModeControl.invalid&&PaymentModeControl.touched">Required</span>
+                      </div>
+                    </div>
+                    <div class="form-group row" [class.has-success]="ledgerIdControl.valid"
+                      [class.has-error]="ledgerIdControl.invalid&&ledgerTouch">
+                      <label for="ledgerId" class="col-sm-4 col-form-label">Ledger Name</label>
+                      <div class="col-sm-7">
+                        <input style="display: none;" class="form-control" required name="ledgerIdControl"
+                          #ledgerIdControl="ngModel" [(ngModel)]="customerTransaction.Ledger_Id">
+                        <app-ledger-dropdown 
+                        (ledgerOnItemSelect)="ledgerOnSeletedItem($event)"
+                        [filterByPaymentMode]="paymentModeFilter"
+                        [paymentMode]="customerTransaction.PaymentMode"
+                        [ledgerSelectedItems]="ledgerSelectedItems">
+                        </app-ledger-dropdown>
+                        <span class="help-block" *ngIf="ledgerIdControl.errors?.required&&ledgerTouch">
+                          Ledger name is required
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="unitId" class="col-sm-4 col-form-label">Subledger Name</label>
+                      <div class="col-sm-7">
+                        <app-subledger-dropdown [ledgerId]="customerTransaction.Ledger_Id"
+                          (subledgerOnItemSelect)="subledgerOnSeletedItem($event)"
+                          (subledgerOnItemDeSelect)="subledgerOnDeSeletedItem($event)"
+                          [subledgerSelectedItems]="subledgerSelectedItems"></app-subledger-dropdown>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-sm-4  control-label" for="PaidAmount">Payment Method</label>
+                      <div class="col-sm-7">
+                        <label class="radio-inline">
+                          <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                            [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="general">General<br>
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                            [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="specific">Specific<br>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2 pull-right">
+                        <input type="button" [disabled]="customerTransactionForm.invalid" (click)="saveItem()" value="Save"
+                          class="btn btn-primary">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
     </div>
   </div>
 </div>

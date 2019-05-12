@@ -34,7 +34,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy {
     if(this.reload){
       this.dtOptions = {
         pagingType: 'full_numbers',
-        pageLength: 10
+        pageLength: 25
       };
       if(this.columnChange){
         this.DataList1=this._customDatatableService.DataList;

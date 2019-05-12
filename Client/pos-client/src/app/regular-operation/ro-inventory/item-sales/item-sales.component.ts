@@ -53,7 +53,7 @@ export class ItemSalesComponent implements OnInit {
   locationSelectedItems :MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
   ];
-  supplierSelectedItems :MultiSelectDropdown[]= [
+  customerSelectedItems :MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
   ];
   locationList:SelectDropdown[];
@@ -125,8 +125,8 @@ export class ItemSalesComponent implements OnInit {
       this.subledgerSelectedItems.push({id:"0",itemName:"SELECT"})
     }
     else{
-      this.supplierSelectedItems=[];
-      this.supplierSelectedItems.push({id:this.groupItem.Supplier_Id,itemName:this.groupItem.SupplierName})
+      this.customerSelectedItems=[];
+      this.customerSelectedItems.push({id:this.groupItem.Customer_Id,itemName:this.groupItem.CustomerName})
       this.ledgerSelectedItems=[];
       this.ledgerSelectedItems.push({id:this.groupItem.Ledger_Id,itemName:this.groupItem.LedgerName})
       this.itemSaleForm.patchValue({
@@ -149,6 +149,7 @@ export class ItemSalesComponent implements OnInit {
         Vat: this.groupItem.Vat,
         Tax:this.groupItem.Tax,
         NetPayableAmount: this.groupItem.NetPayableAmount,
+        PaidAmount: this.groupItem.PaidAmount,
         Approver_Id:this.groupItem.Approver_Id,
         Ledger_Id:this.groupItem.Ledger_Id,
         SubLedger_Id:this.groupItem.SubLedger_Id,

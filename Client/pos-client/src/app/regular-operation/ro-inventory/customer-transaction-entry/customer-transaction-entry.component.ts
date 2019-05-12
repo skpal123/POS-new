@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild,Output,EventEmitter, Input, OnChanges } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgForm, FormControl } from '@angular/forms';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
@@ -16,13 +16,19 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
   templateUrl: './customer-transaction-entry.component.html',
   styleUrls: ['./customer-transaction-entry.component.css']
 })
-export class CustomerTransactionEntryComponent implements OnInit {
+export class CustomerTransactionEntryComponent implements OnChanges,OnInit {
+  @Input() customertransaction:CustomerTransaction
   @Output() customerIdClick:EventEmitter <any>=new EventEmitter <any>();
+  @Output() dueAmountPaymentMethodChange:EventEmitter <any>=new EventEmitter <any>();
+  @Output() paidAmountChange:EventEmitter <any>=new EventEmitter <any>();
   customerNew:boolean=false
   paymentType:string="payment";
+  paymentMethod:string="general";
+  totalBalance1:number=0;
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerTransactionForm') itemForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
+  @ViewChild('PaidAmountControl') PaidAmountControl:FormControl
   ledgerTouch:boolean=false;
   customerSelectedItems :MultiSelectDropdown[]= [
   ];
@@ -36,7 +42,8 @@ export class CustomerTransactionEntryComponent implements OnInit {
   }
   customerTransaction:CustomerTransaction={
     Id:null,ChalanNo:null,OrderNo:null,PaymentMode:"0",PaymentDate:new Date(),Ledger_Id:null,
-    SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0
+    SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0,PaymentMethod:"general",
+    PaymentType:"payment",TotalDueAdvanceAmount:0
   }
   constructor(private matDialog:MatDialog,
   private _alertBox:AlertBoxService,
@@ -55,6 +62,13 @@ export class CustomerTransactionEntryComponent implements OnInit {
       this.ledgerSelectedItems.push({id:this.customerTransaction.Ledger_Id,itemName:this.customerTransaction.LedgerName})
       this.subledgerSelectedItems.push({id:this.customerTransaction.SubLedger_Id,itemName:this.customerTransaction.SubLedgerName})
     }
+    this.PaidAmountControl.valueChanges.subscribe((amount:number)=>{
+        this.customerTransaction.PaidAmount=amount
+        this.paidAmountChange.emit(this.customerTransaction)
+    })
+  }
+  ngOnChanges(){
+      this.customerTransaction.TotalDueAdvanceAmount=this.customertransaction.TotalDueAdvanceAmount
   }
   saveCustomerTransaction(){
     debugger
@@ -120,12 +134,13 @@ export class CustomerTransactionEntryComponent implements OnInit {
   }
   customerOnSeletedItem($event:MultiSelectDropdown){
     debugger
-    this.customerIdClick.emit($event.id);
     if($event.id!="0"){
       this.customerTransaction.Customer_Id=$event.id;
+      this.customerIdClick.emit(this.customerTransaction);
     }
     else{
       this.customerTransaction.Customer_Id=null;
+      this.customerIdClick.emit(this.customerTransaction);
     }
   }
   createNewCustomer(){
@@ -141,5 +156,9 @@ export class CustomerTransactionEntryComponent implements OnInit {
         this.customerNew=true;
       }
     })
+  }
+  dueAmountPaymentMethod(){
+    debugger
+    this.dueAmountPaymentMethodChange.emit(this.customerTransaction);
   }
 }

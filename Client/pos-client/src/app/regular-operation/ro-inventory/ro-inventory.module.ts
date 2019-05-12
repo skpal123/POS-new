@@ -20,6 +20,9 @@ import { SupplierTransactionEntryComponent } from './supplier-transaction-entry/
 import { SupplierTransactionComponent } from './supplier-transaction/supplier-transaction.component';
 import { SupplierTransactionListComponent } from './supplier-transaction-list/supplier-transaction-list.component';
 import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
+import { SepecificCustomerTransactionEntryComponent } from './sepecific-customer-transaction-entry/sepecific-customer-transaction-entry.component';
+import { SepecificSupplierTransactionEntryComponent } from './sepecific-supplier-transaction-entry/sepecific-supplier-transaction-entry.component';
+import { ItemTransactionDetailsComponent } from './item-transaction-details/item-transaction-details.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +34,7 @@ import { CustomDatatableControlComponent } from '../../common-module/custom-data
     RoInventoryLayoutComponent,
     AddItemComponent, 
     ItemPurchaseListComponent, 
-    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent, CustomerTransactionComponent, CustomerTransactionListComponent, CustomerTransactionEntryComponent, SupplierTransactionEntryComponent, SupplierTransactionComponent, SupplierTransactionListComponent
+    ItemPurchaseComponent, ItemSalesComponent, ItemSalesListComponent, CustomerTransactionComponent, CustomerTransactionListComponent, CustomerTransactionEntryComponent, SupplierTransactionEntryComponent, SupplierTransactionComponent, SupplierTransactionListComponent, SepecificCustomerTransactionEntryComponent, SepecificSupplierTransactionEntryComponent, ItemTransactionDetailsComponent
   ],
   entryComponents:[ItemPurchaseComponent,
     FormDetailsControlComponent,
@@ -39,7 +42,8 @@ import { CustomDatatableControlComponent } from '../../common-module/custom-data
     CustomerEntryComponent,
     PartyEntryComponent,
     ItemSalesComponent,
-    CustomDatatableControlComponent
+    CustomDatatableControlComponent,
+    ItemTransactionDetailsComponent
   ]
 })
 export class RoInventoryModule { }

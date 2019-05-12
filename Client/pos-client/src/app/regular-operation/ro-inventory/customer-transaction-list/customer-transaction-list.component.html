@@ -29,11 +29,11 @@
                             <div class="col-sm-9" id="endDateMargin">
                               <div class="row">
                                 <div class="col-md-10">
-                                  <input class="form-control" name="toDate" #toDateControl="ngModel" id="toDate" [(ngModel)]="toDate"
+                                  <input class="form-control"  name="toDate" #toDateControl="ngModel" id="toDate" [(ngModel)]="toDate"
                                     matInput [matDatepicker]="toDatePicker">
                                 </div>
                                 <div class="col-md-2">
-                                  <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                                  <mat-datepicker-toggle  matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
                                   <mat-datepicker #toDatePicker [startAt]="startDate"> </mat-datepicker>
                                 </div>
                               </div>
@@ -43,25 +43,35 @@
                       </div>
                       <div class="row">
                             <div class="col-md-12">
-                                <table class="table">
+                                <table class="table" datatable >
                                     <thead>
                                         <tr>
                                             <th>Invoice No</th>
-                                            <th>Order No</th>
-                                            <th>Supplier Name</th>
+                                            <th>Supplier</th>
                                             <th>Payment Date</th>
-                                            <th>Total Payable Amount</th>
+                                            <th>Payable Amount</th>
                                             <th>Paid Amount</th>
+                                            <th>Pay Amount</th>
+                                            <th>Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let group of groupItemList">
                                             <td>{{group.InvoiceNo}}</td>
-                                            <td>{{group.OrderNo}}</td>
-                                            <td>{{group.SupplierName}}</td>
-                                            <td>{{group.PaymentDate}}</td>
+                                            <td>{{group.CustomerName}}</td>
+                                            <td>{{group.TransactionDate|date}}</td>
                                             <td>{{group.NetPayableAmount}}</td>
                                             <td>{{group.PaidAmount}}</td>
+                                            <td >
+                                              <input class="form-control" type="number" [(ngModel)]="group.PayAmount">
+                                            </td>
+                                            <td>
+                                              <input type="button" value="View" class="btn btn-success" (click)="getItemTransactionDetails(group.Id)">
+                                            </td>
+                                            <td>
+                                              <input type="button" value="history" class="btn btn-success" (click)="getCustomerTransactionDetails(group.Customer_Id)">
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
