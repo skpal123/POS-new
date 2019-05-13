@@ -11,7 +11,7 @@ import { UserFormControl } from '../../models/common/user-form-control.model';
   templateUrl: './custom-datatable.component.html',
   styleUrls: ['./custom-datatable.component.css']
 })
-export class CustomDatatableComponent implements OnChanges,OnDestroy {
+export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   @BlockUI() blockUi:NgBlockUI
   dtTrigger: Subject<any> = new Subject<any>();
   dtOptions: DataTables.Settings = {};
@@ -24,11 +24,14 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy {
   @Output() CheckedAllItem:EventEmitter <any>=new EventEmitter <any>();
   DataList1:any=[];
   ColumnListEnable:UserFormControl[]=[];
-  constructor(private _customDatatableService:CustomDatatableService,
-    private _postLoginService:PostLoginService,
-    private _alertBox:AlertBoxService
+  constructor(private _customDatatableService:CustomDatatableService
   ) { }
-
+  ngOnInit(){
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
+  }
   ngOnChanges() {
     debugger
     if(this.reload){
@@ -44,7 +47,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy {
          return a.IsEnable==true
         });
         this.dtTrigger.next();
-        this.dtTrigger.subscribe();
+        this.dtTrigger.complete();
       }
     }
     // if(this.columnChange){

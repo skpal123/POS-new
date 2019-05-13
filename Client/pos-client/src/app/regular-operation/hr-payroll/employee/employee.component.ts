@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-employee',
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.css']
 })
 export class EmployeeComponent implements OnInit {
+  dtTrigger: Subject<any> = new Subject<any>();
+  dtOptions: DataTables.Settings = {};
   datalist:any=[
     {Id:"0",Name:"soman",Gender:"male",Salary:10000,Dept:"IT"},
     {Id:"1",Name:"soman 1",Gender:"female",Salary:12000,Dept:"BBA"},
@@ -32,6 +35,10 @@ export class EmployeeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
   }
   GetAlertBox(){
     var dialogData=new DialogData();

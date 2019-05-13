@@ -1,5 +1,5 @@
 <div *ngIf="reload">
-    <table datatable class="table table-borderd">
+    <table datatable [dtOptions]="dtOptions" class="table table-borderd">
         <thead>
             <tr> 
                 <td *ngFor="let column of ColumnList;let i=index;">

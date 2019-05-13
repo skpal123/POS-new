@@ -303,7 +303,9 @@ export class CustomerTransactionComponent implements OnInit {
       this.customerTransaction.PaidAmount+=this.groupItemList[index].PayAmount
     }
     else{
-      this.customerTransaction.PaidAmount-=this.groupItemList[index].PayAmount
+      if(this.customerTransaction.PaidAmount>0){
+        this.customerTransaction.PaidAmount-=this.groupItemList[index].PayAmount
+      }
     }
   }
   saveCustomerTransaction(){
@@ -351,7 +353,9 @@ export class CustomerTransactionComponent implements OnInit {
       })
     }
   }
+  dueAmountPaymentMethod(paymentMethod:string){
 
+  }
 }
 export class CheckedItem{
   IsChecked:boolean;

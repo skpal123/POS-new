@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="row">
                                       <div class="col-md-12">
-                                          <table datatable class="table" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                          <table datatable class="table" [dtOptions]="dtOptions">
                                               <thead>
                                                   <tr>
                                                       <td>Invoice No</td>
@@ -147,10 +147,13 @@
                     <div class="form-group row" [class.has-suucess]="PaidAmountControl.valid"
                         [ngClass]="{'has-error':PaidAmountControl.invalid&&PaidAmountControl.touched}">
                     <label class="col-sm-4 control-label" for="PaidAmount">Pay Amount</label>
-                    <div class="col-sm-7">
+                    <div class="col-sm-6">
                       <input id="PaidAmount" required name="PaidAmount" #PaidAmountControl="ngModel"
                         [(ngModel)]="customerTransaction.PaidAmount" class="form-control">
                       <span class="help-block" *ngIf="PaidAmountControl.invalid&&PaidAmountControl.touched">Required</span>
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="checkbox" (change)="fullPayChange()"> Full Pay
                     </div>
                   </div>
                     <div class="form-group row">
