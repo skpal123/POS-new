@@ -271,7 +271,7 @@ export class ItemSalesComponent implements OnInit {
       var locationId=<MultiSelectDropdown[]>control.get('LocationId').value;
       control.get('Item_Id').setValue(selectedItem[0].id);
       if(this.ItemSaleValidation[0].InStock){
-        if(locationId[0].id!="0"||locationId[0].id!=''){
+        if(locationId[0].id!="0"){
           this.getItemStockByLocationAndItemId(selectedItem[0].id,locationId[0].id,control)
         }
       }
@@ -288,7 +288,7 @@ export class ItemSalesComponent implements OnInit {
       var itemid=<MultiSelectDropdown[]>control.get('ItemId').value;
       control.get('Location_Id').setValue(selectedLocation[0].id);
       if(this.ItemSaleValidation[0].InStock){
-        if(itemid[0].id!="0"||itemid[0].id!=''){
+        if(itemid[0].id!="0"){
           this.getItemStockByLocationAndItemId(itemid[0].id,selectedLocation[0].id,control)
         }
       }
@@ -541,5 +541,6 @@ getItemStockByLocationAndItemId(itemId:string,locationId:string,control:Abstract
     dialogData.message=error
     this._alertBox.openDialog(dialogData);
   })
-}
+  }
+  
 }

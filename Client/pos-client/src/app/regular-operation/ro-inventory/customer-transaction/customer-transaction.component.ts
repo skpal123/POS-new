@@ -98,6 +98,7 @@ export class CustomerTransactionComponent implements OnInit {
   }
   GetSalesTransactionList(customerId:string,formDate:Date,toDate:Date){
     debugger
+    this.customerTransaction.TotalDueAdvanceAmount=0;
     //this.blockUi.start("Loading....,Please wait")
     this._inventotyService.GetSalesTransactionList(customerId,formDate,toDate).subscribe(response=>{
       this.blockUi.stop();
@@ -105,7 +106,7 @@ export class CustomerTransactionComponent implements OnInit {
       this.groupItemList=response;
       this.totalPayableAmount=0;
       this.groupItemList.forEach(a=>{
-        a.PayAmount=a.NetPayableAmount-a.PaidAmount;
+        a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
         this.customerTransaction.TotalDueAdvanceAmount+=(a.NetPayableAmount-a.PaidAmount);
         this.checkedItems.push({IsChecked:false});
       })
@@ -196,49 +197,6 @@ export class CustomerTransactionComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  saveCustomerTransaction(){
-    debugger
-    if(this.customerTransaction.PaymentType=="refund"){
-      this.customerTransaction.PaidAmount*-1;
-    }
-    if(this.customerTransaction.Id==null){
-      this.blockUi.start("Loading....,Please wait")
-      this._inventotyService.savePartyTransaction(this.customerTransaction).subscribe(response=>{
-        this.blockUi.stop();
-        let result=response
-        if(result){
-          let dialogData=new DialogData();
-          dialogData.message="Save successfully";
-          this._alertBox.openDialog(dialogData);
-        }
-      },error=>{
-        this.blockUi.stop();
-        let message=error
-        let dialogData=new DialogData();
-        dialogData.message=message.Message;
-        this._alertBox.openDialog(dialogData);
-      })
-    }
-    else{
-      this.blockUi.start("Loading....,Please wait")
-      this._inventotyService.UpdatePartyTransaction(this.customerTransaction).subscribe(response=>{
-        this.blockUi.stop();
-        let result=response
-        if(result){
-          let dialogData=new DialogData();
-          dialogData.message="Update successfully";
-          this._alertBox.openDialog(dialogData);
-        }
-      },error=>{
-        this.blockUi.stop();
-        let message=error
-        let dialogData=new DialogData();
-        dialogData.message=message.Message;
-        this._alertBox.openDialog(dialogData);
-      })
-    }
-  }
-
   ledgerOnSeletedItem($event){
     debugger
     this.ledgerTouch=true;
@@ -285,12 +243,15 @@ export class CustomerTransactionComponent implements OnInit {
   }
   distributedTotalAmount(totalAmount:number){
     debugger
+    this.checkedItems.forEach(a=>{
+      a.IsChecked=false;
+    })
     if(totalAmount.toString()!=""&&totalAmount.toString()!="0"){
       let isFound=false;
-      this.groupItemList.forEach(a=>{
-        if(Number(totalAmount)>=(a.NetPayableAmount-a.PaidAmount)){
+      this.groupItemList.forEach((a,index)=>{
+        if(Number(totalAmount)>(a.NetPayableAmount-a.PaidAmount)){
           totalAmount-=(a.NetPayableAmount-a.PaidAmount)
-          a.PayAmount=a.NetPayableAmount-a.PaidAmount;
+          a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
         }
         else{
           if(!isFound){
@@ -299,10 +260,26 @@ export class CustomerTransactionComponent implements OnInit {
           }
         }
       })
+      let isFound1=false;
+      var amount=0
+      this.groupItemList.forEach((a,index)=>{
+        amount=a.NetPayableAmount-a.PaidAmount;
+        if(!isFound1){
+          if(Number(totalAmount)<amount){
+            if(amount>=0){
+              this.checkedItems[index].IsChecked=true;
+              totalAmount-=amount
+            }
+            else{
+              isFound1=true;
+            }
+          }
+        }
+      })
     }
     else{
       this.groupItemList.forEach(a=>{
-        a.PayAmount=a.NetPayableAmount-a.PaidAmount
+        a.PayAmount=(a.NetPayableAmount-a.PaidAmount)
       })
     }
   }
@@ -315,6 +292,7 @@ export class CustomerTransactionComponent implements OnInit {
     })
   }
   changeChoose($event,index:number){
+    if(this.customerTransaction.PaymentMethod=='specific')
     if($event.target.checked){
       this.customerTransaction.PaidAmount+=this.groupItemList[index].PayAmount
     }
@@ -322,6 +300,52 @@ export class CustomerTransactionComponent implements OnInit {
       this.customerTransaction.PaidAmount-=this.groupItemList[index].PayAmount
     }
   }
+  saveCustomerTransaction(){
+    debugger
+    this.groupItemList.forEach(a=>{
+
+    })
+    if(this.customerTransaction.PaymentType=="refund"){
+      this.customerTransaction.PaidAmount*-1;
+    }
+    if(this.customerTransaction.Id==null){
+      this.blockUi.start("Loading....,Please wait")
+      this._inventotyService.savePartyTransaction(this.customerTransaction).subscribe(response=>{
+        this.blockUi.stop();
+        let result=response
+        if(result){
+          let dialogData=new DialogData();
+          dialogData.message="Save successfully";
+          this._alertBox.openDialog(dialogData);
+        }
+      },error=>{
+        this.blockUi.stop();
+        let message=error
+        let dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBox.openDialog(dialogData);
+      })
+    }
+    else{
+      this.blockUi.start("Loading....,Please wait")
+      this._inventotyService.UpdatePartyTransaction(this.customerTransaction).subscribe(response=>{
+        this.blockUi.stop();
+        let result=response
+        if(result){
+          let dialogData=new DialogData();
+          dialogData.message="Update successfully";
+          this._alertBox.openDialog(dialogData);
+        }
+      },error=>{
+        this.blockUi.stop();
+        let message=error
+        let dialogData=new DialogData();
+        dialogData.message=message.Message;
+        this._alertBox.openDialog(dialogData);
+      })
+    }
+  }
+
 }
 export class CheckedItem{
   IsChecked:boolean;

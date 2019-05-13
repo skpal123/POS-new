@@ -55,7 +55,7 @@
                                                       <td>Payable Amount</td>
                                                       <td>Paid Amount</td>
                                                       <td>Pay Amount</td>
-                                                      <td *ngIf="customerTransaction.PaymentMethod=='specific'">Choose</td>
+                                                      <td >Choose</td>
                                                       <td>View</td>
                                                       <td>History</td>
                                                   </tr>
@@ -70,7 +70,7 @@
                                                       <td >
                                                         <input class="form-control" (blur)="changePaidAmount(i)" type="number" [(ngModel)]="group.PayAmount">
                                                       </td>
-                                                      <td *ngIf="customerTransaction.PaymentMethod=='specific'">
+                                                      <td>
                                                         <input type="checkbox" (change)="changeChoose($event,i)" [(ngModel)]="checkedItems[i].IsChecked">
                                                       </td>
                                                       <td>
@@ -222,8 +222,8 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-2 pull-right">
-                        <input type="button" [disabled]="customerTransactionForm.invalid" (click)="saveItem()" value="Save"
+                      <div class="col-md-2 pull-right" style="margin-right: 60px">
+                        <input type="button" [disabled]="customerTransactionForm.invalid" (click)="saveCustomerTransaction()" value="Save"
                           class="btn btn-primary">
                       </div>
                     </div>
