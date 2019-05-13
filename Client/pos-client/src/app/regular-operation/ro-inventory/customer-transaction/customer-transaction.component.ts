@@ -241,15 +241,17 @@ export class CustomerTransactionComponent implements OnInit {
       }
     })
   }
-  distributedTotalAmount(totalAmount:number){
+  distributedTotalAmount(tAmount:number){
     debugger
+    let totalAmount=Number(tAmount)
+    let totalAmount2=Number(tAmount)
     this.checkedItems.forEach(a=>{
       a.IsChecked=false;
     })
-    if(totalAmount.toString()!=""&&totalAmount.toString()!="0"){
+    if(totalAmount!=0){
       let isFound=false;
       this.groupItemList.forEach((a,index)=>{
-        if(Number(totalAmount)>(a.NetPayableAmount-a.PaidAmount)){
+        if(totalAmount>(a.NetPayableAmount-a.PaidAmount)){
           totalAmount-=(a.NetPayableAmount-a.PaidAmount)
           a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
         }
@@ -260,20 +262,24 @@ export class CustomerTransactionComponent implements OnInit {
           }
         }
       })
-      let isFound1=false;
-      var amount=0
+      let amount2=0
+      let isfound=false
+      let firstAmount=this.groupItemList[0].NetPayableAmount-this.groupItemList[0].PaidAmount
       this.groupItemList.forEach((a,index)=>{
-        amount=a.NetPayableAmount-a.PaidAmount;
-        if(!isFound1){
-          if(Number(totalAmount)<amount){
-            if(amount>=0){
-              this.checkedItems[index].IsChecked=true;
-              totalAmount-=amount
-            }
-            else{
-              isFound1=true;
+        if(firstAmount<totalAmount2){
+          if(totalAmount2>amount2){
+            amount2+=this.groupItemList[index].NetPayableAmount-this.groupItemList[index].PaidAmount;
+            isfound=true;
+            this.checkedItems[index].IsChecked=true;
+          }
+          else{
+            if(!isfound){
+              alert(index)
             }
           }
+        }
+        else{
+          this.checkedItems[0].IsChecked=true;
         }
       })
     }

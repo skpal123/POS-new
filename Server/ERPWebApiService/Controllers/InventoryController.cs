@@ -2107,8 +2107,6 @@ namespace ERPWebApiService.Controllers
                         inventoryGroup.Comments = rdr["Comments"] != DBNull.Value ? rdr["Comments"].ToString() : null;
                         inventoryGroup.GrvNo = rdr["GrvNo"] != DBNull.Value ? rdr["GrvNo"].ToString() : null;
                         inventoryGroup.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
-                        inventoryGroup.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
-                        inventoryGroup.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
                         if (rdr["TransactionDate"] != DBNull.Value)
                         {
                             inventoryGroup.TransactionDate = Convert.ToDateTime(rdr["TransactionDate"]);
