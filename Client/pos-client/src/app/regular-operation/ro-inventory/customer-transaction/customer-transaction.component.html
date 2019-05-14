@@ -212,11 +212,11 @@
                       <label class="col-sm-4  control-label" for="PaidAmount">Payment Method</label>
                       <div class="col-sm-7">
                         <label class="radio-inline">
-                          <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                          <input type="radio"  name="paymentMethod"
                             [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="general">General<br>
                         </label>
                         <label class="radio-inline">
-                          <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
+                          <input type="radio"  name="paymentMethod"
                             [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="specific">Specific<br>
                         </label>
                       </div>
