@@ -56,5 +56,6 @@ namespace ERP.DataService.Model
         public DbSet<CodeFormater> CodeFormaters { set; get; }
         public DbSet<SupplierTransaction> SupplierTransactions { set; get; }
         public DbSet<PartyTransaction> PartyTransactions { set; get; }
+        public DbSet<CustomerSupplierTransactionDetail> CustomerSupplierTransactionDetailsList { set; get; }
     }
 }

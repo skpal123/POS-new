@@ -247,6 +247,10 @@
     <Compile Include="Migrations\201905081718369_add paidamount.Designer.cs">
       <DependentUpon>201905081718369_add paidamount.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905140532046_adding transaction details.cs" />
+    <Compile Include="Migrations\201905140532046_adding transaction details.Designer.cs">
+      <DependentUpon>201905140532046_adding transaction details.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -258,6 +262,7 @@
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\CodeFormater.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\CustomerSupplierTransactionDetail.cs" />
     <Compile Include="Model\FormInfo.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
@@ -432,6 +437,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905081718369_add paidamount.resx">
       <DependentUpon>201905081718369_add paidamount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905140532046_adding transaction details.resx">
+      <DependentUpon>201905140532046_adding transaction details.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

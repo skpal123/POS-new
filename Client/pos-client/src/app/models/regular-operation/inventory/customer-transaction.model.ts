@@ -1,3 +1,5 @@
+import { CustomerSupplierTransactionDetails } from "./customer-supplier-transaction-details.model";
+
 export class CustomerTransaction{
     public Id?:string;
     public ChalanNo?:string;
@@ -15,4 +17,5 @@ export class CustomerTransaction{
     public PaymentType?:string;
     public PaymentMethod?:string;
     public TotalDueAdvanceAmount?:number;
+    public TransactionDetailsList?:CustomerSupplierTransactionDetails[];
 }

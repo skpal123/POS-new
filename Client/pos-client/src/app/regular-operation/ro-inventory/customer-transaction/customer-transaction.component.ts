@@ -15,6 +15,7 @@ import { ItemTransactionDetailsComponent } from '../item-transaction-details/ite
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { Customer } from '../../../models/master-settings/inventory-defination/customer.model';
 import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
+import { CustomerSupplierTransactionDetails } from '../../../models/regular-operation/inventory/customer-supplier-transaction-details.model';
 
 @Component({
   selector: 'app-customer-transaction',
@@ -61,9 +62,9 @@ export class CustomerTransactionComponent implements OnInit {
     Ledger_Id:null,SubLedger_Id:null,LedgerName:null,SubLedgerName:null,Address:null
   }
   customerTransaction:CustomerTransaction={
-    Id:null,ChalanNo:null,OrderNo:null,PaymentMode:"-1",PaymentDate:new Date(),Ledger_Id:null,
+    Id:null,ChalanNo:null,OrderNo:null,InvoiceNo:null,PaymentMode:"-1",PaymentDate:new Date(),Ledger_Id:null,
     SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0,PaymentMethod:"general",
-    PaymentType:"payment",TotalDueAdvanceAmount:0
+    PaymentType:"payment",TotalDueAdvanceAmount:0,TransactionDetailsList:[]
   }
   totalPayableAmount:number=0;
   constructor(private _alertBox:AlertBoxService,
@@ -139,7 +140,7 @@ export class CustomerTransactionComponent implements OnInit {
       // })
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
+      let message=error
       let dialogData=new DialogData();
       dialogData.message=message.Message;
       this._alertBox.openDialog(dialogData);
@@ -158,9 +159,8 @@ export class CustomerTransactionComponent implements OnInit {
       }
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -191,9 +191,8 @@ export class CustomerTransactionComponent implements OnInit {
       this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -300,18 +299,30 @@ export class CustomerTransactionComponent implements OnInit {
   changeChoose($event,index:number){
     if(this.customerTransaction.PaymentMethod=='specific')
     if($event.target.checked){
-      this.customerTransaction.PaidAmount+=this.groupItemList[index].PayAmount
+      this.customerTransaction.PaidAmount+=Number(this.groupItemList[index].PayAmount)
     }
     else{
       if(this.customerTransaction.PaidAmount>0){
-        this.customerTransaction.PaidAmount-=this.groupItemList[index].PayAmount
+        this.customerTransaction.PaidAmount-=Number(this.groupItemList[index].PayAmount)
       }
     }
   }
   saveCustomerTransaction(){
     debugger
-    this.groupItemList.forEach(a=>{
-
+    this.customerTransaction.TransactionDetailsList=[];
+    if(this.groupItemList.length>0){
+      this.customerTransaction.InvoiceNo=this.groupItemList[0].InvoiceNo;
+      this.customerTransaction.Group_Id=this.groupItemList[0].Id;
+    }
+    this.groupItemList.forEach((a,index)=>{
+      if(this.checkedItems[index].IsChecked){
+        var transactionDetails=new CustomerSupplierTransactionDetails();
+        transactionDetails.Group_Id=a.Id;
+        transactionDetails.InvoiceNo=a.InvoiceNo;
+        transactionDetails.PaidAmount=a.PaidAmount;
+        transactionDetails.PaymentDate=this.customerTransaction.PaymentDate;
+        this.customerTransaction.TransactionDetailsList.push(transactionDetails);
+      }
     })
     if(this.customerTransaction.PaymentType=="refund"){
       this.customerTransaction.PaidAmount*-1;
@@ -328,9 +339,8 @@ export class CustomerTransactionComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -355,6 +365,14 @@ export class CustomerTransactionComponent implements OnInit {
   }
   dueAmountPaymentMethod(paymentMethod:string){
 
+  }
+  fullPayChange($event){
+    if($event.target.checked){
+      this.customerTransaction.PaidAmount=this.customerTransaction.TotalDueAdvanceAmount;
+    }
+    else{
+      this.customerTransaction.PaidAmount=0;
+    }
   }
 }
 export class CheckedItem{

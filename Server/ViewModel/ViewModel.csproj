@@ -48,6 +48,7 @@
     <Compile Include="Model\CodeFormaterInfo.cs" />
     <Compile Include="Model\ColumnInfo.cs" />
     <Compile Include="Model\CustomerInfo.cs" />
+    <Compile Include="Model\CustomerSupplierTransactionDetailsInfo.cs" />
     <Compile Include="Model\FormInfoView.cs" />
     <Compile Include="Model\GroupItemInfo.cs" />
     <Compile Include="Model\ItemListInfo.cs" />
