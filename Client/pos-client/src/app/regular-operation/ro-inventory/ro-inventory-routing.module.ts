@@ -6,6 +6,7 @@ import { ItemPurchaseListComponent } from './item-purchase-list/item-purchase-li
 import { ItemSalesListComponent } from './item-sales-list/item-sales-list.component';
 import { SupplierTransactionComponent } from './supplier-transaction/supplier-transaction.component';
 import { CustomerTransactionComponent } from './customer-transaction/customer-transaction.component';
+import { CustomerTransactionListComponent } from './customer-transaction-list/customer-transaction-list.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
       {path:'add-item',component:ItemPurchaseListComponent},
       {path:'sales-item',component:ItemSalesListComponent},
       {path:'supplier-transaction',component:SupplierTransactionComponent},
-      {path:'customer-transaction',component:CustomerTransactionComponent}
+      {path:'customer-transaction',component:CustomerTransactionListComponent}
     ]
   }
 ];

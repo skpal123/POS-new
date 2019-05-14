@@ -1,6 +1,6 @@
-import { Component, OnInit ,ViewChild} from '@angular/core';
+import { Component, OnInit ,ViewChild,Inject} from '@angular/core';
 import { CustomerTransaction } from '../../../models/regular-operation/inventory/customer-transaction.model';
-import { FormBuilder, FormControl, NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
@@ -8,7 +8,7 @@ import { GroupItem } from '../../../models/regular-operation/inventory/group-ite
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { PostLoginService } from '../../../services/common/post-login.service';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { InventoryService } from '../../../services/regular-operation/inventory.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { ItemTransactionDetailsComponent } from '../item-transaction-details/item-transaction-details.component';
@@ -61,24 +61,43 @@ export class CustomerTransactionComponent implements OnInit {
     Id:null,CustomerId:null,CustomerName:null,PhoneNo:null,Email:null,
     Ledger_Id:null,SubLedger_Id:null,LedgerName:null,SubLedgerName:null,Address:null
   }
-  customerTransaction:CustomerTransaction={
-    Id:null,ChalanNo:null,OrderNo:null,InvoiceNo:null,PaymentMode:"-1",PaymentDate:new Date(),Ledger_Id:null,
-    SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0,PaymentMethod:"general",
-    PaymentType:"payment",TotalDueAdvanceAmount:0,TransactionDetailsList:[]
-  }
   totalPayableAmount:number=0;
   constructor(private _alertBox:AlertBoxService,
+    public matDialogRef:MatDialogRef<CustomerTransactionComponent>,
+    @Inject(MAT_DIALOG_DATA) public customerTransaction:CustomerTransaction,
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
     private _inventotyService:InventoryService,
   ) { }
   ngOnInit(){
+    debugger
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 5
+      pageLength: 10
     };
-    this.GetSalesTransactionList(this.customerTransaction.Customer_Id,this.formDate,this.toDate);
+    this.customerSelectedItems.push({id:this.customerTransaction.Customer_Id,itemName:this.customerTransaction.CustomerName});
+    if(this.customerTransaction.Id!=null){
+      this.customerTransaction.TransactionDetailsList.forEach((a,index)=>{
+        var groupItem=new GroupItem();
+        groupItem.InvoiceNo=a.InvoiceNo;
+        groupItem.PayAmount=a.PaidAmount;
+        groupItem.Id=a.Group_Id;
+        groupItem.TransactionDate=a.PaymentDate;
+        groupItem.CustomerName=this.customerTransaction.CustomerName;
+        this.groupItemList.push(groupItem);
+        this.checkedItems.push({IsChecked:true})
+      });
+      if(this.customerTransaction.Ledger_Id!=null){
+        this.ledgerSelectedItems.push({id:this.customerTransaction.Ledger_Id,itemName:this.customerTransaction.LedgerName});
+      }
+      if(this.customerTransaction.SubLedger_Id!=null){
+        this.subledgerSelectedItems.push({id:this.customerTransaction.SubLedger_Id,itemName:this.customerTransaction.SubLedgerName})
+      }
+    }
+    else{
+      this.GetSalesTransactionList(this.customerTransaction.Customer_Id,this.formDate,this.toDate);
+    }                                                                                                                                                
     this.formDateControl.valueChanges.subscribe(data=>{
       debugger
       if(!this.initialload){
@@ -92,10 +111,13 @@ export class CustomerTransactionComponent implements OnInit {
       }
     })
     this.PaidAmountControl.valueChanges.subscribe(data=>{
-      if(this.customerTransaction.PaymentMethod=="general"){
+      if(this.customerTransaction.PaymentMethod=="general"&&!this.customerTransaction.IsUpdate){
         this.distributedTotalAmount(data)
       }
     })
+  }
+  onNoClick(){
+    this.matDialogRef.close();
   }
   GetSalesTransactionList(customerId:string,formDate:Date,toDate:Date){
     debugger

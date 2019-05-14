@@ -2,89 +2,68 @@
   <div class="col-md-12">
       <div class="panel panel-success">
           <div class="panel-heading">
-              <h3 style="text-align: center" class="panel-title">Party Transaction List</h3>
-          </div>           
-          <div class="panel-body" >
-                <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label for="formDate" class="col-sm-3 col-form-label">From Date</label>
-                            <div class="col-sm-9" id="startDateMargin">
+              <h3 style="text-align: center" class="panel-title">Customer Transaction List
+                  <span class="pull-right" (click)="createNewPartyTrnsaction()" id="pointer">
+                      <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                  </span>
+              </h3>
+          </div>
+          <div class="panel-body">
+              <div class="row">
+                  <div class="col-md-4">
+                      <div class="form-group row">
+                          <label for="formDate" class="col-sm-3 col-form-label">From Date</label>
+                          <div class="col-sm-9" id="startDateMargin">
                               <div class="row">
-                                <div class="col-md-10">
-                                  <input class="form-control" name="formDate" #formDateControl="ngModel" id="formDate"
-                                    [(ngModel)]="formDate" matInput [matDatepicker]="formDatePicker">
-                                </div>
-                                <div class="col-md-1">
-                                  <mat-datepicker-toggle matSuffix [for]="formDatePicker"></mat-datepicker-toggle>
-                                  <mat-datepicker #formDatePicker [startAt]="startDate"> </mat-datepicker>
-                                </div>
+                                  <div class="col-md-10">
+                                      <input class="form-control" name="formDate" #formDateControl="ngModel" id="formDate" [(ngModel)]="formDate" matInput [matDatepicker]="formDatePicker">
+                                  </div>
+                                  <div class="col-md-1">
+                                      <mat-datepicker-toggle matSuffix [for]="formDatePicker"></mat-datepicker-toggle>
+                                      <mat-datepicker #formDatePicker [startAt]="startDate"> </mat-datepicker>
+                                  </div>
                               </div>
-                            </div>
                           </div>
-                        </div>
-                        <div class="col-md-6" style="margin-left: 100">
-                          <div class="form-group row">
-                            <label for="toDate" class="col-sm-3 col-form-label">To Date</label>
-                            <div class="col-sm-9" id="endDateMargin">
+                      </div>
+                  </div>
+                  <div class="col-md-4" style="margin-left: 100">
+                      <div class="form-group row">
+                          <label for="toDate" class="col-sm-3 col-form-label">To Date</label>
+                          <div class="col-sm-9" id="endDateMargin">
                               <div class="row">
-                                <div class="col-md-10">
-                                  <input class="form-control"  name="toDate" #toDateControl="ngModel" id="toDate" [(ngModel)]="toDate"
-                                    matInput [matDatepicker]="toDatePicker">
-                                </div>
-                                <div class="col-md-2">
-                                  <mat-datepicker-toggle  matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
-                                  <mat-datepicker #toDatePicker [startAt]="startDate"> </mat-datepicker>
-                                </div>
+                                  <div class="col-md-10">
+                                      <input class="form-control" name="toDate" #toDateControl="ngModel" id="toDate" [(ngModel)]="toDate" matInput [matDatepicker]="toDatePicker">
+                                  </div>
+                                  <div class="col-md-2">
+                                      <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                                      <mat-datepicker #toDatePicker [startAt]="startDate"> </mat-datepicker>
+                                  </div>
                               </div>
-                            </div>
                           </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="toDate" class="col-sm-4 col-form-label">Customer Name</label>
+                        <div class="col-sm-8" >
+                            <app-customer-dropdown
+                            (customerOnItemSelect)="customerOnSeletedItem($event)" [customerSelectedItems]="customerSelectedItems">
+                          </app-customer-dropdown>
                         </div>
-                      </div>
-                      <div class="row">
-                            <div class="col-md-12">
-                                <table class="table" datatable >
-                                    <thead>
-                                        <tr>
-                                            <th>Invoice No</th>
-                                            <th>Supplier</th>
-                                            <th>Payment Date</th>
-                                            <th>Payable Amount</th>
-                                            <th>Paid Amount</th>
-                                            <th>Pay Amount</th>
-                                            <th>Action</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let group of groupItemList">
-                                            <td>{{group.InvoiceNo}}</td>
-                                            <td>{{group.CustomerName}}</td>
-                                            <td>{{group.TransactionDate|date}}</td>
-                                            <td>{{group.NetPayableAmount}}</td>
-                                            <td>{{group.PaidAmount}}</td>
-                                            <td >
-                                              <input class="form-control" type="number" [(ngModel)]="group.PayAmount">
-                                            </td>
-                                            <td>
-                                              <input type="button" value="View" class="btn btn-success" (click)="getItemTransactionDetails(group.Id)">
-                                            </td>
-                                            <td>
-                                              <input type="button" value="history" class="btn btn-success" (click)="getCustomerTransactionDetails(group.Customer_Id)">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                      </div>
-            <!-- <app-custom-datatable 
-            [DataList]="DataList" 
-            [reload]="reload"
-            [ColumnList]="ColumnList"
-            (EditSelectedRowClicked)="getPartyDetails($event)"
-            (DeleteDataRowClicked)="deleteParty($event)"
-            >
-            </app-custom-datatable> -->
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12" *ngIf="reload&&columnReady&&dataReady">
+                      <app-custom-datatable 
+                      [DataList]="DataList" 
+                      [reload]="reload" 
+                      [ColumnList]="ColumnList" 
+                      (EditSelectedRowClicked)="getCustomerTansactionDetails($event)" 
+                      (DeleteDataRowClicked)="deleteCustomerTransaction($event)">
+                      </app-custom-datatable>
+                  </div>
+              </div>
           </div>
       </div>
   </div>

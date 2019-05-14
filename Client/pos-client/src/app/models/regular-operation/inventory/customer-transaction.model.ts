@@ -1,5 +1,4 @@
 import { CustomerSupplierTransactionDetails } from "./customer-supplier-transaction-details.model";
-
 export class CustomerTransaction{
     public Id?:string;
     public ChalanNo?:string;
@@ -7,6 +6,7 @@ export class CustomerTransaction{
     public OrderNo?:string;
     public Group_Id?:string;
     public Customer_Id?:string;
+    public CustomerName?:string;
     public PaymentMode?:string;
     public PaymentDate?:Date;
     public Ledger_Id?:string;
@@ -18,4 +18,5 @@ export class CustomerTransaction{
     public PaymentMethod?:string;
     public TotalDueAdvanceAmount?:number;
     public TransactionDetailsList?:CustomerSupplierTransactionDetails[];
+    public IsUpdate?:boolean;
 }

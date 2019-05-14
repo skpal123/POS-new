@@ -10,21 +10,20 @@ import { UserFormControl } from '../../../models/common/user-form-control.model'
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { FormControl } from '@angular/forms';
 import { GroupItem } from '../../../models/regular-operation/inventory/group-item.model';
-import { Subject } from 'rxjs';
 import { ItemTransactionDetailsComponent } from '../item-transaction-details/item-transaction-details.component';
+import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
+import { CustomerTransactionComponent } from '../customer-transaction/customer-transaction.component';
 
 @Component({
   selector: 'app-customer-transaction-list',
   templateUrl: './customer-transaction-list.component.html',
   styleUrls: ['./customer-transaction-list.component.css']
 })
-export class CustomerTransactionListComponent implements OnChanges,OnInit {
-  @Input() customertransaction:CustomerTransaction;
-  @Output() totalBalance:EventEmitter <any>=new EventEmitter <any>();
+export class CustomerTransactionListComponent implements OnInit {
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
-  dtTrigger: Subject<any> = new Subject<any>();
-  dtOptions: DataTables.Settings = {};
+  IsUpdate:boolean=false;
+  customerId:string=null;
   formDate:Date=new Date();
   initialload:boolean=true;
   toDate:Date=new Date();
@@ -37,9 +36,13 @@ export class CustomerTransactionListComponent implements OnChanges,OnInit {
   ColumnList:any[]=[];
   DataList:any[]=[];
   groupItemList:GroupItem[]=[];
+  customerSelectedItems :MultiSelectDropdown[]= [
+  ];
   customerTransactionList:CustomerTransaction[]=[];
   customerTransaction:CustomerTransaction={
-    
+    Id:null,ChalanNo:null,OrderNo:null,InvoiceNo:null,PaymentMode:"-1",PaymentDate:new Date(),Ledger_Id:null,
+    SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0,PaymentMethod:"general",
+    PaymentType:"payment",TotalDueAdvanceAmount:0,TransactionDetailsList:[],IsUpdate:false
   }
   totalPayableAmount:number=0;
   constructor(private _alertBox:AlertBoxService,
@@ -49,125 +52,134 @@ export class CustomerTransactionListComponent implements OnChanges,OnInit {
     private _inventotyService:InventoryService,
   ) { }
   ngOnInit(){
+    this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
+    this.getUserFormControlByFormName()
     this.formDateControl.valueChanges.subscribe(data=>{
       debugger
       if(!this.initialload){
-        this.GetSalesTransactionList(this.customertransaction.Customer_Id,data,this.toDate);
+        this.getCustomerTransactionList(data,this.toDate,this.customerId);
       }
     })
     this.toDateControl.valueChanges.subscribe(data=>{
       debugger
       if(!this.initialload){
-      this.GetSalesTransactionList(this.customertransaction.Customer_Id,this.formDate,data);
+        this.getCustomerTransactionList(this.formDate,data,this.customerId);
       }
     })
   }
-  ngOnChanges() {
-    debugger
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10
-    };
-    this.GetSalesTransactionList(this.customertransaction.Customer_Id,this.formDate,this.toDate);
-
-  }
-  GetSalesTransactionList(customerId:string,formDate:Date,toDate:Date){
-    debugger
-    //this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.GetSalesTransactionList(customerId,formDate,toDate).subscribe(response=>{
+  getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
+    this._postLoginservice.getUserFormControlByFormName('customer-transaction-list').subscribe(response=>{
       this.blockUi.stop();
-      this.initialload=false;
-      this.groupItemList=response;
-      this.totalPayableAmount=0;
-      this.groupItemList.forEach(a=>{
-        a.PayAmount=a.NetPayableAmount-a.PaidAmount;
-        this.totalPayableAmount+=(a.NetPayableAmount-a.PaidAmount)
-      })
-      this.totalBalance.emit(this.totalPayableAmount);
-      this.dtTrigger.next();
-      this.dtTrigger.complete();
+      this.userControlList=response
+      this.ColumnList=this.userControlList;
+      this.columnReady=true;
+      this._customDatatableService.ColumnList=this.userControlList;
     },error=>{
-      //this.blockUi.stop();
+      this.blockUi.stop();
       let dialogData=new DialogData();
       dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCustomerDetails($event:string){
-    debugger
+  getCustomerTransactionList(formDate:Date,toDate:Date,customerId:string){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionById($event).subscribe(response=>{
+    this._inventotyService.getPartyTransactionList(formDate,toDate,customerId).subscribe(response=>{
       this.blockUi.stop();
-      this.customerTransaction=response
-      // const dialogRef=this.matDialog.open(CustomerEntryComponent,{
-      //   data:this.customer,
-      //   disableClose:true,
-      //   height:window.screen.height*.95+'px', 
-      //   width:window.screen.width*.5+'px'
-      // });
-      // dialogRef.afterClosed().subscribe(result=>{
-      //   if(result){
-      //     this.getCustomerList();
-      //   }
-      // })
-    },error=>{
-      this.blockUi.stop();
-      let message=error.json();
-      let dialogData=new DialogData();
-      dialogData.message=message.Message;
-      this._alertBox.openDialog(dialogData);
-    })
-  }
-  deleteCustomer($event:string){
-    this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.deletePartyTransactionById($event).subscribe(response=>{
-      this.blockUi.stop();
-      let result=response
-      if(result){
-        this.getCustomerList();
-        let dialogData=new DialogData();
-        dialogData.message="Customer deleted succesfully";
-        this._alertBox.openDialog(dialogData);
-      }
-    },error=>{
-      this.blockUi.stop();
-      let message=error.json();
-      let dialogData=new DialogData();
-      dialogData.message=message.Message;
-      this._alertBox.openDialog(dialogData);
-    })
-  }
-  getItemTransactionDetails(Id:string){
-    const dialogRef=this.matDialog.open(ItemTransactionDetailsComponent,{
-      data:Id,
-      disableClose:true,
-      maxWidth:'100vw',
-      maxHeight:'100vh',
-      height:'70%',
-      width:'95%'
-    });
-    dialogRef.afterClosed().subscribe(result=>{
-      
-    })
-  }
-  getCustomerTransactionDetails(customerId:string){
-
-  }
-  getCustomerList(){
-    this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionList(this.formDate,this.toDate,this.customertransaction.Customer_Id).subscribe(response=>{
-      this.blockUi.stop();
-      this.customerTransactionList=response
+      this.initialload=false;
+      this.customerTransactionList=response;
+      this.customerTransactionList.forEach(a=>{
+        a.PaymentMode= a.PaymentMode=="1"?'Cash':a.PaymentMode=="2"?"Bank":"Other";
+      })
       this.DataList=this.customerTransactionList;
       this._customDatatableService.DataList=this.customerTransactionList;
       this.reload=true;
       this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
+  }
+  getCustomerTansactionDetails($event:string){
+    debugger
+    this.blockUi.start("Loading....,Please wait")
+    this._inventotyService.getPartyTransactionById($event).subscribe(response=>{
+      this.blockUi.stop();
+      this.customerTransaction=response;
+      this.customerTransaction.PaymentType="payment";
+      this.customerTransaction.PaymentMethod="general"
+      this.customerTransaction.IsUpdate=true;
+      const dialogRef=this.matDialog.open(CustomerTransactionComponent,{
+        data:this.customerTransaction,
+        disableClose:true,
+        maxWidth:'100vw',
+        maxHeight:'100vh',
+        height:'100%',
+        width:'95%'
+      });
+      dialogRef.afterClosed().subscribe(result=>{
+        if(result){
+          this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
+        }
+      })
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  deleteCustomerTransaction($event:string){
+    this.blockUi.start("Loading....,Please wait")
+    this._inventotyService.deletePartyTransactionById($event).subscribe(response=>{
+      this.blockUi.stop();
+      let result=response
+      if(result){
+        this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
+        let dialogData=new DialogData();
+        dialogData.message="Customer deleted succesfully";
+        this._alertBox.openDialog(dialogData);
+      }
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  customerOnSeletedItem($event:MultiSelectDropdown){
+    debugger
+    if($event.id!="0"){
+      this.customerId=$event.id;
+      this.customerTransaction.Customer_Id=$event.id;
+      this.customerTransaction.CustomerName=$event.itemName;
+      this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
+    }
+    else{
+      this.customerTransaction.Customer_Id=null;
+      this.customerTransaction.CustomerName="Select Customer"
+      this.customerId=null;
+    }
+  }
+  createNewPartyTrnsaction(){
+    this.clearPartyTransaction();
+    const dialogRef=this.matDialog.open(CustomerTransactionComponent,{
+      data:this.customerTransaction,
+      disableClose:true,
+      maxWidth:'100vw',
+      maxHeight:'100vh',
+      height:'100%',
+      width:'95%'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result){
+        this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
+      }
+    })
+  }
+  clearPartyTransaction(){
+    this.customerTransaction.IsUpdate=false;
   }
 }

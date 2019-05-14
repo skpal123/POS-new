@@ -1810,22 +1810,21 @@ namespace ERPWebApiService.Controllers
                     {
                         PartyTransactionInfo partyTransactionInfo=new PartyTransactionInfo();
                         partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
-                        partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
-                            ? rdr["ChalanNo"].ToString()
+                        //partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                        //    ? rdr["ChalanNo"].ToString()
+                        //    : null;
+                        //partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
+                        //    ? rdr["OrderNo"].ToString()
+                        //    : null;
+                        partyTransactionInfo.CustomerName = rdr["CustomerName"] != DBNull.Value
+                            ? rdr["CustomerName"].ToString()
                             : null;
-                        partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
-                            ? rdr["OrderNo"].ToString()
-                            : null;
-                        if (rdr["PhoneNo"] != DBNull.Value)
-                        {
-                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
-                        }
+                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"]) : 0;
+                        partyTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
                         if (rdr["PaymentDate"] != DBNull.Value)
                         {
-                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
-                        }
-                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
-                        partyTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
+                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PaymentDate"].ToString());
+                        }                      
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
                             partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
@@ -1855,34 +1854,38 @@ namespace ERPWebApiService.Controllers
                 PartyTransactionInfo partyTransactionInfo = new PartyTransactionInfo();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd = new SqlCommand(@"select pt.Id,ChalanNo,InvoiceNo,OrderNo,Group_Id,PaymentMode,paymentDate,PaidAmount,AccountDescription LedgerName,sl.Description SubledgerName from tblpartytransaction pt
-                                                    left join tblAccount ac on pt.Ledger_Id= ac.id
-                                                    left join tblSubledger sl on pt.subledger_id=sl.Id
-                                                    where pt.id=@id", con);
+                    SqlCommand cmd = new SqlCommand(@"select * from func_GetPartyTransactionListById(@id)", con);
                     cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
                         partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
-                        partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
-                            ? rdr["ChalanNo"].ToString()
+                        //partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
+                        //    ? rdr["ChalanNo"].ToString()
+                        //    : null;
+                        //partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
+                        //    ? rdr["OrderNo"].ToString()
+                        //    : null;
+                        partyTransactionInfo.CustomerName = rdr["CustomerName"] != DBNull.Value
+                            ? rdr["CustomerName"].ToString()
                             : null;
-                        partyTransactionInfo.OrderNo = rdr["OrderNo"] != DBNull.Value
-                            ? rdr["OrderNo"].ToString()
-                            : null;
-                        if (rdr["PhoneNo"] != DBNull.Value)
-                        {
-                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
-                        }
                         if (rdr["PaymentDate"] != DBNull.Value)
                         {
-                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PhoneNo"].ToString());
+                            partyTransactionInfo.PaymentDate = Convert.ToDateTime(rdr["PaymentDate"].ToString());
                         }
                         partyTransactionInfo.LedgerName = rdr["LedgerName"] != DBNull.Value ? rdr["LedgerName"].ToString() : null;
-                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaymentMode"]) : 0;
+                        partyTransactionInfo.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"]) : 0;
                         partyTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
                         partyTransactionInfo.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
+                        if (rdr["Group_Id"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["Group_Id"].ToString());
+                        }
+                        if (rdr["Customer_Id"] != DBNull.Value)
+                        {
+                            partyTransactionInfo.Customer_Id = Guid.Parse(rdr["Customer_Id"].ToString());
+                        }  
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
                             partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
@@ -1891,6 +1894,16 @@ namespace ERPWebApiService.Controllers
                         {
                             partyTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
                         }
+                        partyTransactionInfo.TransactionDetailsList =
+                            ERPContext.CustomerSupplierTransactionDetailsList.Where(y=>y.CustomerTransaction_Id==partyTransactionInfo.Id).Select(
+                                x => new CustomerSupplierTransactionDetailsInfo()
+                                {
+                                    Id = x.Id,
+                                    InvoiceNo = x.InvoiceNo,
+                                    Group_Id = x.Group_Id,
+                                    PaymentDate = x.PaymentDate,
+                                    PaidAmount = x.PaidAmount
+                                }).ToList();
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, partyTransactionInfo);

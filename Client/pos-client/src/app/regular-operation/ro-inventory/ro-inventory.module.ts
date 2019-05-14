@@ -43,7 +43,8 @@ import { ItemTransactionDetailsComponent } from './item-transaction-details/item
     PartyEntryComponent,
     ItemSalesComponent,
     CustomDatatableControlComponent,
-    ItemTransactionDetailsComponent
+    ItemTransactionDetailsComponent,
+    CustomerTransactionComponent
   ]
 })
 export class RoInventoryModule { }

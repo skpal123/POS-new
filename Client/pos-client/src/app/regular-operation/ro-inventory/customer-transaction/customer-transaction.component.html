@@ -50,12 +50,12 @@
                                               <thead>
                                                   <tr>
                                                       <td>Invoice No</td>
-                                                      <td>Supplier</td>
+                                                      <td>Customer</td>
                                                       <td>Payment Date</td>
-                                                      <td>Payable Amount</td>
-                                                      <td>Paid Amount</td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">Payable Amount</td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">Paid Amount</td>
                                                       <td>Pay Amount</td>
-                                                      <td >Choose</td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">Choose</td>
                                                       <td>View</td>
                                                       <td>History</td>
                                                   </tr>
@@ -65,12 +65,12 @@
                                                       <td>{{group.InvoiceNo}}</td>
                                                       <td>{{group.CustomerName}}</td>
                                                       <td>{{group.TransactionDate|date}}</td>
-                                                      <td>{{group.NetPayableAmount}}</td>
-                                                      <td>{{group.PaidAmount}}</td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">{{group.NetPayableAmount}}</td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">{{group.PaidAmount}}</td>
                                                       <td >
                                                         <input class="form-control" (blur)="changePaidAmount(i)" type="number" [(ngModel)]="group.PayAmount">
                                                       </td>
-                                                      <td>
+                                                      <td *ngIf="!customerTransaction.IsUpdate">
                                                         <input type="checkbox" (change)="changeChoose($event,i)" [(ngModel)]="checkedItems[i].IsChecked">
                                                       </td>
                                                       <td>
