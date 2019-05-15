@@ -341,7 +341,7 @@ export class CustomerTransactionComponent implements OnInit {
         var transactionDetails=new CustomerSupplierTransactionDetails();
         transactionDetails.Group_Id=a.Id;
         transactionDetails.InvoiceNo=a.InvoiceNo;
-        transactionDetails.PaidAmount=a.PaidAmount;
+        transactionDetails.PaidAmount=a.PayAmount;
         transactionDetails.PaymentDate=this.customerTransaction.PaymentDate;
         this.customerTransaction.TransactionDetailsList.push(transactionDetails);
       }
