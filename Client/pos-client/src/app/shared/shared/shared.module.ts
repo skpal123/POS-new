@@ -3,9 +3,10 @@ import {FormsModule, ReactiveFormsModule,FormControl} from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import {A11yModule} from '@angular/cdk/a11y';
-//import {DragDropModule} from '@angular/cdk/drag-drop';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import {PortalModule} from '@angular/cdk/portal';
-//import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ScrollDispatcher } from '@angular/cdk/scrolling'; 
+import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import {CdkTableModule} from '@angular/cdk/table';
 import {CdkTreeModule} from '@angular/cdk/tree';
@@ -64,7 +65,7 @@ import { TestComponent } from 'src/app/test/test.component';
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,
-    //DragDropModule,
+    DragDropModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -101,7 +102,7 @@ import { TestComponent } from 'src/app/test/test.component';
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    //ScrollingModule,
+    ScrollingModule,
     Ng2CompleterModule,TestComponent,
     NgbModule,
     AngularMultiSelectModule
