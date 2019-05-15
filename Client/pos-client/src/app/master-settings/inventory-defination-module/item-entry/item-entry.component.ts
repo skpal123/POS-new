@@ -29,6 +29,7 @@ export class ItemEntryComponent implements OnInit {
   @ViewChild('unitIdControl') unitIdControl:FormControl
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
   categoryTouch:boolean=false;
+  allLedger:boolean=true;
   subcategoryTouch:boolean=false;
   unitTouch:boolean=false;
   ledgerTouch:boolean=false;

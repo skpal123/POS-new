@@ -20,6 +20,7 @@ export class CustomerEntryComponent implements OnInit {
   @ViewChild('customerForm') customerForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
   ledgerTouch:boolean=false;
+  allLedger:boolean=true;
   ledgerSelectedItems :MultiSelectDropdown[]= [
   ];
   subledgerSelectedItems :MultiSelectDropdown[]= [

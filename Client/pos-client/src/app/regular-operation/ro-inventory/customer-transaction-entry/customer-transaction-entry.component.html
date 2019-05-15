@@ -1,132 +1,35 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <h5> Customer transaction entry
-          <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
-        </h5>
-      </div>
-      <div class="panel-body">
-        <form #customerTransactionForm="ngForm">
-            <div class="form-group row" [class.has-suucess]="CustomerIdControl.valid"
-            [ngClass]="{'has-error':CustomerIdControl.invalid}">
-            <label class="col-sm-4 control-label" for="Customer_Id">Customer name </label>
-            <div class="col-sm-7">
-              <input style="display: none;" name="CustomerId" required #CustomerIdControl="ngModel"
-                [(ngModel)]="customerTransaction.Customer_Id" class="form-control">
-              <app-customer-dropdown [IsNewCustomerAdd]="customerNew"
-                (customerOnItemSelect)="customerOnSeletedItem($event)" [customerSelectedItems]="customerSelectedItems">
-              </app-customer-dropdown>
-              <span class="help-block" *ngIf="CustomerIdControl.invalid">Required</span>
-            </div>
-            <div class="col-md-1">
-              <span id="pointer" (click)="createNewCustomer()" class="glyphicon glyphicon-plus"></span>
-            </div>
-          </div>
-          <div class="row" style="margin-top: 10px;margin-bottom: 10px">
-            <div class="col-md-4">
-              <label class="radio-inline">
-                <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
-                  [(ngModel)]="customerTransaction.PaymentType" #paymentTypeControl="ngModel" value="payment">Payment<br>
-              </label>
-            </div>
-            <div class="col-md-4">
-              <label class="radio-inline">
-                <input type="radio" (change)="paymentTypeChange(paymentType)" name="paymentType"
-                  [(ngModel)]="customerTransaction.PaymentType" #paymentTypeControl="ngModel" value="refund">Refund<br>
-              </label>
-            </div>
-          </div>
-          <div class="form-group row" [class.has-suucess]="PaidAmountControl.valid"
-          [ngClass]="{'has-error':PaidAmountControl.invalid&&PaidAmountControl.touched}">
-            <label class="col-sm-4  control-label" for="PaidAmount">{{totalBalance1>0?'Total Due amount':'Total Advance amount'}}</label>
-            <div class="col-sm-7">
-                <input required readonly name="balance" #totalBalanceControl="ngModel"
-                  [(ngModel)]="customerTransaction.TotalDueAdvanceAmount" class="form-control">
-            </div>
-          </div>
-          <div class="form-group row" [class.has-suucess]="PaidAmountControl.valid"
-              [ngClass]="{'has-error':PaidAmountControl.invalid&&PaidAmountControl.touched}">
-          <label class="col-sm-4 control-label" for="PaidAmount">Pay Amount</label>
-          <div class="col-sm-7">
-            <input id="PaidAmount" required name="PaidAmount" #PaidAmountControl="ngModel"
-              [(ngModel)]="customerTransaction.PaidAmount" class="form-control">
-            <span class="help-block" *ngIf="PaidAmountControl.invalid&&PaidAmountControl.touched">Required</span>
-          </div>
-        </div>
-          <div class="form-group row">
-            <label for="PaymentDate" class="col-sm-4 col-form-label">Payment Date</label>
-            <div class="col-sm-7">
-              <div class="row">
-                <div class="col-md-10">
-                  <input class="form-control" name="PaymentDate" #PaymentDateControl="ngModel" id="formDate"
-                    [(ngModel)]="customerTransaction.PaymentDate" matInput [matDatepicker]="PaymentDatePicker">
-                </div>
-                <div class="col-md-2">
-                  <mat-datepicker-toggle matSuffix [for]="PaymentDatePicker"></mat-datepicker-toggle>
-                  <mat-datepicker #PaymentDatePicker [startAt]="startDate"> </mat-datepicker>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group row" [class.has-suucess]="PaymentModeControl.valid"
-            [ngClass]="{'has-error':PaymentModeControl.invalid&&PaymentModeControl.touched}">
-            <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode</label>
-            <div class="col-sm-7">
-              <select id="PaymentMode" required name="PaymentMode" #PaymentModeControl="ngModel"
-                [(ngModel)]="customerTransaction.PaymentMode" class="form-control">
-                <option value="-1">SELECT</option>
-                <option value="1">Cash</option>
-                <option value="2">Bank</option>
-                <option value="0">Other</option>
-              </select>
-              <span class="help-block" *ngIf="PaymentModeControl.invalid&&PaymentModeControl.touched">Required</span>
-            </div>
-          </div>
-          <div class="form-group row" [class.has-success]="ledgerIdControl.valid"
-            [class.has-error]="ledgerIdControl.invalid&&ledgerTouch">
-            <label for="ledgerId" class="col-sm-4 col-form-label">Ledger Name</label>
-            <div class="col-sm-7">
-              <input style="display: none;" class="form-control" required name="ledgerIdControl"
-                #ledgerIdControl="ngModel" [(ngModel)]="customerTransaction.Ledger_Id">
-              <app-ledger-dropdown (ledgerOnItemSelect)="ledgerOnSeletedItem($event)"
-                [ledgerSelectedItems]="ledgerSelectedItems"></app-ledger-dropdown>
-              <span class="help-block" *ngIf="ledgerIdControl.errors?.required&&ledgerTouch">
-                Ledger name is required
-              </span>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="unitId" class="col-sm-4 col-form-label">Subledger Name</label>
-            <div class="col-sm-7">
-              <app-subledger-dropdown [ledgerId]="customerTransaction.Ledger_Id"
-                (subledgerOnItemSelect)="subledgerOnSeletedItem($event)"
-                (subledgerOnItemDeSelect)="subledgerOnDeSeletedItem($event)"
-                [subledgerSelectedItems]="subledgerSelectedItems"></app-subledger-dropdown>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-md-offset-2">
-              <label class="radio-inline">
-                <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
-                  [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="general">General<br>
-              </label>
-            </div>
-            <div class="col-md-4">
-              <label class="radio-inline">
-                <input type="radio" (change)="dueAmountPaymentMethod(paymentMethod)" name="paymentMethod"
-                  [(ngModel)]="customerTransaction.PaymentMethod" #paymentMethodControl="ngModel" value="specific">Specific<br>
-              </label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-2 pull-right">
-              <input type="button" [disabled]="customerTransactionForm.invalid" (click)="saveItem()" value="Save"
-                class="btn btn-primary">
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Personal data
+        </mat-panel-title>
+        <mat-panel-title>
+          Personal data
+        </mat-panel-title>
+        <mat-panel-description>
+          Type your name and age
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <mat-form-field>
+        <input matInput placeholder="First name">
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput placeholder="Age">
+      </mat-form-field>
+    </mat-expansion-panel>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Self aware panel
+        </mat-panel-title>
+        <mat-panel-description>
+          Currently I am {{panelOpenState ? 'open' : 'closed'}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+  </mat-accordion>

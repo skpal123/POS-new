@@ -100,7 +100,11 @@
                   <label for="ledgerId" class="col-sm-4 col-form-label">Ledger Name</label>
                   <div class="col-sm-7" >
                       <input style="display: none;" class="form-control" [required]="itemValidation[0]?.Ledger_Id&&itemValidation[1]?.Ledger_Id" name="ledgerIdControl" #ledgerIdControl="ngModel" [(ngModel)]="item.Ledger_Id">
-                     <app-ledger-dropdown (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" [ledgerSelectedItems]="ledgerSelectedItems"></app-ledger-dropdown> 
+                     <app-ledger-dropdown 
+                     [allLedger]="allLedger"
+                     (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" 
+                     [ledgerSelectedItems]="ledgerSelectedItems">
+                    </app-ledger-dropdown> 
                      <span class="help-block" *ngIf="ledgerIdControl.errors?.required&&ledgerTouch">
                         Ledger name is required
                     </span> 
@@ -109,7 +113,11 @@
                 <div class="form-group row" *ngIf="itemValidation[0]?.SubLedger_Id">
                   <label for="unitId" class="col-sm-4 col-form-label">Subledger Name</label>
                   <div class="col-sm-7" >
-                     <app-subledger-dropdown [ledgerId]="item.Ledger_Id" (subledgerOnItemSelect)="subledgerOnSeletedItem($event)" (subledgerOnItemDeSelect)="subledgerOnDeSeletedItem($event)" [subledgerSelectedItems]="subledgerSelectedItems"></app-subledger-dropdown> 
+                     <app-subledger-dropdown 
+                     [ledgerId]="item.Ledger_Id" 
+                     (subledgerOnItemSelect)="subledgerOnSeletedItem($event)" 
+                     (subledgerOnItemDeSelect)="subledgerOnDeSeletedItem($event)"
+                      [subledgerSelectedItems]="subledgerSelectedItems"></app-subledger-dropdown> 
                   </div>
                 </div>
               <div class="row">

@@ -163,7 +163,7 @@ export class CustomerTransactionListComponent implements OnInit {
       this.customerId=null;
     }
   }
-  createNewPartyTrnsaction(){
+  createNewCustomerTrnsaction(){
     this.clearPartyTransaction();
     const dialogRef=this.matDialog.open(CustomerTransactionComponent,{
       data:this.customerTransaction,
@@ -181,5 +181,7 @@ export class CustomerTransactionListComponent implements OnInit {
   }
   clearPartyTransaction(){
     this.customerTransaction.IsUpdate=false;
+    this.customerTransaction.TotalDueAdvanceAmount=0;
+    this.customerTransaction.PaidAmount=0;
   }
 }

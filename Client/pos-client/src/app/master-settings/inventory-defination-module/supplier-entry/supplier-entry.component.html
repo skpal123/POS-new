@@ -67,6 +67,7 @@
                   <div class="col-sm-7" >
                     <input style="display: none;" class="form-control" required name="ledgerIdControl" #ledgerIdControl="ngModel" [(ngModel)]="supplier.Ledger_Id">
                     <app-ledger-dropdown 
+                     [allLedger]="allLedger"
                      (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" 
                      [ledgerSelectedItems]="ledgerSelectedItems">
                     </app-ledger-dropdown> 

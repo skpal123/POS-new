@@ -19,6 +19,7 @@ export class SupplierEntryComponent implements OnInit {
   @ViewChild('supplierForm') supplierForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
   ledgerTouch:boolean=false;
+  allLedger:boolean=false;
   ledgerSelectedItems :MultiSelectDropdown[]= [
   ];
   subledgerSelectedItems :MultiSelectDropdown[]= [

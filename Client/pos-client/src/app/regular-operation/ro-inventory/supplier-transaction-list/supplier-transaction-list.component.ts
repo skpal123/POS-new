@@ -17,6 +17,7 @@ import { GroupItem } from '../../../models/regular-operation/inventory/group-ite
   styleUrls: ['./supplier-transaction-list.component.css']
 })
 export class SupplierTransactionListComponent implements OnInit {
+  panelOpenState:boolean=false
   @Input() supplierId:string;
   @BlockUI() blockUi:NgBlockUI;
   @ViewChild('formDateControl') formDateControl:FormControl;

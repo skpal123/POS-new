@@ -59,6 +59,7 @@
                     <input style="display: none;" class="form-control" required name="ledgerIdControl" #ledgerIdControl="ngModel" [(ngModel)]="customer.Ledger_Id">
                     <app-ledger-dropdown 
                      (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" 
+                     [allLedger]="allLedger"
                      [ledgerSelectedItems]="ledgerSelectedItems">
                     </app-ledger-dropdown> 
                      <span class="help-block" *ngIf="ledgerIdControl.invalid&&ledgerTouch">
@@ -82,7 +83,7 @@
                   <input type="button" [disabled]="customerForm.invalid" (click)="saveCustomer()" value="{{customer.Id==null?'Save':'Update'}}" class="btn btn-primary">
                 </div>
                 <div class="col-md-2 pull-right">
-                  <input type="button" [disabled]="!customerForm.dirty" (click)="clearCustomer()" value="Save" class="btn btn-primary">
+                  <input type="button" [disabled]="!customerForm.dirty" (click)="clearCustomer()" value="Clear" class="btn btn-primary">
                 </div>
               </div>
         </form>

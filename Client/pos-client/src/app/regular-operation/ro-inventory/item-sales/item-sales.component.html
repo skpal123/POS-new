@@ -325,10 +325,10 @@
                                   <label class="col-sm-4 control-label" for="PaymentMode">Payment Mode<span *ngIf="ItemSaleValidation[1]?.PaymentMode" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <select id="Reason" formControlName="PaymentMode" class="form-control">
-                                          <option value="0">SELECT</option>
+                                          <option value="-1">SELECT</option>
                                           <option value="1">Cash</option>
                                           <option value="2">Bank</option>
-                                          <option value="3">Other</option>
+                                          <option value="0">Other</option>
                                       </select>
                                       <span class="help-block" *ngIf="itemSaleForm.get('PaymentMode').invalid&&itemSaleForm.get('PaymentMode').touched">Required</span>
                                   </div>
@@ -339,7 +339,11 @@
                                   <label class="col-sm-4 control-label" for="Ledger_Id">Ledger name<span *ngIf="ItemSaleValidation[1]?.Ledger_Id" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                   <div class="col-sm-7">
                                       <input style="display: none;" class="form-control" formControlName="Ledger_Id">
-                                      <app-ledger-dropdown (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" [ledgerSelectedItems]="ledgerSelectedItems">
+                                      <app-ledger-dropdown 
+                                      [filterByPaymentMode]="filterByPaymentMode"
+                                      [paymentMode]="itemSaleForm.get('PaymentMode').value"
+                                      (ledgerOnItemSelect)="ledgerOnSeletedItem($event)" 
+                                      [ledgerSelectedItems]="ledgerSelectedItems">
                                       </app-ledger-dropdown>
                                       <span class="help-block" *ngIf="itemSaleForm.get('Ledger_Id').invalid">Required</span>
                                   </div>

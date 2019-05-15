@@ -18,6 +18,7 @@ import { CustomerEntryComponent } from '../../../master-settings/inventory-defin
 import { PartyEntryComponent } from '../../../master-settings/inventory-defination-module/party-entry/party-entry.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { Customer } from '../../../models/master-settings/inventory-defination/customer.model';
 
 @Component({
   selector: 'app-item-sales',
@@ -29,6 +30,8 @@ export class ItemSalesComponent implements OnInit {
   itemSaleForm:FormGroup
   ItemSaleValidation:ItemPurchaseValidation[]=[];
   ledgerTouch:boolean=false;
+  allLedger:boolean=false;
+  filterByPaymentMode:boolean=true
   subledgerTouch:boolean=false;
   supplierNew:boolean=false;
   partyNew:boolean=false;
@@ -107,7 +110,7 @@ export class ItemSalesComponent implements OnInit {
       Approver_Id: [null,this.ItemSaleValidation[0].Approver_Id==true&&this.ItemSaleValidation[1].Approver_Id==true? Validators.required:null],
       Ledger_Id: [null,this.ItemSaleValidation[0].Ledger_Id==true&&this.ItemSaleValidation[1].Ledger_Id==true? Validators.required:null],
       SubLedger_Id: [null,this.ItemSaleValidation[0].SubLedger_Id==true&&this.ItemSaleValidation[1].SubLedger_Id==true? Validators.required:null],
-      PaymentMode: [0,this.ItemSaleValidation[0].PaymentMode==true&&this.ItemSaleValidation[1].PaymentMode==true? Validators.required:null],
+      PaymentMode: [-1,this.ItemSaleValidation[0].PaymentMode==true&&this.ItemSaleValidation[1].PaymentMode==true? Validators.required:null],
       TransactionType: ["Sales",this.ItemSaleValidation[0].TransactionType==true&&this.ItemSaleValidation[1].TransactionType==true? Validators.required:null],
       ItemTransactionList: this.fb.array([
         this.addNewItemTransaction()
@@ -394,34 +397,6 @@ export class ItemSalesComponent implements OnInit {
   slectedGroupControl(){
     this.getTotalQuantityAndAmount();
   }
-  createNewSupplier(){
-     const dialogRef=this.matDialog.open(SupplierEntryComponent,{
-       data:this.category,
-       disableClose:true,
-       height:window.screen.height*.6+'px',
-       width:window.screen.width*.4+'px'
-     });
-     dialogRef.afterClosed().subscribe(result=>{
-       debugger
-       if(result){
-         this.supplierNew=true;
-       }
-     })
-   }
-   createNewParty(){
-    const dialogRef=this.matDialog.open(PartyEntryComponent,{
-      data:this.category,
-      disableClose:true,
-      height:window.screen.height*.6+'px',
-      width:window.screen.width*.4+'px'
-    });
-    dialogRef.afterClosed().subscribe(result=>{
-      debugger
-      if(result){
-        this.partyNew=true;
-      }
-    })
-  }
   createNewCustomer(){
     const dialogRef=this.matDialog.open(CustomerEntryComponent,{
       data:this.category,
@@ -429,10 +404,12 @@ export class ItemSalesComponent implements OnInit {
       height:window.screen.height*.6+'px',
       width:window.screen.width*.4+'px'
     });
-    dialogRef.afterClosed().subscribe(result=>{
+    dialogRef.afterClosed().subscribe((result:Customer)=>{
       debugger
       if(result){
         this.customerNew=true;
+        this.customerSelectedItems=[];
+        this.customerSelectedItems.push({id:result.Id,itemName:result.CustomerId+'-'+result.CustomerName})
       }
     })
   }

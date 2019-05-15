@@ -66,9 +66,8 @@ export class ItemTransactionDetailsComponent implements OnInit {
       this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error.json();
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

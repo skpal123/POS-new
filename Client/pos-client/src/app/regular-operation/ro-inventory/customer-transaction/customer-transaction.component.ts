@@ -32,8 +32,6 @@ export class CustomerTransactionComponent implements OnInit {
   ledgerTouch:boolean=false;
   checkedItems:CheckedItem[]=[];
   paymentModeFilter:boolean=true;
-  customerSelectedItems :MultiSelectDropdown[]= [
-  ];
   ledgerSelectedItems :MultiSelectDropdown[]= [
   ];
   subledgerSelectedItems :MultiSelectDropdown[]= [  
@@ -53,7 +51,6 @@ export class CustomerTransactionComponent implements OnInit {
   groupItemList:GroupItem[]=[];
   oldGroupItemList:GroupItem[]=[];
   customerTransactionList:CustomerTransaction[]=[];
-  customerNew:boolean=false
   paymentType:string="payment";
   paymentMethod:string="general";
   totalBalance1:number=0;
@@ -76,7 +73,6 @@ export class CustomerTransactionComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10
     };
-    this.customerSelectedItems.push({id:this.customerTransaction.Customer_Id,itemName:this.customerTransaction.CustomerName});
     if(this.customerTransaction.Id!=null){
       this.customerTransaction.TransactionDetailsList.forEach((a,index)=>{
         var groupItem=new GroupItem();
@@ -113,6 +109,9 @@ export class CustomerTransactionComponent implements OnInit {
     this.PaidAmountControl.valueChanges.subscribe(data=>{
       if(this.customerTransaction.PaymentMethod=="general"&&!this.customerTransaction.IsUpdate){
         this.distributedTotalAmount(data)
+      }
+      else if(this.customerTransaction.PaymentMethod=="specific"){
+        this.distributedTotalAmountForSpecific(data)
       }
     })
   }
@@ -168,24 +167,7 @@ export class CustomerTransactionComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteCustomer($event:string){
-    this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.deletePartyTransactionById($event).subscribe(response=>{
-      this.blockUi.stop();
-      let result=response
-      if(result){
-        this.getCustomerList();
-        let dialogData=new DialogData();
-        dialogData.message="Customer deleted succesfully";
-        this._alertBox.openDialog(dialogData);
-      }
-    },error=>{
-      this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
-      this._alertBox.openDialog(dialogData);
-    })
-  }
+
   getItemTransactionDetails(Id:string){
     const dialogRef=this.matDialog.open(ItemTransactionDetailsComponent,{
       data:Id,
@@ -201,22 +183,6 @@ export class CustomerTransactionComponent implements OnInit {
   }
   getCustomerTransactionDetails(customerId:string){
 
-  }
-  getCustomerList(){
-    this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionList(this.formDate,this.toDate,this.customerTransaction.Customer_Id).subscribe(response=>{
-      this.blockUi.stop();
-      this.customerTransactionList=response
-      this.DataList=this.customerTransactionList;
-      this._customDatatableService.DataList=this.customerTransactionList;
-      this.reload=true;
-      this.dataReady=true;
-    },error=>{
-      this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
-      this._alertBox.openDialog(dialogData);
-    })
   }
   ledgerOnSeletedItem($event){
     debugger
@@ -247,20 +213,6 @@ export class CustomerTransactionComponent implements OnInit {
       this.groupItemList=[];
       this.customerTransaction.Customer_Id=null;
     }
-  }
-  createNewCustomer(){
-    const dialogRef=this.matDialog.open(CustomerEntryComponent,{
-      data:this.customer,
-      disableClose:true,
-      height:window.screen.height*.6+'px',
-      width:window.screen.width*.4+'px'
-    });
-    dialogRef.afterClosed().subscribe(result=>{
-      debugger
-      if(result){
-        this.customerNew=true;
-      }
-    })
   }
   distributedTotalAmount(tAmount:number){
     debugger
@@ -310,6 +262,34 @@ export class CustomerTransactionComponent implements OnInit {
       })
     }
   }
+  distributedTotalAmountForSpecific(tAmount:number){
+    debugger
+    let totalAmount=Number(tAmount)
+    if(totalAmount!=0){
+      let isFound=false;
+      this.groupItemList.forEach((a,index)=>{
+        if(this.checkedItems[index].IsChecked){
+          if(totalAmount>(a.NetPayableAmount-a.PaidAmount)){
+            totalAmount-=(a.NetPayableAmount-a.PaidAmount)
+            a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
+          }
+          else{
+            if(!isFound){
+              a.PayAmount=totalAmount;
+              isFound=true;
+            }
+          }
+        }
+      })
+    }
+    else{
+      this.groupItemList.forEach((a,index)=>{
+        if(this.checkedItems[index].IsChecked){
+          a.PayAmount=(a.NetPayableAmount-a.PaidAmount)
+        }
+      })
+    }
+  }
   changePaidAmount(index:number){
     this.customerTransaction.PaidAmount=0;
     this.groupItemList.forEach((a,i)=>{
@@ -332,16 +312,12 @@ export class CustomerTransactionComponent implements OnInit {
   saveCustomerTransaction(){
     debugger
     this.customerTransaction.TransactionDetailsList=[];
-    if(this.groupItemList.length>0){
-      this.customerTransaction.InvoiceNo=this.groupItemList[0].InvoiceNo;
-      this.customerTransaction.Group_Id=this.groupItemList[0].Id;
-    }
     this.groupItemList.forEach((a,index)=>{
       if(this.checkedItems[index].IsChecked){
         var transactionDetails=new CustomerSupplierTransactionDetails();
         transactionDetails.Group_Id=a.Id;
         transactionDetails.InvoiceNo=a.InvoiceNo;
-        transactionDetails.PaidAmount=a.PaidAmount;
+        transactionDetails.PaidAmount=a.PayAmount;
         transactionDetails.PaymentDate=this.customerTransaction.PaymentDate;
         this.customerTransaction.TransactionDetailsList.push(transactionDetails);
       }
@@ -385,8 +361,11 @@ export class CustomerTransactionComponent implements OnInit {
       })
     }
   }
-  dueAmountPaymentMethod(paymentMethod:string){
-
+  dueAmountPaymentMethod(){
+    debugger
+    if(this.customerTransaction.PaymentMethod=="specific"){
+      this.customerTransaction.PaidAmount=0;
+    }
   }
   fullPayChange($event){
     if($event.target.checked){
