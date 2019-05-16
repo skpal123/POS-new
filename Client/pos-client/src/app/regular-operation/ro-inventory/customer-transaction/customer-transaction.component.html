@@ -63,7 +63,8 @@
                                               <tbody>
                                                   <tr *ngFor="let group of groupItemList;let i=index;">
                                                       <td>{{group.InvoiceNo}}</td>
-                                                      <td>{{group.CustomerName}}</td>
+                                                      <td><p class="btn btn-info" data-toggle="collapse" data-target="#demo">{{group.CustomerName}} </p>
+                                                      </td>
                                                       <td>{{group.TransactionDate|date}}</td>
                                                       <td *ngIf="!customerTransaction.IsUpdate">{{group.NetPayableAmount}}</td>
                                                       <td *ngIf="!customerTransaction.IsUpdate">{{group.PaidAmount}}</td>

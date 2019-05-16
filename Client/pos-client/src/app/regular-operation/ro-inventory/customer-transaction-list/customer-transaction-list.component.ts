@@ -180,6 +180,7 @@ export class CustomerTransactionListComponent implements OnInit {
     })
   }
   clearPartyTransaction(){
+    this.customerTransaction.Id=null;
     this.customerTransaction.IsUpdate=false;
     this.customerTransaction.TotalDueAdvanceAmount=0;
     this.customerTransaction.PaidAmount=0;
