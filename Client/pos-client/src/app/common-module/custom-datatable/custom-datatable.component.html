@@ -1,8 +1,8 @@
 <div *ngIf="reload">
     <table datatable [dtOptions]="dtOptions" class="table table-borderd">
         <thead>
-            <tr> 
-                <td *ngFor="let column of ColumnList;let i=index;">
+            <tr cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)"> 
+                <td cdkDrag class="example-box" *ngFor="let column of ColumnList;let i=index;">
                     <span *ngIf="column.IsEnable&&column.Name!='Status'">{{column.LabelName}}</span>
                     <span *ngIf="column.IsEnable&&column.Name=='Status'"><input (change)="checkedAllItem($event)" type="checkbox">Checked all</span>
                 </td>
