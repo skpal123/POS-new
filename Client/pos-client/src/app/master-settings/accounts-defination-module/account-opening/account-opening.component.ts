@@ -37,6 +37,7 @@ export class AccountOpeningComponent implements OnInit {
     this.getUserFormControlByFormName();
   }
   getChildAccountList(){
+    debugger
     this.blockUI.start("Loading,Please wait...")
     this._accountDefinationService.getAccountListForAccountOpening().subscribe(response=>{
       this.accountOpeningView=response
@@ -65,9 +66,8 @@ export class AccountOpeningComponent implements OnInit {
     },
   error=>{
     this.blockUI.stop();
-    let message=error.json();
     let dialogData=new DialogData();
-    dialogData.message=message.Message;
+    dialogData.message=error
     this._alertBox.openDialog(dialogData);
   })
   }
