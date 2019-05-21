@@ -24,6 +24,8 @@ import { FormDetailsControlComponent } from '../../common-module/form-details-co
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerEntryComponent } from './customer-entry/customer-entry.component';
 import { SettingPriceComponent } from './setting-price/setting-price.component';
+import { OfferComponent } from './offer/offer.component';
+import { OfferEntryComponent } from './offer-entry/offer-entry.component';
 
 @NgModule({
   imports: [
@@ -49,7 +51,7 @@ import { SettingPriceComponent } from './setting-price/setting-price.component';
     PartyListComponent, 
     PartyEntryComponent, 
     ManufactureListComponent, 
-    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent, SettingPriceComponent
+    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent, SettingPriceComponent, OfferComponent, OfferEntryComponent
   ],
     entryComponents:[
       AddUnitComponent,AddSubcategoryComponent,

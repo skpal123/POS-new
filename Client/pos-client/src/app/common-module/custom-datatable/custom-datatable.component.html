@@ -1,23 +1,46 @@
+<div class="row">
+    <div class="col-md-3 pull-right" style="margin-bottom: 5px">
+        <input type="text" class="for" placeholder="Search" class="form-control" #globalSearch="ngModel" [(ngModel)]="searchTerm">
+    </div>
+</div>
 <div *ngIf="reload">
-    <table datatable [dtOptions]="dtOptions" class="table table-borderd">
-        <thead>
-            <tr cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="drop($event)"> 
-                <td cdkDrag class="example-box" *ngFor="let column of ColumnList;let i=index;">
-                    <span *ngIf="column.IsEnable&&column.Name!='Status'">{{column.LabelName}}</span>
-                    <span *ngIf="column.IsEnable&&column.Name=='Status'"><input (change)="checkedAllItem($event)" type="checkbox">Checked all</span>
-                </td>
-            </tr>
-        </thead>  
-       <tbody>
-            <tr *ngFor="let a of DataList1;let i=index;" id="pointer">
-                <td *ngFor="let b of ColumnList; let j=index;">
-                    <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type!='date'">{{DataList1[i][b.Name]}}</span>
-                    <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type=='date'">{{DataList1[i][b.Name]|date}}</span>
-                    <input id="pointer" type="checkbox"  *ngIf="b.IsEnable&&b.Name=='Status'" [(ngModel)]="DataList1[i][b.Name]">
-                    <span id="pointer" title="Edit" *ngIf="b.IsEnable&&b.Name=='Edit'" (click)="getRowDetailsById(a.Id)"><img src="./assets/Img/edit.jpg" height="30px" width="30px"></span>
-                    <span id="pointer" title="Delete" *ngIf="b.IsEnable&&b.Name=='Delete'" (click)="deleteRow(a.Id)"><img src="./assets/Img/delete.png" height="30px" width="30px"></span> 
-               </td>         
-            </tr>                 
-       </tbody>
-      </table>
+  <table cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" border="1" class="table">
+    <tr>
+      <td cdkDrag *ngFor="let column of ColumnList;let i=index;" class="example-box">
+        <span *ngIf="column.IsEnable&&column.Name!='Status'">{{column.LabelName}}</span>
+        <span *ngIf="column.IsEnable&&column.Name=='Status'"><input (change)="checkedAllItem($event)"
+            type="checkbox">Checked all</span>
+      </td>
+    </tr>
+    <tr *ngFor="let a of pagedItems;let i=index;" id="pointer">
+      <td *ngFor="let b of ColumnList; let j=index;">
+        <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type!='date'">{{pagedItems[i][b.Name]}}</span>
+        <span *ngIf="b.IsEnable&&b.Name!='Status'&&b.Type=='date'">{{pagedItems[i][b.Name]|date}}</span>
+        <input id="pointer" type="checkbox" *ngIf="b.IsEnable&&b.Name=='Status'" [(ngModel)]="pagedItems[i][b.Name]">
+        <span id="pointer" title="Edit" *ngIf="b.IsEnable&&b.Name=='Edit'" (click)="getRowDetailsById(a.Id)"><img
+            src="./assets/Img/edit.jpg" height="30px" width="30px"></span>
+        <span id="pointer" title="Delete" *ngIf="b.IsEnable&&b.Name=='Delete'" (click)="deleteRow(a.Id)"><img
+            src="./assets/Img/delete.png" height="30px" width="30px"></span>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="row pull-right" style="margin-top: -10px">
+  <ul class="pagination" *ngIf="pager.pages && pager.pages.length">
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(1)">First</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+    </li>
+    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <a (click)="setPage(page)">{{page}}</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.currentPage + 1)">Next</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.totalPages)">Last</a>
+    </li>
+  </ul>
 </div>
