@@ -5,14 +5,14 @@
     min-height: 20px;
     display: flex;
     flex-direction: row;
-    background: white;
+    background: #ccc;
     border-radius: 4px;
     overflow: hidden;
   }
   
   .example-box {
     cursor: move;
-    background: white;
+    background: wheat;
   }
   
   .cdk-drag-preview {
@@ -40,5 +40,8 @@
   }
   .active{
     background-color: black
+  }
+  ul li{
+    cursor: pointer;
   }
   

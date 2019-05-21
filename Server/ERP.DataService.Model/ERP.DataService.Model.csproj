@@ -262,6 +262,7 @@
     <Compile Include="Model\Category.cs" />
     <Compile Include="Model\CodeFormater.cs" />
     <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\CustomerOffer.cs" />
     <Compile Include="Model\CustomerSupplierTransactionDetail.cs" />
     <Compile Include="Model\FormInfo.cs" />
     <Compile Include="Model\GroupItem.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Model\ItemTransaction.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
+    <Compile Include="Model\OfferSetup.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\PartyTransaction.cs" />
     <Compile Include="Model\SettingSellPrice.cs" />

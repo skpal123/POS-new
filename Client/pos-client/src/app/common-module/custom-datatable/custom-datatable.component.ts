@@ -17,9 +17,7 @@ import { PageService } from '../../services/common/page.service';
 })
 export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   @ViewChild('globalSearch') globalSearch:FormControl;
-  @BlockUI() blockUi:NgBlockUI;
-  dtTrigger: Subject<any> = new Subject<any>();
-  dtOptions: DataTables.Settings = {};
+  @ViewChild('showEntriesControl') showEntriesControl:FormControl;
   @Input() reload:boolean;
   @Input() columnChange:boolean;
   @Input() DataList: any = [];
@@ -27,6 +25,13 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   @Output() EditSelectedRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() CheckedAllItem:EventEmitter <any>=new EventEmitter <any>();
+  showEntries:number=5;
+  currentPage:number=1;
+  totalshownToItem:number=0;
+  totalshownFromItem:number=0;
+  totalItem:number=0;
+  IsAscendingOrder :boolean=true;
+  IsDescendingOrder:boolean=false;
   DataList1:any=[];
   ColumnListEnable:UserFormControl[]=[];
   searchTerm:string=null;
@@ -49,10 +54,6 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
     private _pageService:PageService
   ) { }
   ngOnInit(){
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
       this.globalSearch.valueChanges.subscribe(data=>{
         debugger
         this.DataList1=[];
@@ -75,27 +76,25 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
           this.allItems = this.DataList1
           this.setPage(1);
         }
+      });
+      this.showEntriesControl.valueChanges.subscribe((data:number)=>{
+          this.showEntries=data;
+          this.setPage(this.currentPage);
       })
   }
   ngOnChanges() {
     debugger
-    if(this.reload){
-      this.dtOptions = {
-        pagingType: 'full_numbers',
-        pageLength: 25
-      };
-      if(this.columnChange){
-        this.DataList1=this._customDatatableService.DataList;
-        this.allItems = this.DataList1
-        this.setPage(1);
-      }else{
-        this.DataList1=this._customDatatableService.DataList;
-        this.ColumnList=this._customDatatableService.ColumnList.filter(a=>{
-         return a.IsEnable==true
-        });
-        this.allItems = this.DataList1
-        this.setPage(1);
-      }
+    if(this.columnChange){
+      this.DataList1=this._customDatatableService.DataList;
+      this.allItems = this.DataList1
+      this.setPage(1);
+    }else{
+      this.DataList1=this._customDatatableService.DataList;
+      this.ColumnList=this._customDatatableService.ColumnList.filter(a=>{
+       return a.IsEnable==true
+      });
+      this.allItems = this.DataList1
+      this.setPage(1);
     }
     // if(this.columnChange){
     //   //this.getUserFormControlByFormName();
@@ -103,10 +102,20 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   }
   setPage(page: number) {
     debugger
+    this.currentPage=page;
     // get pager object from service
-    this.pager = this._pageService.getPager(this.allItems.length, page);
+    this.pager = this._pageService.getPager(this.allItems.length, page,this.showEntries);
     // get current page of items
     this.pagedItems = this.allItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    if(page==1){
+      this.totalshownFromItem=1
+      this.totalshownToItem=this.pagedItems.length;
+    }
+    else{
+      this.totalshownFromItem=(this.showEntries*(page-1))+1;
+      this.totalshownToItem=this.totalshownToItem+this.pagedItems.length;
+    }
+    this.totalItem=this.DataList.length;
   }
   getRowDetailsById($event){
     this.EditSelectedRowClicked.emit($event);
@@ -121,9 +130,33 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   ngOnDestroy(): void {
     this._customDatatableService.ColumnList=[];
     this._customDatatableService.DataList=[]
-    this.dtTrigger.unsubscribe();
   }
   drop(event: CdkDragDrop<any[]>) {
+    debugger
     moveItemInArray(this.ColumnList, event.previousIndex, event.currentIndex);
+    let p=this.ColumnList;
+  }
+  sortColumn(column:string){
+    debugger
+    if(this.IsAscendingOrder){
+      this.IsAscendingOrder=false;
+      this.pagedItems=this.pagedItems.sort((t1, t2) => {
+        const name1 = t1[column].toLowerCase();
+        const name2 = t2[column].toLowerCase();
+        if (name1 > name2) { return 1; }
+        if (name1 < name2) { return -1; }
+        return 0;
+      });
+    }
+    else{
+      this.IsAscendingOrder=true;
+      this.pagedItems=this.pagedItems.sort((t1, t2) => {
+        const name1 = t1[column].toLowerCase();
+        const name2 = t2[column].toLowerCase();
+        if (name1 < name2) { return 1; }
+        if (name1 > name2) { return -1; }
+        return 0;
+      });
+    }
   }
 }
