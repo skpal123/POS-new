@@ -12,9 +12,10 @@ import { AddSubcategoryComponent } from '../add-subcategory/add-subcategory.comp
 import { Subcategory } from '../../../models/master-settings/inventory-defination/subcategory.model';
 import { NewDropdownDataService } from '../../../common-module/new-dropdown-data.service';
 import { ValidationService } from '../../../services/common/validation.service';
-import { InventoryItemValidation } from '../../../models/master-settings/inventory-defination/item-validation.model';
 import { Unit } from '../../../models/master-settings/inventory-defination/unit.model';
 import { AddUnitComponent } from '../add-unit/add-unit.component';
+import { InventoryItemValidation } from '../../../models/validation/inventory/item-validation.model';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 
 @Component({
   selector: 'app-item-entry',
@@ -287,5 +288,19 @@ export class ItemEntryComponent implements OnInit {
     this.item.Ledger_Id=null;
     this.item.SubLedger_Id=null;
     this.itemForm.reset();
+  }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"itementry",
+      disableClose:true,
+      height:window.screen.height*.9+'px',
+      width:window.screen.width*.8+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       //this.getItemPurchaseValidationList()
+     }
+    })
   }
 }

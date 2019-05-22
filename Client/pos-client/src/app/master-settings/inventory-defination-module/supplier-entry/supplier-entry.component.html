@@ -4,9 +4,10 @@
       <div class="panel-heading">
         <h5> Supplier entry
             <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+            <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px" width="30px" src="./assets/Img/settings.png"></span>
         </h5>
       </div>
-      <div class="panel-body">
+      <div class="panel-body"> 
         <form #supplierForm="ngForm">
               <div class="form-group row" [class.has-success]="SupplierIdControl.valid" [class.has-error]="SupplierIdControl.invalid&&SupplierIdControl.touched">
                   <label for="SupplierId" class="col-sm-4 col-form-label">Supplier Id</label>

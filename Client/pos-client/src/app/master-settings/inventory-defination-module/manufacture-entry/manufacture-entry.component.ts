@@ -6,7 +6,7 @@ import { AlertBoxService } from '../../../shared/alert-box.service';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { ValidationService } from '../../../services/common/validation.service';
-import { ManufactureValidation } from '../../../models/master-settings/inventory-defination/manufacture-validation.model';
+import { ManufactureValidation } from '../../../models/validation/inventory/manufacture-validation.model';
 
 @Component({
   selector: 'app-manufacture-entry',

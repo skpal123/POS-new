@@ -78,6 +78,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
         }
       });
       this.showEntriesControl.valueChanges.subscribe((data:number)=>{
+        debugger
           this.showEntries=data;
           this.setPage(this.currentPage);
       })
@@ -104,7 +105,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
     debugger
     this.currentPage=page;
     // get pager object from service
-    this.pager = this._pageService.getPager(this.allItems.length, page,this.showEntries);
+    this.pager = this._pageService.getPager(this.allItems.length, page,Number(this.showEntries));
     // get current page of items
     this.pagedItems = this.allItems.slice(this.pager.startIndex, this.pager.endIndex + 1);
     if(page==1){
@@ -112,7 +113,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
       this.totalshownToItem=this.pagedItems.length;
     }
     else{
-      this.totalshownFromItem=(this.showEntries*(page-1))+1;
+      this.totalshownFromItem=(Number(this.showEntries)*(page-1))+1;
       this.totalshownToItem=this.totalshownToItem+this.pagedItems.length;
     }
     this.totalItem=this.DataList.length;

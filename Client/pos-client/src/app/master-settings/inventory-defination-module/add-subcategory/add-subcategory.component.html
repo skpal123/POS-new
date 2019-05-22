@@ -4,19 +4,25 @@
         <div class="panel-heading">
           <h5> Sub Category entry
               <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+              <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px" width="30px" src="./assets/Img/settings.png"></span>
           </h5>
         </div>
         <div class="panel-body">
           <form #subcategoryForm="ngForm">
-              <div class="form-group row">
-                  <label for="categoryId" class="col-sm-3 col-form-label">Category Name</label>
+              <div class="form-group row" *ngIf="subcategoryValidation[0]?.Category_Id" [class.has-success]="CategoryIdControl.valid" [class.has-error]="CategoryIdControl.invalid&&categoryTouched">
+                  <label for="categoryId" class="col-sm-3 col-form-label control-label" [class.required]="CategoryIdControl.invalid">Category Name</label>
+                  <input style="display: none;" [required]="subcategoryValidation[0]?.Category_Id&&subcategoryValidation[1]?.Category_Id" 
+                  type="text" name="CategoryId" #CategoryIdControl="ngModel" [(ngModel)]="subcategory.Category_Id">
                   <div class="col-sm-8" >
                      <app-category-dropdown 
                      (categoryOnItemSelect)="OnSeletedItem($event)" 
                      (categoryOnItemDeSelect)="OnDeSeletedItem($event)" 
                      [IsNewCategoryAdd]="categoryNew"
                      [categorySelectedItems]="categorySelectedItems">
-                    </app-category-dropdown> 
+                    </app-category-dropdown>
+                    <span class="help-block" *ngIf="CategoryIdControl.invalid&&categoryTouched">
+                      Category id feild is required
+                   </span>  
                   </div>
                   <div class="col-sm-1">
                       <span class="pull-right" (click)="createNewCategory()" id="pointer">
@@ -24,19 +30,19 @@
                         </span>
                   </div>
                 </div>
-                <div class="form-group row" [class.has-success]="subcategoryIdControl.valid" [class.has-error]="subcategoryIdControl.invalid&&subcategoryIdControl.touched">
-                    <label for="categoryId" class="col-sm-3 col-form-label">Sub category id</label>
+                <div class="form-group row" *ngIf="subcategoryValidation[0]?.SubCategoryId" [class.has-success]="subcategoryIdControl.valid&&subcategoryIdControl.touched" [ngClass]="{'has-error':subcategoryIdControl.invalid&&subcategoryIdControl.touched}">
+                    <label for="categoryId" class="col-sm-3 col-form-label control-label" [class.required]="subcategoryIdControl.invalid">Sub category id</label>
                     <div class="col-sm-9" >
-                        <input class="form-control" required name="SubCategoryId" #subcategoryIdControl="ngModel" id="SubCategoryId" [(ngModel)]="subcategory.SubCategoryId">
+                        <input class="form-control" [required]="subcategoryValidation[0]?.SubCategoryId&&subcategoryValidation[1]?.SubCategoryId" name="SubCategoryId" #subcategoryIdControl="ngModel" id="SubCategoryId" [(ngModel)]="subcategory.SubCategoryId">
                         <span class="help-block" *ngIf="subcategoryIdControl.invalid&&subcategoryIdControl.touched">
-                            Category id feild is required
+                            Sub Category id feild is required
                         </span>  
                     </div>
                   </div>
-                <div class="form-group row" [class.has-success]="subcategoryNameControl.valid" [class.has-error]="subcategoryNameControl.invalid&&subcategoryNameControl.touched">
-                    <label for="subCategoryName" class="col-sm-3 col-form-label">Sub category Name</label>
+                <div class="form-group row"*ngIf="subcategoryValidation[0]?.SubCategoryName" [class.has-success]="subcategoryNameControl.valid&&subcategoryNameControl.touched" [class.has-error]="subcategoryNameControl.invalid&&subcategoryNameControl.touched">
+                    <label for="subCategoryName" class="col-sm-3 col-form-label control-label" [class.required]="subcategoryNameControl.invalid">Sub category Name</label>
                     <div class="col-sm-9" >
-                        <input class="form-control" required name="subCategoryName" #subcategoryNameControl="ngModel" id="subCategoryName" [(ngModel)]="subcategory.SubCategoryName">
+                        <input class="form-control" [required]="subcategoryValidation[0]?.SubCategoryName&&subcategoryValidation[1]?.SubCategoryName" name="subCategoryName" #subcategoryNameControl="ngModel" id="subCategoryName" [(ngModel)]="subcategory.SubCategoryName">
                         <span class="help-block" *ngIf="subcategoryNameControl.invalid&&subcategoryNameControl.touched">
                             Sub category name feild is required
                         </span>  
