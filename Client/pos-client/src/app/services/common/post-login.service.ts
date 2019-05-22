@@ -62,4 +62,10 @@ export class PostLoginService {
       catchError(this.handleError)
     )
   }
+  public GetAutoCodeByProductName(productName:string){
+    var url=this._defaultRoute.CommonService+'getAutoCode/'+productName;
+    return this._httpClient.get<string>(url).pipe(
+      catchError(this.handleError)
+    )
+  }
 }

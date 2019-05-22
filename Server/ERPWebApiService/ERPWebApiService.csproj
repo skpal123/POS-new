@@ -169,7 +169,7 @@
     <Compile Include="Authentication\PasswordHash.cs" />
     <Compile Include="Authentication\SecurityServices.cs" />
     <Compile Include="Authentication\SessionInfo.cs" />
-    <Compile Include="Authentication\StringExtension.cs" />
+    <Compile Include="ExrensionMethod\StringExtension.cs" />
     <Compile Include="Authentication\UserSession.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
@@ -183,6 +183,7 @@
     <Compile Include="DataConnection\DatabaseCommand.cs" />
     <Compile Include="Exceptions\InvalidSessionFailure.cs" />
     <Compile Include="Exceptions\SessionCreationFailure.cs" />
+    <Compile Include="ExrensionMethod\SqlParameterExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

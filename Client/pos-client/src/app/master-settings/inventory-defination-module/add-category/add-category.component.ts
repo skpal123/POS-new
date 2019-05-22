@@ -1,10 +1,13 @@
 import { Component, OnInit,ViewChild,Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef,MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { Category } from '../../../models/master-settings/inventory-defination/category.model';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
+import { ValidationService } from '../../../services/common/validation.service';
+import { CategoryValidation } from '../../../models/validation/inventory/category-validation.model';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 
 @Component({
   selector: 'app-add-category',
@@ -14,9 +17,12 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 export class AddCategoryComponent implements OnInit {
 
   @ViewChild('categoryForm') categoryForm:NgForm
+  categoryValidation:CategoryValidation[]=[]
   constructor(public matDialogRef:MatDialogRef<AddCategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public category:Category,
   private _alertBox:AlertBoxService,
+  private matDialog:MatDialog,
+  private _validationService:ValidationService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
 
@@ -24,9 +30,20 @@ export class AddCategoryComponent implements OnInit {
     if(this.category.Id!=null){
       this.categoryForm.control.markAsDirty();
     }
+    this.getItemFormInfo();
   }
   onNoClick(){
     this.matDialogRef.close(false);
+  }
+  getItemFormInfo(){
+    this._validationService.getCategoryValidationData().subscribe((response:CategoryValidation[])=>{
+      this.categoryValidation=response
+    },error=>{
+      let message=error;
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
   }
   saveCategory(){
     if(this.category.Id==null){
@@ -67,5 +84,19 @@ export class AddCategoryComponent implements OnInit {
     this.category.CategoryId=null;
     this.category.CategoryName=null;
     this.categoryForm.reset();
+  }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"category-entry",
+      disableClose:true,
+      height:window.screen.height*.9+'px',
+      width:window.screen.width*.8+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       //this.getItemPurchaseValidationList()
+     }
+    })
   }
 }

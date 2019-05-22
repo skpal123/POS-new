@@ -2,12 +2,15 @@ import { Component, OnInit, ViewChild,Inject } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgForm, FormControl } from '@angular/forms';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { SupplierEntryComponent } from '../supplier-entry/supplier-entry.component';
 import { Customer } from '../../../models/master-settings/inventory-defination/customer.model';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { ValidationService } from '../../../services/common/validation.service';
+import { CustomerValidation } from '../../../models/validation/inventory/customer-validation.model';
 
 @Component({
   selector: 'app-customer-entry',
@@ -15,7 +18,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
   styleUrls: ['./customer-entry.component.css']
 })
 export class CustomerEntryComponent implements OnInit {
-
+  customerValidation:CustomerValidation[]=[];
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerForm') customerForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -28,6 +31,8 @@ export class CustomerEntryComponent implements OnInit {
   constructor(public matDialogRef:MatDialogRef<SupplierEntryComponent>,
   @Inject(MAT_DIALOG_DATA) public customer:Customer,
   private _alertBox:AlertBoxService,
+  private matDialog:MatDialog,
+  private _validationService:ValidationService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
 
@@ -44,6 +49,16 @@ export class CustomerEntryComponent implements OnInit {
   }
   onNoClick(){
     this.matDialogRef.close(false);
+  }
+  getItemFormInfo(){
+    this._validationService.getCustomerValidationData().subscribe((response:CustomerValidation[])=>{
+      this.customerValidation=response
+    },error=>{
+      let message=error;
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
   }
   saveCustomer(){
     debugger
@@ -125,5 +140,19 @@ export class CustomerEntryComponent implements OnInit {
     this.subledgerSelectedItems[0].itemName="Select";
     this.customer.SubLedger_Id=null;
     this.customerForm.reset();
+  }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"customer-entry",
+      disableClose:true,
+      height:window.screen.height*.9+'px',
+      width:window.screen.width*.8+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       //this.getItemPurchaseValidationList()
+     }
+    })
   }
 }

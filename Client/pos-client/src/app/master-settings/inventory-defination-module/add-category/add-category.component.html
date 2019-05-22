@@ -4,23 +4,24 @@
       <div class="panel-heading">
         <h5> Category entry
             <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+            <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px" width="30px" src="./assets/Img/settings.png"></span>
         </h5>
       </div>
       <div class="panel-body">
         <form #categoryForm="ngForm">
-            <div class="form-group row" [class.has-success]="categoryIdControl.valid" [class.has-error]="categoryIdControl.invalid&&categoryIdControl.touched">
+            <div class="form-group row" *ngIf="categoryValidation[0]?.CategoryId" [class.has-success]="categoryIdControl.valid" [class.has-error]="categoryIdControl.invalid&&categoryIdControl.touched">
                 <label for="categoryId" class="col-sm-3 col-form-label">Category id</label>
                 <div class="col-sm-9" >
-                    <input class="form-control" required name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
+                    <input class="form-control" [required]="categoryValidation[0]?.CategoryId&&categoryValidation[1]?.CategoryId" name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
                     <span class="help-block" *ngIf="categoryIdControl.invalid&&categoryIdControl.touched">
                         Category id feild is required
                     </span>  
                 </div>
               </div>
-            <div class="form-group row" [class.has-success]="categoryNameControl.valid" [class.has-error]="categoryNameControl.invalid&&categoryNameControl.touched">
+            <div *ngIf="categoryValidation[0]?.CategoryName" class="form-group row" [class.has-success]="categoryNameControl.valid" [class.has-error]="categoryNameControl.invalid&&categoryNameControl.touched">
                 <label for="CategoryName" class="col-sm-3 col-form-label">Category Name</label>
                 <div class="col-sm-9" >
-                    <input class="form-control" required name="CategoryName" #categoryNameControl="ngModel" id="CategoryName" [(ngModel)]="category.CategoryName">
+                    <input class="form-control" [required]="categoryValidation[0]?.CategoryName&&categoryValidation[1]?.CategoryName" name="CategoryName" #categoryNameControl="ngModel" id="CategoryName" [(ngModel)]="category.CategoryName">
                     <span class="help-block" *ngIf="categoryNameControl.invalid&&categoryNameControl.touched">
                         Category name feild is required
                     </span>  

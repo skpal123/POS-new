@@ -18,7 +18,20 @@ export class ValidationService {
     private _httpClient:HttpClient,
     ) 
     { }
+    private handleError(error: HttpErrorResponse) {
+      debugger
 
+      if (error.error instanceof ErrorEvent) {
+        console.error('An error occurred:', error.error.message);
+        return throwError(error.error.message) 
+      } 
+      else 
+      {
+        let message=error.error.Message;       
+        return throwError(message+'<br/>'+error.message) 
+      }
+      // return an observable with a user-facing error message
+    };
     public getFormInfoList(formName:string){
       var url=this._defaultRoute.CommonService+'getFormInfo/'+formName;
       return this._httpClient.get(url).pipe(
@@ -49,18 +62,34 @@ export class ValidationService {
         catchError(this.handleError)
       )
     }
-    private handleError(error: HttpErrorResponse) {
-      debugger
-
-      if (error.error instanceof ErrorEvent) {
-        console.error('An error occurred:', error.error.message);
-        return throwError(error.error.message) 
-      } 
-      else 
-      {
-        let message=error.error.Message;       
-        return throwError(message+'<br/>'+error.message) 
-      }
-      // return an observable with a user-facing error message
-    };
+    public getCategoryValidationData(){
+      var url=this._defaultRoute.CommonService+'categoryValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getSubCategoryValidationData(){
+      var url=this._defaultRoute.CommonService+'subcategoryValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getCustomerValidationData(){
+      var url=this._defaultRoute.CommonService+'customerValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getSupplierValidationData(){
+      var url=this._defaultRoute.CommonService+'supplierValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
+    public getUnitValidationData(){
+      var url=this._defaultRoute.CommonService+'unitValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
 }

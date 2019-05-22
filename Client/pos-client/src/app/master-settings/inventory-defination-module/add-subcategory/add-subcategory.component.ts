@@ -9,6 +9,9 @@ import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown
 import { NewDropdownDataService } from '../../../common-module/new-dropdown-data.service';
 import { Category } from '../../../models/master-settings/inventory-defination/category.model';
 import { AddCategoryComponent } from '../add-category/add-category.component';
+import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { ValidationService } from '../../../services/common/validation.service';
+import { SubcategoryValidation } from '../../../models/validation/inventory/subcategory-validation.model';
 
 @Component({
   selector: 'app-add-subcategory',
@@ -19,11 +22,13 @@ export class AddSubcategoryComponent implements OnInit {
   @ViewChild('subcategoryForm') subcategoryForm:NgForm
   categorySelectedItems :MultiSelectDropdown[]= [
   ];
+  subcategoryValidation:SubcategoryValidation[]=[];
   categoryNew:boolean=false;
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   constructor(public matDialogRef:MatDialogRef<AddSubcategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public subcategory:Subcategory,
   private _alertBox:AlertBoxService,
+  private _validationService:ValidationService,
   private matDialog:MatDialog,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -41,9 +46,20 @@ export class AddSubcategoryComponent implements OnInit {
       this.subcategoryForm.control.markAsDirty();
       this.categorySelectedItems.push({id:this.subcategory.Category_Id,itemName:this.subcategory.CategoryName})
     }
+    this.getItemFormInfo();
   }
   onNoClick(){
     this.matDialogRef.close(false);
+  }
+  getItemFormInfo(){
+    this._validationService.getSubCategoryValidationData().subscribe((response:SubcategoryValidation[])=>{
+      this.subcategoryValidation=response
+    },error=>{
+      let message=error;
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
   }
   saveSubCategory(){
     debugger
@@ -82,8 +98,13 @@ export class AddSubcategoryComponent implements OnInit {
     }
   }
   OnSeletedItem($event:MultiSelectDropdown){
-    this.subcategory.Category_Id=$event.id;
-    console.log($event)
+    debugger
+    if($event.id=="0"){
+      this.subcategory.Category_Id=null;
+    }
+    else{
+      this.subcategory.Category_Id=$event.id
+    }
   }
   OnDeSeletedItem($event){
     console.log($event)
@@ -118,5 +139,19 @@ export class AddSubcategoryComponent implements OnInit {
     this.category.Id=null;
     this.category.CategoryId=null;
     this.category.CategoryName=null;
+  }
+  controlGroupItemForm(){
+    debugger
+    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
+      data:"subcategory-entry",
+      disableClose:true,
+      height:window.screen.height*.9+'px',
+      width:window.screen.width*.8+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+     if(result){
+       //this.getItemPurchaseValidationList()
+     }
+    })
   }
 }
