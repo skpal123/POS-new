@@ -7,6 +7,7 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { ValidationService } from '../../../services/common/validation.service';
 import { ManufactureValidation } from '../../../models/validation/inventory/manufacture-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-manufacture-entry',
@@ -19,6 +20,7 @@ export class ManufactureEntryComponent implements OnInit {
   constructor(public matDialogRef:MatDialogRef<ManufactureEntryComponent>,
   @Inject(MAT_DIALOG_DATA) public manufacture:Manufacture,
   private _alertBox:AlertBoxService,
+  private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -34,6 +36,7 @@ saveManufacture(){
   if(this.manufacture.Id==null){
     this._inventotyDefinationService.CreateManufacture(this.manufacture).subscribe(response=>{
       let result=response
+      this._navigationData.IsSaved=true;
       if(result){
         this.matDialogRef.close(true);
         let dialogData=new DialogData();

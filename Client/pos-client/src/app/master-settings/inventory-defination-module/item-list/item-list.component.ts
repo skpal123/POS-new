@@ -10,7 +10,6 @@ import { ItemEntryComponent } from '../item-entry/item-entry.component';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
@@ -152,4 +151,5 @@ export class ItemListComponent implements OnInit {
      
     })
   }
+
 }

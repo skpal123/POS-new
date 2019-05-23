@@ -9,7 +9,6 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-
 @Component({
   selector: 'app-item-category-list',
   templateUrl: './item-category-list.component.html',

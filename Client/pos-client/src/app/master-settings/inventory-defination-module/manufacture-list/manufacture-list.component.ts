@@ -78,7 +78,7 @@ export class ManufactureListComponent implements OnInit {
       const dialogRef=this.matDialog.open(ManufactureEntryComponent,{
         data:this.manufacture,
         disableClose:true,
-        height:window.screen.height*.6+'px',
+        height:'auto',
         width:window.screen.width*.4+'px'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -118,7 +118,7 @@ export class ManufactureListComponent implements OnInit {
     const dialogRef=this.matDialog.open(ManufactureEntryComponent,{
       data:this.manufacture,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      height:'auto',
       width:window.screen.width*.4+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

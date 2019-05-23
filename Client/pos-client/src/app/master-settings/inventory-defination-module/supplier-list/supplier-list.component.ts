@@ -117,7 +117,7 @@ export class SupplierListComponent implements OnInit {
     const dialogRef=this.matDialog.open(SupplierEntryComponent,{
       data:this.supplier,
       disableClose:true,
-      height:window.screen.height*.95+'px',
+      height:'auto',
       width:window.screen.width*.5+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

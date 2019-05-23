@@ -244,7 +244,12 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
   margin-top: 0px;
   vertical-align:center
 }
-
+.required{
+  color: #a94442
+}
+.c-btn{
+  border: #a94442
+}
 
 
  

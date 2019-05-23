@@ -11,6 +11,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { ValidationService } from '../../../services/common/validation.service';
 import { CustomerValidation } from '../../../models/validation/inventory/customer-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-customer-entry',
@@ -19,6 +20,7 @@ import { CustomerValidation } from '../../../models/validation/inventory/custome
 })
 export class CustomerEntryComponent implements OnInit {
   customerValidation:CustomerValidation[]=[];
+  itemName:string="itemId"
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerForm') customerForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -32,6 +34,7 @@ export class CustomerEntryComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public customer:Customer,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -46,6 +49,7 @@ export class CustomerEntryComponent implements OnInit {
       this.ledgerSelectedItems.push({id:this.customer.Ledger_Id,itemName:this.customer.LedgerName})
       this.subledgerSelectedItems.push({id:this.customer.SubLedger_Id,itemName:this.customer.SubLedgerName})
     }
+    this.getItemFormInfo();
   }
   onNoClick(){
     this.matDialogRef.close(false);
@@ -67,6 +71,7 @@ export class CustomerEntryComponent implements OnInit {
       this._inventotyDefinationService.CreateCustomer(this.customer).subscribe(response=>{
         this.blockUi.stop();
         let result=response
+        this._navigationData.IsSaved=true;
         if(result){
           this.matDialogRef.close(response);
           let dialogData=new DialogData();
@@ -146,7 +151,8 @@ export class CustomerEntryComponent implements OnInit {
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
       data:"customer-entry",
       disableClose:true,
-      height:window.screen.height*.9+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -154,5 +160,8 @@ export class CustomerEntryComponent implements OnInit {
        //this.getItemPurchaseValidationList()
      }
     })
+  }
+  parentGetGeneratedCode($event:string){
+    this.customer.CustomerId=$event;
   }
 }

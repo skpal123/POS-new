@@ -8,6 +8,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { ValidationService } from '../../../services/common/validation.service';
 import { CategoryValidation } from '../../../models/validation/inventory/category-validation.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-add-category',
@@ -18,10 +19,12 @@ export class AddCategoryComponent implements OnInit {
 
   @ViewChild('categoryForm') categoryForm:NgForm
   categoryValidation:CategoryValidation[]=[]
+  itemName:string="categoryId"
   constructor(public matDialogRef:MatDialogRef<AddCategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public category:Category,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -50,6 +53,7 @@ export class AddCategoryComponent implements OnInit {
       this._inventotyDefinationService.CreateCategory(this.category).subscribe(response=>{
         let result=response
         if(result){
+          this._navigationData.IsSaved=true;
           this.matDialogRef.close(response);
           let dialogData=new DialogData();
           dialogData.message="Save successfully";
@@ -90,7 +94,8 @@ export class AddCategoryComponent implements OnInit {
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
       data:"category-entry",
       disableClose:true,
-      height:window.screen.height*.9+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -99,4 +104,9 @@ export class AddCategoryComponent implements OnInit {
      }
     })
   }
+  parentGetGeneratedCode($event:string){
+    debugger
+    this.category.CategoryId=$event;
+  }
+  
 }

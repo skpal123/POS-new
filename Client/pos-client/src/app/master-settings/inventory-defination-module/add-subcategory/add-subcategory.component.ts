@@ -12,6 +12,7 @@ import { AddCategoryComponent } from '../add-category/add-category.component';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { ValidationService } from '../../../services/common/validation.service';
 import { SubcategoryValidation } from '../../../models/validation/inventory/subcategory-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-add-subcategory',
@@ -22,13 +23,16 @@ export class AddSubcategoryComponent implements OnInit {
   @ViewChild('subcategoryForm') subcategoryForm:NgForm
   categorySelectedItems :MultiSelectDropdown[]= [
   ];
+  itemName:string="subcategoryId"
   subcategoryValidation:SubcategoryValidation[]=[];
+  categoryTouch:boolean=false;
   categoryNew:boolean=false;
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   constructor(public matDialogRef:MatDialogRef<AddSubcategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public subcategory:Subcategory,
   private _alertBox:AlertBoxService,
   private _validationService:ValidationService,
+  private _navigationData:NavigationDataService,
   private matDialog:MatDialog,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -66,7 +70,8 @@ export class AddSubcategoryComponent implements OnInit {
     if(this.subcategory.Id==null){
       console.log(this.subcategory);
       this._inventotyDefinationService.CreateSubCategory(this.subcategory).subscribe(response=>{
-        let result=response
+        let result=response;
+        this._navigationData.IsSaved=true;
         if(result){
           this.matDialogRef.close(response);
           let dialogData=new DialogData();
@@ -99,6 +104,7 @@ export class AddSubcategoryComponent implements OnInit {
   }
   OnSeletedItem($event:MultiSelectDropdown){
     debugger
+    this.categoryTouch=true;
     if($event.id=="0"){
       this.subcategory.Category_Id=null;
     }
@@ -145,7 +151,8 @@ export class AddSubcategoryComponent implements OnInit {
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
       data:"subcategory-entry",
       disableClose:true,
-      height:window.screen.height*.9+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -153,5 +160,8 @@ export class AddSubcategoryComponent implements OnInit {
        //this.getItemPurchaseValidationList()
      }
     })
+  }
+  parentGetGeneratedCode($event:string){
+    this.subcategory.SubCategoryId=$event;
   }
 }

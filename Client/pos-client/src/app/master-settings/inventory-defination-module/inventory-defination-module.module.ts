@@ -26,6 +26,7 @@ import { CustomerEntryComponent } from './customer-entry/customer-entry.componen
 import { SettingPriceComponent } from './setting-price/setting-price.component';
 import { OfferComponent } from './offer/offer.component';
 import { OfferEntryComponent } from './offer-entry/offer-entry.component';
+import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { OfferEntryComponent } from './offer-entry/offer-entry.component';
       SupplierEntryComponent,
       ManufactureEntryComponent,
       FormDetailsControlComponent,
-      CustomerEntryComponent
+      CustomerEntryComponent,
+      CustomDatatableControlComponent
     ],
     exports:[
       SupplierEntryComponent,

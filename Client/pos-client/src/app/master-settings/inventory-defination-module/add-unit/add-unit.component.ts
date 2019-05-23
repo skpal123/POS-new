@@ -87,7 +87,8 @@ export class AddUnitComponent implements OnInit {
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
       data:"unit-entry",
       disableClose:true,
-      height:window.screen.height*.9+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.9+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

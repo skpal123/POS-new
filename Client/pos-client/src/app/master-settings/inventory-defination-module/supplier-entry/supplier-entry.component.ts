@@ -10,6 +10,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { ValidationService } from '../../../services/common/validation.service';
 import { SupplierValidation } from '../../../models/validation/inventory/supplier-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-supplier-entry',
@@ -18,6 +19,7 @@ import { SupplierValidation } from '../../../models/validation/inventory/supplie
 })
 export class SupplierEntryComponent implements OnInit {
   supplierValidation:SupplierValidation[]=[];
+  itemName:string="supplierId"
   @BlockUI() blockUi:NgBlockUI;
   @ViewChild('supplierForm') supplierForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -31,6 +33,7 @@ export class SupplierEntryComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public supplier:Supplier,
   private _alertBox:AlertBoxService,
   private _validationService:ValidationService,
+  private _navigationData:NavigationDataService,
   private matDialog:MatDialog,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
@@ -68,6 +71,7 @@ export class SupplierEntryComponent implements OnInit {
       this._inventotyDefinationService.CreateSupplier(this.supplier).subscribe(response=>{
         this.blockUi.stop();
         let result=response
+        this._navigationData.IsSaved=true;
         if(result){
           this.matDialogRef.close(response);
           let dialogData=new DialogData();
@@ -132,7 +136,8 @@ export class SupplierEntryComponent implements OnInit {
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
       data:"supplier-entry",
       disableClose:true,
-      height:window.screen.height*.9+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.95+'px',
       width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -140,5 +145,8 @@ export class SupplierEntryComponent implements OnInit {
        //this.getItemPurchaseValidationList()
      }
     })
+  }
+  parentGetGeneratedCode($event:string){
+    this.supplier.SupplierId=$event
   }
 }

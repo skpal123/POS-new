@@ -9,7 +9,6 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { CustomerEntryComponent } from '../customer-entry/customer-entry.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
-
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
@@ -80,7 +79,7 @@ export class CustomerListComponent implements OnInit {
       const dialogRef=this.matDialog.open(CustomerEntryComponent,{
         data:this.customer,
         disableClose:true,
-        height:window.screen.height*.95+'px', 
+        height:'auto', 
         width:window.screen.width*.5+'px'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -120,7 +119,7 @@ export class CustomerListComponent implements OnInit {
     const dialogRef=this.matDialog.open(CustomerEntryComponent,{
       data:this.customer,
       disableClose:true,
-      height:window.screen.height*.95+'px',
+      height:'auto',
       width:window.screen.width*.5+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

@@ -30,6 +30,7 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   totalshownToItem:number=0;
   totalshownFromItem:number=0;
   totalItem:number=0;
+  isDataFound:boolean=false;
   IsAscendingOrder :boolean=true;
   IsDescendingOrder:boolean=false;
   DataList1:any=[];
@@ -64,12 +65,12 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
                let result= item[a.Name].toUpperCase().includes(data.toString().toUpperCase());
                if(result){
                 this.DataList1.push(item)
-                this.allItems = this.DataList1
-                this.setPage(1);
                }
               }
             })
           )
+          this.allItems = this.DataList1
+          this.setPage(1);
         }
         else{
           this.DataList1=this.DataList;

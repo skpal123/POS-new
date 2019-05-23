@@ -10,6 +10,7 @@ import { AddSubcategoryComponent } from '../add-subcategory/add-subcategory.comp
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CustomDatatableControlComponent } from '../../../common-module/custom-datatable-control/custom-datatable-control.component';
 
 @Component({
   selector: 'app-item-subcategory-list',
@@ -77,7 +78,7 @@ export class ItemSubcategoryListComponent implements OnInit {
       const dialogRef=this.matDialog.open(AddSubcategoryComponent,{
         data:this.subcategory,
         disableClose:true,
-        height:window.screen.height*.6+'px', 
+        height:'auto', 
         width:window.screen.width*.4+'px'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -117,7 +118,7 @@ export class ItemSubcategoryListComponent implements OnInit {
     const dialogRef=this.matDialog.open(AddSubcategoryComponent,{
       data:this.subcategory,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      height:'auto',
       width:window.screen.width*.4+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -133,5 +134,19 @@ export class ItemSubcategoryListComponent implements OnInit {
     this.subcategory.SubCategoryName=null;
     this.subcategory.SubCategoryId=null;
   }
-
+  getDatatableControl(){
+    // this.columnChange=false;
+     const dialogRef=this.matDialog.open(CustomDatatableControlComponent,{
+       data:this.userControlList,
+       disableClose:true,
+       height:'auto',
+       maxHeight:window.screen.height*.9+'px',
+       width:window.screen.width*.8+'px'
+     });
+     dialogRef.afterClosed().subscribe(result=>{
+      if(result){
+       // this.columnChange=true;
+      }
+     })
+   }
 }
