@@ -56,16 +56,4 @@ export class PostLoginService {
       catchError(this.handleError)
     )
   }
-  public saveColumnInfoList(columnInfolist:UserFormControl[]){
-    var url=this._defaultRoute.CommonService+'saveColumnInfo/'+columnInfolist[0].FormName;
-    return this._httpClient.put(url,columnInfolist).pipe(
-      catchError(this.handleError)
-    )
-  }
-  public GetAutoCodeByProductName(productName:string){
-    var url=this._defaultRoute.CommonService+'getAutoCode/'+productName;
-    return this._httpClient.get<string>(url).pipe(
-      catchError(this.handleError)
-    )
-  }
 }

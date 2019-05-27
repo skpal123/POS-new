@@ -117,7 +117,8 @@ export class UnitListComponent implements OnInit {
     const dialogRef=this.matDialog.open(AddUnitComponent,{
       data:this.unit,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.6+'px',
       width:window.screen.width*.4+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

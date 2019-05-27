@@ -35,11 +35,13 @@ export class CodeFormaterEntryComponent implements OnInit {
       StartPossition:[0],
       LastNumber:[0],
       Prefix:[null],
-      StringLength:['',Validators.required]
+      StringLength:['',Validators.required],
+      MiddleSymbol:''
     })
-    this.codeFormaterForm.valueChanges.subscribe(data=>{
+    // this.codeFormaterForm.valueChanges.subscribe(data=>{
+    //   debugger
       
-    })
+    // })
     if(this.codeFormater.Id!=null){
       this.codeFormaterForm.patchValue({
         Name:this.codeFormater.Name,
@@ -56,12 +58,27 @@ export class CodeFormaterEntryComponent implements OnInit {
       })
     }
   }
+  updateValidation(){
+    debugger
+    if(this.codeFormaterForm.get('MiddleSymbol').value!=''){
+      this.codeFormaterForm.controls['IsTodaysDate'].setValidators([Validators.requiredTrue]);
+      this.codeFormaterForm.controls['IsTodaysDate'].updateValueAndValidity();
+      this.codeFormaterForm.controls['IsSerial'].setValidators([Validators.requiredTrue]);
+      this.codeFormaterForm.controls['IsSerial'].updateValueAndValidity();
+    }
+  }
   changeIsSymbol($event){
     debugger
     if($event.target.checked){
       this.codeFormaterForm.controls['SymbolName'].setValidators([Validators.required]);
       this.codeFormaterForm.controls['SymbolName'].updateValueAndValidity();
       this.codeFormaterForm.controls['Prefix'].setValidators([Validators.required]);
+      this.codeFormaterForm.controls['Prefix'].updateValueAndValidity();
+    }
+    else{
+      this.codeFormaterForm.controls['SymbolName'].clearValidators();
+      this.codeFormaterForm.controls['SymbolName'].updateValueAndValidity();
+      this.codeFormaterForm.controls['Prefix'].clearValidators();
       this.codeFormaterForm.controls['Prefix'].updateValueAndValidity();
     }
   }

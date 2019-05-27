@@ -14,7 +14,7 @@ using System.Web.Http;
 using ERPWebApiService.Exceptions;
 using ViewModel.Model;
 using ViewModel.Model.Validation;
-using ViewModel.Validation;
+using ViewModel.Model.Validation.Inventory;
 
 namespace ERPWebApiService.Controllers
 {
@@ -98,8 +98,9 @@ namespace ERPWebApiService.Controllers
                     IsEnable = x.IsEnable,
                     FormName = x.FormName,
                     IsCheckbox = x.IsCheckbox,
-                    Type = x.Type
-                }).ToList();
+                    Type = x.Type,
+                    OrderNo = x.OrderNo
+                }).OrderBy(m=>m.OrderNo).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, userControlList);
             }
             catch (InvalidSessionFailure ex)
@@ -130,12 +131,13 @@ namespace ERPWebApiService.Controllers
                 dt.Columns.Add("FormName", typeof(string));
                 dt.Columns.Add("Type", typeof(string));
                 dt.Columns.Add("IsCheckbox", typeof(Boolean));
+                dt.Columns.Add("OrderNo", typeof(int));
                 if (userFormControls.Any())
                 {                
                     foreach (UserFormControlInfo forminfo in userFormControls)
                     {
                         dt.Rows.Add(forminfo.Name, forminfo.LabelName, forminfo.Autocomplete, forminfo.Editable,
-                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox);
+                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox,forminfo.OrderNo);
                     }  Dictionary<string, object> paramlist = new Dictionary<string, object>();
                      paramlist.Add("@TypeUserFormControl", dt);
                      DatabaseCommand.ExcuteObjectNonQuery("proc_saveUserFormControl", paramlist, "procedure");
@@ -298,7 +300,8 @@ namespace ERPWebApiService.Controllers
                     StartPossition = codeFormaterInfo.StartPossition,
                     LastNumber = codeFormaterInfo.LastNumber,
                     Prefix = codeFormaterInfo.Prefix,
-                    StringLength = codeFormaterInfo.StringLength
+                    StringLength = codeFormaterInfo.StringLength,
+                    MiddleSymbol = codeFormaterInfo.MiddleSymbol
                 };
                 ERPContext.CodeFormaters.Add(codeformater);
                 ERPContext.SaveChanges();
@@ -339,7 +342,8 @@ namespace ERPWebApiService.Controllers
                     StartPossition = codeFormaterInfo.StartPossition,
                     LastNumber = codeFormaterInfo.LastNumber,
                     Prefix = codeFormaterInfo.Prefix,
-                    StringLength = codeFormaterInfo.StringLength
+                    StringLength = codeFormaterInfo.StringLength,
+                    MiddleSymbol = codeFormaterInfo.MiddleSymbol
                 };
                 ERPContext.CodeFormaters.Add(codeformater);
                 ERPContext.SaveChanges();
@@ -379,7 +383,8 @@ namespace ERPWebApiService.Controllers
                     StartPossition = x.StartPossition,
                     LastNumber = x.LastNumber,
                     Prefix = x.Prefix,
-                    StringLength = x.StringLength
+                    StringLength = x.StringLength,
+                    MiddleSymbol = x.MiddleSymbol,
                 }).ToList();               
                 return Request.CreateResponse(HttpStatusCode.OK, codeformaterList);
             }
@@ -416,7 +421,8 @@ namespace ERPWebApiService.Controllers
                     StartPossition = x.StartPossition,
                     LastNumber = x.LastNumber,
                     Prefix = x.Prefix,
-                    StringLength = x.StringLength
+                    StringLength = x.StringLength,
+                    MiddleSymbol = x.MiddleSymbol
                 }).FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, codeformater);
             }
@@ -653,6 +659,72 @@ namespace ERPWebApiService.Controllers
                         fromValidation.Email = Convert.ToBoolean(rdr["Email"]);
                         fromValidation.Ledger_Id = Convert.ToBoolean(rdr["Ledger_Id"]);
                         fromValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("customerTransactionValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetCustomerTransactionValidation()
+        {
+            try
+            {
+                List<CustomerTransactionValidation> formValidationList = new List<CustomerTransactionValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "customer-transaction");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        CustomerTransactionValidation fromValidation = new CustomerTransactionValidation();
+                        fromValidation.Customer_Id = Convert.ToBoolean(rdr["Customer_Id"]);
+                        fromValidation.PaymentType = Convert.ToBoolean(rdr["PaymentType"]);
+                        fromValidation.PaymentMethod = Convert.ToBoolean(rdr["PaymentMethod"]);
+                        fromValidation.PaymentDate = Convert.ToBoolean(rdr["PaymentDate"]);
+                        fromValidation.PaymentMode = Convert.ToBoolean(rdr["PaymentMode"]);
+                        fromValidation.TotalDueAdvanceAmount = Convert.ToBoolean(rdr["TotalDueAdvanceAmount"]);
+                        fromValidation.Ledger_Id = Convert.ToBoolean(rdr["Ledger_Id"]);
+                        fromValidation.PayAmount = Convert.ToBoolean(rdr["PayAmount"]);
+                        fromValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("locationValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetLocationValidation()
+        {
+            try
+            {
+                List<LocationValidation> formValidationList = new List<LocationValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "location-entry");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        LocationValidation fromValidation = new LocationValidation();
+                        fromValidation.LocationId = Convert.ToBoolean(rdr["LocationId"]);
+                        fromValidation.LocationName = Convert.ToBoolean(rdr["LocationName"]);
+                        fromValidation.Description = Convert.ToBoolean(rdr["Description"]);                    
                         formValidationList.Add(fromValidation);
                     }
                 }

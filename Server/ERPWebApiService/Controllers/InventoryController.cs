@@ -1295,15 +1295,16 @@ namespace ERPWebApiService.Controllers
                     var supplierTransaction = new SupplierTransaction()
                     {
                         Id = Guid.NewGuid(),
-                        //ChalanNo = groupItemInfo.ChalanNo,
-                        //InvoiceNo = groupItemInfo.InvoiceNo,
+                        ChalanNo = groupItemInfo.ChalanNo,
+                        InvoiceNo = groupItemInfo.InvoiceNo,
                         Supplier_Id = groupItemInfo.Supplier_Id,
-                        //Group_Id = groupItem.Id,
+                        Group_Id = groupItem.Id,
                         PaymentMode = groupItemInfo.PaymentMode,
                         PaymentDate = groupItemInfo.TransactionDate,
                         Ledger_Id = groupItemInfo.Ledger_Id,
                         SubLedger_Id = groupItemInfo.SubLedger_Id,
-                        PaidAmount = groupItemInfo.PaidAmount
+                        PaidAmount = groupItemInfo.PaidAmount,
+                        IsFirstTransaction = true
                     };
                     ERPContext.SupplierTransactions.Add(supplierTransaction);
                     ERPContext.SaveChanges();
@@ -1325,15 +1326,16 @@ namespace ERPWebApiService.Controllers
                     var customerTransaction = new PartyTransaction()
                     {
                         Id = Guid.NewGuid(),
-                        //ChalanNo = groupItemInfo.ChalanNo,
-                        //InvoiceNo = groupItemInfo.InvoiceNo,
+                        ChalanNo = groupItemInfo.ChalanNo,
+                        InvoiceNo = groupItemInfo.InvoiceNo,
                         Customer_Id = groupItemInfo.Customer_Id,
-                        //Group_Id = groupItem.Id,
+                        Group_Id = groupItem.Id,
                         PaymentMode = groupItemInfo.PaymentMode,
                         PaymentDate = groupItemInfo.TransactionDate,
                         Ledger_Id = groupItemInfo.Ledger_Id,
                         SubLedger_Id = groupItemInfo.SubLedger_Id,
-                        PaidAmount = groupItemInfo.PaidAmount
+                        PaidAmount = groupItemInfo.PaidAmount,
+                        IsFirstTransaction = true
                     };
                     ERPContext.PartyTransactions.Add(customerTransaction);
                     ERPContext.SaveChanges();
@@ -1425,7 +1427,79 @@ namespace ERPWebApiService.Controllers
                     }
                     Dictionary<string, object> paramlist = new Dictionary<string, object>();
                     paramlist.Add("@typeItemTransaction", dt);
-                    DatabaseCommand.ExcuteObjectNonQuery("proc_SaveItemTransaction", paramlist, "procedure");                    
+                    DatabaseCommand.ExcuteObjectNonQuery("proc_SaveItemTransaction", paramlist, "procedure");
+                    if (groupItemInfo.TransactionType == "Purchase")
+                    {
+                        var oSupplierTransaction =
+                            ERPContext.SupplierTransactions.FirstOrDefault(x => x.IsFirstTransaction == true&&x.Group_Id==oGroupItem.Id);
+                        var supplierTransaction = new SupplierTransaction()
+                        {
+                            Id = oSupplierTransaction!=null?oSupplierTransaction.Id:Guid.NewGuid(),
+                            ChalanNo = groupItemInfo.ChalanNo,
+                            InvoiceNo = groupItemInfo.InvoiceNo,
+                            Supplier_Id = groupItemInfo.Supplier_Id,
+                            Group_Id = groupItem.Id,
+                            PaymentMode = groupItemInfo.PaymentMode,
+                            PaymentDate = groupItemInfo.TransactionDate,
+                            Ledger_Id = groupItemInfo.Ledger_Id,
+                            SubLedger_Id = groupItemInfo.SubLedger_Id,
+                            PaidAmount = groupItemInfo.PaidAmount,
+                            IsFirstTransaction = true
+                        };
+                        ERPContext.SupplierTransactions.AddOrUpdate(supplierTransaction);
+                        ERPContext.SaveChanges();
+                        Dictionary<string, string> paramlist1 = new Dictionary<string, string>();
+                        paramlist1.Add("@id", supplierTransaction.Id.ToString());
+                        DatabaseCommand.ExcuteNonQuery("delete from tblCustomerSupplierTransactionDetail where suppliertransactionId=@id", paramlist1, null);
+                        var transactionDetails = new CustomerSupplierTransactionDetail()
+                        {
+                            Id = Guid.NewGuid(),
+                            SupplierTransaction_Id = supplierTransaction.Id,
+                            Group_Id = groupItem.Id,
+                            InvoiceNo = groupItem.InvoiceNo,
+                            PaidAmount = groupItem.PaidAmount,
+                            PaymentDate = groupItem.TransactionDate,
+                            TransactionId = groupItem.TransactionId
+                        };
+                        ERPContext.CustomerSupplierTransactionDetailsList.Add(transactionDetails);
+                        ERPContext.SaveChanges();
+                    }
+                    else
+                    {
+                        var oCustomerTransaction =
+                            ERPContext.PartyTransactions.FirstOrDefault(x => x.IsFirstTransaction == true && x.Group_Id == oGroupItem.Id);
+                        var customerTransaction = new PartyTransaction()
+                        {
+                            Id = oCustomerTransaction != null ? oCustomerTransaction.Id : Guid.NewGuid(),
+                            ChalanNo = groupItemInfo.ChalanNo,
+                            InvoiceNo = groupItemInfo.InvoiceNo,
+                            Customer_Id = groupItemInfo.Customer_Id,
+                            Group_Id = groupItem.Id,
+                            PaymentMode = groupItemInfo.PaymentMode,
+                            PaymentDate = groupItemInfo.TransactionDate,
+                            Ledger_Id = groupItemInfo.Ledger_Id,
+                            SubLedger_Id = groupItemInfo.SubLedger_Id,
+                            PaidAmount = groupItemInfo.PaidAmount,
+                            IsFirstTransaction = true
+                        };
+                        ERPContext.PartyTransactions.AddOrUpdate(customerTransaction);
+                        ERPContext.SaveChanges();
+                        Dictionary<string, string> paramlist2 = new Dictionary<string, string>();
+                        paramlist2.Add("@id", customerTransaction.Id.ToString());
+                        DatabaseCommand.ExcuteNonQuery("delete from tblCustomerSupplierTransactionDetail where customertransaction_Id=@id", paramlist2, null);
+                        var transactionDetails = new CustomerSupplierTransactionDetail()
+                        {
+                            Id = Guid.NewGuid(),
+                            CustomerTransaction_Id = customerTransaction.Id,
+                            Group_Id = groupItem.Id,
+                            InvoiceNo = groupItem.InvoiceNo,
+                            PaidAmount = groupItem.PaidAmount,
+                            PaymentDate = groupItem.TransactionDate,
+                            TransactionId = groupItem.TransactionId
+                        };
+                        ERPContext.CustomerSupplierTransactionDetailsList.Add(transactionDetails);
+                        ERPContext.SaveChanges();
+                    }
                 }
                 return Request.CreateResponse(HttpStatusCode.Created, true);
             }
@@ -1899,7 +1973,7 @@ namespace ERPWebApiService.Controllers
             {
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
-                DatabaseCommand.ExcuteNonQuery("delete from tblCustomer where id=@id", paramlist, null);
+                DatabaseCommand.ExcuteNonQuery("delete from tblPartyTransaction where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
@@ -2191,8 +2265,6 @@ namespace ERPWebApiService.Controllers
                         inventoryGroup.TotalAmount = rdr["TotalAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["TotalAmount"].ToString()) : 0;
                         inventoryGroup.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"].ToString()) : 0;
                         inventoryGroup.DiscountAmount = rdr["DiscountAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountAmount"].ToString()) : 0;
-                        inventoryGroup.Vat = rdr["Vat"] != DBNull.Value ? Convert.ToDecimal(rdr["Vat"].ToString()) : 0;
-                        inventoryGroup.Tax = rdr["Tax"] != DBNull.Value ? Convert.ToDecimal(rdr["Tax"].ToString()) : 0;
                         inventoryGroup.NetPayableAmount = rdr["NetPayableAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["NetPayableAmount"].ToString()) : 0;
                         inventoryGroup.PaidAmount = rdr["PaidAmount"] != DBNull.Value ? Convert.ToDecimal(rdr["PaidAmount"].ToString()) : 0;
                         inventoryGroup.ChalanNo = rdr["ChalanNo"] != DBNull.Value ? rdr["ChalanNo"].ToString() : null;

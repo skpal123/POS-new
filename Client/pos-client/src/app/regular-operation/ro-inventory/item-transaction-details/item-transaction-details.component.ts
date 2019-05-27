@@ -28,7 +28,7 @@ export class ItemTransactionDetailsComponent implements OnInit {
     private _postLoginservice:PostLoginService,
     private matDialog:MatDialog,
     public matDialogRef:MatDialogRef<ItemTransactionDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public customerId:string,
+    @Inject(MAT_DIALOG_DATA) public groupId:string,
     private _customDatatableService:CustomDatatableService,
     private _inventotyService:InventoryService,
   ) { }
@@ -57,7 +57,7 @@ export class ItemTransactionDetailsComponent implements OnInit {
   }
   GetItemTransactionDetails(){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.GetItemTransactionDetails(this.customerId).subscribe(response=>{
+    this._inventotyService.GetItemTransactionDetailsById(this.groupId).subscribe(response=>{
       this.blockUi.stop();
       this.itemTransactionList=response
       this.DataList=this.itemTransactionList;

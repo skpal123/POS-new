@@ -10,5 +10,6 @@ export class CodeFormater{
     public StartPossition ?:number
     public LastNumber ?:number
     public Prefix ?:string;
-    public StringLength ?:number
+    public StringLength ?:number;
+    public MiddleSymbol ?:string;
 }

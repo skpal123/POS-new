@@ -17,6 +17,6 @@ export class CustomerTransaction{
     public PaymentType?:string;
     public PaymentMethod?:string;
     public TotalDueAdvanceAmount?:number;
+    public IsFirstTransaction?:boolean;
     public TransactionDetailsList?:CustomerSupplierTransactionDetails[];
-    public IsUpdate?:boolean;
 }

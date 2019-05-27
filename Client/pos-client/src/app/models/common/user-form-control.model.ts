@@ -7,5 +7,6 @@ export class UserFormControl{
     public Editable?:boolean
     public IsEnable?:boolean
     public IsCheckbox?:boolean
-    public FormName?:string
+    public FormName?:string;
+    public OrderNo?:number;
 }

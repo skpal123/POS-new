@@ -1,5 +1,4 @@
 import { Component, OnInit, Input,Output,EventEmitter, OnChanges, OnDestroy, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
 import { CustomDatatableService } from '../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { PostLoginService } from '../../services/common/post-login.service';
@@ -10,21 +9,31 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormControl } from '@angular/forms';
 import { Page } from '../../models/common/page.model';
 import { PageService } from '../../services/common/page.service';
+import { CommonService } from '../../services/common/common.service';
+import { DatatableButtonOutput } from '../../models/common/datatable-button-output';
+import { DatatableCheckboxOutput } from '../../models/common/datatable-checkbox-output';
+import { dashCaseToCamelCase } from '@angular/animations/browser/src/util';
 @Component({
   selector: 'app-custom-datatable',
   templateUrl: './custom-datatable.component.html',
   styleUrls: ['./custom-datatable.component.css']
 })
 export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
+  @BlockUI() blockUi:NgBlockUI
   @ViewChild('globalSearch') globalSearch:FormControl;
   @ViewChild('showEntriesControl') showEntriesControl:FormControl;
   @Input() reload:boolean;
+  @Input() dataChange:boolean;
   @Input() columnChange:boolean;
   @Input() DataList: any = [];
   @Input() ColumnList: UserFormControl[] = [];
   @Output() EditSelectedRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() CheckedAllItem:EventEmitter <any>=new EventEmitter <any>();
+  @Output() customButtonClick:EventEmitter <any>=new EventEmitter <any>();
+  @Output() customCheckboxClick:EventEmitter <any>=new EventEmitter <any>();
+  buttonData:DatatableButtonOutput={};
+  checkboxData:DatatableCheckboxOutput={}
   showEntries:number=5;
   currentPage:number=1;
   totalshownToItem:number=0;
@@ -34,8 +43,9 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   IsAscendingOrder :boolean=true;
   IsDescendingOrder:boolean=false;
   DataList1:any=[];
-  ColumnListEnable:UserFormControl[]=[];
+  newOrderColumnList:UserFormControl[]=[];
   searchTerm:string=null;
+  enableSaveButton:boolean=false;
   //pagin start
   allItems: any[];
   pager: Page={totalItems: 0,
@@ -52,55 +62,45 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   array:any[]=[]
   //paging end
   constructor(private _customDatatableService:CustomDatatableService,
-    private _pageService:PageService
+    private _pageService:PageService,
+    private _alertBox:AlertBoxService,
+    private commonService:CommonService
   ) { }
   ngOnInit(){
-      this.globalSearch.valueChanges.subscribe(data=>{
-        debugger
-        this.DataList1=[];
-        if (data!=null&&data!=''){
-          this.DataList.forEach(item => 
-            this.ColumnList.forEach(a=>{
-              if(item[a.Name]!=undefined){
-               let result= item[a.Name].toUpperCase().includes(data.toString().toUpperCase());
-               if(result){
-                this.DataList1.push(item)
-               }
-              }
-            })
-          )
-          this.allItems = this.DataList1
-          this.setPage(1);
-        }
-        else{
-          this.DataList1=this.DataList;
-          this.allItems = this.DataList1
-          this.setPage(1);
-        }
-      });
-      this.showEntriesControl.valueChanges.subscribe((data:number)=>{
-        debugger
-          this.showEntries=data;
-          this.setPage(this.currentPage);
-      })
+
   }
   ngOnChanges() {
     debugger
-    if(this.columnChange){
-      this.DataList1=this._customDatatableService.DataList;
-      this.allItems = this.DataList1
-      this.setPage(1);
-    }else{
-      this.DataList1=this._customDatatableService.DataList;
-      this.ColumnList=this._customDatatableService.ColumnList.filter(a=>{
-       return a.IsEnable==true
-      });
-      this.allItems = this.DataList1
-      this.setPage(1);
-    }
-    // if(this.columnChange){
-    //   //this.getUserFormControlByFormName();
-    // }
+    this.DataList1=this.DataList;
+    this.ColumnList=this.ColumnList.filter(a=>{
+     return a.IsEnable==true
+    });
+    this.allItems = this.DataList1
+    this.setPage(1);
+    this.globalSearch.valueChanges.subscribe(data=>{
+      debugger
+      if (data!=null&&data!=''){
+        this.DataList1=[];
+        this.DataList.forEach(item => 
+          this.ColumnList.forEach(a=>{
+              if(item[a.Name]!=undefined){
+                let result= item[a.Name].toString().toUpperCase().includes(data.toString().toUpperCase());
+                if(result){
+                 this.DataList1.push(item)
+                }
+               }
+          })
+        )
+        this.allItems = this.DataList1
+        this.setPage(1);
+      }
+      else{
+        this.DataList1=this.DataList;
+        this.allItems = this.DataList1
+        this.setPage(1);
+      }
+    });
+
   }
   setPage(page: number) {
     debugger
@@ -129,17 +129,19 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
     console.log($event);
     this.CheckedAllItem.emit($event.target.checked);
   }
+  changeShowEntric(){
+    this.setPage(this.currentPage);
+  }
   ngOnDestroy(): void {
     this._customDatatableService.ColumnList=[];
     this._customDatatableService.DataList=[]
   }
   drop(event: CdkDragDrop<any[]>) {
-    debugger
     moveItemInArray(this.ColumnList, event.previousIndex, event.currentIndex);
-    let p=this.ColumnList;
+    this.newOrderColumnList=this.ColumnList;
+    this.enableSaveButton=true;
   }
   sortColumn(column:string){
-    debugger
     if(this.IsAscendingOrder){
       this.IsAscendingOrder=false;
       this.pagedItems=this.pagedItems.sort((t1, t2) => {
@@ -160,5 +162,31 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
         return 0;
       });
     }
+  }
+  btnClicked(columnName,data){
+    this.buttonData.ColumnName=columnName;
+    this.buttonData.RowData=data;
+   this.customButtonClick.emit(this.buttonData)
+  }
+  checkboxClick(columnName,data,$event){
+    this.checkboxData.ColumnName=columnName;
+    this.checkboxData.RowData=data;
+    this.checkboxData.IsChecked=$event.target.checked;
+    this.customCheckboxClick.emit(this.checkboxData)
+  }
+  saveNewOrder(){
+    this.newOrderColumnList.forEach((a,index)=>{
+      a.OrderNo=index+1
+    })
+    this.blockUi.start("Loading....,Please wait.")
+    this.commonService.saveColumnInfoList(this.newOrderColumnList).subscribe((response:boolean)=>{
+      this.blockUi.stop();
+      this.enableSaveButton=false;    
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
   }
 }

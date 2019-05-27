@@ -17,7 +17,8 @@ import { CustomerDropdownComponent } from './customer-dropdown/customer-dropdown
 import { PartyDropdownComponent } from './party-dropdown/party-dropdown.component';
 import { CustomDatatableControlComponent } from './custom-datatable-control/custom-datatable-control.component';
 import { AutocodeGenerateComponent } from './autocode-generate/autocode-generate.component';
-import { CustomDatatableControlSettingsComponent } from './custom-datatable-control-settings/custom-datatable-control-settings.component'
+import { CustomDatatableControlSettingsComponent } from './custom-datatable-control-settings/custom-datatable-control-settings.component';
+import { FormControlInfoSettingsComponent } from './form-control-info-settings/form-control-info-settings.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -39,7 +40,9 @@ import { CustomDatatableControlSettingsComponent } from './custom-datatable-cont
     CustomerDropdownComponent, 
     PartyDropdownComponent, 
     CustomDatatableControlComponent, 
-    AutocodeGenerateComponent, CustomDatatableControlSettingsComponent
+    AutocodeGenerateComponent,
+    CustomDatatableControlSettingsComponent,
+    FormControlInfoSettingsComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -58,7 +61,8 @@ import { CustomDatatableControlSettingsComponent } from './custom-datatable-cont
     CustomerDropdownComponent,
     CustomDatatableControlComponent, 
     AutocodeGenerateComponent,
-    CustomDatatableControlSettingsComponent
+    CustomDatatableControlSettingsComponent,
+    FormControlInfoSettingsComponent
   ]
 })
 export class CommonModuleModule { }

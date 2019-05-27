@@ -8,4 +8,5 @@ export class CustomDatatableService {
   constructor() { }
   DataList:any=[];
   ColumnList:UserFormControl[]=[];
+  dataChange:boolean;
 }

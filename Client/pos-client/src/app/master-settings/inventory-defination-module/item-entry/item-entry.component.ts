@@ -28,7 +28,9 @@ export class ItemEntryComponent implements OnInit {
   @ViewChild('categoryIdControl') categoryIdControl:FormControl
   @ViewChild('subcategoryIdControl') subcategoryIdControl:FormControl
   @ViewChild('unitIdControl') unitIdControl:FormControl
-  @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
+  @ViewChild('ledgerIdControl') ledgerIdControl:FormControl;
+  itemName1:string="itemId";
+  itemName2:string="itemCode";
   categoryTouch:boolean=false;
   allLedger:boolean=true;
   subcategoryTouch:boolean=false;
@@ -302,5 +304,13 @@ export class ItemEntryComponent implements OnInit {
        //this.getItemPurchaseValidationList()
      }
     })
+  }
+  parentGetGeneratedCode1($event:string){
+    debugger
+    this.item.ItemId=$event;
+  }
+  parentGetGeneratedCode2($event:string){
+    debugger
+    this.item.ItemCode=$event;
   }
 }

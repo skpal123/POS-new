@@ -27,5 +27,7 @@ namespace ERP.DataService.Model.Model
         [StringLength(30)]
         public string Prefix { set; get; }
         public int? StringLength { set; get; }
+          [StringLength(10)]
+        public string MiddleSymbol { set; get; }
     }
 }

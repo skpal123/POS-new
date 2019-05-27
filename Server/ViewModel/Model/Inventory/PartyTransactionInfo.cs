@@ -22,6 +22,7 @@ namespace ViewModel.Model
         public Guid? SubLedger_Id { set; get; }
         public string SubLedgerName { set; get; }
         public decimal PaidAmount { set; get; }
+        public bool? IsFirstTransaction { set; get; }
         public List<CustomerSupplierTransactionDetailsInfo> TransactionDetailsList { set; get; }
 
     }

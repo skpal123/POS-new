@@ -251,6 +251,22 @@
     <Compile Include="Migrations\201905140532046_adding transaction details.Designer.cs">
       <DependentUpon>201905140532046_adding transaction details.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905240414228_adding offer.cs" />
+    <Compile Include="Migrations\201905240414228_adding offer.Designer.cs">
+      <DependentUpon>201905240414228_adding offer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905240421131_change order type.cs" />
+    <Compile Include="Migrations\201905240421131_change order type.Designer.cs">
+      <DependentUpon>201905240421131_change order type.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905261102021_adding isFirsttransaction.cs" />
+    <Compile Include="Migrations\201905261102021_adding isFirsttransaction.Designer.cs">
+      <DependentUpon>201905261102021_adding isFirsttransaction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905270901365_change code formater.cs" />
+    <Compile Include="Migrations\201905270901365_change code formater.Designer.cs">
+      <DependentUpon>201905270901365_change code formater.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -270,6 +286,7 @@
     <Compile Include="Model\ItemTransaction.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
+    <Compile Include="Model\Offer.cs" />
     <Compile Include="Model\OfferSetup.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\PartyTransaction.cs" />
@@ -444,6 +461,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905140532046_adding transaction details.resx">
       <DependentUpon>201905140532046_adding transaction details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905240414228_adding offer.resx">
+      <DependentUpon>201905240414228_adding offer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905240421131_change order type.resx">
+      <DependentUpon>201905240421131_change order type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905261102021_adding isFirsttransaction.resx">
+      <DependentUpon>201905261102021_adding isFirsttransaction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905270901365_change code formater.resx">
+      <DependentUpon>201905270901365_change code formater.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NavigationDataService {
-  IsSaved:boolean
+  IsSaved:boolean;
+  data:any
   constructor() { }
 }

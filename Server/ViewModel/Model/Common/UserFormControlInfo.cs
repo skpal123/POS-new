@@ -17,5 +17,6 @@ namespace ViewModel.Model
         public bool IsEnable { set; get; }
         public bool IsCheckbox { set; get; }
         public string FormName { set; get; }
+        public int? OrderNo { set; get; }
     }
 }

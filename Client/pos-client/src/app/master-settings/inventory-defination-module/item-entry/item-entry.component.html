@@ -11,21 +11,35 @@
         <form #itemForm="ngForm">
               <div class="form-group row" *ngIf="itemValidation[0]?.ItemId" [class.has-success]="itemIdControl.valid&&itemIdControl.touched" [class.has-error]="itemIdControl.invalid&&itemIdControl.touched">
                   <label for="itemId" class="col-sm-4 col-form-label control-label " [class.required]="itemIdControl.invalid">Item Id</label>
-                  <div class="col-sm-7" >
+                  <div class="col-sm-6" >
                       <input class="form-control" [required]="itemValidation[0]?.ItemId&&itemValidation[1]?.ItemId" name="itemId" #itemIdControl="ngModel" id="itemId" [(ngModel)]="item.ItemId">
                       <span class="help-block" *ngIf="itemIdControl.errors?.required&&itemIdControl.touched">
                         Item Id feild is required
                       </span>  
                   </div>
+                  <div class="col-md-2"> 
+                      <app-autocode-generate
+                      [itemName]="itemName1"
+                      (getGenerateAutoCode)="parentGetGeneratedCode1($event)"
+                      >
+                      </app-autocode-generate>
+                    </div>
                 </div>
                 <div class="form-group row" *ngIf="itemValidation[0]?.ItemCode" [class.has-success]="itemCodeControl.valid&&itemCodeControl.touched" [class.has-error]="itemCodeControl.invalid&&itemCodeControl.touched">
                   <label for="itemCode" class="col-sm-4 col-form-label control-label" [class.required]="itemCodeControl.invalid">Item Code</label>
-                  <div class="col-sm-7" >
+                  <div class="col-sm-6" >
                       <input class="form-control" [required]="itemValidation[0]?.ItemCode&&itemValidation[1]?.ItemCode" name="itemCode" #itemCodeControl="ngModel" id="itemCode" [(ngModel)]="item.ItemCode">
                       <span class="help-block" *ngIf="itemCodeControl.errors?.required&&itemCodeControl.touched">
                         Item Code feild is required
                       </span>  
                   </div>
+                  <div class="col-md-2"> 
+                      <app-autocode-generate
+                      [itemName]="itemName2"
+                      (getGenerateAutoCode)="parentGetGeneratedCode2($event)"
+                      >
+                      </app-autocode-generate>
+                    </div>
                 </div>
               <div class="form-group row" *ngIf="itemValidation[0]?.ItemName" [class.has-success]="itemNameControl.valid&&itemNameControl.touched" [class.has-error]="itemNameControl.invalid&&itemNameControl.touched">
                   <label for="itemName" class="col-sm-4 col-form-label control-label" [class.required]="itemNameControl.invalid">Item Name</label>

@@ -20,5 +20,6 @@ namespace ViewModel.Model
         public int? LastNumber { set; get; }
         public string Prefix { set; get; }
         public int? StringLength { set; get; }
+        public string MiddleSymbol { set; get; }
     }
 }
