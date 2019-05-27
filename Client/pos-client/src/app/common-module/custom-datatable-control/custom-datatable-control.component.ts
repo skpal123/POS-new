@@ -1,10 +1,10 @@
 import { Component,Inject, OnInit } from '@angular/core';
 import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material';
 import { UserFormControl } from '../../models/common/user-form-control.model';
-import { PostLoginService } from '../../services/common/post-login.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { DialogData } from '../../models/common/dialog-data.model';
 import { AlertBoxService } from '../../shared/alert-box.service';
+import { CommonService } from '../../services/common/common.service';
 
 @Component({
   selector: 'app-custom-datatable-control',
@@ -15,7 +15,7 @@ export class CustomDatatableControlComponent implements OnInit {
   @BlockUI() blockUi:NgBlockUI
   constructor(
     public dialogRef: MatDialogRef<CustomDatatableControlComponent>,
-    private _postLoginService:PostLoginService,
+    private _commonService:CommonService,
     private _alertBox:AlertBoxService,
     @Inject(MAT_DIALOG_DATA) public data: UserFormControl[]) {}
 
@@ -29,7 +29,7 @@ export class CustomDatatableControlComponent implements OnInit {
   saveColumnInfo(){
     debugger
    this.blockUi.start("Loading....,Please wait.")
-    this._postLoginService.saveColumnInfoList(this.data).subscribe((response:boolean)=>{
+    this._commonService.saveColumnInfoList(this.data).subscribe((response:boolean)=>{
       this.blockUi.stop();
       let result=response;
       if(result){

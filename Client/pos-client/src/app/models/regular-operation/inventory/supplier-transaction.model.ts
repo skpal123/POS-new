@@ -12,4 +12,5 @@ export class SupplierTransaction{
     public SubLedger_Id?:string;
     public SubLedgerName?:string;
     public PaidAmount?:number;
+    public IsFirstTransaction?:boolean;
 }

@@ -23,6 +23,7 @@ namespace ERP.DataService.Model.Model
         public Guid? Ledger_Id { set; get; }
         public Guid? SubLedger_Id { set; get; }
         public decimal PaidAmount { set; get; }
+        public bool? IsFirstTransaction { set; get; }
 
     }
 }

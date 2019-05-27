@@ -3,6 +3,7 @@ import { DefaultRouteService } from './default-route.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { UserFormControl } from '../../models/common/user-form-control.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,18 @@ export class CommonService {
   public resetLastNumberCodeFormaterByProductName(productName:string){
     var url=this._defaultRoute.CommonService+'resetCode/'+productName;
     return this._httpClient.get<string>(url).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public saveColumnInfoList(columnInfolist:UserFormControl[]){
+    var url=this._defaultRoute.CommonService+'saveColumnInfo/'+columnInfolist[0].FormName;
+    return this._httpClient.put(url,columnInfolist).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public getUserFormControlByFormName(fromName:string){
+    var url=this._defaultRoute.CommonService+'getFormControl/'+fromName;
+    return this._httpClient.get<UserFormControl[]>(url).pipe(
       catchError(this.handleError)
     )
   }

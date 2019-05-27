@@ -98,8 +98,9 @@ namespace ERPWebApiService.Controllers
                     IsEnable = x.IsEnable,
                     FormName = x.FormName,
                     IsCheckbox = x.IsCheckbox,
-                    Type = x.Type
-                }).ToList();
+                    Type = x.Type,
+                    OrderNo = x.OrderNo
+                }).OrderBy(m=>m.OrderNo).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, userControlList);
             }
             catch (InvalidSessionFailure ex)
@@ -130,12 +131,13 @@ namespace ERPWebApiService.Controllers
                 dt.Columns.Add("FormName", typeof(string));
                 dt.Columns.Add("Type", typeof(string));
                 dt.Columns.Add("IsCheckbox", typeof(Boolean));
+                dt.Columns.Add("OrderNo", typeof(int));
                 if (userFormControls.Any())
                 {                
                     foreach (UserFormControlInfo forminfo in userFormControls)
                     {
                         dt.Rows.Add(forminfo.Name, forminfo.LabelName, forminfo.Autocomplete, forminfo.Editable,
-                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox);
+                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox,forminfo.OrderNo);
                     }  Dictionary<string, object> paramlist = new Dictionary<string, object>();
                      paramlist.Add("@TypeUserFormControl", dt);
                      DatabaseCommand.ExcuteObjectNonQuery("proc_saveUserFormControl", paramlist, "procedure");
@@ -652,6 +654,42 @@ namespace ERPWebApiService.Controllers
                         fromValidation.Address = Convert.ToBoolean(rdr["Address"]);
                         fromValidation.Email = Convert.ToBoolean(rdr["Email"]);
                         fromValidation.Ledger_Id = Convert.ToBoolean(rdr["Ledger_Id"]);
+                        fromValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("customerTransactionValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetCustomerTransactionValidation()
+        {
+            try
+            {
+                List<CustomerTransactionValidation> formValidationList = new List<CustomerTransactionValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "customer-transaction");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        CustomerTransactionValidation fromValidation = new CustomerTransactionValidation();
+                        fromValidation.Customer_Id = Convert.ToBoolean(rdr["Customer_Id"]);
+                        fromValidation.PaymentType = Convert.ToBoolean(rdr["PaymentType"]);
+                        fromValidation.PaymentMethod = Convert.ToBoolean(rdr["PaymentMethod"]);
+                        fromValidation.PaymentDate = Convert.ToBoolean(rdr["PaymentDate"]);
+                        fromValidation.PaymentMode = Convert.ToBoolean(rdr["PaymentMode"]);
+                        fromValidation.TotalDueAdvanceAmount = Convert.ToBoolean(rdr["TotalDueAdvanceAmount"]);
+                        fromValidation.Ledger_Id = Convert.ToBoolean(rdr["Ledger_Id"]);
+                        fromValidation.PayAmount = Convert.ToBoolean(rdr["PayAmount"]);
                         fromValidation.SubLedger_Id = Convert.ToBoolean(rdr["SubLedger_Id"]);
                         formValidationList.Add(fromValidation);
                     }

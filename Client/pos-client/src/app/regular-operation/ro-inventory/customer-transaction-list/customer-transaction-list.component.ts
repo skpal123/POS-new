@@ -13,6 +13,10 @@ import { GroupItem } from '../../../models/regular-operation/inventory/group-ite
 import { ItemTransactionDetailsComponent } from '../item-transaction-details/item-transaction-details.component';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { CustomerTransactionComponent } from '../customer-transaction/customer-transaction.component';
+import { ValidationService } from '../../../services/common/validation.service';
+import { CustomerTransactionValidation } from '../../../models/validation/inventory/customer-transaction-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
+import { CommonService } from '../../../services/common/common.service';
 
 @Component({
   selector: 'app-customer-transaction-list',
@@ -29,10 +33,9 @@ export class CustomerTransactionListComponent implements OnInit {
   toDate:Date=new Date();
   startDate:Date=new Date()
   @BlockUI() blockUi:NgBlockUI
-  reload:boolean=false;
-  columnReady:boolean=false;
-  dataReady:boolean=false;
+  customerIdtouch:boolean=false;
   userControlList:UserFormControl[]=[];
+  cTransactionValidation:CustomerTransactionValidation[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
   groupItemList:GroupItem[]=[];
@@ -42,18 +45,20 @@ export class CustomerTransactionListComponent implements OnInit {
   customerTransaction:CustomerTransaction={
     Id:null,ChalanNo:null,OrderNo:null,InvoiceNo:null,PaymentMode:"-1",PaymentDate:new Date(),Ledger_Id:null,
     SubLedger_Id:null,Group_Id:null,Customer_Id:null,PaidAmount:0,PaymentMethod:"general",
-    PaymentType:"payment",TotalDueAdvanceAmount:0,TransactionDetailsList:[],IsUpdate:false
+    PaymentType:"payment",TotalDueAdvanceAmount:0,TransactionDetailsList:[],IsFirstTransaction:false
   }
   totalPayableAmount:number=0;
   constructor(private _alertBox:AlertBoxService,
-    private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _commonService:CommonService,
+    private _navigationData:NavigationDataService,
+    private _validationService:ValidationService,
     private _inventotyService:InventoryService,
   ) { }
   ngOnInit(){
     this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
-    this.getUserFormControlByFormName()
+    this.getUserFormControlByFormName();
     this.formDateControl.valueChanges.subscribe(data=>{
       debugger
       if(!this.initialload){
@@ -69,11 +74,10 @@ export class CustomerTransactionListComponent implements OnInit {
   }
   getUserFormControlByFormName(){
     this.blockUi.start("Loading....,Please wait.")
-    this._postLoginservice.getUserFormControlByFormName('customer-transaction-list').subscribe(response=>{
+    this._commonService.getUserFormControlByFormName('customer-transaction-list').subscribe(response=>{
       this.blockUi.stop();
       this.userControlList=response
       this.ColumnList=this.userControlList;
-      this.columnReady=true;
       this._customDatatableService.ColumnList=this.userControlList;
     },error=>{
       this.blockUi.stop();
@@ -93,8 +97,6 @@ export class CustomerTransactionListComponent implements OnInit {
       })
       this.DataList=this.customerTransactionList;
       this._customDatatableService.DataList=this.customerTransactionList;
-      this.reload=true;
-      this.dataReady=true;
     },error=>{
       this.blockUi.stop();
       let dialogData=new DialogData();
@@ -110,7 +112,6 @@ export class CustomerTransactionListComponent implements OnInit {
       this.customerTransaction=response;
       this.customerTransaction.PaymentType="payment";
       this.customerTransaction.PaymentMethod="general"
-      this.customerTransaction.IsUpdate=true;
       const dialogRef=this.matDialog.open(CustomerTransactionComponent,{
         data:this.customerTransaction,
         disableClose:true,
@@ -151,6 +152,7 @@ export class CustomerTransactionListComponent implements OnInit {
   }
   customerOnSeletedItem($event:MultiSelectDropdown){
     debugger
+    this.customerIdtouch=true;
     if($event.id!="0"){
       this.customerId=$event.id;
       this.customerTransaction.Customer_Id=$event.id;
@@ -174,6 +176,7 @@ export class CustomerTransactionListComponent implements OnInit {
       width:'95%'
     });
     dialogRef.afterClosed().subscribe(result=>{
+      debugger
       if(result){
         this.getCustomerTransactionList(this.formDate,this.toDate,this.customerId);
       }
@@ -181,7 +184,6 @@ export class CustomerTransactionListComponent implements OnInit {
   }
   clearPartyTransaction(){
     this.customerTransaction.Id=null;
-    this.customerTransaction.IsUpdate=false;
     this.customerTransaction.TotalDueAdvanceAmount=0;
     this.customerTransaction.PaidAmount=0;
   }

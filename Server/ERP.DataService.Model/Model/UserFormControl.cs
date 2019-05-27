@@ -24,5 +24,6 @@ namespace ERP.DataService.Model.Model
         public bool IsCheckbox { set; get; }
           [StringLength(100)]
         public string FormName { set; get; }
+        public int? OrderNo { set; get; }
     }
 }

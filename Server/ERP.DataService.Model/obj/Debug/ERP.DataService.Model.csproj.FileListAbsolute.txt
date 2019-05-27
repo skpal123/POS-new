@@ -253,3 +253,6 @@ E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.
 E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
 E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingtransactiondetails.resources
 E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingtransactiondetails.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingoffer.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeordertype.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingisFirsttransaction.resources

@@ -112,12 +112,13 @@ export class InventoryLocationListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  createNewUnit(){
+  createNewLocation(){
    this.clearUnit();
     const dialogRef=this.matDialog.open(LocationEntryComponent,{
       data:this.location,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.6+'px',
       width:window.screen.width*.4+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

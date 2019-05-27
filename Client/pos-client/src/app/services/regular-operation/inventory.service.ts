@@ -8,6 +8,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SupplierTransaction } from '../../models/regular-operation/inventory/supplier-transaction.model';
 import { CustomerTransaction } from '../../models/regular-operation/inventory/customer-transaction.model';
+import { PurchaseSalesTransaction } from '../../models/regular-operation/inventory/purchase-sales-transaction.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -114,7 +115,7 @@ export class InventoryService {
     }
     public GetSalesTransactionList(customerId:string,formDate:Date,toDate:Date){
       var url=this._defaultRoute.InventoryService+'SalesTransactions/'+customerId+'/'+this._defaultRoute.convertDate(formDate)+'/'+this._defaultRoute.convertDate(toDate);
-      return this._httpClient.get<GroupItem[]>(url).pipe(
+      return this._httpClient.get<PurchaseSalesTransaction[]>(url).pipe(
         catchError(this.handleError)
       )
     }

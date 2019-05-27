@@ -82,6 +82,7 @@
     <Compile Include="Model\Administration\UserInfoView.cs" />
     <Compile Include="Model\Finance\VoucherDetailInfo.cs" />
     <Compile Include="Model\Finance\VoucherInfo.cs" />
+    <Compile Include="Model\Validation\CustomerTransactionValidation.cs" />
     <Compile Include="Model\Validation\UnitValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Validation\CategoryValidation.cs" />

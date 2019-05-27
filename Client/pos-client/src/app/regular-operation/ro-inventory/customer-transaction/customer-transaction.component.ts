@@ -1,4 +1,4 @@
-import { Component, OnInit ,ViewChild,Inject} from '@angular/core';
+import { Component, OnInit ,ViewChild,Inject, OnDestroy} from '@angular/core';
 import { CustomerTransaction } from '../../../models/regular-operation/inventory/customer-transaction.model';
 import { FormControl, NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -14,15 +14,19 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { ItemTransactionDetailsComponent } from '../item-transaction-details/item-transaction-details.component';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { Customer } from '../../../models/master-settings/inventory-defination/customer.model';
-import { CustomerEntryComponent } from '../../../master-settings/inventory-defination-module/customer-entry/customer-entry.component';
 import { CustomerSupplierTransactionDetails } from '../../../models/regular-operation/inventory/customer-supplier-transaction-details.model';
+import { PurchaseSalesTransaction } from '../../../models/regular-operation/inventory/purchase-sales-transaction.model';
+import { ValidationService } from '../../../services/common/validation.service';
+import { CustomerTransactionValidation } from '../../../models/validation/inventory/customer-transaction-validation.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
+import { CommonService } from '../../../services/common/common.service';
 
 @Component({
   selector: 'app-customer-transaction',
   templateUrl: './customer-transaction.component.html',
   styleUrls: ['./customer-transaction.component.css']
 })
-export class CustomerTransactionComponent implements OnInit {
+export class CustomerTransactionComponent implements OnInit,OnDestroy {
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerTransactionForm') itemForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -30,6 +34,7 @@ export class CustomerTransactionComponent implements OnInit {
   @ViewChild('formDateControl') formDateControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
   ledgerTouch:boolean=false;
+  formName:string="customer-transaction"
   checkedItems:CheckedItem[]=[];
   paymentModeFilter:boolean=true;
   ledgerSelectedItems :MultiSelectDropdown[]= [
@@ -48,9 +53,11 @@ export class CustomerTransactionComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
-  groupItemList:GroupItem[]=[];
-  oldGroupItemList:GroupItem[]=[];
+  groupItemList:PurchaseSalesTransaction[]=[];
+  groupItem:PurchaseSalesTransaction;
+  oldGroupItemList:PurchaseSalesTransaction[]=[];
   customerTransactionList:CustomerTransaction[]=[];
+  cTransactionValidation:CustomerTransactionValidation[]=[];
   paymentType:string="payment";
   paymentMethod:string="general";
   totalBalance1:number=0;
@@ -62,17 +69,17 @@ export class CustomerTransactionComponent implements OnInit {
   constructor(private _alertBox:AlertBoxService,
     public matDialogRef:MatDialogRef<CustomerTransactionComponent>,
     @Inject(MAT_DIALOG_DATA) public customerTransaction:CustomerTransaction,
-    private _postLoginservice:PostLoginService,
+    private _commonService:CommonService,
+    private _validationService:ValidationService,
+    private _navigationData:NavigationDataService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
     private _inventotyService:InventoryService,
   ) { }
   ngOnInit(){
     debugger
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10
-    };
+    this.getUserFormControlByFormName();
+    this.getItemFormInfo();
     if(this.customerTransaction.Id!=null){
       this.customerTransaction.TransactionDetailsList.forEach((a,index)=>{
         var groupItem=new GroupItem();
@@ -82,8 +89,10 @@ export class CustomerTransactionComponent implements OnInit {
         groupItem.TransactionDate=a.PaymentDate;
         groupItem.CustomerName=this.customerTransaction.CustomerName;
         this.groupItemList.push(groupItem);
-        this.checkedItems.push({IsChecked:true})
       });
+      this.DataList=this.groupItemList;
+      this.dataReady=true;
+      this.reload=true;
       if(this.customerTransaction.Ledger_Id!=null){
         this.ledgerSelectedItems.push({id:this.customerTransaction.Ledger_Id,itemName:this.customerTransaction.LedgerName});
       }
@@ -107,7 +116,10 @@ export class CustomerTransactionComponent implements OnInit {
       }
     })
     this.PaidAmountControl.valueChanges.subscribe(data=>{
-      if(this.customerTransaction.PaymentMethod=="general"&&!this.customerTransaction.IsUpdate){
+      if(data==""){
+        this.customerTransaction.PaidAmount=0
+      }
+      if(this.customerTransaction.PaymentMethod=="general"&&!this.customerTransaction.Id!=null){
         this.distributedTotalAmount(data)
       }
       else if(this.customerTransaction.PaymentMethod=="specific"){
@@ -117,6 +129,51 @@ export class CustomerTransactionComponent implements OnInit {
   }
   onNoClick(){
     this.matDialogRef.close();
+  }
+  getItemFormInfo(){
+    this._validationService.getCustomerTransactionValidationData().subscribe((response:CustomerTransactionValidation[])=>{
+      this.cTransactionValidation=response;
+    },error=>{
+      let message=error;
+      let dialogData=new DialogData();
+      dialogData.message=message.Message;
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  getUserFormControlByFormName(){
+    this.blockUi.start("Loading....,Please wait.")
+    this._commonService.getUserFormControlByFormName('transaction-details-list').subscribe(response=>{
+      this.blockUi.stop();
+      this.userControlList=response;
+      if(this.customerTransaction.Id!=null){
+        this.userControlList.forEach((u,index)=>{
+          if(this.userControlList[index]["Name"]=="NetPayableAmount")
+          {
+            this.userControlList[index]['IsEnable']=false
+          } 
+          if(this.userControlList[index]["Name"]=="PaidAmount")
+          {
+            this.userControlList[index]['IsEnable']=false
+          } 
+          if(this.userControlList[index]["Name"]=="History")
+          {
+            this.userControlList[index]['IsEnable']=false
+          }  
+          if(this.userControlList[index]["Name"]=="View")
+          {
+            this.userControlList[index]['IsEnable']=false
+          }  
+        })
+      }
+      this.ColumnList=this.userControlList;
+      this.columnReady=true;
+      this._customDatatableService.ColumnList=this.userControlList;
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
   }
   GetSalesTransactionList(customerId:string,formDate:Date,toDate:Date){
     debugger
@@ -130,11 +187,12 @@ export class CustomerTransactionComponent implements OnInit {
       this.groupItemList.forEach(a=>{
         a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
         this.customerTransaction.TotalDueAdvanceAmount+=(a.NetPayableAmount-a.PaidAmount);
-        this.checkedItems.push({IsChecked:false});
+        a.History="histrory",
+        a.View="view"
       })
-      this.dtTrigger.next();
-      this.dtTrigger.subscribe();
-      this.dtTrigger.complete();
+      this.DataList=this.groupItemList;
+      this.dataReady=true;
+      this.reload=true;
     },error=>{
       //this.blockUi.stop();
       let dialogData=new DialogData();
@@ -214,13 +272,13 @@ export class CustomerTransactionComponent implements OnInit {
       this.customerTransaction.Customer_Id=null;
     }
   }
+  payAmountChange(){
+    
+  }
   distributedTotalAmount(tAmount:number){
     debugger
     let totalAmount=Number(tAmount)
     let totalAmount2=Number(tAmount)
-    this.checkedItems.forEach(a=>{
-      a.IsChecked=false;
-    })
     if(totalAmount!=0){
       let isFound=false;
       this.groupItemList.forEach((a,index)=>{
@@ -243,7 +301,7 @@ export class CustomerTransactionComponent implements OnInit {
           if(totalAmount2>amount2){
             amount2+=this.groupItemList[index].NetPayableAmount-this.groupItemList[index].PaidAmount;
             isfound=true;
-            this.checkedItems[index].IsChecked=true;
+            a.IsChecked=true
           }
           else{
             if(!isfound){
@@ -252,15 +310,17 @@ export class CustomerTransactionComponent implements OnInit {
           }
         }
         else{
-          this.checkedItems[0].IsChecked=true;
+          this.groupItemList[0].IsChecked=true;
         }
       })
     }
     else{
       this.groupItemList.forEach(a=>{
-        a.PayAmount=(a.NetPayableAmount-a.PaidAmount)
+        a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
+        a.IsChecked=false;
       })
     }
+    this.DataList=this.groupItemList;
   }
   distributedTotalAmountForSpecific(tAmount:number){
     debugger
@@ -284,7 +344,7 @@ export class CustomerTransactionComponent implements OnInit {
     }
     else{
       this.groupItemList.forEach((a,index)=>{
-        if(this.checkedItems[index].IsChecked){
+        if(a.IsChecked){
           a.PayAmount=(a.NetPayableAmount-a.PaidAmount)
         }
       })
@@ -293,7 +353,7 @@ export class CustomerTransactionComponent implements OnInit {
   changePaidAmount(index:number){
     this.customerTransaction.PaidAmount=0;
     this.groupItemList.forEach((a,i)=>{
-      if(this.checkedItems[i].IsChecked){
+      if(a.IsChecked){
         this.customerTransaction.PaidAmount+=a.PayAmount
       }
     })
@@ -309,11 +369,48 @@ export class CustomerTransactionComponent implements OnInit {
       }
     }
   }
+  
+  dueAmountPaymentMethod(){
+    debugger
+    if(this.customerTransaction.PaymentMethod=="specific"){
+      this.customerTransaction.PaidAmount=0;
+    }
+  }
+  fullPayChange($event){
+    if($event.target.checked){
+      this.customerTransaction.PaidAmount=this.customerTransaction.TotalDueAdvanceAmount;
+    }
+    else{
+      this.customerTransaction.PaidAmount=0;
+    }
+  }
+  customButtonClicked($event:any){
+    debugger
+    
+  }
+  customCheckboxClicked($event:any){
+    debugger
+    if($event.rowData!=undefined)
+    {
+      this.groupItem=$event.rowData;
+      if(this.customerTransaction.PaymentMethod=='specific'){
+        let position=this.groupItemList.findIndex(m=>m.Id==this.groupItem.Id)
+        if($event.isChecked){
+          this.customerTransaction.PaidAmount+=Number(this.groupItemList[position].PayAmount)
+        }
+        else{
+          if(this.customerTransaction.PaidAmount>0){
+            this.customerTransaction.PaidAmount-=Number(this.groupItemList[position].PayAmount)
+          }
+        }
+      }
+    }
+  }
   saveCustomerTransaction(){
     debugger
     this.customerTransaction.TransactionDetailsList=[];
     this.groupItemList.forEach((a,index)=>{
-      if(this.checkedItems[index].IsChecked){
+      if(a.IsChecked){
         var transactionDetails=new CustomerSupplierTransactionDetails();
         transactionDetails.Group_Id=a.Id;
         transactionDetails.InvoiceNo=a.InvoiceNo;
@@ -361,19 +458,8 @@ export class CustomerTransactionComponent implements OnInit {
       })
     }
   }
-  dueAmountPaymentMethod(){
-    debugger
-    if(this.customerTransaction.PaymentMethod=="specific"){
-      this.customerTransaction.PaidAmount=0;
-    }
-  }
-  fullPayChange($event){
-    if($event.target.checked){
-      this.customerTransaction.PaidAmount=this.customerTransaction.TotalDueAdvanceAmount;
-    }
-    else{
-      this.customerTransaction.PaidAmount=0;
-    }
+  ngOnDestroy(){
+    this._navigationData.data=null;
   }
 }
 export class CheckedItem{

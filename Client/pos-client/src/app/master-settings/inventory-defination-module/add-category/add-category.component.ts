@@ -30,6 +30,7 @@ export class AddCategoryComponent implements OnInit {
 ) { }
 
   ngOnInit() {
+    debugger
     if(this.category.Id!=null){
       this.categoryForm.control.markAsDirty();
     }

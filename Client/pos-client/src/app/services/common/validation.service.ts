@@ -92,4 +92,10 @@ export class ValidationService {
         catchError(this.handleError)
       )
     }
+    public getCustomerTransactionValidationData(){
+      var url=this._defaultRoute.CommonService+'customerTransactionValidation';
+      return this._httpClient.get(url).pipe(
+        catchError(this.handleError)
+      )
+    }
 }
