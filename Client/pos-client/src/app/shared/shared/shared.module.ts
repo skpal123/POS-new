@@ -47,19 +47,20 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
-
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { Ng2CompleterModule } from "ng2-completer";
 import { AlertComponent } from '../alert/alert.component';
 import { TestComponent } from 'src/app/test/test.component';
+import {SelectListRequiredValidator} from 'src/app/shared/select-list-required-validator.directive';
+import {DuplicateCheckDirective} from 'src/app/shared/duplicate-check.directive'
 @NgModule({
   imports: [
     CommonModule,
    // AngularMultiSelectModule
     //Ng2CompleterModule
   ],
-  declarations: [AlertComponent,TestComponent],
+  declarations: [AlertComponent,TestComponent,SelectListRequiredValidator,DuplicateCheckDirective],
   exports:[ FormsModule,ReactiveFormsModule,DataTablesModule, 
     A11yModule,
     CdkStepperModule,
@@ -105,7 +106,8 @@ import { TestComponent } from 'src/app/test/test.component';
     ScrollingModule,
     Ng2CompleterModule,TestComponent,
     NgbModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    SelectListRequiredValidator,DuplicateCheckDirective
   ],
  entryComponents:[AlertComponent]
   

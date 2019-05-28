@@ -12,9 +12,9 @@
             <div class="form-group row" *ngIf="categoryValidation[0]?.CategoryId" [class.has-success]="categoryIdControl.valid&&categoryIdControl.touched" [class.has-error]="categoryIdControl.invalid&&categoryIdControl.touched">
                 <label for="categoryId" class="col-sm-3 col-form-label control-label" [class.required]="categoryIdControl.invalid">Category id</label>
                 <div class="col-sm-7" >
-                    <input class="form-control" [required]="categoryValidation[0]?.CategoryId&&categoryValidation[1]?.CategoryId" name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
+                    <input class="form-control" DuplicateCheck="tblCategory-CategoryId" [required]="categoryValidation[0]?.CategoryId&&categoryValidation[1]?.CategoryId" name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
                     <span class="help-block" *ngIf="categoryIdControl.invalid&&categoryIdControl.touched">
-                        Category id feild is required
+                        Category id feild is required  
                     </span>  
                 </div>
                 <div class="col-md-2"> 

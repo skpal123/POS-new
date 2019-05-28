@@ -51,4 +51,10 @@ export class CommonService {
       catchError(this.handleError)
     )
   }
+  public getDuplicateById(tableName:string,itemName:string,value){
+    var url=this._defaultRoute.CommonService+'duplicateCheck/'+tableName+'/'+itemName+'/'+value;
+    return this._httpClient.get(url).pipe(
+      catchError(this.handleError)
+    )
+  }
 }
