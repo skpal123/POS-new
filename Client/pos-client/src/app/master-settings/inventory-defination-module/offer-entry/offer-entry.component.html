@@ -1,3 +1,71 @@
-<p>
-  offer-entry works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5> Offer setup entry
+            <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+            <app-form-control-info-settings [formName]="formName"></app-form-control-info-settings>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <form #offerSetupValidation="ngForm">
+              <div class="form-group row" [class.has-success]="offerIdControl.valid&&offerIdControl.touched" [class.has-error]="offerIdControl.invalid&&offerIdControl.touched">
+                  <label for="offerId" class="col-sm-4 col-form-label control-label " [class.required]="offerIdControl.invalid">Item Id</label>
+                  <div class="col-sm-6" >
+                      <input class="form-control"  name="offerId" #offerIdControl="ngModel" id="offerId" [(ngModel)]="offerSetup.OfferId">
+                      <span class="help-block" *ngIf="offerIdControl.errors?.required&&offerIdControl.touched">
+                        Item Id feild is required
+                      </span>  
+                  </div>
+                  <div class="col-md-2"> 
+                      <app-autocode-generate
+                      [itemName]="itemName"
+                      (getGenerateAutoCode)="parentGetGeneratedCode1($event)"
+                      >
+                      </app-autocode-generate>
+                    </div>
+                </div>
+              <div class="form-group row" [class.has-success]="OfferNameControl.valid&&OfferNameControl.touched" [class.has-error]="OfferNameControl.invalid&&OfferNameControl.touched">
+                  <label for="OfferName" class="col-sm-4 col-form-label control-label" [class.required]="OfferNameControl.invalid">OfferName Name</label>
+                  <div class="col-sm-7" >
+                      <input class="form-control" name="OfferName" #OfferNameControl="ngModel" id="OfferName" [(ngModel)]="offerSetup.OfferName">
+                      <span class="help-block" *ngIf="OfferNameControl.errors?.required&&OfferNameControl.touched">
+                          Item name feild is required
+                      </span>  
+                  </div>
+                </div>
+                <div class="form-group row"  >
+                  <label for="ProductId" class="col-sm-4 col-form-label control-label" [class.required]="ProductIdControl.invalid">Product Name</label>
+                  <div class="col-sm-7" >
+                     <input style="display: none;" class="form-control" name="ProductId" #ProductIdControl="ngModel" [(ngModel)]="offerSetup.Product_Id">
+                     <app-item-dropdown 
+                     (itemOnItemSelect)="ItemOnSeletedItem($event)" 
+                     (itemOnItemDeSelect)="OnDeSeletedItem($event)"
+                      [itemSelectedItems]="itemSelectedItems"
+                      [IsNewItemAdd]="itemNew"
+                      [singleSelection]="singleSelection"
+                      >
+                     </app-item-dropdown> 
+                     <span class="help-block" *ngIf="ProductIdControl.errors?.required">
+                        Category name is required
+                    </span>  
+                  </div>
+                  <div class="col-md-1">
+                      <span id="pointer" (click)="createNewItem()">
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                      </span>
+                  </div>
+                </div>
+              <div class="row">
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="offerSetupValidation.invalid" (click)="saveItem()" value="{{offerSetup.Id==null?'Save':'Update'}}" class="btn btn-primary">
+                </div>
+                <div class="col-md-2 pull-right">
+                  <input type="button" [disabled]="!offerSetupValidation.dirty" (click)="clearItem()" value="Clear" class="btn btn-primary">
+                </div>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

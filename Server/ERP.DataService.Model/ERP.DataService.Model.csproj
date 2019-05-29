@@ -267,6 +267,10 @@
     <Compile Include="Migrations\201905270901365_change code formater.Designer.cs">
       <DependentUpon>201905270901365_change code formater.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905291520537_change offersetup.cs" />
+    <Compile Include="Migrations\201905291520537_change offersetup.Designer.cs">
+      <DependentUpon>201905291520537_change offersetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -473,6 +477,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905270901365_change code formater.resx">
       <DependentUpon>201905270901365_change code formater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905291520537_change offersetup.resx">
+      <DependentUpon>201905291520537_change offersetup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

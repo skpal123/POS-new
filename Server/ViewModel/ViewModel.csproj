@@ -60,6 +60,8 @@
     <Compile Include="Model\Inventory\ManufactureInfo.cs" />
     <Compile Include="Model\Common\MenuView.cs" />
     <Compile Include="Model\Common\ModuleView.cs" />
+    <Compile Include="Model\Inventory\OfferInfo.cs" />
+    <Compile Include="Model\Inventory\OfferSetupInfo.cs" />
     <Compile Include="Model\Inventory\PartyInfo.cs" />
     <Compile Include="Model\Inventory\PartyTransactionInfo.cs" />
     <Compile Include="Model\Common\PermissionTree.cs" />

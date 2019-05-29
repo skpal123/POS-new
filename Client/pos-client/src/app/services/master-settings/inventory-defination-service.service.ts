@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions,Headers } from '@angular/http';
 import { DefaultRouteService } from '../common/default-route.service';
-import { HttpService } from '../common/http.service';
-import { SessionService } from '../common/session.service';
 import { InventoryLocation } from '../../models/master-settings/inventory-defination/inventory-location.model';
 import { Unit } from '../../models/master-settings/inventory-defination/unit.model';
 import { Category } from '../../models/master-settings/inventory-defination/category.model';
@@ -13,12 +10,10 @@ import { Party } from '../../models/master-settings/inventory-defination/party.m
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { AlertBoxService } from '../../shared/alert-box.service';
-import { BlockUI,NgBlockUI } from 'ng-block-ui';
-import { DialogData } from '../../models/common/dialog-data.model';
 import { InventoryItem } from '../../models/master-settings/inventory-defination/inventory-item.model';
 import { Customer } from '../../models/master-settings/inventory-defination/customer.model';
 import { SettingSellprice } from '../../models/master-settings/inventory-defination/setting-sell-price.model';
+import { OfferSetup } from '../../models/master-settings/inventory-defination/offer-setup.model';
 
 @Injectable({
   providedIn: 'root'
@@ -315,6 +310,36 @@ export class InventoryDefinationServiceService {
   }
   public deleteCustomer(Id:string){
     var url=this._defaultRoute.InventoryService+'Customer/'+Id;
+    return this._httpClient.delete(url).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public getOfferSetupList(){
+    var url=this._defaultRoute.InventoryService+'OfferSetups';
+    return this._httpClient.get<OfferSetup[]>(url).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public CreateOfferSetup(offerSetup:OfferSetup){
+    var url=this._defaultRoute.InventoryService+'OfferSetup';
+    return this._httpClient.post<OfferSetup>(url,offerSetup).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public UpdateOfferSetup(offerSetup:OfferSetup){
+    var url=this._defaultRoute.InventoryService+'OfferSetup/'+offerSetup.Id;
+    return this._httpClient.put<boolean>(url,offerSetup).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public getOfferSetupById(Id:string){
+    var url=this._defaultRoute.InventoryService+'OfferSetup/'+Id;
+    return this._httpClient.get<OfferSetup>(url).pipe(
+      catchError(this.handleError)
+    )
+  }
+  public deleteOfferSetup(Id:string){
+    var url=this._defaultRoute.InventoryService+'OfferSetup/'+Id;
     return this._httpClient.delete(url).pipe(
       catchError(this.handleError)
     )

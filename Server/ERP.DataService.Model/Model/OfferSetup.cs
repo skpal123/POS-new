@@ -11,6 +11,8 @@ namespace ERP.DataService.Model.Model
     public class OfferSetup
     {
         public Guid Id { set; get; }
+        public string OfferName { set; get; }
+        public string OfferId { set; get; }
         public Guid? Product_Id { set; get; }
         public Guid? FreeProduct_Id { set; get; }
         public decimal? DiscountRate { set; get; }

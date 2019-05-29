@@ -63,7 +63,8 @@ import { OfferSetupComponent } from './offer-setup/offer-setup.component';
       ManufactureEntryComponent,
       FormDetailsControlComponent,
       CustomerEntryComponent,
-      CustomDatatableControlComponent
+      CustomDatatableControlComponent,
+      OfferEntryComponent
     ],
     exports:[
       SupplierEntryComponent,

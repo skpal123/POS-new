@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
     this._loginService.login(this.Username,this.Password,this.NewPassword,this.IpAddress).subscribe(response=>{
       this.blockUI.stop();
       var loggedData=response.json();
-      console.log(JSON.stringify( response.json()))
       sessionStorage.setItem('loggedData',JSON.stringify( response.json()));
      // sessionStorage.setItem('sessionId',)
       this._router.navigate(['login/postlogin']);  

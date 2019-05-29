@@ -14,6 +14,8 @@ using System.Data.Entity.Migrations;
 using ERP.DataService.Model;
 using ERPWebApiService.DataConnection;
 using System.Data.SqlClient;
+using ViewModel.Model.Inventory;
+
 namespace ERPWebApiService.Controllers
 {
     [RoutePrefix("api/InventoryService")]
@@ -1008,6 +1010,147 @@ namespace ERPWebApiService.Controllers
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
                 DatabaseCommand.ExcuteNonQuery("delete from Manufactures where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("OfferSetups")]
+        [HttpGet]
+        public HttpResponseMessage GetOfferSetupList()
+        {
+            try
+            {
+                List<OfferSetupInfo> offerSetupInfos = new List<OfferSetupInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select a.*,b.ItemName ProductName from tblofferSetup 
+                                                    a inner join tblInventoryItem b on a.Product_Id=b.Id", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        OfferSetupInfo offerSetupInfo = new OfferSetupInfo();
+                        offerSetupInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        offerSetupInfo.OfferId = rdr["OfferId"] != DBNull.Value ? rdr["OfferId"].ToString() : null;
+                        offerSetupInfo.OfferName = rdr["OfferName"] != DBNull.Value ? rdr["OfferName"].ToString() : null;
+                        offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;          
+                        offerSetupInfo.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"]) : 0;
+                        offerSetupInfo.BundleSize = rdr["BundleSize"] != DBNull.Value ? Convert.ToInt32(rdr["BundleSize"]) : 0;
+                        if (rdr["Product_Id"] != DBNull.Value)
+                        {
+                            offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
+                        }
+                        offerSetupInfos.Add(offerSetupInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, offerSetupInfos);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("OfferSetup")]
+        [HttpPost]
+        public HttpResponseMessage CreateOfferSetup(OfferSetupInfo offerSetupInfo)
+        {
+            try
+            {
+                OfferSetup offerSetup = new OfferSetup()
+                {
+                    Id= Guid.NewGuid(),
+                    OfferId = offerSetupInfo.OfferId,
+                    OfferName = offerSetupInfo.OfferName,
+                    Product_Id = offerSetupInfo.Product_Id,
+                    FreeProduct_Id = offerSetupInfo.FreeProduct_Id,
+                    DiscountRate = offerSetupInfo.DiscountRate,
+                    BundleSize = offerSetupInfo.BundleSize
+                };
+                ERPContext.OfferSetups.Add(offerSetup);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.Created, offerSetup);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("OfferSetup/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateOfferSetup(string id, OfferSetupInfo offerSetupInfo)
+        {
+            try
+            {
+                var oOffersetup = ERPContext.OfferSetups.FirstOrDefault(x => x.Id == offerSetupInfo.Id);
+                if (oOffersetup != null)
+                {
+                    OfferSetup offerSetup = new OfferSetup()
+                    {
+                        Id = Guid.NewGuid(),
+                        OfferId = offerSetupInfo.OfferId,
+                        OfferName = offerSetupInfo.OfferName,
+                        Product_Id = offerSetupInfo.Product_Id,
+                        FreeProduct_Id = offerSetupInfo.FreeProduct_Id,
+                        DiscountRate = offerSetupInfo.DiscountRate,
+                        BundleSize = offerSetupInfo.BundleSize
+                    };
+                    ERPContext.OfferSetups.AddOrUpdate(offerSetup);
+                    ERPContext.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("OfferSetup/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetOfferSetupId(string id)
+        {
+            try
+            {
+                OfferSetupInfo offerSetupInfo = new OfferSetupInfo();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand(@"select a.*,b.ItemName ProductName from tblofferSetup 
+                                                    a inner join tblInventoryItem b on a.Product_Id=b.Id where a.id=@id", con);
+                    cmd.Parameters.AddWithNullableValue("@id",id);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        offerSetupInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        offerSetupInfo.OfferId = rdr["OfferId"] != DBNull.Value ? rdr["OfferId"].ToString() : null;
+                        offerSetupInfo.OfferName = rdr["OfferName"] != DBNull.Value ? rdr["OfferName"].ToString() : null;
+                        offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;
+                        offerSetupInfo.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"]) : 0;
+                        offerSetupInfo.BundleSize = rdr["BundleSize"] != DBNull.Value ? Convert.ToInt32(rdr["BundleSize"]) : 0;
+                        if (rdr["Product_Id"] != DBNull.Value)
+                        {
+                            offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, offerSetupInfo);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("OfferSetup/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteOfferSetUp(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from tblofferSetup where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)

@@ -15,6 +15,7 @@ import { PartyListComponent } from './party-list/party-list.component';
 import { ManufactureListComponent } from './manufacture-list/manufacture-list.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { SettingPriceComponent } from './setting-price/setting-price.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
       {path:'add-party',component:PartyListComponent},
       {path:'add-manufacture',component:ManufactureListComponent},
       {path:'add-customer',component:CustomerListComponent},
-      {path:'setting-price',component:SettingPriceComponent}
+      {path:'setting-price',component:SettingPriceComponent},
+      {path:'offer-setup',component:OfferSetupComponent}
     ]
 
   }

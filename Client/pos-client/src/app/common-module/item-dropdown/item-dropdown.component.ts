@@ -11,12 +11,13 @@ import { DialogData } from '../../models/common/dialog-data.model';
   styleUrls: ['./item-dropdown.component.css']
 })
 export class ItemDropdownComponent implements OnChanges {
-
   itemList:SelectDropdown[]=[]
+  @Input() IsNewItemAdd:boolean=false;
+  @Input() singleSelection:boolean
   @Input() subCategoryId:string
-  @Input() subledgerSelectedItems:any=[];
-  @Output() subledgerOnItemSelect:EventEmitter <any>=new EventEmitter <any>();
-  @Output() subledgerOnItemDeSelect:EventEmitter <any>=new EventEmitter <any>();
+  @Input() itemSelectedItems:any=[];
+  @Output() itemOnItemSelect:EventEmitter <any>=new EventEmitter <any>();
+  @Output() itemOnItemDeSelect:EventEmitter <any>=new EventEmitter <any>();
 
   itemDropdownList: MultiSelectDropdown[] = [
     { id: "0", itemName: "Select" }
@@ -36,16 +37,26 @@ export class ItemDropdownComponent implements OnChanges {
 
   ngOnChanges(){
     debugger
-    if(this.subCategoryId!=null && this.subCategoryId!="0"){
-      this.getItemList(this.subCategoryId);
-    }else if(this.subCategoryId==null){
-      this.getItemList("00000000-0000-0000-0000-000000000000")
-
+    if(this.IsNewItemAdd){
+      if(this.subCategoryId!=null && this.subCategoryId!="0"){
+        this.getItemList(this.subCategoryId);
+      }else if(this.subCategoryId==null){
+        this.getItemList("00000000-0000-0000-0000-000000000000")
+  
+      }
+    }
+    else{
+      if(this.subCategoryId!=null && this.subCategoryId!="0"){
+        this.getItemList(this.subCategoryId);
+      }else if(this.subCategoryId==null){
+        this.getItemList("00000000-0000-0000-0000-000000000000")
+  
+      }
     }
   }
   getItemList(subCategoryId:string){
-    this.itemDropdownList=[];
-    this.subledgerSelectedItems=[];
+    //this.itemDropdownList=[];
+    //this.itemSelectedItems=[];
     this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
       this.itemList=response
       if(this.itemList.length>0){
@@ -59,13 +70,13 @@ export class ItemDropdownComponent implements OnChanges {
       this._alertBox.openDialog(dialogData);
     })
   }
-  subledgerOnItemSelect1($event:MultiSelectDropdown){
+  itemOnItemSelect1($event:MultiSelectDropdown){
     debugger
-    this.subledgerOnItemSelect.emit($event)
+    this.itemOnItemSelect.emit($event)
   }
-  subledgerOnItemDeSelect1($event){ 
+  itemOnItemDeSelect1($event){ 
     debugger
-    this.subledgerOnItemSelect.emit($event)
+    this.itemOnItemDeSelect.emit($event)
   }
 
 }

@@ -260,3 +260,5 @@ E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.
 E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeordertype.resources
 E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addingisFirsttransaction.resources
 E:\development_Sumon\POS_New\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changecodeformater.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changecodeformater.resources
+E:\My Project\ProjectGit\POS\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeoffersetup.resources
