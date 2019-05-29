@@ -33,10 +33,13 @@
                 <div class="form-group row" *ngIf="subcategoryValidation[0]?.SubCategoryId" [class.has-success]="subcategoryIdControl.valid&&subcategoryIdControl.touched" [ngClass]="{'has-error':subcategoryIdControl.invalid&&subcategoryIdControl.touched}">
                     <label for="categoryId" class="col-sm-3 col-form-label control-label" [class.required]="subcategoryIdControl.invalid">Sub category id</label>
                     <div class="col-sm-7" >
-                        <input class="form-control" [required]="subcategoryValidation[0]?.SubCategoryId&&subcategoryValidation[1]?.SubCategoryId" name="SubCategoryId" #subcategoryIdControl="ngModel" id="SubCategoryId" [(ngModel)]="subcategory.SubCategoryId">
-                        <span class="help-block" *ngIf="subcategoryIdControl.invalid&&subcategoryIdControl.touched">
+                        <input class="form-control" subcategoryCheck [required]="subcategoryValidation[0]?.SubCategoryId&&subcategoryValidation[1]?.SubCategoryId" name="SubCategoryId" #subcategoryIdControl="ngModel" id="SubCategoryId" [(ngModel)]="subcategory.SubCategoryId">
+                        <span class="help-block" *ngIf="subcategoryIdControl.errors?.required&&subcategoryIdControl.touched">
                             Sub Category id feild is required
-                        </span>  
+                        </span>
+                        <span class="help-block" *ngIf="subcategoryIdControl.errors?.exists&&subcategoryIdControl.touched">
+                            Sub category id already taken
+                        </span>    
                     </div>
                     <div class="col-md-2"> 
                       <app-autocode-generate

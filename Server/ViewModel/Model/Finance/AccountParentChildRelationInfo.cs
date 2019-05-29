@@ -23,6 +23,8 @@ namespace ViewModel.Model
         public Guid? ParentAccount_Id { set; get; }
         public Guid? ChildAccount_Id { set; get; }
         public bool? IsLeaf { set; get; }
+        public bool? Status { set; get; }
+        public bool? IsClicked { set; get; }
         public bool? HasSubleder { set; get; }
         public List<AccountParentChildRelationInfo> Children { set; get; }
     }

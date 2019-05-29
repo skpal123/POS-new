@@ -47,7 +47,9 @@ namespace ERPWebApiService.Controllers
                                        ParentAccId = pcr.ParentAccId,
                                        ChildGroupId = pcr.ChildGroupId,
                                        ChildLevelId = pcr.ChildLevelId,
-                                       ChildAccount_Id = pcr.ChildAccount_Id                                     
+                                       ChildAccount_Id = pcr.ChildAccount_Id,
+                                       Status = false,
+                                       IsClicked = false
                                    }).ToList();
                 ChartOfAccountListTree = (from acc in ERPContext.Accounts
                                           where acc.LevelId == 1 && acc.AccId == 1
@@ -62,6 +64,8 @@ namespace ERPWebApiService.Controllers
                                               ChildLevelId=acc.LevelId,
                                               ChildAccId=acc.AccId,
                                               IsLeaf=acc.IsLeaf,
+                                              Status = false,
+                                              IsClicked = false
                                              // HasSubleder=acc.HasSubLedger
                                           }).ToList();
                 foreach (var account in ChartOfAccountListTree)
@@ -74,6 +78,8 @@ namespace ERPWebApiService.Controllers
                     ChartOfAccount.ChildLevelId = account.ChildLevelId;
                     ChartOfAccount.ChildAccId = account.ChildAccId;
                     ChartOfAccount.IsLeaf = account.IsLeaf;
+                    ChartOfAccount.Status = account.Status;
+                    ChartOfAccount.IsClicked = account.IsClicked;
                     //ChartOfAccount.HasSubleder = account.HasSubleder;
                     ChartOfAccount.Children = genterateAccountTree(accountList, account.AccountId);
                     ChartOfAccountListTree2.Add(ChartOfAccount);
@@ -115,6 +121,8 @@ namespace ERPWebApiService.Controllers
                     ChildLevelId = x.ChildLevelId,
                     ChildAccount_Id = x.ChildAccount_Id,
                     IsLeaf=x.IsLeaf,
+                    Status = x.Status,
+                    IsClicked = x.IsClicked,
                    // HasSubleder=x.HasSubleder,
                     Children = genterateAccountTree(accoountList, x.ChildAccount_Id)
                 }).ToList();

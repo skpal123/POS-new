@@ -14,6 +14,11 @@ namespace ERP.DataService.Model
         {
 
         }
+        public SumonERPContext(string connectionString)
+            : base(connectionString)
+        {
+
+        }
         public DbSet<UserInfo> UserInfos { set; get; }
         public DbSet<Module> Modules { set; get; }
         public DbSet<Menu> Menus { set; get; }

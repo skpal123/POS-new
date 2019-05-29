@@ -76,7 +76,8 @@ export class ItemCategoryListComponent implements OnInit {
       const dialogRef=this.matDialog.open(AddCategoryComponent,{
         data:this.category,
         disableClose:true,
-        height:window.screen.height*.6+'px',
+        height:'auto',
+        maxHeight:window.screen.height*.6+'px',
         width:window.screen.width*.4+'px'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -116,7 +117,8 @@ export class ItemCategoryListComponent implements OnInit {
     const dialogRef=this.matDialog.open(AddCategoryComponent,{
       data:this.category,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      height:'auto',
+      maxHeight:window.screen.height*.6+'px',
       width:window.screen.width*.4+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{

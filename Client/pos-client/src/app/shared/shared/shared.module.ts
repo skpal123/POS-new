@@ -47,65 +47,47 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
-
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { Ng2CompleterModule } from "ng2-completer";
 import { AlertComponent } from '../alert/alert.component';
 import { TestComponent } from 'src/app/test/test.component';
+import {SelectListRequiredValidator} from 'src/app/shared/select-list-required-validator.directive';
+import {DuplicateCheckDirective} from 'src/app/shared/duplicate-check.directive'
+import {CategoryExistingCheckAsyncValidator} from 'src/app/shared/categoryid-duplicaion-check.directive'
+import {SubcategoryExistingCheckAsyncValidator} from 'src/app/shared/subcategory-duplication-check.directive'
+import {ItemExistingCheckAsyncValidator} from 'src/app/shared/itemId-duplication-check.directive'
+import {SupplierExistingCheckAsyncValidator} from 'src/app/shared/supplierid-duplication.directive'
+import {CustomerExistingCheckAsyncValidator} from 'src/app/shared/customerid-duplication-check.directive'
 @NgModule({
   imports: [
     CommonModule,
    // AngularMultiSelectModule
     //Ng2CompleterModule
   ],
-  declarations: [AlertComponent,TestComponent],
+  declarations: [AlertComponent,TestComponent,SelectListRequiredValidator,
+    DuplicateCheckDirective,
+    CategoryExistingCheckAsyncValidator,SubcategoryExistingCheckAsyncValidator,
+    ItemExistingCheckAsyncValidator,SupplierExistingCheckAsyncValidator,
+    CustomerExistingCheckAsyncValidator
+  ],
   exports:[ FormsModule,ReactiveFormsModule,DataTablesModule, 
-    A11yModule,
-    CdkStepperModule,
-    CdkTableModule,
-    CdkTreeModule,
-    DragDropModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    PortalModule,
+    A11yModule,CdkStepperModule,CdkTableModule,CdkTreeModule,DragDropModule,MatAutocompleteModule,
+    MatBadgeModule,MatBottomSheetModule,MatButtonModule,MatButtonToggleModule,MatCardModule,MatCheckboxModule,
+    MatChipsModule,MatStepperModule,MatDatepickerModule, MatDialogModule,MatDividerModule,
+    MatExpansionModule,MatGridListModule,MatIconModule,MatInputModule,MatListModule,MatMenuModule,
+    MatNativeDateModule,MatPaginatorModule,MatProgressBarModule,MatProgressSpinnerModule,
+    MatRadioModule,MatRippleModule,MatSelectModule,MatSidenavModule,
+    MatSliderModule, MatSlideToggleModule, MatSnackBarModule,MatSortModule,
+    MatTableModule,MatTabsModule,MatToolbarModule,MatTooltipModule,MatTreeModule,PortalModule,
     ScrollingModule,
     Ng2CompleterModule,TestComponent,
     NgbModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
+    SelectListRequiredValidator,DuplicateCheckDirective,
+    CategoryExistingCheckAsyncValidator,SubcategoryExistingCheckAsyncValidator,
+    SupplierExistingCheckAsyncValidator,ItemExistingCheckAsyncValidator,
+    CustomerExistingCheckAsyncValidator
   ],
  entryComponents:[AlertComponent]
   

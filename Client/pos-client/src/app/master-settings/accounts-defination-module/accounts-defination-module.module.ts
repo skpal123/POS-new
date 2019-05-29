@@ -9,6 +9,7 @@ import { AccountOpeningComponent } from './account-opening/account-opening.compo
 import { CoaTreeComponent } from './coa-tree/coa-tree.component';
 import { SubledgerOpeningComponent } from './subledger-opening/subledger-opening.component';
 import { AddSubledgerComponent } from './add-subledger/add-subledger.component';
+import { AddChartOfAccountComponent } from './add-chart-of-account/add-chart-of-account.component';
 
 @NgModule({
   imports: [
@@ -19,8 +20,8 @@ import { AddSubledgerComponent } from './add-subledger/add-subledger.component';
   ],
   declarations: [AcountLayoutComponent, ChartOfAccountComponent, 
     AccountOpeningComponent, CoaTreeComponent,
-  SubledgerOpeningComponent, AddSubledgerComponent],
-  entryComponents:[AddSubledgerComponent]
+  SubledgerOpeningComponent, AddSubledgerComponent, AddChartOfAccountComponent],
+  entryComponents:[AddSubledgerComponent,AddChartOfAccountComponent]
   
 })
 export class AccountsDefinationModuleModule { }

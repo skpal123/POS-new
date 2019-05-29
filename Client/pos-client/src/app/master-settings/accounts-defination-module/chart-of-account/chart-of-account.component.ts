@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material';
 import { AddSubledgerComponent } from '../add-subledger/add-subledger.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgForm } from '@angular/forms';
+import { AddChartOfAccountComponent } from '../add-chart-of-account/add-chart-of-account.component';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
@@ -47,7 +48,8 @@ export class ChartOfAccountComponent implements OnInit {
       this._alertBoxService.openDialog(dialogData);
     })
   }
-  expandAllChildNode(node:ChartOfAccountTree){
+  collapseAllChildNode(node:ChartOfAccountTree){
+    debugger
     this.isFound=false;
     var position= this.chartOfAccountTreeList.findIndex(fea=>fea.AccountId==node.AccountId);
     if(position!=-1){
@@ -55,13 +57,13 @@ export class ChartOfAccountComponent implements OnInit {
       if(this.chartOfAccountTreeList[position].IsClicked){
         this.chartOfAccountTreeList[position].IsClicked=false;
         this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
-          a.Status=true
+          a.Status=false
         })
        }
        else{
         this.chartOfAccountTreeList[position].IsClicked=true;
         this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
-          a.Status=false
+          a.Status=true
         })
        }
     }
@@ -73,7 +75,7 @@ export class ChartOfAccountComponent implements OnInit {
           if(chartOfAcc.Children[position].IsClicked){
             chartOfAcc.Children[position].IsClicked=false;
             chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
-            a.Status=true
+            a.Status=false
             if(a.Children!=null){
               this.changeStatus(a.Children,true);
             }
@@ -82,7 +84,55 @@ export class ChartOfAccountComponent implements OnInit {
         else{
           chartOfAcc.Children[position].IsClicked=true;
           chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
+          a.Status=true
+           if(a.Children!=null){
+            this.changeStatus(a.Children,false);
+           }
+         })
+        }
+       }
+       else{
+          this.findChildPosition(chartOfAcc.Children,node)
+       }
+      })
+    }
+  }
+  expandAllChildNode(node:ChartOfAccountTree){
+    this.isFound=false;
+    var position= this.chartOfAccountTreeList.findIndex(fea=>fea.AccountId==node.AccountId);
+    if(position!=-1){
+      this.isFound=true;
+      if(this.chartOfAccountTreeList[position].IsClicked){
+        this.chartOfAccountTreeList[position].IsClicked=false;
+        this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
           a.Status=false
+        })
+       }
+       else{
+        this.chartOfAccountTreeList[position].IsClicked=true;
+        this.chartOfAccountTreeList[position].Children.forEach((a,b,array)=>{
+          a.Status=true
+        })
+       }
+    }
+    else{
+      this.chartOfAccountTreeList.forEach((chartOfAcc,index,array)=>{
+        let position=chartOfAcc.Children.findIndex(fea=>fea.AccountId==node.AccountId);
+        if(position!=-1){
+          this.isFound=true;
+          if(chartOfAcc.Children[position].IsClicked){
+            chartOfAcc.Children[position].IsClicked=false;
+            chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
+            a.Status=false
+            if(a.Children!=null){
+              this.changeStatus(a.Children,true);
+            }
+          })
+        }
+        else{
+          chartOfAcc.Children[position].IsClicked=true;
+          chartOfAcc.Children[position].Children.forEach((a,b,array)=>{
+          a.Status=true
            if(a.Children!=null){
             this.changeStatus(a.Children,false);
            }
@@ -103,7 +153,7 @@ export class ChartOfAccountComponent implements OnInit {
           if(coa.Children[position].IsClicked){
             coa.Children[position].IsClicked=false;
             coa.Children[position].Children.forEach((a,b,array)=>{
-            a.Status=true
+            a.Status=false
             if(a.Children!=null){
               this.changeStatus(a.Children,true)
             }
@@ -112,7 +162,7 @@ export class ChartOfAccountComponent implements OnInit {
         else{
           coa.Children[position].IsClicked=true;
           coa.Children[position].Children.forEach((a,b,array)=>{
-          a.Status=false
+          a.Status=true
           if(a.Children!=null){
             this.changeStatus(a.Children,false)
           }
@@ -132,9 +182,9 @@ export class ChartOfAccountComponent implements OnInit {
       }
     })
   }
-  selectedNode(selectedNode:ChartOfAccountTree){
-    console.log(selectedNode)
-    this.accountClicked=true;
+  addNewAccount(status:string,selectedNode:ChartOfAccountTree){
+    debugger
+    this.Status=status;
     if(this.Status=="add"){
       var AutoAccountCode;
       this.account.Id=null;
@@ -169,6 +219,50 @@ export class ChartOfAccountComponent implements OnInit {
         this.IsSubledgerEnable=false;
       }
     }
+    this.matDialog.open(AddChartOfAccountComponent,{
+      data:this.account,
+      disableClose:true,
+      height:'auto',
+      width:window.screen.width*.5+'px'
+    })
+  }
+  selectedNode(selectedNode:ChartOfAccountTree){
+    // console.log(selectedNode)
+    // this.accountClicked=true;
+    // if(this.Status=="add"){
+    //   var AutoAccountCode;
+    //   this.account.Id=null;
+    //   this._service.getMaxAccidByGroupIdAndLevelId(selectedNode.ChildGroupId,selectedNode.ChildLevelId+1).subscribe(response=>{
+    //     let maxAccid=response
+    //     let newAccid=maxAccid+1;
+    //     let newlevel=selectedNode.ChildLevelId+1;
+    //     this.account.LevelId=newlevel;
+    //     this.account.AccId=newAccid;
+    //     this.account.GroupId=selectedNode.ChildGroupId
+    //     AutoAccountCode=selectedNode.ChildGroupId+"0"+newlevel+"00"+newAccid.toString();
+    //     this.account.AutoAccountCode=AutoAccountCode;
+    //     this.account.ManualAccountCode=AutoAccountCode;
+    //     this.account.AccountDescription=null;
+    //     this.account.ParentAccountId=selectedNode.AccountId;
+    //   },error=>{
+    //     var dialogData=new DialogData();
+    //     dialogData.message=error
+    //     this._alertBoxService.openDialog(dialogData);
+    //   })
+    // }
+    // else{
+    //   this.account.Id=selectedNode.AccountId;
+    //   this.account.ManualAccountCode=selectedNode.ManualAccountCode;
+    //   this.account.AutoAccountCode=selectedNode.AutoAccountCode;
+    //   this.account.AccountDescription=selectedNode.AccountDescription;
+    //   if(selectedNode.IsLeaf){
+    //     this.IsSubledgerEnable=true;
+    //     this.subledger.AccountId=selectedNode.AccountId;
+    //   }
+    //   else{
+    //     this.IsSubledgerEnable=false;
+    //   }
+    // }
   }
   createChartOfAccount(){
     if(this.account.Id==null){

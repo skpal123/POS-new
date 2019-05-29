@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using ERPWebApiService.ExrensionMethod;
 using ViewModel.Model;
 using System.Data.Entity.Migrations;
 using ERP.DataService.Model;
@@ -27,7 +28,8 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var unitList = ERPContext.Units.Select(x => new UnitInfo
+                var erpContect = new SumonERPContext("SumonPOSContext2");
+                var unitList = erpContect.Units.Select(x => new UnitInfo
                 {
                     Id = x.Id,
                     UnitName = x.UnitName,
@@ -2335,5 +2337,87 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }           
         }
+        [Route("categoryIdCheck/{value}")]
+        [HttpGet]
+        public HttpResponseMessage GetCategoryDuplicate(string value)
+        {
+            try
+            {
+                using (SqlConnection con=new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd=new SqlCommand("select count(1) from tblCategory where categoryId=@value",con);
+                    cmd.Parameters.AddWithNullableValue("@value",value);
+                    con.Open();
+                    int result = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (result > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, true);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subcategoryIdCheck/{value}")]
+        [HttpGet]
+        public HttpResponseMessage GetSubCategoryDuplicate(string value)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("select count(1) from tblsubCategory where subcategoryId=@value",con);
+                    cmd.Parameters.AddWithNullableValue("@value", value);
+                    con.Open();
+                    int result = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (result > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, true);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("itemIdCheck/{value}")]
+        [HttpGet]
+        public HttpResponseMessage GetItemDuplicateByItemId(string value)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("select count(1) from tblInventoryItem where ItemId=@value",con);
+                    cmd.Parameters.AddWithNullableValue("@value", value);
+                    con.Open();
+                    int result = Convert.ToInt32(cmd.ExecuteScalar());
+                    if (result > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, true);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+      
     }
 }

@@ -116,6 +116,39 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("duplicateCheck/{tableName}/{itemName}/{value}")]
+        [HttpGet]
+        public HttpResponseMessage CheckDuplicateCodeById(string tableName,string columnName,string value )
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("proc_checkDuplicateCode", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@@tableName", tableName);
+                    cmd.Parameters.AddWithValue("@columnName", columnName);
+                    cmd.Parameters.AddWithValue("@value",value);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    return Request.CreateResponse(HttpStatusCode.OK,cmd.ExecuteReader().ToString());
+
+                }
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
         [Route("saveColumnInfo/{formName}")]
         [HttpPut]
         public HttpResponseMessage CreateUserControlFormInfo(string formName, List<UserFormControlInfo> userFormControls)
