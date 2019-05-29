@@ -27,6 +27,7 @@ import { SettingPriceComponent } from './setting-price/setting-price.component';
 import { OfferComponent } from './offer/offer.component';
 import { OfferEntryComponent } from './offer-entry/offer-entry.component';
 import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
+import { OfferSetupComponent } from './offer-setup/offer-setup.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,7 @@ import { CustomDatatableControlComponent } from '../../common-module/custom-data
     PartyListComponent, 
     PartyEntryComponent, 
     ManufactureListComponent, 
-    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent, SettingPriceComponent, OfferComponent, OfferEntryComponent
+    ManufactureEntryComponent, CustomerListComponent, CustomerEntryComponent, SettingPriceComponent, OfferComponent, OfferEntryComponent, OfferSetupComponent
   ],
     entryComponents:[
       AddUnitComponent,AddSubcategoryComponent,
