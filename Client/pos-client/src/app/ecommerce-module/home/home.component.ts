@@ -8,9 +8,45 @@ import * as $ from 'jquery'
 export class HomeComponent implements OnInit {
   totalItem:number=0;
   constructor(){}
-  ngOnInit(){
+  propertyTags: any = [
+    {Id:"1",Name:"west"},
+    {Id:"2",Name:"east"},
+    {Id:"3",Name:"pool"}
+  ];
+  pointOfInterests: any = [
+    {Id:"1",Name:"park",Value:0,tags:[]},
+    {Id:"2",Name:"school",Value:0,tags:[]},
+    {Id:"2",Name:"hospital",Value:0,tags:[]}
+  ];
+  mixeds:mixed[]=[];
 
+  p:any[][]=[];
+  a:any[]=[];
+  b:any[]=[];
+  ngOnInit(){
+    this.getDynamicTable()
   }
+  getDynamicTable(){
+    debugger
+    //this.a=this.pointOfInterests;
+    //this.b=this.propertyTags
+    this.pointOfInterests.forEach((s,t,n)=>{
+      this.a=[];
+      this.propertyTags.forEach((p,q,r)=>{
+        var poi=new mixed();
+        poi.poiId=s.Id;
+        poi.tagId=p.Id
+        poi.value=0
+        this.a.push(poi)
+       })
+       this.p.push(this.a);
+    })
+  }
+  save(){
+    debugger
+    console.log(this.p);
+  }
+ 
   clickPlusBtn(){
     this.totalItem++
   }
@@ -23,4 +59,15 @@ export class HomeComponent implements OnInit {
   off(){
     document.getElementById("overlay").style.display = "none";
   }
+}
+export class mixed{
+  Id:string;
+  poiId:string;
+  tagId:string;
+  value:number;
+}
+export class TagPoi{
+  TagId:string;
+  Pois:any[];
+  Id:string;
 }

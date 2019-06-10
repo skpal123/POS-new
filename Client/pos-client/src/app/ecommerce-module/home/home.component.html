@@ -187,4 +187,17 @@
       </div>
     </div>
   </div>
+
+  <table border="1px solid black">
+    <th></th><th *ngFor="let tag of pointOfInterests;">{{tag.Name}}</th>
+    <tr *ngFor="let a of propertyTags;let i=index;">
+      <td>{{a.Name}}</td>
+        <td *ngFor="let b of pointOfInterests; let j=index;">
+           <input type="text" [(ngModel)]="p[i][j].value">
+        </td>
+      </tr>
+</table>
+
+<input type="button" value="Submit" (click)="save()">
+
 </div>

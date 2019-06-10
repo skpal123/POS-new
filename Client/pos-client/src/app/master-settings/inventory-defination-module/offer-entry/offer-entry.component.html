@@ -37,12 +37,13 @@
                 <div class="form-group row"  >
                   <label for="ProductId" class="col-sm-4 col-form-label control-label" [class.required]="ProductIdControl.invalid">Product Name</label>
                   <div class="col-sm-7" >
-                     <input style="display: none;" class="form-control" name="ProductId" #ProductIdControl="ngModel" [(ngModel)]="offerSetup.Product_Id">
+                     <input style="display: none;" name="ProductId" #ProductIdControl="ngModel" [(ngModel)]="offerSetup.Product_Id">
                      <app-item-dropdown 
                      (itemOnItemSelect)="ItemOnSeletedItem($event)" 
                      (itemOnItemDeSelect)="OnDeSeletedItem($event)"
                       [itemSelectedItems]="itemSelectedItems"
                       [IsNewItemAdd]="itemNew"
+                      [subCategoryId]="subCategoryId"
                       [singleSelection]="singleSelection"
                       >
                      </app-item-dropdown> 
@@ -54,6 +55,47 @@
                       <span id="pointer" (click)="createNewItem()">
                           <img height="30px" width="30px" src="./assets/Img/addicon.png">
                       </span>
+                  </div>
+                </div>
+                <div class="form-group row"  >
+                  <label for="FreeProductId" class="col-sm-4 col-form-label control-label" [class.required]="FreeProductIdControl.invalid">Free Product Name</label>
+                  <div class="col-sm-7" >
+                     <input style="display: none;" class="form-control" name="FreeProductId" #FreeProductIdControl="ngModel" [(ngModel)]="offerSetup.FreeProduct_Id">
+                     <app-item-dropdown 
+                     (itemOnItemSelect)="ItemOnSeletedItem($event)" 
+                     (itemOnItemDeSelect)="OnDeSeletedItem($event)"
+                      [itemSelectedItems]="freeItemSelectedItems"
+                      [IsNewItemAdd]="itemNew"
+                      [subCategoryId]="subCategoryId"
+                      [singleSelection]="singleSelection1"
+                      >
+                     </app-item-dropdown> 
+                     <span class="help-block" *ngIf="FreeProductIdControl.errors?.required">
+                        Category name is required
+                    </span>  
+                  </div>
+                  <div class="col-md-1">
+                      <span id="pointer" (click)="createNewItem()">
+                          <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                      </span>
+                  </div>
+                </div>
+                <div class="form-group row" [class.has-success]="DiscountRateControl.valid&&DiscountRateControl.touched" [class.has-error]="DiscountRateControl.invalid&&DiscountRateControl.touched">
+                  <label for="discountRate" class="col-sm-4 col-form-label control-label" [class.required]="DiscountRateControl.invalid">Discount rate</label>
+                  <div class="col-sm-7" >
+                      <input class="form-control" name="discountRate" #DiscountRateControl="ngModel" id="discountRate" [(ngModel)]="offerSetup.DiscountRate">
+                      <span class="help-block" *ngIf="DiscountRateControl.errors?.required&&DiscountRateControl.touched">
+                          Discount rate is required
+                      </span>  
+                  </div>
+                </div>
+                <div class="form-group row" [class.has-success]="BundleSizeControl.valid&&BundleSizeControl.touched" [class.has-error]="BundleSizeControl.invalid&&BundleSizeControl.touched">
+                  <label for="BundleSize" class="col-sm-4 col-form-label control-label" [class.required]="DiscountRateControl.invalid">Bundle Size</label>
+                  <div class="col-sm-7" >
+                      <input class="form-control" name="BundleSize" #BundleSizeControl="ngModel" id="BundleSize" [(ngModel)]="offerSetup.BundleSize">
+                      <span class="help-block" *ngIf="BundleSizeControl.errors?.required&&BundleSizeControl.touched">
+                        Bundle size is required
+                      </span>  
                   </div>
                 </div>
               <div class="row">

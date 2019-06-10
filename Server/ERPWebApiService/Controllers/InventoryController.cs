@@ -1059,19 +1059,41 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                OfferSetup offerSetup = new OfferSetup()
+                if (offerSetupInfo.IsSingle)
                 {
-                    Id= Guid.NewGuid(),
-                    OfferId = offerSetupInfo.OfferId,
-                    OfferName = offerSetupInfo.OfferName,
-                    Product_Id = offerSetupInfo.Product_Id,
-                    FreeProduct_Id = offerSetupInfo.FreeProduct_Id,
-                    DiscountRate = offerSetupInfo.DiscountRate,
-                    BundleSize = offerSetupInfo.BundleSize
-                };
-                ERPContext.OfferSetups.Add(offerSetup);
-                ERPContext.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.Created, offerSetup);
+                    OfferSetup offerSetup = new OfferSetup()
+                    {
+                        Id = Guid.NewGuid(),
+                        OfferId = offerSetupInfo.OfferId,
+                        OfferName = offerSetupInfo.OfferName,
+                        Product_Id = offerSetupInfo.Product_Id,
+                        DiscountRate = offerSetupInfo.DiscountRate,
+                        BundleSize = offerSetupInfo.BundleSize
+                    };
+                    ERPContext.OfferSetups.Add(offerSetup);
+                    ERPContext.SaveChanges();
+                }
+                else 
+                {
+                    DataTable dt=new DataTable();
+                    dt.Columns.Add("Id", typeof(Guid));
+                    dt.Columns.Add("Product_Id", typeof(Guid));
+                    dt.Columns.Add("FreeProduct_Id", typeof(Guid));
+                    dt.Columns.Add("DiscountRate", typeof(decimal));
+                    dt.Columns.Add("BundleSize", typeof(Int32));
+                    dt.Columns.Add("OfferName", typeof(string));
+                    dt.Columns.Add("OfferId", typeof(string));
+                    foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                    {
+                        dt.Rows.Add(Guid.NewGuid(), offerSetupInfo.Product_Id, freeProduct.Id,
+                            offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
+                            offerSetupInfo.OfferId);
+                    }
+                    Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                    paramlist.Add("@TypeOfferSetup", dt);
+                    DatabaseCommand.ExcuteObjectNonQuery("proc_saveOfferSetup", paramlist, "procedure");
+                }
+                return Request.CreateResponse(HttpStatusCode.Created, true);
             }
             catch (Exception ex)
             {
@@ -1087,18 +1109,40 @@ namespace ERPWebApiService.Controllers
                 var oOffersetup = ERPContext.OfferSetups.FirstOrDefault(x => x.Id == offerSetupInfo.Id);
                 if (oOffersetup != null)
                 {
-                    OfferSetup offerSetup = new OfferSetup()
+                    if (offerSetupInfo.IsSingle)
                     {
-                        Id = Guid.NewGuid(),
-                        OfferId = offerSetupInfo.OfferId,
-                        OfferName = offerSetupInfo.OfferName,
-                        Product_Id = offerSetupInfo.Product_Id,
-                        FreeProduct_Id = offerSetupInfo.FreeProduct_Id,
-                        DiscountRate = offerSetupInfo.DiscountRate,
-                        BundleSize = offerSetupInfo.BundleSize
-                    };
-                    ERPContext.OfferSetups.AddOrUpdate(offerSetup);
-                    ERPContext.SaveChanges();
+                        OfferSetup offerSetup = new OfferSetup()
+                        {
+                            Id =oOffersetup.Id,
+                            OfferId = offerSetupInfo.OfferId,
+                            OfferName = offerSetupInfo.OfferName,
+                            Product_Id = offerSetupInfo.Product_Id,
+                            DiscountRate = offerSetupInfo.DiscountRate,
+                            BundleSize = offerSetupInfo.BundleSize
+                        };
+                        ERPContext.OfferSetups.Add(offerSetup);
+                        ERPContext.SaveChanges();
+                    }
+                    else
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Id", typeof(Guid));
+                        dt.Columns.Add("Product_Id", typeof(Guid));
+                        dt.Columns.Add("FreeProduct_Id", typeof(Guid));
+                        dt.Columns.Add("DiscountRate", typeof(decimal));
+                        dt.Columns.Add("BundleSize", typeof(Int32));
+                        dt.Columns.Add("OfferName", typeof(string));
+                        dt.Columns.Add("OfferId", typeof(string));
+                        foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                        {
+                            dt.Rows.Add(offerSetupInfo.Id, offerSetupInfo.Product_Id, freeProduct.Id,
+                                offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
+                                offerSetupInfo.OfferId);
+                        }
+                        Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                        paramlist.Add("@TypeOfferSetup", dt);
+                        DatabaseCommand.ExcuteObjectNonQuery("proc_saveOfferSetup", paramlist, "procedure");
+                    }
                 }
                 return Request.CreateResponse(HttpStatusCode.Created, true);
             }

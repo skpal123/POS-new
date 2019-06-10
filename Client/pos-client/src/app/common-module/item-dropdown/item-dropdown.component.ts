@@ -23,7 +23,7 @@ export class ItemDropdownComponent implements OnChanges {
     { id: "0", itemName: "Select" }
   ];
   itemDropdownSettings = {
-    singleSelection: true,
+    singleSelection: this.singleSelection,
     text: "Select item",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
@@ -41,7 +41,7 @@ export class ItemDropdownComponent implements OnChanges {
       if(this.subCategoryId!=null && this.subCategoryId!="0"){
         this.getItemList(this.subCategoryId);
       }else if(this.subCategoryId==null){
-        this.getItemList("00000000-0000-0000-0000-000000000000")
+        this.getItemList(null)
   
       }
     }
@@ -49,7 +49,7 @@ export class ItemDropdownComponent implements OnChanges {
       if(this.subCategoryId!=null && this.subCategoryId!="0"){
         this.getItemList(this.subCategoryId);
       }else if(this.subCategoryId==null){
-        this.getItemList("00000000-0000-0000-0000-000000000000")
+        this.getItemList(null)
   
       }
     }

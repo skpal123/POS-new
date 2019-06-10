@@ -50,6 +50,7 @@
     <Compile Include="Model\Inventory\CustomerInfo.cs" />
     <Compile Include="Model\Inventory\CustomerSupplierTransactionDetailsInfo.cs" />
     <Compile Include="Model\Common\FormInfoView.cs" />
+    <Compile Include="Model\Inventory\FreeProductInfo.cs" />
     <Compile Include="Model\Inventory\GroupItemInfo.cs" />
     <Compile Include="Model\Common\ItemListInfo.cs" />
     <Compile Include="Model\Inventory\InventoryItemInfo.cs" />

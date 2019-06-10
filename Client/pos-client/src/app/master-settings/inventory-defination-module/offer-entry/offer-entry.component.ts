@@ -23,21 +23,16 @@ export class OfferEntryComponent implements OnInit {
   formName:string="offerSetup-entry";
   itemNew:boolean=false;
   subCategoryId:string=null;
-  singleSelection:boolean=true
+  singleSelection1:boolean=true
+  singleSelection:boolean=false
   itemSelectedItems :MultiSelectDropdown[]= [
+  ];
+  freeItemSelectedItems:MultiSelectDropdown[]= [
   ];
   itemDropdownList: MultiSelectDropdown[] = [
     { id: "0", itemName: "Select" }
   ];
-  itemDropdownSettings = {
-    singleSelection: true,
-    text: "Select item",
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    enableSearchFilter: true,
-    showCheckbox:true
-    
-  };
+
   constructor(public matDialogRef:MatDialogRef<OfferEntryComponent>,
     private _validationService:ValidationService,
   @Inject(MAT_DIALOG_DATA) public offerSetup:OfferSetup,

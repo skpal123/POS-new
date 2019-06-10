@@ -5,6 +5,7 @@ export class OfferSetup{
     public Product_Id ?:string
     public ProductName ?:string
     public FreeProduct_Id ?:string
+    public FreeProductList?:string
     public DiscountRate ?:number
     public BundleSize?:number
 }

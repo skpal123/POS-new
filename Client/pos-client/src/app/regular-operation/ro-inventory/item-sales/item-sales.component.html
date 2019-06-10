@@ -311,7 +311,7 @@
                           </div>
                           <div *ngIf="ItemSaleValidation[0]?.PaidAmount">
                                 <div class="form-group row" [class.has-suucess]="itemSaleForm.get('PaidAmount').valid" [ngClass]="{'has-error':itemSaleForm.get('PaidAmount').invalid&&itemSaleForm.get('PaidAmount').touched}">
-                                    <label class="col-sm-4 control-label" for="Vat">Total Amount<span *ngIf="ItemSaleValidation[1]?.PaidAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
+                                    <label class="col-sm-4 control-label" for="Vat">Paid Amount<span *ngIf="ItemSaleValidation[1]?.PaidAmount" style="color: red;margin-left: 10px; size: 15px">*</span></label>
                                     <div class="col-sm-7">
                                         <input id="Vat" type="number" formControlName="PaidAmount" class="form-control">
                                         <span *ngIf="itemSaleForm.get('PaidAmount').invalid&&itemSaleForm.get('PaidAmount').touched" class="help-block">

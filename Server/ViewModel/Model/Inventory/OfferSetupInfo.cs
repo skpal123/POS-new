@@ -13,7 +13,8 @@ namespace ViewModel.Model.Inventory
         public string OfferName { set; get; }
         public Guid? Product_Id { set; get; }
         public string ProductName { set; get; }
-        public Guid? FreeProduct_Id { set; get; }
+        public bool IsSingle { set; get; }
+        public List<FreeProductInfo> FreeProductList { set; get; }
         public decimal? DiscountRate { set; get; }
         public int? BundleSize { set; get; }
     }
