@@ -13,7 +13,6 @@ import { DialogData } from '../../models/common/dialog-data.model';
 export class ItemDropdownComponent implements OnChanges {
   itemList:SelectDropdown[]=[]
   @Input() IsNewItemAdd:boolean=false;
-  @Input() singleSelection:boolean
   @Input() subCategoryId:string
   @Input() itemSelectedItems:any=[];
   @Output() itemOnItemSelect:EventEmitter <any>=new EventEmitter <any>();
@@ -23,7 +22,7 @@ export class ItemDropdownComponent implements OnChanges {
     { id: "0", itemName: "Select" }
   ];
   itemDropdownSettings = {
-    singleSelection: this.singleSelection,
+    singleSelection: true,
     text: "Select item",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',

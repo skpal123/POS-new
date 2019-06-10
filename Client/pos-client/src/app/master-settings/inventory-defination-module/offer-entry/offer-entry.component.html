@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" (click)="clickOutsideOfMultiselect()">
   <div class="col-md-12">
     <div class="panel panel-success">
       <div class="panel-heading">
@@ -44,7 +44,6 @@
                       [itemSelectedItems]="itemSelectedItems"
                       [IsNewItemAdd]="itemNew"
                       [subCategoryId]="subCategoryId"
-                      [singleSelection]="singleSelection"
                       >
                      </app-item-dropdown> 
                      <span class="help-block" *ngIf="ProductIdControl.errors?.required">
@@ -61,7 +60,7 @@
                   <label for="FreeProductId" class="col-sm-4 col-form-label control-label" [class.required]="FreeProductIdControl.invalid">Free Product Name</label>
                   <div class="col-sm-7" >
                      <input style="display: none;" class="form-control" name="FreeProductId" #FreeProductIdControl="ngModel" [(ngModel)]="offerSetup.FreeProduct_Id">
-                     <app-item-dropdown 
+                     <!-- <app-item-dropdown 
                      (itemOnItemSelect)="ItemOnSeletedItem($event)" 
                      (itemOnItemDeSelect)="OnDeSeletedItem($event)"
                       [itemSelectedItems]="freeItemSelectedItems"
@@ -69,7 +68,15 @@
                       [subCategoryId]="subCategoryId"
                       [singleSelection]="singleSelection1"
                       >
-                     </app-item-dropdown> 
+                     </app-item-dropdown>  -->
+                     <app-custom-multi-select
+                     [selectedItem]="freeItemSelectedItems"
+                     [data]="itemDropdownList"
+                     [showItem]="showItem"
+                     (getSelectedItemChild)="getSelectedItemParent()"
+                     (showItemValue)="showItemValueParent($event)"
+                   >
+                   </app-custom-multi-select>
                      <span class="help-block" *ngIf="FreeProductIdControl.errors?.required">
                         Category name is required
                     </span>  

@@ -7,6 +7,7 @@ import * as $ from 'jquery'
 })
 export class HomeComponent implements OnInit {
   totalItem:number=0;
+  text:string='';
   constructor(){}
   propertyTags: any = [
     {Id:"1",Name:"west"},
@@ -17,6 +18,9 @@ export class HomeComponent implements OnInit {
     {Id:"1",Name:"park",Value:0,tags:[]},
     {Id:"2",Name:"school",Value:0,tags:[]},
     {Id:"2",Name:"hospital",Value:0,tags:[]}
+  ];
+  items:any=[
+    {Id:"0",Name:"Select"}
   ];
   mixeds:mixed[]=[];
 
@@ -58,6 +62,16 @@ export class HomeComponent implements OnInit {
   }
   off(){
     document.getElementById("overlay").style.display = "none";
+  }
+  itemAdd(item:any){
+    debugger
+    let index=this.items.findIndex(a=>a.Name===item.Name);
+    if(index==-1){
+      this.items.push(item);
+    }
+    else{
+      this.items.splice(index,1);
+    }
   }
 }
 export class mixed{

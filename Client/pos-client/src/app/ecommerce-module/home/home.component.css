@@ -68,3 +68,8 @@ img:hover #overlay{
   align-items: center;
   display: flex;
 }
+ul li {
+  list-style: none;;
+  display: block;
+  margin-left: 0px
+}

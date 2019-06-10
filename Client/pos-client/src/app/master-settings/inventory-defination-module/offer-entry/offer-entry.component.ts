@@ -10,6 +10,7 @@ import { NewDropdownDataService } from '../../../common-module/new-dropdown-data
 import { DropdownService } from '../../../services/common/dropdown.service';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
+import { SelectDropdown } from '../../../models/common/select.dropdown.model';
 
 @Component({
   selector: 'app-offer-entry',
@@ -18,16 +19,17 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 })
 export class OfferEntryComponent implements OnInit {
   offerSetupValidation:OfferSetupValidation[]=[];
-  @ViewChild('offerSetupForm') offerSetupForm:NgForm
+  @ViewChild('offerSetupForm') offerSetupForm:NgForm;
+  itemList:SelectDropdown[]=[]
   itemName:string="offerId";
   formName:string="offerSetup-entry";
   itemNew:boolean=false;
   subCategoryId:string=null;
-  singleSelection1:boolean=true
-  singleSelection:boolean=false
+  showItem:boolean=true
   itemSelectedItems :MultiSelectDropdown[]= [
   ];
   freeItemSelectedItems:MultiSelectDropdown[]= [
+    { id: "0", itemName: "Select" }
   ];
   itemDropdownList: MultiSelectDropdown[] = [
     { id: "0", itemName: "Select" }
@@ -44,11 +46,17 @@ export class OfferEntryComponent implements OnInit {
 
   ngOnInit() {
     debugger
+    $(document).ready(function(){
+      $('#outDiv').click(function(e){
+      
+      })
+    })
     if(this.offerSetup.Id==null){
       this.itemSelectedItems.push({id:"0",itemName:"SELECT"});
     }
     else{
     }
+    this.getItemList(null);
     this.getItemFormInfo();
   }
   onNoClick(){
@@ -89,7 +97,20 @@ export class OfferEntryComponent implements OnInit {
       })
     }
   }
-  
+  getItemList(subCategoryId:string){
+    this._dropdownService.getItemDropdownList(subCategoryId).subscribe(response=>{
+      this.itemList=response
+      if(this.itemList.length>0){
+        this.itemList.forEach((a,index,array)=>{
+          this.itemDropdownList.push({id:a.Value,itemName:a.Code+'-'+a.Text});
+        })
+      }
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
    getItemFormInfo(){
     // this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
     //   this.itemValidation=response
@@ -103,5 +124,16 @@ export class OfferEntryComponent implements OnInit {
   parentGetGeneratedCode($event:string){
     debugger
     this.offerSetup.OfferId=$event;
+  }
+  getSelectedItemParent($event:MultiSelectDropdown[]){
+
+  }
+  showItemValueParent($event:boolean){
+    debugger
+    this.showItem=$event
+  }
+  clickOutsideOfMultiselect(){
+    debugger
+    this.showItem=true;
   }
 }
