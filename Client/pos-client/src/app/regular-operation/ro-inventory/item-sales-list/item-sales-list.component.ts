@@ -92,10 +92,10 @@ export class ItemSalesListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getGroupItemDetails($event:string){
+  getGroupItemDetails($event:GroupItem){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyService.getGroupItemById($event).subscribe((response:GroupItem)=>{
+    this._inventotyService.getGroupItemById($event.Id).subscribe((response:GroupItem)=>{
       this.blockUi.stop();
       this.groupItem=response;
       this.groupItem.data=this.itemSalesValidationList;
@@ -117,9 +117,9 @@ export class ItemSalesListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteGroupItem($event:string){
+  deleteGroupItem($event:GroupItem){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyService.deleteGroupItem($event).subscribe((response:boolean)=>{
+    this._inventotyService.deleteGroupItem($event.Id).subscribe((response:boolean)=>{
       let result=response;
       if(result){
         this.getGroupItemList();

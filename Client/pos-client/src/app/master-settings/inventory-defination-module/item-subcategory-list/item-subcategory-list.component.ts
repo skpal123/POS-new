@@ -69,10 +69,10 @@ export class ItemSubcategoryListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getSubCategoryDetails($event:string){
+  getSubCategoryDetails($event:Subcategory){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getSubCategoryById($event).subscribe(response=>{
+    this._inventotyDefinationService.getSubCategoryById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.subcategory=response
       const dialogRef=this.matDialog.open(AddSubcategoryComponent,{
@@ -94,9 +94,9 @@ export class ItemSubcategoryListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteSubCategory($event:string){
+  deleteSubCategory($event:Subcategory){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteSubCategory($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteSubCategory($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

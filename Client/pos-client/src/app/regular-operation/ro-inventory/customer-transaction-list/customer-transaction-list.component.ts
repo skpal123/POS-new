@@ -104,10 +104,10 @@ export class CustomerTransactionListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCustomerTansactionDetails($event:string){
+  getCustomerTansactionDetails($event:CustomerTransaction){
     debugger
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionById($event).subscribe(response=>{
+    this._inventotyService.getPartyTransactionById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.customerTransaction=response;
       this.customerTransaction.PaymentType="payment";
@@ -132,9 +132,9 @@ export class CustomerTransactionListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteCustomerTransaction($event:string){
+  deleteCustomerTransaction($event:CustomerTransaction){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.deletePartyTransactionById($event).subscribe(response=>{
+    this._inventotyService.deletePartyTransactionById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

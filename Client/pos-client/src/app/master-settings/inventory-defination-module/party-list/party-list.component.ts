@@ -71,10 +71,10 @@ export class PartyListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getPartyDetails($event:string){
+  getPartyDetails($event:Party){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getPartyById($event).subscribe(response=>{
+    this._inventotyDefinationService.getPartyById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.party=response
       const dialogRef=this.matDialog.open(PartyEntryComponent,{
@@ -96,9 +96,9 @@ export class PartyListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteParty($event:string){
+  deleteParty($event:Party){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteParty($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteParty($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

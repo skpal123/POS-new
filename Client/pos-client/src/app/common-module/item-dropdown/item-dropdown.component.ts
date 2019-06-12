@@ -22,7 +22,7 @@ export class ItemDropdownComponent implements OnChanges {
     { id: "0", itemName: "Select" }
   ];
   itemDropdownSettings = {
-    singleSelection: true,
+    singleSelection: false,
     text: "Select item",
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',

@@ -271,6 +271,18 @@
     <Compile Include="Migrations\201905291520537_change offersetup.Designer.cs">
       <DependentUpon>201905291520537_change offersetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906110928529_adding issingle in offersetup table.cs" />
+    <Compile Include="Migrations\201906110928529_adding issingle in offersetup table.Designer.cs">
+      <DependentUpon>201906110928529_adding issingle in offersetup table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906110934235_change string length.cs" />
+    <Compile Include="Migrations\201906110934235_change string length.Designer.cs">
+      <DependentUpon>201906110934235_change string length.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906120946448_alter table tblOfferSetup add onetomay.cs" />
+    <Compile Include="Migrations\201906120946448_alter table tblOfferSetup add onetomay.Designer.cs">
+      <DependentUpon>201906120946448_alter table tblOfferSetup add onetomay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountOpeningTableView.cs" />
@@ -480,6 +492,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905291520537_change offersetup.resx">
       <DependentUpon>201905291520537_change offersetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906110928529_adding issingle in offersetup table.resx">
+      <DependentUpon>201906110928529_adding issingle in offersetup table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906110934235_change string length.resx">
+      <DependentUpon>201906110934235_change string length.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906120946448_alter table tblOfferSetup add onetomay.resx">
+      <DependentUpon>201906120946448_alter table tblOfferSetup add onetomay.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

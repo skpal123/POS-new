@@ -71,16 +71,17 @@ export class ItemListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getItemDetails($event:string){
+  getItemDetails($event:InventoryItem){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getInventoryItemById($event).subscribe(response=>{
+    this._inventotyDefinationService.getInventoryItemById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.inventoryItem=response
       const dialogRef=this.matDialog.open(ItemEntryComponent,{
         data:this.inventoryItem,
         disableClose:true,
-        height:window.screen.height*.95+'px', 
+        height:'auto',
+        maxHeight:window.screen.height*.95+'px', 
         width:window.screen.width*.5+'px'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -96,9 +97,9 @@ export class ItemListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteItem($event:string){
+  deleteItem($event:InventoryItem){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteInventoryItem($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteInventoryItem($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

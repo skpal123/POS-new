@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild,Inject } from '@angular/core';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 import { OfferSetupValidation } from '../../../models/validation/inventory/offer-setup-validation.model';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl } from '@angular/forms';
 import { OfferSetup } from '../../../models/master-settings/inventory-defination/offer-setup.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { ValidationService } from '../../../services/common/validation.service';
@@ -11,6 +11,9 @@ import { DropdownService } from '../../../services/common/dropdown.service';
 import { InventoryDefinationServiceService } from '../../../services/master-settings/inventory-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { SelectDropdown } from '../../../models/common/select.dropdown.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
+import { ItemEntryComponent } from '../item-entry/item-entry.component';
+import { InventoryItem } from '../../../models/master-settings/inventory-defination/inventory-item.model';
 
 @Component({
   selector: 'app-offer-entry',
@@ -20,13 +23,16 @@ import { SelectDropdown } from '../../../models/common/select.dropdown.model';
 export class OfferEntryComponent implements OnInit {
   offerSetupValidation:OfferSetupValidation[]=[];
   @ViewChild('offerSetupForm') offerSetupForm:NgForm;
+  @ViewChild('offerTypeControl') offerTypeControl:FormControl;
   itemList:SelectDropdown[]=[]
+  ItemNew:boolean=false
   itemName:string="offerId";
   formName:string="offerSetup-entry";
   itemNew:boolean=false;
   subCategoryId:string=null;
   showItem:boolean=true
   itemSelectedItems :MultiSelectDropdown[]= [
+    { id: "0", itemName: "Select" }
   ];
   freeItemSelectedItems:MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
@@ -34,13 +40,17 @@ export class OfferEntryComponent implements OnInit {
   itemDropdownList: MultiSelectDropdown[] = [
     { id: "0", itemName: "Select" }
   ];
-
+  inventoryItem:InventoryItem={
+    Id:null,Category_Id:null,ItemCode:null,ItemId:null,ItemName:null,
+    Ledger_Id:null,SubLedger_Id:null,UnitId:null,SubCategory_Id:null
+  }
   constructor(public matDialogRef:MatDialogRef<OfferEntryComponent>,
     private _validationService:ValidationService,
   @Inject(MAT_DIALOG_DATA) public offerSetup:OfferSetup,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
   private _dropdownService:DropdownService,
+  private _navigationData:NavigationDataService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
 
@@ -51,22 +61,38 @@ export class OfferEntryComponent implements OnInit {
       
       })
     })
-    if(this.offerSetup.Id==null){
-      this.itemSelectedItems.push({id:"0",itemName:"SELECT"});
+    this.offerTypeControl.valueChanges.subscribe(data=>{
+      if(data=="single"){
+        this.offerSetup.IsSingle=true
+      }
+      else{
+        this.offerSetup.IsSingle=false;
+      }
+    })
+    if(this.offerSetup.OfferId==null){      
     }
     else{
+      this.freeItemSelectedItems=this.offerSetup.FreeProductList
+      this.itemSelectedItems=this.offerSetup.ProductList
     }
     this.getItemList(null);
     this.getItemFormInfo();
+
   }
   onNoClick(){
     this.matDialogRef.close(false);
   }
   saveItem(){
     debugger
+    // this.offerSetup.FreeProductList=this.freeItemSelectedItems;
+    // this.offerSetup.ProductList=this.itemSelectedItems;
+    if(this.offerSetup.ProductList.length==1&&this.offerSetup.ProductList.length>1){
+      this.offerSetup.IsOneToMany=true
+    }
     if(this.offerSetup.Id==null){
       this._inventotyDefinationService.CreateOfferSetup(this.offerSetup).subscribe(response=>{
-        let result=response
+        let result=response;
+        this._navigationData.IsSaved=true
         if(result){
           this.matDialogRef.close(response);
           let dialogData=new DialogData();
@@ -74,9 +100,8 @@ export class OfferEntryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -90,9 +115,8 @@ export class OfferEntryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error.json();
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -111,6 +135,34 @@ export class OfferEntryComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
+  createNewItem(){
+    this.clearItem();
+    this.itemNew=false;
+     const dialogRef=this.matDialog.open(ItemEntryComponent,{
+       data:this.inventoryItem,
+       disableClose:true,
+       height:window.screen.height*.6+'px',
+       width:window.screen.width*.4+'px'
+     });
+     dialogRef.afterClosed().subscribe((result:InventoryItem)=>{
+       if(result){
+         this.ItemNew=true;
+         this.itemSelectedItems=[];
+         this.itemSelectedItems.push({id:result.Id,itemName:result.ItemId+'-'+result.ItemName})
+       }
+     })
+   }
+   clearItem(){
+    this.inventoryItem.Id=null;
+    this.inventoryItem.ItemCode=null;
+    this.inventoryItem.ItemId=null;
+    this.inventoryItem.ItemName=null;
+    this.inventoryItem.Category_Id=null;
+    this.inventoryItem.SubCategory_Id=null;
+    this.inventoryItem.UnitId=null;
+    this.inventoryItem.Ledger_Id=null;
+    this.inventoryItem.SubLedger_Id=null;
+  }
    getItemFormInfo(){
     // this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
     //   this.itemValidation=response
@@ -125,8 +177,22 @@ export class OfferEntryComponent implements OnInit {
     debugger
     this.offerSetup.OfferId=$event;
   }
-  getSelectedItemParent($event:MultiSelectDropdown[]){
-
+  getSelectedItemParent($event:MultiSelectDropdown){
+    debugger
+    this.offerSetup.FreeProductList.push($event)
+    this.offerSetup.BundleSize=this.freeItemSelectedItems.length
+  }
+  getSelectedProductParent($event:MultiSelectDropdown){
+    debugger
+    this.offerSetup.ProductList.push($event)
+  }
+  ItemOnSeletedItem($event:MultiSelectDropdown){
+    if($event.id!="0"){
+      this.offerSetup.Product_Id=$event.id
+    }
+    else{
+      this.offerSetup.Product_Id=null
+    }
   }
   showItemValueParent($event:boolean){
     debugger
@@ -136,4 +202,5 @@ export class OfferEntryComponent implements OnInit {
     debugger
     this.showItem=true;
   }
+
 }

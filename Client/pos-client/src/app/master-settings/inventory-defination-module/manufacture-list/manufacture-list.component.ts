@@ -69,10 +69,10 @@ export class ManufactureListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getManufactureDetails($event:string){
+  getManufactureDetails($event:Manufacture){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getManufactureById($event).subscribe(response=>{
+    this._inventotyDefinationService.getManufactureById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.manufacture=response
       const dialogRef=this.matDialog.open(ManufactureEntryComponent,{
@@ -94,9 +94,9 @@ export class ManufactureListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteManufacture($event:string){
+  deleteManufacture($event:Manufacture){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteManufacture($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteManufacture($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){
@@ -113,7 +113,7 @@ export class ManufactureListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  createNewManufacture(){
+  createMaufactureForm(){
    this.clearManufacture();
     const dialogRef=this.matDialog.open(ManufactureEntryComponent,{
       data:this.manufacture,
@@ -134,17 +134,5 @@ export class ManufactureListComponent implements OnInit {
     this.manufacture.Address=null;
     this.manufacture.Country_Id=null;
   }
-  createMaufactureForm(){
-    const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
-      data:"manufacture",
-      disableClose:true,
-      //height:window.screen.height*.6+'px',
-      width:window.screen.width*.8+'px'
-    });
-    dialogRef.afterClosed().subscribe(result=>{
-      if(result){
-        this.getManufactureList();
-      }
-    })
-  }
+ 
 }

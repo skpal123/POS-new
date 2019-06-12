@@ -80,10 +80,10 @@ export class ItemPurchaseListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getGroupItemDetails($event:string){
+  getGroupItemDetails($event:GroupItem){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyService.getGroupItemById($event).subscribe((response:GroupItem)=>{
+    this._inventotyService.getGroupItemById($event.Id).subscribe((response:GroupItem)=>{
       this.blockUi.stop();
       this.groupItem=response;
       this.groupItem.data=this.itemPurchaseValidationList;
@@ -106,9 +106,9 @@ export class ItemPurchaseListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteGroupItem($event:string){
+  deleteGroupItem($event:GroupItem){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyService.deleteGroupItem($event).subscribe((response:boolean)=>{
+    this._inventotyService.deleteGroupItem($event.Id).subscribe((response:boolean)=>{
       this.blockUi.stop();
       let result=response;
       if(result){

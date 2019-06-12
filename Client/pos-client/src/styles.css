@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css'; 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-.navbar-nav > li > a, .navbar-brand {padding-top:8px !important; padding-bottom:0 !important; height: 40px; } .navbar {min-height:30px !important;}
+/* .navbar-nav > li > a, .navbar-brand {padding-top:8px !important; padding-bottom:0 !important; height: 40px; } .navbar {min-height:30px !important;} */
 
   
 html, body { height: 100%; }
@@ -16,7 +16,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 #navigation-menu{
     background-color: bisque
 }
-.navbardiv ul li{
+/* .navbardiv ul li{
     background-color: rgb(213, 213, 231)
 }
 
@@ -221,7 +221,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
-  
+   */
   @keyframes loading-children {
     0%    { color: #f3e5f5; }
     12.5% { color: #e1bee7; }
@@ -237,9 +237,12 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
 .required{
   color: #a94442
 }
-.c-btn{
+/* .c-btn{
   border: #a94442
 }
+.form-control{
+  height: 29px;
+} */
 
 
  

@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ERPWebApiService.ExrensionMethod;
+using Microsoft.Ajax.Utilities;
 using ViewModel.Model;
 using System.Data.Entity.Migrations;
 using ERP.DataService.Model;
@@ -1026,14 +1027,14 @@ namespace ERPWebApiService.Controllers
                 List<OfferSetupInfo> offerSetupInfos = new List<OfferSetupInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd = new SqlCommand(@"select a.*,b.ItemName ProductName from tblofferSetup 
+                    SqlCommand cmd = new SqlCommand(@"select distinct a.Product_Id,a.DiscountRate,a.BundleSize,a.OfferId,
+                                                    a.OfferName,b.ItemName ProductName from tblofferSetup 
                                                     a inner join tblInventoryItem b on a.Product_Id=b.Id", con);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
                         OfferSetupInfo offerSetupInfo = new OfferSetupInfo();
-                        offerSetupInfo.Id = Guid.Parse(rdr["Id"].ToString());
                         offerSetupInfo.OfferId = rdr["OfferId"] != DBNull.Value ? rdr["OfferId"].ToString() : null;
                         offerSetupInfo.OfferName = rdr["OfferName"] != DBNull.Value ? rdr["OfferName"].ToString() : null;
                         offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;          
@@ -1042,7 +1043,7 @@ namespace ERPWebApiService.Controllers
                         if (rdr["Product_Id"] != DBNull.Value)
                         {
                             offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
-                        }
+                        }                     
                         offerSetupInfos.Add(offerSetupInfo);
                     }
                 }
@@ -1068,7 +1069,9 @@ namespace ERPWebApiService.Controllers
                         OfferName = offerSetupInfo.OfferName,
                         Product_Id = offerSetupInfo.Product_Id,
                         DiscountRate = offerSetupInfo.DiscountRate,
-                        BundleSize = offerSetupInfo.BundleSize
+                        BundleSize = offerSetupInfo.BundleSize,
+                        IsOneToMany = false,
+                        IsSingle = true
                     };
                     ERPContext.OfferSetups.Add(offerSetup);
                     ERPContext.SaveChanges();
@@ -1083,11 +1086,16 @@ namespace ERPWebApiService.Controllers
                     dt.Columns.Add("BundleSize", typeof(Int32));
                     dt.Columns.Add("OfferName", typeof(string));
                     dt.Columns.Add("OfferId", typeof(string));
-                    foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                    dt.Columns.Add("IsSingle", typeof(bool));
+                    dt.Columns.Add("IsOneToMany", typeof(bool));
+                    foreach (var product in offerSetupInfo.ProductList)
                     {
-                        dt.Rows.Add(Guid.NewGuid(), offerSetupInfo.Product_Id, freeProduct.Id,
-                            offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
-                            offerSetupInfo.OfferId);
+                        foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                        {
+                            dt.Rows.Add(Guid.NewGuid(), product.Id, freeProduct.Id,
+                                offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
+                                offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany);
+                        }
                     }
                     Dictionary<string, object> paramlist = new Dictionary<string, object>();
                     paramlist.Add("@TypeOfferSetup", dt);
@@ -1106,7 +1114,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var oOffersetup = ERPContext.OfferSetups.FirstOrDefault(x => x.Id == offerSetupInfo.Id);
+                var oOffersetup = ERPContext.OfferSetups.FirstOrDefault(x => x.OfferId == offerSetupInfo.OfferId);
                 if (oOffersetup != null)
                 {
                     if (offerSetupInfo.IsSingle)
@@ -1118,9 +1126,11 @@ namespace ERPWebApiService.Controllers
                             OfferName = offerSetupInfo.OfferName,
                             Product_Id = offerSetupInfo.Product_Id,
                             DiscountRate = offerSetupInfo.DiscountRate,
+                            IsSingle = true,
+                            IsOneToMany = false,
                             BundleSize = offerSetupInfo.BundleSize
                         };
-                        ERPContext.OfferSetups.Add(offerSetup);
+                        ERPContext.OfferSetups.AddOrUpdate(offerSetup);
                         ERPContext.SaveChanges();
                     }
                     else
@@ -1133,11 +1143,16 @@ namespace ERPWebApiService.Controllers
                         dt.Columns.Add("BundleSize", typeof(Int32));
                         dt.Columns.Add("OfferName", typeof(string));
                         dt.Columns.Add("OfferId", typeof(string));
-                        foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                        dt.Columns.Add("IsSingle", typeof(bool));
+                        dt.Columns.Add("IsOneToMany", typeof(bool));
+                        foreach (var product in offerSetupInfo.ProductList)
                         {
-                            dt.Rows.Add(offerSetupInfo.Id, offerSetupInfo.Product_Id, freeProduct.Id,
-                                offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
-                                offerSetupInfo.OfferId);
+                            foreach (var freeProduct in offerSetupInfo.FreeProductList)
+                            {
+                                dt.Rows.Add(Guid.NewGuid(), product.Id, freeProduct.Id,
+                                    offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
+                                    offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany);
+                            }
                         }
                         Dictionary<string, object> paramlist = new Dictionary<string, object>();
                         paramlist.Add("@TypeOfferSetup", dt);
@@ -1161,7 +1176,7 @@ namespace ERPWebApiService.Controllers
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand(@"select a.*,b.ItemName ProductName from tblofferSetup 
-                                                    a inner join tblInventoryItem b on a.Product_Id=b.Id where a.id=@id", con);
+                                                    a inner join tblInventoryItem b on a.Product_Id=b.Id where a.OfferId=@id", con);
                     cmd.Parameters.AddWithNullableValue("@id",id);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -1177,6 +1192,28 @@ namespace ERPWebApiService.Controllers
                         {
                             offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
                         }
+                        if (rdr["IsSingle"] != DBNull.Value)
+                        {
+                            offerSetupInfo.IsSingle = Convert.ToBoolean(rdr["IsSingle"].ToString());
+                        }
+                        offerSetupInfo.FreeProductList = (from offer in ERPContext.OfferSetups
+                            join item in ERPContext.InventoryItems on offer.FreeProduct_Id equals item.Id
+                            where offer.OfferId == id
+                            select new FreeProductInfo()
+                            {
+                                Id = item.Id,
+                                itemName = item.ItemId+"-"+item.ItemName
+                            }).DistinctBy(x=>x.itemName).ToList();
+                        offerSetupInfo.ProductList = (from offer in ERPContext.OfferSetups
+                            join item in ERPContext.InventoryItems on offer.Product_Id equals item.Id
+                            where offer.OfferId == id
+                            select new FreeProductInfo()
+                            {
+                                Id = item.Id,
+                                itemName = item.ItemId + "-" + item.ItemName
+                            }).DistinctBy(x => x.itemName).ToList();
+
+
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, offerSetupInfo);
@@ -1194,7 +1231,7 @@ namespace ERPWebApiService.Controllers
             {
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
-                DatabaseCommand.ExcuteNonQuery("delete from tblofferSetup where id=@id", paramlist, null);
+                DatabaseCommand.ExcuteNonQuery("delete from tblofferSetup where OfferId=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)

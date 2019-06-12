@@ -91,9 +91,9 @@ export class VoucherListComponent implements OnInit {
     })
   }
 
-  getVoucherDetails($data){
+  getVoucherDetails($data:Voucher){
     debugger
-      this._accountService.getVoucherDetailsById($data).subscribe(response=>{
+      this._accountService.getVoucherDetailsById($data.Id).subscribe(response=>{
         this.voucher=response
         console.log(this.voucher)
         const dialogRef=this.matDialog.open(AddVoucherDialogComponent,{
@@ -159,8 +159,8 @@ export class VoucherListComponent implements OnInit {
       console.log(response);
     })
   }
-  deleteVoucher($event){
-    this._accountService.deleteVoucher($event).subscribe(response=>{
+  deleteVoucher($event:Voucher){
+    this._accountService.deleteVoucher($event.Id).subscribe(response=>{
      let result=response
       if(result){
         let dialogData=new DialogData();

@@ -70,10 +70,10 @@ export class SupplierListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getSupplierDetails($event:string){
+  getSupplierDetails($event:Supplier){
     debugger
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyDefinationService.getSupplierById($event).subscribe(response=>{
+    this._inventotyDefinationService.getSupplierById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.supplier=response
       const dialogRef=this.matDialog.open(SupplierEntryComponent,{
@@ -94,9 +94,9 @@ export class SupplierListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteSupplier($event:string){
+  deleteSupplier($event:Supplier){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyDefinationService.deleteSupplier($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteSupplier($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

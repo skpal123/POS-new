@@ -8,6 +8,7 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { OfferEntryComponent } from '../offer-entry/offer-entry.component';
+import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
 
 @Component({
   selector: 'app-offer-setup',
@@ -23,8 +24,9 @@ export class OfferSetupComponent implements OnInit {
   ColumnList:any[]=[];
   DataList:any[]=[];
   offerSetupList:OfferSetup[]=[];
-  offerSetup:OfferSetup={Id:null,OfferId:null,OfferName:null,DiscountRate:0,
-    Product_Id:null,FreeProduct_Id:null,ProductName:null
+  offerSetup:OfferSetup={Id:null,OfferId:null,OfferName:null,DiscountRate:0,IsSingle:false,OfferType:"single",
+    Product_Id:null,FreeProduct_Id:null,ProductName:null,FreeProductList:null,ViewFreeProduct:null,
+    ProductList:[],IsOneToMany:false
   }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
@@ -55,23 +57,26 @@ export class OfferSetupComponent implements OnInit {
     this._inventotyDefinationService.getOfferSetupList().subscribe(response=>{
       this.blockUi.stop();
       this.offerSetupList=response
+      this.offerSetupList.forEach(a=>{
+        a.ViewFreeProduct="View product list"
+      })
       this.DataList=this.offerSetupList
       this.dataReady=true;
       this.reload=true;
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
-  getOfferSetUpDetails($event:string){
+  getOfferSetUpDetails($event:OfferSetup){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getOfferSetupById($event).subscribe(response=>{
+    this._inventotyDefinationService.getOfferSetupById($event.OfferId).subscribe(response=>{
       this.blockUi.stop();
       this.offerSetup=response
+      this.offerSetup.IsSingle?this.offerSetup.OfferType="single":this.offerSetup.OfferType="multiple"
       const dialogRef=this.matDialog.open(OfferEntryComponent,{
         data:this.offerSetup,
         disableClose:true,
@@ -86,15 +91,14 @@ export class OfferSetupComponent implements OnInit {
       })
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteOfferSetup($event:string){
+  deleteOfferSetup($event:OfferSetup){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteOfferSetup($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteOfferSetup($event.OfferId).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){
@@ -105,9 +109,8 @@ export class OfferSetupComponent implements OnInit {
       }
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -126,10 +129,22 @@ export class OfferSetupComponent implements OnInit {
       }
     })
   }
+  customButtonClick($event:DatatableButtonOutput){
+    if($event.ColumnName="ViewFreeProduct"){
+      alert("tttt")
+    }
+  }
   clearOfferSetup(){
     this.offerSetup.Id=null;
     this.offerSetup.OfferId=null;
     this.offerSetup.OfferName=null;
+    this.offerSetup.IsSingle=true;
+    this.offerSetup.BundleSize=null;
+    this.offerSetup.IsOneToMany=false;
+    this.offerSetup.OfferType="single";
+    this.offerSetup.FreeProductList=[];
+    this.offerSetup.ProductList=[];
+    this.offerSetup.DiscountRate=0;
   }
 
 }

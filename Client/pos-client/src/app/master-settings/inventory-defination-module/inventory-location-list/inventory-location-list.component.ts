@@ -68,10 +68,10 @@ export class InventoryLocationListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getLocationDetails($event:string){
+  getLocationDetails($event:InventoryLocation){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getLocationById($event).subscribe(response=>{
+    this._inventotyDefinationService.getLocationById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.location=response
       const dialogRef=this.matDialog.open(LocationEntryComponent,{
@@ -93,9 +93,9 @@ export class InventoryLocationListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteLocation($event:string){
+  deleteLocation($event:InventoryLocation){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteLocation($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteLocation($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response;
       if(result){

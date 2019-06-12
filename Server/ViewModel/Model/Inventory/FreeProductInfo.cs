@@ -9,6 +9,6 @@ namespace ViewModel.Model.Inventory
     public class FreeProductInfo
     {
         public Guid Id { set; get; }
-        public string ItemName { set; get; }
+        public string itemName { set; get; }
     }
 }

@@ -32,8 +32,8 @@ export class InventoryDefinationServiceService {
       } 
       else 
       {
-        let message=error.error.Message;       
-        return throwError(message+'<br/>'+error.message) 
+        var message=error.error.Message+" "+"in "+error.url;       
+        return throwError(message) 
       }
       // return an observable with a user-facing error message
     };
@@ -327,7 +327,7 @@ export class InventoryDefinationServiceService {
     )
   }
   public UpdateOfferSetup(offerSetup:OfferSetup){
-    var url=this._defaultRoute.InventoryService+'OfferSetup/'+offerSetup.Id;
+    var url=this._defaultRoute.InventoryService+'OfferSetup/'+offerSetup.OfferId;
     return this._httpClient.put<boolean>(url,offerSetup).pipe(
       catchError(this.handleError)
     )

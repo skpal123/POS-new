@@ -68,10 +68,10 @@ export class UnitListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getUnitDetails($event:string){
+  getUnitDetails($event:Unit){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getUnitById($event).subscribe(response=>{
+    this._inventotyDefinationService.getUnitById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.unit=response
       const dialogRef=this.matDialog.open(AddUnitComponent,{
@@ -93,9 +93,9 @@ export class UnitListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteUnit($event:string){
+  deleteUnit($event:Unit){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteUnit($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteUnit($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

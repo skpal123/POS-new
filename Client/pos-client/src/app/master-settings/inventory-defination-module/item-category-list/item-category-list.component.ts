@@ -67,10 +67,10 @@ export class ItemCategoryListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCategoryDetails($event:string){
+  getCategoryDetails($event:Category){
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getCategoryById($event).subscribe(response=>{
+    this._inventotyDefinationService.getCategoryById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.category=response
       const dialogRef=this.matDialog.open(AddCategoryComponent,{
@@ -93,9 +93,9 @@ export class ItemCategoryListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteCategory($event:string){
+  deleteCategory($event:Category){
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteUnit($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteUnit($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

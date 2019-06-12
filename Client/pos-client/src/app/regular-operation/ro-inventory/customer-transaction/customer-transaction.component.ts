@@ -202,10 +202,10 @@ export class CustomerTransactionComponent implements OnInit,OnDestroy {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCustomerDetails($event:string){
+  getCustomerDetails($event:CustomerTransaction){
     debugger
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyService.getPartyTransactionById($event).subscribe(response=>{
+    this._inventotyService.getPartyTransactionById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.customerTransaction=response
       // const dialogRef=this.matDialog.open(CustomerEntryComponent,{

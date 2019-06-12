@@ -70,10 +70,10 @@ export class CustomerListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCustomerDetails($event:string){
+  getCustomerDetails($event:Customer){
     debugger
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyDefinationService.getCustomerById($event).subscribe(response=>{
+    this._inventotyDefinationService.getCustomerById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.customer=response
       const dialogRef=this.matDialog.open(CustomerEntryComponent,{
@@ -95,9 +95,9 @@ export class CustomerListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteCustomer($event:string){
+  deleteCustomer($event:Customer){
     this.blockUi.start("Loading....,Please wait")
-    this._inventotyDefinationService.deleteCustomer($event).subscribe(response=>{
+    this._inventotyDefinationService.deleteCustomer($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){
