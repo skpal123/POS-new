@@ -44,6 +44,11 @@
     <Compile Include="Model\Finance\AccountOpeningInfo.cs" />
     <Compile Include="Model\Finance\AccountParentChildRelationInfo.cs" />
     <Compile Include="Model\Common\BranchInfo.cs" />
+    <Compile Include="Model\HrPayroll\DesigantionInfo.cs" />
+    <Compile Include="Model\HrPayroll\EmployeeGrade.cs" />
+    <Compile Include="Model\HrPayroll\EmployeeSubGradeInfo.cs" />
+    <Compile Include="Model\HrPayroll\GradeStepSalaryItemInfo.cs" />
+    <Compile Include="Model\HrPayroll\SalaryItemInfo.cs" />
     <Compile Include="Model\Inventory\CategoryInfo.cs" />
     <Compile Include="Model\Common\CodeFormaterInfo.cs" />
     <Compile Include="Model\Common\ColumnInfo.cs" />

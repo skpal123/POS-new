@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Web.Http;
 using ERPWebApiService.Exceptions;
 using ViewModel.Model;
-using ViewModel.Model.Validation;
 using ViewModel.Model.Validation.Inventory;
 
 namespace ERPWebApiService.Controllers

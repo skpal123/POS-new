@@ -169,6 +169,7 @@
     <Compile Include="Authentication\PasswordHash.cs" />
     <Compile Include="Authentication\SecurityServices.cs" />
     <Compile Include="Authentication\SessionInfo.cs" />
+    <Compile Include="Controllers\HrPayrollController.cs" />
     <Compile Include="ExrensionMethod\StringExtension.cs" />
     <Compile Include="Authentication\UserSession.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
