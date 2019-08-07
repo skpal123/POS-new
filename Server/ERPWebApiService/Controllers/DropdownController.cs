@@ -36,6 +36,12 @@ namespace ERPWebApiService.Controllers
                     Text = x.UnitName
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, unitList);
+                 var unitList3 = ERPContext.Units.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Text = x.UnitName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, unitList);
             }
             catch (Exception ex)
             {
