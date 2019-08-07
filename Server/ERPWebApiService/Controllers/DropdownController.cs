@@ -13,7 +13,7 @@ using ViewModel.Model;
 
 namespace ERPWebApiService.Controllers
 {
-     [RoutePrefix("api/DropdownService")]
+     [RoutePrefix("api/DropdownService1")]
     public class DropdownController : ApiController
     {
         public ActionLogger actionLogger = new ActionLogger();
