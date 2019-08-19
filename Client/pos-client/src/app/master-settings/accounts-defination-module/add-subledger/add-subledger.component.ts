@@ -30,6 +30,7 @@ export class AddSubledgerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    debugger
       this.geSubledgerList();
       this.getUserFormControlByFormName();
   }
@@ -46,6 +47,7 @@ export class AddSubledgerComponent implements OnInit {
     })
   }
   geSubledgerList(){
+    debugger
     this._accountService.GetSublederList(this.subledger.AccountId).subscribe(response=>{
       this.sublederList=response
       this.DataList=this.sublederList;
@@ -95,8 +97,9 @@ export class AddSubledgerComponent implements OnInit {
     }
 
   }
-  getSubledgerDetailsById($event:string){
-    this._accountService.GetSublederById($event).subscribe(response=>{
+  getSubledgerDetailsById($event:Subledger){
+    debugger
+    this._accountService.GetSublederById($event.Id).subscribe(response=>{
       this.subledger=response
     },error=>{
       let dialogData=new DialogData();
@@ -104,8 +107,8 @@ export class AddSubledgerComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteSubledger($event){
-    this._accountService.DeleteGetSublederById($event).subscribe(response=>{
+  deleteSubledger($event:Subledger){
+    this._accountService.DeleteGetSublederById($event.Id).subscribe(response=>{
       let result=response
       if(result){
         let dialogData=new DialogData();

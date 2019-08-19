@@ -1,9 +1,11 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { AccountDefinationService } from '../../../services/master-settings/account-defination.service';
-import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef,MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { ChartOfaccount } from '../../../models/master-settings/account-defination/chart-of-account.model';
 import { DialogData } from '../../../models/common/dialog-data.model';
+import { Subledger } from '../../../models/master-settings/account-defination/subledger.model';
+import { AddSubledgerComponent } from '../add-subledger/add-subledger.component';
 
 @Component({
   selector: 'app-add-chart-of-account',
@@ -11,14 +13,24 @@ import { DialogData } from '../../../models/common/dialog-data.model';
   styleUrls: ['./add-chart-of-account.component.css']
 })
 export class AddChartOfAccountComponent implements OnInit {
+  IsSubledgerEnable:boolean=false;
+  subledger:Subledger={Id:null,Description:null,SublederCode:null,AccountId:null}
   constructor(private _accountService:AccountDefinationService,
     private _alertBox:AlertBoxService,
+    private matDialog:MatDialog,
     public dialogRef:MatDialogRef<AddChartOfAccountComponent>,
     @Inject(MAT_DIALOG_DATA) public account: ChartOfaccount
   ) {}
 
   ngOnInit() {
     debugger
+    if(this.account.IsLeaf){
+      this.IsSubledgerEnable=true;
+      this.subledger.AccountId=this.account.Id;
+    }
+    else{
+      this.IsSubledgerEnable=false;
+    }
   }
   onNoClick():void{
     this.dialogRef.close(false);
@@ -62,4 +74,12 @@ export class AddChartOfAccountComponent implements OnInit {
     this.account.AutoAccountCode=null;
     this.account.ManualAccountCode=null;
   }
+  addSubleder(){
+    const dialogRef=this.matDialog.open(AddSubledgerComponent,{
+      disableClose:true,
+      data:this.subledger,
+      height:window.screen.height*.6+'px',
+      width:window.screen.width*.6+'px'
+    });
+}
 }

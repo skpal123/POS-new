@@ -18,42 +18,20 @@ export class PostLoginService {
     private _defaultRoute:DefaultRouteService,
     private _httpClient:HttpClient) 
     { }
-    private handleError(error: HttpErrorResponse) {
-      debugger
-
-      if (error.error instanceof ErrorEvent) {
-        console.error('An error occurred:', error.error.message);
-        return throwError(error.error.message) 
-      } 
-      else 
-      {
-        let message=error.error.Message;       
-        return throwError(message+'<br/>'+error.message) 
-      }
-      // return an observable with a user-facing error message
-    };
   getMainMenus(){
     var url=this._defaultRoute.administrationService+'getMainModules/';
-    return this._httpClient.get<Module[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<Module[]>(url)
   }
   getMenusSubMenus(){
     var url=this._defaultRoute.administrationService+'getMainMenuSubMenu';
-    return this._httpClient.get<Menu[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<Menu[]>(url)
   }
   geSubMenus(MenuSeqId:string){
     var url=this._defaultRoute.administrationService+'getSubMenusByMenuId/'+MenuSeqId;
-    return this._httpClient.get<Submenu[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<Submenu[]>(url)
   }
   public getUserFormControlByFormName(fromName:string){
     var url=this._defaultRoute.CommonService+'getFormControl/'+fromName;
-    return this._httpClient.get<UserFormControl[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<UserFormControl[]>(url)
   }
 }

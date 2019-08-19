@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpInterceptor,HttpRequest,HttpHandler, HttpHeaders } from "@angular/common/http";
+import { HttpInterceptor,HttpRequest,HttpHandler, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { SessionService } from "../services/common/session.service";
+import { retryWhen,delay,tap, catchError } from "rxjs/operators";
+import { throwError } from "rxjs";
 
 @Injectable()
 export class HttpGlobalInterceptor implements HttpInterceptor {
@@ -24,6 +26,34 @@ export class HttpGlobalInterceptor implements HttpInterceptor {
         .set( 'ActionName',req.method)
       });
     // send cloned request with header to the next handler.
-    return next.handle(authReq);
+    return next.handle(authReq).pipe(
+      retryWhen(errors =>{
+      var retryCount=0;
+      return errors.pipe(
+        delay(1000),
+        tap(errorStatus => {
+          if (retryCount>2) {
+            throw errorStatus;
+          }
+          else{
+            retryCount++;
+          }
+        },)
+      )
+    }),catchError(this.handleError)
+  )
   }
+  private handleError(error: HttpErrorResponse) {
+    debugger
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+      return throwError(error.error.message) 
+    } 
+    else 
+    {
+      var message=error.error.Message+" "+"in "+error.url;       
+        return throwError(message)  
+    }
+    // return an observable with a user-facing error message
+  };
 }

@@ -23,10 +23,8 @@ export class ChartOfAccountComponent implements OnInit {
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
   accountDetails:AccountDetails;
   account:ChartOfaccount={AccountType:"0",};
-  subledger:Subledger={Id:null,Description:null,SublederCode:null,AccountId:null}
   Status:string="add";
   isFound:boolean=false;
-  IsSubledgerEnable:boolean=false;
   constructor(private _accountDeninationService:AccountDefinationService,
     private _service:AccountDefinationService,
     private matDialog:MatDialog,
@@ -211,19 +209,20 @@ export class ChartOfAccountComponent implements OnInit {
       this.account.ManualAccountCode=selectedNode.ManualAccountCode;
       this.account.AutoAccountCode=selectedNode.AutoAccountCode;
       this.account.AccountDescription=selectedNode.AccountDescription;
-      if(selectedNode.IsLeaf){
-        this.IsSubledgerEnable=true;
-        this.subledger.AccountId=selectedNode.AccountId;
-      }
-      else{
-        this.IsSubledgerEnable=false;
-      }
+      //let position=this.accountDetails.AccountList.findIndex(fea=>fea.a)
+      this.account.AccountType=selectedNode.AccountType.toString();
+      this.account.IsLeaf=selectedNode.IsLeaf;
     }
-    this.matDialog.open(AddChartOfAccountComponent,{
+    const dialogRef=this.matDialog.open(AddChartOfAccountComponent,{
       data:this.account,
       disableClose:true,
       height:'auto',
       width:window.screen.width*.5+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result=true){
+
+      }
     })
   }
   selectedNode(selectedNode:ChartOfAccountTree){
@@ -299,14 +298,6 @@ export class ChartOfAccountComponent implements OnInit {
         this._alertBoxService.openDialog(dialogData);
       })
     }
-  }
-  addSubleder(){
-      const dialogRef=this.matDialog.open(AddSubledgerComponent,{
-        disableClose:true,
-        data:this.subledger,
-        height:window.screen.height*.6+'px',
-        width:window.screen.width*.6+'px'
-      });
   }
   clearChartOfAccountForm(){
     this.account.AccountDescription=null;

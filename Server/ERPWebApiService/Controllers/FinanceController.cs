@@ -61,6 +61,7 @@ namespace ERPWebApiService.Controllers
                                               AutoAccountCode = acc.AutoAccountCode,
                                               ManualAccountCode = acc.ManualAccountCode,
                                               ChildGroupId=acc.GroupId,
+                                              AccountType = acc.AccountType,
                                               ChildLevelId=acc.LevelId,
                                               ChildAccId=acc.AccId,
                                               IsLeaf=acc.IsLeaf,
@@ -80,6 +81,7 @@ namespace ERPWebApiService.Controllers
                     ChartOfAccount.IsLeaf = account.IsLeaf;
                     ChartOfAccount.Status = account.Status;
                     ChartOfAccount.IsClicked = account.IsClicked;
+                    ChartOfAccount.AccountType = account.AccountType;
                     //ChartOfAccount.HasSubleder = account.HasSubleder;
                     ChartOfAccount.Children = genterateAccountTree(accountList, account.AccountId);
                     ChartOfAccountListTree2.Add(ChartOfAccount);
@@ -115,6 +117,7 @@ namespace ERPWebApiService.Controllers
                     ParentGroupId = x.ParentGroupId,
                     ParentLevelId = x.ParentLevelId,
                     ParentAccount_Id = x.ParentAccount_Id,
+                    AccountType = x.AccountType,
                     ChildAccId = x.ChildAccId,
                     ParentAccId = x.ParentAccId,
                     ChildGroupId = x.ChildGroupId,

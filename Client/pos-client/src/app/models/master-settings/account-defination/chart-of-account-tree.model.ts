@@ -3,6 +3,7 @@ export class ChartOfAccountTree{
     public AccountDescription?:string;
     public AutoAccountCode?:string;
     public ManualAccountCode?:string;
+    public AccountType?:string;
     public AccountId?:string;
     public ParentGroupId?:number
     public ParentLevelId?:number;

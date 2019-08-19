@@ -157,6 +157,7 @@ export class AddVoucherDialogComponent implements OnInit {
     this.DataList=this.voucher.VoucherDetailsList.filter(fea=>fea.Lineno!=1);
   }
   getOneSideAccountForVoucher(voucherType:string){
+    debugger
     if(voucherType=="0"||voucherType=="1"){
       this.debitAcccountList=this.accountList.filter(account=>account.AccountType=="1");
       if( this.debitAcccountList.length>0){

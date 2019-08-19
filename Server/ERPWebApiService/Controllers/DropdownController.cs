@@ -25,12 +25,12 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var unitList3 = ERPContext.Units.Select(x => new SelectListItem
+                var unitList = ERPContext.Units.Select(x => new SelectListItem
                 {                 
                     Value=x.Id,
                     Code = x.UnitName+x.Description,
                 }).ToList();               
-                return Request.CreateResponse(HttpStatusCode.OK, unitList3);
+                return Request.CreateResponse(HttpStatusCode.OK, unitList);            
             }
             catch (Exception ex)
             {

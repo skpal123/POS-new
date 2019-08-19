@@ -52,6 +52,7 @@ export class UnitListComponent implements OnInit {
     })
   }
   getUnitList(){
+    debugger
     this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getUnitList().subscribe(response=>{
       this.blockUi.stop();
@@ -62,9 +63,8 @@ export class UnitListComponent implements OnInit {
       this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -87,9 +87,8 @@ export class UnitListComponent implements OnInit {
       })
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -106,9 +105,8 @@ export class UnitListComponent implements OnInit {
       }
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

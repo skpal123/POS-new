@@ -11,11 +11,12 @@ namespace ERP.DataService.Model.Model
     [Table("tblAccount")]
     public class Account
     {
+        [Key]
         public Guid Id { set; get; }
         public int? GroupId { set; get; }
         public int? LevelId { set; get; }
         public int? AccId { set; get; }
-         [StringLength(1000)]
+        [StringLength(1000)]
         public string AccountDescription { set; get; }  
         public bool? CloseingStatus { set; get; }
         public int AccountType { set; get; }
