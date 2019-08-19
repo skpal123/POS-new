@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class SelectListItem
     {
-        public Guid Value { set; get; }
+        public string Value { set; get; }
         public string Code { set; get; }
         public string Text { set; get; }
     }

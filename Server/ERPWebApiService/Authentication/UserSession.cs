@@ -9,11 +9,11 @@ namespace ERPWebApiService.Authentication
     public class UserSession:BasicSession
     {
         public UserInfo User { get; private set; }
-        public Guid? SelectedBranchId { get; set; }
+        public string SelectedBranchId { get; set; }
         public Int32? SelectedPackageId { get; set; }
         public Int32? SelectedLevelId { get; set; }
-        public Guid? SelectedProjectId { get; set; }
-        public Guid? SelectedCustomUnitId { get; set; }
+        public string SelectedProjectId { get; set; }
+        public string SelectedCustomUnitId { get; set; }
         public string SelectedBranchCode { get; set; }
         public DateTime? CurrentDate { get; set; }
         public Func<ICollection<IAccessible>> GetAccessibles;

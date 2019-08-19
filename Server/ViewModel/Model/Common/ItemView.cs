@@ -8,8 +8,8 @@ namespace ViewModel.Model
 {
     public class ItemView
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string Name { set; get; }
-        public Guid? SubMenu_Id { set; get; }
+        public string SubMenu_Id { set; get; }
     }
 }

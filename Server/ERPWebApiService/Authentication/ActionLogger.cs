@@ -20,7 +20,7 @@ namespace ERPWebApiService.Authentication
                 var itemId = GetEnumDescription(item);
                 var itemName = item.ToString().Replace('_', ' ');
                 Conn.Open();
-                var comText = " INSERT INTO user_activity_log (id, user_id, userId, userName, session_id, item_id, itemName, action, comment, working_time, element_ref,deletionReason) VALUES('" + Guid.NewGuid() + "','" + userId + "','" + userCode + "','" + userName + "','" + sessionId + "','" + itemId + "','" + itemName + "','" + action + "','" + message + "','" + DateTime.Now + "','" + elementRef + "','" + deletionReasion + "')";
+                var comText = " INSERT INTO user_activity_log (id, user_id, userId, userName, session_id, item_id, itemName, action, comment, working_time, element_ref,deletionReason) VALUES('" + Guid.NewGuid().ToString() + "','" + userId + "','" + userCode + "','" + userName + "','" + sessionId + "','" + itemId + "','" + itemName + "','" + action + "','" + message + "','" + DateTime.Now + "','" + elementRef + "','" + deletionReasion + "')";
                 using (SqlCommand Com = new SqlCommand(comText, Conn))
                 {
                     Com.ExecuteNonQuery();

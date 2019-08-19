@@ -11,18 +11,31 @@ namespace ERP.DataService.Model.Model
     [Table("tblInventoryItem")]
     public class InventoryItem
     {
-        public Guid Id { set; get; }
-           [StringLength(20)]
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
+        [StringLength(20)]
         public string ItemId { set; get; }
-           [StringLength(20)]
+        [StringLength(20)]
         public string ItemCode { set; get; }
-           [StringLength(150)]
+        [StringLength(150)]
         public string ItemName { set; get; }
-        public Guid? Category_Id { set; get; }
-        public Guid? SubCategory_Id { set; get; }
-        public Guid? UnitId { set; get; }
-        public Guid? Ledger_Id { set; get; }
-        public Guid? SubLedger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Category_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string SubCategory_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string UnitId { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Ledger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string SubLedger_Id { set; get; }
 
     }
 }

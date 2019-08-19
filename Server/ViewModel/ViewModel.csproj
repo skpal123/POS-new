@@ -42,10 +42,11 @@
     <Compile Include="Model\Finance\AccountDetails.cs" />
     <Compile Include="Model\Finance\AccountInfo.cs" />
     <Compile Include="Model\Finance\AccountOpeningInfo.cs" />
+    <Compile Include="Model\Finance\AccountOpeningTableView.cs" />
     <Compile Include="Model\Finance\AccountParentChildRelationInfo.cs" />
     <Compile Include="Model\Common\BranchInfo.cs" />
     <Compile Include="Model\HrPayroll\DesigantionInfo.cs" />
-    <Compile Include="Model\HrPayroll\EmployeeGrade.cs" />
+    <Compile Include="Model\HrPayroll\EmployeeGradeInfo.cs" />
     <Compile Include="Model\HrPayroll\EmployeeSubGradeInfo.cs" />
     <Compile Include="Model\HrPayroll\GradeStepSalaryItemInfo.cs" />
     <Compile Include="Model\HrPayroll\SalaryItemInfo.cs" />

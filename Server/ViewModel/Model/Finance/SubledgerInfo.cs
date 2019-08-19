@@ -8,10 +8,10 @@ namespace ViewModel.Model
 {
     public class SubledgerInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string SublederCode { set; get; }
         public string Description { set; get; }
-        public Guid? AccountId { set; get; }
+        public string AccountId { set; get; }
 
     }
 }

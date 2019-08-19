@@ -12,7 +12,7 @@ namespace ViewModel.Model
         public Guid MenuId { get; set; }
         public Guid SubmenuId { get; set; }
         public Guid ModuleId { get; set; }
-        public Guid? RoleId { get; set; }
+        public string RoleId { get; set; }
 
         public int ModuleSeqId { get; set; }
 
@@ -23,7 +23,7 @@ namespace ViewModel.Model
 
         public int SubmenuSeqId { get; set; }
 
-        public Guid? ItemId { get; set; }
+        public string ItemId { get; set; }
 
         public string ItemName { get; set; }
 

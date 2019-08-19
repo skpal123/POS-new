@@ -12,6 +12,8 @@ using ERPWebApiService.Autentication;
 using ERPWebApiService.Exceptions;
 using System.Data.Entity.Migrations;
 using ERPWebApiService.DataConnection;
+using ViewModel.Model.Finance;
+
 namespace ERPWebApiService.Controllers
 {
     [RoutePrefix("api/FinanceService")]
@@ -104,7 +106,7 @@ namespace ERPWebApiService.Controllers
             }
 
         }
-        private List<AccountParentChildRelationInfo> genterateAccountTree(List<AccountParentChildRelationInfo> accoountList, Guid? accountId)
+        private List<AccountParentChildRelationInfo> genterateAccountTree(List<AccountParentChildRelationInfo> accoountList, string accountId)
         {
             var accountList2 =
                 accoountList.Where(y => y.ParentAccount_Id == accountId).Select(x => new AccountParentChildRelationInfo()
@@ -142,7 +144,7 @@ namespace ERPWebApiService.Controllers
                 //{
                     var chartOfAccount = new Account()
                     {
-                        Id=Guid.NewGuid(),
+                        Id=Guid.NewGuid().ToString().ToString().ToString(),
                         AccId=accountInfo.AccId,
                         GroupId=accountInfo.GroupId,
                         LevelId=accountInfo.LevelId,
@@ -160,7 +162,7 @@ namespace ERPWebApiService.Controllers
                     ERPContext.SaveChanges();
                     var parentAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == accountInfo.ParentAccountId);
                     var childParentRelation=new AccountParentChildRelation(){
-                        Id=Guid.NewGuid(),
+                        Id=Guid.NewGuid().ToString().ToString(),
                         ParentAccId=parentAccount.AccId,
                         ParentGroupId=parentAccount.GroupId,
                         ParentLevelId=parentAccount.LevelId,
@@ -200,8 +202,7 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                    var parseId = Guid.Parse(id);
-                    var oChartOfAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == parseId);
+                    var oChartOfAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == id);
                     var chartOfAccount = new Account()
                     {
                         Id = oChartOfAccount.Id,
@@ -290,7 +291,7 @@ namespace ERPWebApiService.Controllers
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
-                var voucherid = Guid.Parse(voucherId);
+                var voucherid = (voucherId);
                 var voucherInfo = ERPContext.Vouchers.Where(x=>x.Id==voucherid).Select(x => new VoucherInfo()
                 {
                     Id = x.Id,
@@ -321,13 +322,13 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         VoucherDetailInfo voucherDetailInfo = new VoucherDetailInfo();
-                        voucherDetailInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        voucherDetailInfo.Id =rdr["Id"].ToString();
                         voucherDetailInfo.Lineno = Convert.ToInt32(rdr["Lineno"].ToString());
                         voucherDetailInfo.Amount = Convert.ToDouble(rdr["Amount"].ToString());
                         voucherDetailInfo.Vat = Convert.ToDouble(rdr["Vat"].ToString());
                         voucherDetailInfo.Tax = Convert.ToDouble(rdr["Tax"].ToString());
                         voucherDetailInfo.AccountDescription = rdr["AccountDescription"].ToString();
-                        voucherDetailInfo.AccountId =Guid.Parse( rdr["Account_Id"].ToString());
+                        voucherDetailInfo.AccountId =rdr["Account_Id"].ToString();
                         voucherDetailInfo.SubLedgerTransactions = GetSubledgerTransactionListByVoucherDetailsId(voucherDetailInfo.Id);
                         VoucherDetailList.Add(voucherDetailInfo);
                     }
@@ -384,7 +385,7 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 var voucher = new Voucher()
                 {
-                    Id=Guid.NewGuid(),
+                    Id=Guid.NewGuid().ToString().ToString(),
                     Voucherdate=voucherInfo.VoucherDate,
                     Voucherno=voucherInfo.VoucherNo,
                     Vouchertype=voucherInfo.VoucherType,
@@ -406,7 +407,7 @@ namespace ERPWebApiService.Controllers
                     var account = ERPContext.Accounts.FirstOrDefault(x => x.Id == vd.AccountId);
                     var voucherDetail = new VoucherDetails()
                     {
-                        Id=Guid.NewGuid(),
+                        Id=Guid.NewGuid().ToString().ToString().ToString(),
                         Lineno=vd.Lineno,
                         Account_Id=vd.AccountId,
                         AccId=account.AccId,
@@ -424,7 +425,7 @@ namespace ERPWebApiService.Controllers
                     {
                         var subledgerTransaction = new SubledgerTransaction() 
                         { 
-                            Id=Guid.NewGuid(),
+                            Id=Guid.NewGuid().ToString().ToString(),
                             Amount=subledgerTransactionInfo.Amount,
                             Account_Id=account.Id,
                             Subledger_Id=subledgerTransactionInfo.SubLedger_Id,
@@ -482,7 +483,7 @@ namespace ERPWebApiService.Controllers
                         var account = ERPContext.Accounts.FirstOrDefault(x => x.Id == vd.AccountId);
                         var voucherDetail = new VoucherDetails()
                         {
-                            Id = Guid.NewGuid(),
+                            Id = Guid.NewGuid().ToString().ToString().ToString(),
                             Lineno = vd.Lineno,
                             Account_Id = vd.AccountId,
                             AccId = account.AccId,
@@ -500,7 +501,7 @@ namespace ERPWebApiService.Controllers
                         {
                             var subledgerTransaction = new SubledgerTransaction()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = Guid.NewGuid().ToString().ToString(),
                                 Amount = subledgerTransactionInfo.Amount,
                                 Account_Id = account.Id,
                                 Subledger_Id = subledgerTransactionInfo.SubLedger_Id,
@@ -528,7 +529,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        private List<SubLedgerTransactionInfo> GetSubledgerTransactionListByVoucherDetailsId(Guid deatilsId)
+        private List<SubLedgerTransactionInfo> GetSubledgerTransactionListByVoucherDetailsId(string deatilsId)
         {
             List<SubLedgerTransactionInfo> subledgerTransactionList = new List<SubLedgerTransactionInfo>();
             using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
@@ -541,9 +542,9 @@ namespace ERPWebApiService.Controllers
                 while (rdr.Read())
                 {
                     SubLedgerTransactionInfo subLedgerTransactionInfo = new SubLedgerTransactionInfo();
-                    subLedgerTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
-                    subLedgerTransactionInfo.Account_Id = Guid.Parse(rdr["Account_Id"].ToString());
-                    subLedgerTransactionInfo.SubLedger_Id = Guid.Parse(rdr["Subledger_Id"].ToString());
+                    subLedgerTransactionInfo.Id = (rdr["Id"].ToString());
+                    subLedgerTransactionInfo.Account_Id = (rdr["Account_Id"].ToString());
+                    subLedgerTransactionInfo.SubLedger_Id = (rdr["Subledger_Id"].ToString());
                     subLedgerTransactionInfo.Amount = Convert.ToDecimal(rdr["Amount"].ToString());
                     subLedgerTransactionInfo.SubledgerDescription = rdr["Description"].ToString();
                     subledgerTransactionList.Add(subLedgerTransactionInfo);
@@ -656,7 +657,7 @@ namespace ERPWebApiService.Controllers
                 {
                     var subledger = new Subledger()
                     {
-                        Id=Guid.NewGuid(),
+                        Id=Guid.NewGuid().ToString().ToString(),
                         SubledgerCode=subledgerInfo.SublederCode,
                         Description=subledgerInfo.Description,
                         Account_Id=subledgerInfo.AccountId
@@ -721,8 +722,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var accountId = Guid.Parse(id);
-                var subledgerList = ERPContext.Subledgers.Where(x=>x.Account_Id==accountId).Select(x => new SubledgerInfo
+                var subledgerList = ERPContext.Subledgers.Where(x=>x.Account_Id==id).Select(x => new SubledgerInfo
                 {
                     Id = x.Id,
                     Description = x.Description,
@@ -750,8 +750,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var sublederId = Guid.Parse(id);
-                var subledger = ERPContext.Subledgers.Where(x=>x.Id==sublederId).Select(x => new SubledgerInfo
+                var subledger = ERPContext.Subledgers.Where(x=>x.Id==id).Select(x => new SubledgerInfo
                 {
                     Id = x.Id,
                     Description = x.Description,

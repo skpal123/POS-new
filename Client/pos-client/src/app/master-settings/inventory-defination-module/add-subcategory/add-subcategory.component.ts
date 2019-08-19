@@ -59,9 +59,8 @@ export class AddSubcategoryComponent implements OnInit {
     this._validationService.getSubCategoryValidationData().subscribe((response:SubcategoryValidation[])=>{
       this.subcategoryValidation=response
     },error=>{
-      let message=error;
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -79,9 +78,8 @@ export class AddSubcategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -95,9 +93,8 @@ export class AddSubcategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }

@@ -57,9 +57,8 @@ export class SupplierEntryComponent implements OnInit {
     this._validationService.getSupplierValidationData().subscribe((response:SupplierValidation[])=>{
       this.supplierValidation=response
     },error=>{
-      let message=error;
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -80,9 +79,8 @@ export class SupplierEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -99,9 +97,8 @@ export class SupplierEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }

@@ -8,14 +8,19 @@ using System.Threading.Tasks;
 
 namespace ERP.DataService.Model.Model
 {
-     [Table("tblSubCategory")]
+    [Table("tblSubCategory")]
     public class Subcategory
     {
-        public Guid Id { set; get; }
-           [StringLength(20)]
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
+        [StringLength(20)]
         public string SubCategoryId { set; get; }
-        public Guid? Category_Id { set; get; }
-          [StringLength(150)]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Category_Id { set; get; }
+        [StringLength(150)]
         public string SubCategoryName { set; get; }
     }
 }

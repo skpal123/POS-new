@@ -86,12 +86,12 @@ namespace ERPWebApiService.Controllers
         /// <summary>
         /// Log out from application
         /// </summary>
-        protected bool LogoutByNewUser(Guid user_id, string pass)
+        protected bool LogoutByNewUser(string user_id, string pass)
         {
 
             try
             {
-                Guid? loggedsession_id = null;
+                string loggedsession_id = null;
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     var sql = "select session_id from sessionManagements where user_id='" + user_id + "' and Password ='" + pass + "'";
@@ -102,7 +102,7 @@ namespace ERPWebApiService.Controllers
                     {
                         while (oReader.Read())
                         {
-                            loggedsession_id = Guid.Parse(Convert.ToString(oReader["session_id"]));
+                            loggedsession_id = (Convert.ToString(oReader["session_id"]));
                             if (loggedsession_id != null)
                             {
                                 SecurityServices.CloseSession(loggedsession_id.ToString());
@@ -134,8 +134,8 @@ namespace ERPWebApiService.Controllers
         public bool updateExpirepassword(string userName, string pass, string newpassword)
         {
             Int64 addedDays = 0;
-            Guid? user_level_Id = null;
-            Guid? user_id = null;
+            string user_level_Id = null;
+            string user_id = null;
 
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["iMFASDataServices"].ConnectionString;
             var conn = new SqlConnection(connectionString);
@@ -146,8 +146,8 @@ namespace ERPWebApiService.Controllers
             while (oReader1.Read())
             {
                 pass = oReader1["password"].ToString();
-                user_level_Id = Guid.Parse(oReader1["user_level_Id"].ToString());
-                user_id = Guid.Parse(oReader1["id"].ToString());
+                user_level_Id = (oReader1["user_level_Id"].ToString());
+                user_id = (oReader1["id"].ToString());
             }
             oReader1.Close();
 
@@ -159,7 +159,7 @@ namespace ERPWebApiService.Controllers
             conn.Close();
             var PasswordChanges = new PasswordChangeHistory
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 User_Id = user_id,
                 Branch_Id = user_level_Id,
                 Password = enCrypNewpassword,
@@ -217,11 +217,11 @@ namespace ERPWebApiService.Controllers
         /// <param name="SessionId"></param>
         private void storeSessionManagement(UserInfo userInfo, string ipAddress, string SessionId)
         {
-            var insertQuery = "Insert into ApplicatonAccessLogs (id, user_id, session_id, loginDate, userId, userName, loginip) VALUES ('" + Guid.NewGuid() + "','" + userInfo.Id + "','" + SessionId + "','" + DateTime.Now + "','" + userInfo.User_Id + "','" + userInfo.User_Name + "','" + System.Uri.UnescapeDataString(ipAddress) + "')";
+            var insertQuery = "Insert into ApplicatonAccessLogs (id, user_id, session_id, loginDate, userId, userName, loginip) VALUES ('" + Guid.NewGuid().ToString() + "','" + userInfo.Id + "','" + SessionId + "','" + DateTime.Now + "','" + userInfo.User_Id + "','" + userInfo.User_Name + "','" + System.Uri.UnescapeDataString(ipAddress) + "')";
             ErpContext.Database.ExecuteSqlCommand(insertQuery);
             insertQuery = "delete from SessionManagements where user_id='" + userInfo.Id + "' and Password ='" + userInfo.Password + "'";
             ErpContext.Database.ExecuteSqlCommand(insertQuery);
-            insertQuery = "Insert into SessionManagements (id, user_id, session_id, login_Date, userId, userName, Password,loginip) VALUES ('" + Guid.NewGuid() + "','" + userInfo.Id + "','" + SessionId + "','" + DateTime.Now + "','" + userInfo.User_Id + "','" + userInfo.User_Name + "','" + userInfo.Password + "','" + System.Uri.UnescapeDataString(ipAddress) + "')";
+            insertQuery = "Insert into SessionManagements (id, user_id, session_id, login_Date, userId, userName, Password,loginip) VALUES ('" + Guid.NewGuid().ToString() + "','" + userInfo.Id + "','" + SessionId + "','" + DateTime.Now + "','" + userInfo.User_Id + "','" + userInfo.User_Name + "','" + userInfo.Password + "','" + System.Uri.UnescapeDataString(ipAddress) + "')";
             ErpContext.Database.ExecuteSqlCommand(insertQuery);
 
         }

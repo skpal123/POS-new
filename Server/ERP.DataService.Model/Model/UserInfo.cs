@@ -10,18 +10,21 @@ namespace ERP.DataService.Model.Model
     [Table("tblUserInfo")]
     public class UserInfo
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(20)]
         public string User_Id { set; get; }
         [StringLength(20)]
         public string Password { set; get; }
         [StringLength(100)]
         public string User_Name { set; get; }
-        public Guid? Employee_Id { set; get; }
-        public Guid? Branch_Id { set; get; }
+        public string Employee_Id { set; get; }
+        public string Branch_Id { set; get; }
         public Boolean Status { set; get; }
         public int? User_Level { set; get; }
-        public Guid? User_Level_Id { set; get; }
+        public string User_Level_Id { set; get; }
         public Guid? Role_Id { set; get; }
         public DateTime? passWordCreateDate { set; get; }
         public Boolean? IsReset { set; get; }

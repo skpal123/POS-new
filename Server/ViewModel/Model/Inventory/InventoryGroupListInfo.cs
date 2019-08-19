@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class InventoryGroupListInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string TransactionId { set; get; }
         public string TransactionType { set; get; }
         public int Quantity { set; get; }

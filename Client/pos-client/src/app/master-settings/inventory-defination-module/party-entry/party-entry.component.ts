@@ -60,9 +60,8 @@ export class PartyEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -79,9 +78,8 @@ export class PartyEntryComponent implements OnInit {
         }
       },error=>{
         this.blockUi.stop();
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }

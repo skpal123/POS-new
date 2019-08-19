@@ -67,7 +67,7 @@ namespace ERPWebApiService.Controllers
                 bool IsGuid = Guid.TryParse(id, out Id);
                 if (IsGuid)
                 {
-                    datalist = ERPContext.Subcategorys.Where(x => x.Category_Id == Id).Select(x => new SelectListItem
+                    datalist = ERPContext.Subcategorys.Where(x => x.Category_Id == id).Select(x => new SelectListItem
                     {
                         Value = x.Id,
                         Code=x.SubCategoryId,
@@ -101,7 +101,7 @@ namespace ERPWebApiService.Controllers
                 bool IsGuid = Guid.TryParse(id, out Id);
                 if (IsGuid)
                 {
-                    datalist = ERPContext.InventoryItems.Where(x => x.SubCategory_Id == Id).Select(x => new SelectListItem
+                    datalist = ERPContext.InventoryItems.Where(x => x.SubCategory_Id == id).Select(x => new SelectListItem
                     {
                         Value = x.Id,
                         Code=x.ItemId,
@@ -155,7 +155,7 @@ namespace ERPWebApiService.Controllers
                 bool IsGuid = Guid.TryParse(id,out Id);
                 if (IsGuid)
                 {
-                    datalist = ERPContext.Subledgers.Where(x => x.Account_Id == Id).Select(x => new SelectListItem
+                    datalist = ERPContext.Subledgers.Where(x => x.Account_Id == id).Select(x => new SelectListItem
                     {
                         Value = x.Id,
                         Code=x.SubledgerCode,

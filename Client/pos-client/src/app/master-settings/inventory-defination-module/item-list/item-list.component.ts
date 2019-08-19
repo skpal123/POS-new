@@ -65,9 +65,8 @@ export class ItemListComponent implements OnInit {
       this.dataReady=true;
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -110,9 +109,8 @@ export class ItemListComponent implements OnInit {
       }
     },error=>{
       this.blockUi.stop();
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ERP.DataService.Model.Model
+namespace ViewModel.Model.Finance
 {
     public class AccountOpeningTableView
     {
@@ -14,6 +14,6 @@ namespace ERP.DataService.Model.Model
        public decimal? DebitAmount {set;get;}
        public decimal? CreditAmount {set;get;}
        public int? AccountType {set;get;}
-       public Guid? AccountId { set; get; }
+       public string AccountId { set; get; }
     }
 }

@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class BranchInfo
     {
-        public Guid Id { set; get; }
+        public Guid Id { get; set; }
         public string BranchName { set; get; }
         public string BranchId { set; get; }
         public string BranchCode { set; get; }

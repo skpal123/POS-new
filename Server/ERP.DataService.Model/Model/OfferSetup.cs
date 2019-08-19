@@ -11,15 +11,22 @@ namespace ERP.DataService.Model.Model
     [Table("tblOfferSetup")]
     public class OfferSetup
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(1500)]
         public string OfferName { set; get; }
-          [StringLength(30)]
+        [StringLength(30)]
         public string OfferId { set; get; }
-        public Guid? Product_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Product_Id { set; get; }
         public bool? IsSingle { set; get; }
         public bool? IsOneToMany { set; get; }
-        public Guid? FreeProduct_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string FreeProduct_Id { set; get; }
         public decimal? DiscountRate { set; get; }
         public int? BundleSize { set; get; }
     }

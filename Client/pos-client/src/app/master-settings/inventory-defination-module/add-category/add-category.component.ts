@@ -43,9 +43,8 @@ export class AddCategoryComponent implements OnInit {
     this._validationService.getCategoryValidationData().subscribe((response:CategoryValidation[])=>{
       this.categoryValidation=response
     },error=>{
-      let message=error;
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -61,9 +60,8 @@ export class AddCategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -77,9 +75,8 @@ export class AddCategoryComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }

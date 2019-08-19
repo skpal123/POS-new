@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
      [Table("tblSettingSellPrice")]
     public class SettingSellPrice
     {
-        public Guid Id { set; get; }
+         [Key]
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+         public string Id { set; get; }
         [StringLength(20)]
         public string ItemCode { set; get; }
         [StringLength(20)]
@@ -19,7 +22,9 @@ namespace ERP.DataService.Model.Model
         public DateTime? PurchaseDate { set; get; }
         public decimal PreviousAmount { set; get; }
         public decimal Amount { set; get; }
-        public Guid? Item_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Item_Id { set; get; }
 
     }
 }

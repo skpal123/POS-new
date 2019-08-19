@@ -11,14 +11,19 @@ namespace ERP.DataService.Model.Model
     [Table("tblAccountOpening")]
     public class AccountOpening
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(6)]
         public string BranchCode { set; get; }
-        public Guid? Branch_Id { set; get; }
+         [StringLength(100)]
+        public string Branch_Id { set; get; }
         public decimal? Amount { set; get; }
         public DateTime OpeningDate { set; get; }
         [StringLength(20)]
         public string AutoAccountCode { set; get; }
-        public Guid? Account_Id { set; get; }
+         [StringLength(100)]
+        public string Account_Id { set; get; }
     }
 }

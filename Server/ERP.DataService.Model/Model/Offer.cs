@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,16 @@ namespace ERP.DataService.Model.Model
     [Table("Offer")]
     public class Offer
     {
-        public Guid Id { set; get; }
-        public Guid? ValuableCustomerType_Id { set; get; }
-        public Guid? OfferSetup_Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string ValuableCustomerType_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string OfferSetup_Id { set; get; }
         public string OfferType { set; get; }
         public bool? IsMultiple { set; get; }
         public bool? IsDiscountRate { set; get; }

@@ -36,9 +36,8 @@ export class AddUnitComponent implements OnInit {
     this._validationService.getUnitValidationData().subscribe((response:UnitValidation[])=>{
       this.unitValidation=response
     },error=>{
-      let message=error;
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -53,9 +52,8 @@ export class AddUnitComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }
@@ -69,9 +67,8 @@ export class AddUnitComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
-        let message=error
         let dialogData=new DialogData();
-        dialogData.message=message.Message;
+        dialogData.message=error
         this._alertBox.openDialog(dialogData);
       })
     }

@@ -8,11 +8,11 @@ namespace ViewModel.Model
 {
     public class AccountParentChildRelationInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string AccountDescription { set; get; }
         public string AutoAccountCode { set; get; }
         public string ManualAccountCode { set; get; }
-        public Guid? AccountId { set; get; }
+        public string AccountId { set; get; }
         public int? AccountType { set; get; }
         public int? ParentGroupId { set; get; }
         public int? ParentLevelId { set; get; }
@@ -20,8 +20,8 @@ namespace ViewModel.Model
         public int? ParentAccId { set; get; }
         public int? ChildAccId { set; get; }
         public int? ChildLevelId { set; get; }
-        public Guid? ParentAccount_Id { set; get; }
-        public Guid? ChildAccount_Id { set; get; }
+        public string ParentAccount_Id { set; get; }
+        public string ChildAccount_Id { set; get; }
         public bool? IsLeaf { set; get; }
         public bool? Status { set; get; }
         public bool? IsClicked { set; get; }

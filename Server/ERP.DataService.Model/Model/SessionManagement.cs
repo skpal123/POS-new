@@ -9,9 +9,9 @@ namespace ERP.DataService.Model.Model
 {
     public class SessionManagement
     {
-        public Guid Id { set; get; }
-        public Guid? User_Id { set; get; }
-        public Guid? Session_Id { set; get; }
+        public string Id { get; set; }
+        public string User_Id { set; get; }
+        public string Session_Id { set; get; }
         public DateTime? Login_Date { set; get; }
          [StringLength(20)]
         public string UserId { set; get; }

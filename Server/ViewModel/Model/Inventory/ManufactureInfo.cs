@@ -8,11 +8,11 @@ namespace ViewModel.Model
 {
     public class ManufactureInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string ManufactureId { set; get; }
         public string ManufactureName { set; get; }
         public string Address { set; get; }
         public string CountryName { set; get; }
-        public Guid? Country_Id { set; get; }
+        public string Country_Id { set; get; }
     }
 }

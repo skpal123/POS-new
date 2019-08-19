@@ -283,9 +283,20 @@
     <Compile Include="Migrations\201906120946448_alter table tblOfferSetup add onetomay.Designer.cs">
       <DependentUpon>201906120946448_alter table tblOfferSetup add onetomay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908191626027_AddingEmployeeGrade.cs" />
+    <Compile Include="Migrations\201908191626027_AddingEmployeeGrade.Designer.cs">
+      <DependentUpon>201908191626027_AddingEmployeeGrade.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908191722476_ChangeGuidToString.cs" />
+    <Compile Include="Migrations\201908191722476_ChangeGuidToString.Designer.cs">
+      <DependentUpon>201908191722476_ChangeGuidToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908191736447_ChangeGuidToStringAllForignKey.cs" />
+    <Compile Include="Migrations\201908191736447_ChangeGuidToStringAllForignKey.Designer.cs">
+      <DependentUpon>201908191736447_ChangeGuidToStringAllForignKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
-    <Compile Include="Model\AccountOpeningTableView.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
     <Compile Include="Model\ApplicatonAccessLog.cs" />
     <Compile Include="Model\Account.cs" />
@@ -296,7 +307,11 @@
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\CustomerOffer.cs" />
     <Compile Include="Model\CustomerSupplierTransactionDetail.cs" />
+    <Compile Include="Model\Designation.cs" />
+    <Compile Include="Model\EmployeeGrade.cs" />
+    <Compile Include="Model\EmployeeSubGrade.cs" />
     <Compile Include="Model\FormInfo.cs" />
+    <Compile Include="Model\GradeStepSalaryItem.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
     <Compile Include="Model\ItemTransaction.cs" />
@@ -306,6 +321,7 @@
     <Compile Include="Model\OfferSetup.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\PartyTransaction.cs" />
+    <Compile Include="Model\SalaryItem.cs" />
     <Compile Include="Model\SettingSellPrice.cs" />
     <Compile Include="Model\Subcategory.cs" />
     <Compile Include="Model\SubledgerOpening.cs" />
@@ -501,6 +517,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906120946448_alter table tblOfferSetup add onetomay.resx">
       <DependentUpon>201906120946448_alter table tblOfferSetup add onetomay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908191626027_AddingEmployeeGrade.resx">
+      <DependentUpon>201908191626027_AddingEmployeeGrade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908191722476_ChangeGuidToString.resx">
+      <DependentUpon>201908191722476_ChangeGuidToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908191736447_ChangeGuidToStringAllForignKey.resx">
+      <DependentUpon>201908191736447_ChangeGuidToStringAllForignKey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

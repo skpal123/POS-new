@@ -12,7 +12,9 @@ namespace ERP.DataService.Model.Model
     public class Account
     {
         [Key]
-        public Guid Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         public int? GroupId { set; get; }
         public int? LevelId { set; get; }
         public int? AccId { set; get; }
@@ -32,10 +34,13 @@ namespace ERP.DataService.Model.Model
         public string Currency { set; get; }
         public int? PackageId { set; get; }
         public bool? IsSale { set; get; }
-        public Guid? BranchId { set; get; }
-        public Guid? Corporate_Id { set; get; }
+         [StringLength(100)]
+        public string BranchId { set; get; }
+         [StringLength(100)]
+        public string Corporate_Id { set; get; }
         public int? ControlLevelId { set; get; }
-        public Guid? ControlLevel_Id { set; get; }
+         [StringLength(100)]
+        public string ControlLevel_Id { set; get; }
 
     }
 }

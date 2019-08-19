@@ -20,7 +20,7 @@ namespace ERPWebApiService.Autentication
         public List<SubMenuView> SubMenus { set; get; }
         public int? UserLevel { get; set; }
 
-        public Guid? LevelId { get; set; }
+        public string LevelId { get; set; }
 
         public string PluginName { get; set; }
 

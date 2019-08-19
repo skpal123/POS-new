@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,16 @@ namespace ERP.DataService.Model.Model
 {
     public class ApplicatonAccessLog
     {
-        public Guid Id { set; get; }
-        public Guid? User_Id { set; get; }
-        public Guid? Session_Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string User_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Session_Id { set; get; }
         public DateTime? LoginDate { set; get; }
         public DateTime? Logout { set; get; }
         [StringLength(20)]

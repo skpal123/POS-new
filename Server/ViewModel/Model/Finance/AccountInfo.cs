@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModel.Model
+namespace ViewModel.Model.Finance
 {
     public class AccountInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public int GroupId { set; get; }
         public int LevelId { set; get; }
         public int AccId { set; get; }
@@ -24,10 +24,10 @@ namespace ViewModel.Model
         public string Currency { set; get; }
         public int PackageId { set; get; }
         public bool IsSale { set; get; }
-        public Guid? BranchId { set; get; }
-        public Guid? Corporate_Id { set; get; }
+        public string BranchId { set; get; }
+        public string Corporate_Id { set; get; }
         public int? ControlLevelId { set; get; }
-        public Guid? ControlLevel_Id { set; get; }
-        public Guid? ParentAccountId { set; get; }
+        public string ControlLevel_Id { set; get; }
+        public string ParentAccountId { set; get; }
     }
 }

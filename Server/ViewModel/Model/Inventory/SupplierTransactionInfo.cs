@@ -8,16 +8,16 @@ namespace ViewModel.Model
 {
     public class SupplierTransactionInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string ChalanNo { set; get; }
         public string InvoiceNo { set; get; }
         public string OrderNo { set; get; }
-        public Guid? Group_Id { set; get; }
-        public Guid? Supplier_Id { set; get; }
+        public string Group_Id { set; get; }
+        public string Supplier_Id { set; get; }
         public int? PaymentMode { set; get; }
         public DateTime? PaymentDate { set; get; }
-        public Guid? Ledger_Id { set; get; }
-        public Guid? SubLedger_Id { set; get; }
+        public string Ledger_Id { set; get; }
+        public string SubLedger_Id { set; get; }
         public decimal PaidAmount { set; get; }
         public bool? IsFirstTransaction { set; get; }
         public List<CustomerSupplierTransactionDetailsInfo> TransactionDetailsList { set; get; }

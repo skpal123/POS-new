@@ -8,10 +8,10 @@ namespace ViewModel.Model.Inventory
 {
     public class OfferSetupInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string OfferId { set; get; }
         public string OfferName { set; get; }
-        public Guid? Product_Id { set; get; }
+        public string Product_Id { set; get; }
         public string ProductName { set; get; }
         public bool IsSingle { set; get; }
         public bool IsOneToMany { set; get; }

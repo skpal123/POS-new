@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
     [Table("tblItemTransaction")]
     public class ItemTransaction
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(20)]
         public string TransactionId { set; get; }
          [StringLength(20)]
@@ -29,8 +32,14 @@ namespace ERP.DataService.Model.Model
         [StringLength(20)]
         public string LotNo { set; get; }
         public DateTime? TransactionDate { set; get; }
-        public Guid? Group_Id { set; get; }
-        public Guid? Item_Id { set; get; }
-        public Guid? Location_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Group_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Item_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Location_Id { set; get; }
     }
 }

@@ -56,7 +56,7 @@ namespace ERPWebApiService.Autentication
 
             try
             {
-                //var userid = Guid.Parse(userId);
+                //var userid = (userId);
                 //var userPermissions = ERPContext.UserPermissions.Count(x => x.User_Id == userid);
                 //if (userPermissions > 0)
                 //{
@@ -65,7 +65,7 @@ namespace ERPWebApiService.Autentication
                 //                   join userinfo in ERPContext.UserInfos
                 //                   on new { uId = userPermission.User_Id, roleId = userPermission.Role_Id } equals new { uId = userinfo.Id, roleId = userinfo.Role_Id }
                 //                   join subMenu in ERPContext.SubMenus on permission.SubMenu_id equals subMenu.Id
-                //                   where userinfo.Id == Guid.Parse(userId)
+                //                   where userinfo.Id == (userId)
                 //                       && subMenu.ItemName == itemName
                 //                       && permission.Name == actionName
                 //                   select new PermissionView()
@@ -87,7 +87,7 @@ namespace ERPWebApiService.Autentication
                 //                   join permission in ERPContext.Permissions on subMenu.Id equals permission.SubMenu_id
                 //                   join rolepermission in ERPContext.RolePermissions on permission.Id equals rolepermission.Permission_Id
                 //                   join userinfo in ERPContext.UserInfos on rolepermission.Role_Id equals userinfo.Role_Id
-                //                   where userinfo.Id == Guid.Parse(userId)
+                //                   where userinfo.Id == (userId)
                 //                   && subMenu.ItemName == itemName
                 //                   && permission.Name == actionName
                 //                   select new PermissionView()
@@ -114,7 +114,7 @@ namespace ERPWebApiService.Autentication
         protected static bool IsSessionExist(string sessionId)
         {
             var sessionExist = false;
-            Guid? loggedsession_id = null;
+            string loggedsession_id = null;
 
             using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
             {
@@ -125,7 +125,7 @@ namespace ERPWebApiService.Autentication
                 {
                     while (oReader.Read())
                     {
-                        loggedsession_id = Guid.Parse(Convert.ToString(oReader["session_id"]));
+                        loggedsession_id = (Convert.ToString(oReader["session_id"]));
                         if (loggedsession_id != null)
                         {
                             sessionExist = true;

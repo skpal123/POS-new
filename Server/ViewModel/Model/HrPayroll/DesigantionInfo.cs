@@ -8,7 +8,7 @@ namespace ViewModel.Model.HrPayroll
 {
     public class DesigantionInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string DesignationId { set; get; }
         public string DesignationName { set; get; }
         public string Description { set; get; }

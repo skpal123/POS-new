@@ -10,11 +10,22 @@ namespace ERP.DataService.Model.Model
     [Table("tblSubledgerTransaction")]
     public class SubledgerTransaction
     {
-        public Guid Id { set; get; }
-        public Guid? Voucher_Id { set; get; }
-        public Guid? Voucher_Detail_Id { set; get; }
-        public Guid? Account_Id { set; get; }
-        public Guid? Subledger_Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Voucher_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Voucher_Detail_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Account_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Subledger_Id { set; get; }
         public decimal? Amount { set; get; }
        
     }

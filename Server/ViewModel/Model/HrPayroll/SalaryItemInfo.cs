@@ -9,11 +9,11 @@ namespace ViewModel.Model.HrPayroll
     public class SalaryItemInfo
     {
 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public double? ItemId { get; set; }
 
-        public string Itemname { get; set; }
+        public string ItemName { get; set; }
 
         public string ItemType { get; set; }
 

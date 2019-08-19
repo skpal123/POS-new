@@ -406,7 +406,7 @@ namespace ERPWebApiService.Controllers
                        
                         foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
                         {
-                            rolePermissionTable.Rows.Add(Guid.NewGuid(), newRole.Id, rolePermissionInfo.PermissionId);                         
+                            rolePermissionTable.Rows.Add(Guid.NewGuid().ToString(), newRole.Id, rolePermissionInfo.PermissionId);                         
                         }
                     }
                 }
@@ -420,7 +420,7 @@ namespace ERPWebApiService.Controllers
                         }
                         foreach (RolePermissionInfo rolePermissionInfo in rolePermissionDataInfo.RolePermissionList)
                         {
-                            rolePermissionTable.Rows.Add(Guid.NewGuid(), role.Id, rolePermissionInfo.PermissionId);
+                            rolePermissionTable.Rows.Add(Guid.NewGuid().ToString(), role.Id, rolePermissionInfo.PermissionId);
                         }
                     }
                 }

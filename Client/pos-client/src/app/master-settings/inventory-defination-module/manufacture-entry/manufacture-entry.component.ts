@@ -44,9 +44,8 @@ saveManufacture(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -60,9 +59,8 @@ saveManufacture(){
         this._alertBox.openDialog(dialogData);
       }
     },error=>{
-      let message=error
       let dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error;
       this._alertBox.openDialog(dialogData);
     })
   }
@@ -72,9 +70,8 @@ getManufactureFormInfo(){
     this.manufactureFormInfoList=response
       console.log(this.manufactureFormInfoList);
   },error=>{
-    let message=error.json();
     let dialogData=new DialogData();
-    dialogData.message=message.Message;
+    dialogData.message=error
     this._alertBox.openDialog(dialogData);
   })
 }

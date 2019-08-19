@@ -8,8 +8,8 @@ namespace ViewModel.Model
 {
     public class RolePermissionInfo
     {
-        public Guid Id { set; get; }
-        public Guid? RoleId { set; get; }
-        public Guid? PermissionId { set; get; }
+        public string Id { get; set; }
+        public string RoleId { set; get; }
+        public string PermissionId { set; get; }
     }
 }

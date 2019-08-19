@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class ItemListInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string ItemId { set; get; }
         public string ItemCode { set; get; }
         public string ItemName { set; get; }

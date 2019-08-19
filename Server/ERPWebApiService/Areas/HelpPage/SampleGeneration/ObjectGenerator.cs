@@ -411,7 +411,7 @@ namespace ERPWebApiService.Areas.HelpPage
                     { typeof(DBNull), index => DBNull.Value },
                     { typeof(Decimal), index => (Decimal)index },
                     { typeof(Double), index => (Double)(index + 0.1) },
-                    { typeof(Guid), index => Guid.NewGuid() },
+                    { typeof(Guid), index => Guid.NewGuid().ToString() },
                     { typeof(Int16), index => (Int16)(index % Int16.MaxValue) },
                     { typeof(Int32), index => (Int32)(index % Int32.MaxValue) },
                     { typeof(Int64), index => (Int64)index },

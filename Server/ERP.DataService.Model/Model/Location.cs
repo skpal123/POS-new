@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
      [Table("tblItemLocation")]
     public class Location
     {
-        public Guid Id { set; get; }
+         [Key]
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+         public string Id { set; get; }
          [StringLength(20)]
         public string LocationId { set; get; }
         [StringLength(150)]

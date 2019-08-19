@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
     [Table("tblGroupItem")]
     public class GroupItem
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(20)]
         public string TransactionId { set; get; }
         [StringLength(20)]
@@ -26,7 +29,9 @@ namespace ERP.DataService.Model.Model
         public decimal DiscountAmount { set; get; }
         public decimal NetPayableAmount { set; get; }
         public decimal PaidAmount { set; get; }
-        public Guid? Group_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Group_Id { set; get; }
         [StringLength(20)]
         public string ChalanNo { set; get; }
         [StringLength(20)]
@@ -36,13 +41,25 @@ namespace ERP.DataService.Model.Model
         public DateTime? TransactionDate { set; get; }
         [StringLength(20)]
         public String GrvNo { set; get; }
-        public Guid? Supplier_Id { set; get; }
-        public Guid? Party_Id { set; get; }
-        public Guid? Customer_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Supplier_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Party_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Customer_Id { set; get; }
         public DateTime GrvDate { set; get; }
-        public Guid? Approver_Id { set; get; }
-        public Guid? Ledger_Id { set; get; }
-        public Guid? SubLedger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Approver_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Ledger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string SubLedger_Id { set; get; }
         public int? PaymentMode { set; get; }
          [StringLength(20)]
         public string LotNo { set; get; }

@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
      [Table("tblParty")]
     public class Party
     {
-        public Guid Id { set; get; }
+         [Key]
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+         public string Id { set; get; }
         [StringLength(20)]
         public string PartyId { set; get; }
         [StringLength(150)]
@@ -24,7 +27,11 @@ namespace ERP.DataService.Model.Model
         public string Email { set; get; }
         [StringLength(200)]
         public string Address { set; get; }
-        public Guid? Ledger_Id { set; get; }
-        public Guid? SubLedger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Ledger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string SubLedger_Id { set; get; }
     }
 }

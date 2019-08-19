@@ -153,7 +153,7 @@ namespace ERPWebApiService.Authentication
             conn.Open();
             var onlyDate = DateTime.Now;
             var getDate = onlyDate.Date;
-            var comText = " INSERT INTO TriedLoginByWrongPass_log  VALUES('" + Guid.NewGuid() + "','" + user.Id + "','" + user.User_Name + "','" + onlyDate + "','" + userInfo.TriedLogin + "','" + Reason + "','" + userIP + "','" + isUserBlocked + "','" + computerName + "')";
+            var comText = " INSERT INTO TriedLoginByWrongPass_log  VALUES('" + Guid.NewGuid().ToString() + "','" + user.Id + "','" + user.User_Name + "','" + onlyDate + "','" + userInfo.TriedLogin + "','" + Reason + "','" + userIP + "','" + isUserBlocked + "','" + computerName + "')";
             using (SqlCommand Com = new SqlCommand(comText, conn)) { Com.ExecuteNonQuery(); }
             conn.Close();
         }

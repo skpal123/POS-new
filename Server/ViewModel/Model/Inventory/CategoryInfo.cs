@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class CategoryInfo
     {
-        public Guid Id { set; get; }
+        public string Id { get; set; }
         public string CategoryId { set; get; }
         public string CategoryName { set; get; }
     }

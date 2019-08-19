@@ -8,10 +8,10 @@ namespace ViewModel.Model
 {
     public class SubMenuView
     {
-        public Guid Id { set; get; }
+        public Guid Id { get; set; }
         public string Name { set; get; }
         public string RouterPath { set; get; }
-        public Guid? Menu_Id { set; get; }
+        public Guid Menu_Id { set; get; }
         public int? MenuSqId { set; get; }
         public int? SubMenuSqId { set; get; }
         public string ItemName { set; get; }

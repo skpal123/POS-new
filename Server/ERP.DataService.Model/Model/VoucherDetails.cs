@@ -11,7 +11,10 @@ namespace ERP.DataService.Model.Model
      [Table("tblVoucherDetails")]
     public class VoucherDetails
     {
-        public Guid Id { get; set; }
+         [Key]
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+        public string Id { get; set; }
          [StringLength(30)]
         public string VoucherNo { get; set; }
         public int? Lineno { get; set; }
@@ -19,9 +22,15 @@ namespace ERP.DataService.Model.Model
         public int? GroupId { get; set; }
         public int? LevelId { get; set; }
         public int? AccId { get; set; }
-        public Guid? Branch_Id { get; set; }
-        public Guid? Voucher_Id { get; set; }
-        public Guid? Account_Id { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Branch_Id { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Voucher_Id { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Account_Id { get; set; }
         public double? Vat { get; set; }
         public double? Tax { get; set; }
     }

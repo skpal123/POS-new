@@ -11,14 +11,23 @@ namespace ERP.DataService.Model.Model
      [Table("tblCustomerSupplierTransactionDetail")]
     public class CustomerSupplierTransactionDetail
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
          [StringLength(20)]
         public string InvoiceNo { set; get; }
          [StringLength(20)]
         public string TransactionId { set; get; }
-        public Guid? Group_Id { set; get; }
-        public Guid? CustomerTransaction_Id { set; get; }
-        public Guid? SupplierTransaction_Id { set; get; }
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+        public string Group_Id { set; get; }
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+        public string CustomerTransaction_Id { set; get; }
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+        public string SupplierTransaction_Id { set; get; }
         public DateTime? PaymentDate { set; get; }
         public decimal PaidAmount { set; get; }
     }

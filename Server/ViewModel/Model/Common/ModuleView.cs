@@ -8,7 +8,7 @@ namespace ViewModel.Model
 {
     public class ModuleView
     {
-        public Guid Id { set; get; }
+        public Guid Id { get; set; }
         public string Name { set; get; }
         public string RouterPath { set; get; }
         public int SequenceId { set; get; }

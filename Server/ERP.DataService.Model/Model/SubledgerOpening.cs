@@ -11,15 +11,24 @@ namespace ERP.DataService.Model.Model
     [Table("tblSubledgerOpening")]
     public class SubledgerOpening
     {
-        public Guid Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         [StringLength(6)]
         public string BranchCode { set; get; }
-        public Guid? Branch_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Branch_Id { set; get; }
         public decimal? Amount { set; get; }
         public DateTime OpeningDate { set; get; }
         [StringLength(10)]
         public string SubledgerCode { set; get; }
-        public Guid? Account_Id { set; get; }
-        public Guid? Subledger_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Account_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Subledger_Id { set; get; }
     }
 }

@@ -53,7 +53,7 @@ namespace ERPWebApiService.Controllers
             {
                 var unit = new Unit()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     UnitName = unitInfo.UnitName,
                     Description = unitInfo.Description
                 };
@@ -97,7 +97,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
+                var Id = (id);
                 var unitInfo = ERPContext.Units.Where(x => x.Id == Id).Select(x => new UnitInfo()
                 {
                     Id = x.Id,
@@ -117,7 +117,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
+                var Id = (id);
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", Id.ToString());
                 DatabaseCommand.ExcuteNonQuery("delete from tblUnit where id=@id", paramlist, null);
@@ -157,7 +157,7 @@ namespace ERPWebApiService.Controllers
             {
                 var location = new Location()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     LocationId = inventoryLocationInfo.LocationId,
                     LocationName = inventoryLocationInfo.LocationName,
                     Description = inventoryLocationInfo.Description
@@ -203,8 +203,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
-                var locationInfo = ERPContext.Locations.Where(x => x.Id == Id).Select(x => new InventoryLocationInfo()
+                var locationInfo = ERPContext.Locations.Where(x => x.Id == id).Select(x => new InventoryLocationInfo()
                 {
                     Id = x.Id,
                     LocationId = x.LocationId,
@@ -261,7 +260,7 @@ namespace ERPWebApiService.Controllers
             {
                 var category = new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     CategoryId = categoryInfo.CategoryId,
                     CategoryName = categoryInfo.CategoryName
                 };
@@ -305,7 +304,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
+                var Id = (id);
                 var categoryInfo = ERPContext.Categorys.Where(x => x.Id == Id).Select(x => new CategoryInfo()
                 {
                     Id = x.Id,
@@ -363,7 +362,7 @@ namespace ERPWebApiService.Controllers
             {
                 var subcategory = new Subcategory()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     SubCategoryId = subCategoryInfo.SubCategoryId,
                     SubCategoryName = subCategoryInfo.SubCategoryName,
                     Category_Id = subCategoryInfo.Category_Id
@@ -409,7 +408,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
+                var Id = (id);
                 var subcategoryInfo = ERPContext.Subcategorys.Where(x => x.Id == Id).Select(x => new SubCategoryInfo()
                 {
                     Id = x.Id,
@@ -476,7 +475,7 @@ namespace ERPWebApiService.Controllers
             {
                 var inventoryItem = new InventoryItem()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     ItemId = inventoryItemInfo.ItemId,
                     ItemCode = inventoryItemInfo.ItemCode,
                     ItemName = inventoryItemInfo.ItemName,
@@ -548,7 +547,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        inventoryItemInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryItemInfo.Id = (rdr["Id"].ToString());
                         inventoryItemInfo.ItemId = rdr["ItemId"] != DBNull.Value ? rdr["ItemId"].ToString() : null;
                         inventoryItemInfo.ItemCode = rdr["ItemCode"] != DBNull.Value ? rdr["ItemCode"].ToString() : null;
                         inventoryItemInfo.ItemName = rdr["ItemName"] != DBNull.Value ? rdr["ItemName"].ToString() : null;
@@ -559,23 +558,23 @@ namespace ERPWebApiService.Controllers
                         inventoryItemInfo.UnitName = rdr["UnitName"] != DBNull.Value ? rdr["UnitName"].ToString() : null;
                         if (rdr["Category_Id"] != DBNull.Value)
                         {
-                            inventoryItemInfo.Category_Id = Guid.Parse(rdr["Category_Id"].ToString());
+                            inventoryItemInfo.Category_Id = (rdr["Category_Id"].ToString());
                         }
                         if (rdr["SubCategory_Id"] != DBNull.Value)
                         {
-                            inventoryItemInfo.SubCategory_Id = Guid.Parse(rdr["SubCategory_Id"].ToString());
+                            inventoryItemInfo.SubCategory_Id = (rdr["SubCategory_Id"].ToString());
                         }
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            inventoryItemInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            inventoryItemInfo.Ledger_Id = rdr["Ledger_Id"].ToString();
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            inventoryItemInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            inventoryItemInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                         if (rdr["UnitId"] != DBNull.Value)
                         {
-                            inventoryItemInfo.UnitId = Guid.Parse(rdr["UnitId"].ToString());
+                            inventoryItemInfo.UnitId = (rdr["UnitId"].ToString());
                         }
                     }
                 }
@@ -619,7 +618,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         PartyInfo partyInfo = new PartyInfo();
-                        partyInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyInfo.Id = (rdr["Id"].ToString());
                         partyInfo.PartyId = rdr["PartyId"] != DBNull.Value ? rdr["PartyId"].ToString() : null;
                         partyInfo.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
                         partyInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
@@ -646,7 +645,7 @@ namespace ERPWebApiService.Controllers
             {
                 var party = new Party()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     PartyId = partyInfo.PartyId,
                     PartyName = partyInfo.PartyName,
                     PnoneNo = partyInfo.PhoneNo,
@@ -713,7 +712,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        partyInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyInfo.Id = (rdr["Id"].ToString());
                         partyInfo.PartyId = rdr["PartyId"] != DBNull.Value ? rdr["PartyId"].ToString() : null;
                         partyInfo.PartyName = rdr["PartyName"] != DBNull.Value ? rdr["PartyName"].ToString() : null;
                         partyInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
@@ -724,11 +723,11 @@ namespace ERPWebApiService.Controllers
                         partyInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            partyInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            partyInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            partyInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            partyInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                     }
                 }
@@ -772,7 +771,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         SupplierInfo supplierInfo = new SupplierInfo();
-                        supplierInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierInfo.Id = (rdr["Id"].ToString());
                         supplierInfo.SupplierId = rdr["SupplierId"] != DBNull.Value ? rdr["SupplierId"].ToString() : null;
                         supplierInfo.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
                         supplierInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
@@ -799,7 +798,7 @@ namespace ERPWebApiService.Controllers
             {
                 var supplier = new Supplier()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     SupplierId = supplierInfo.SupplierId,
                     SupplierName = supplierInfo.SupplierName,
                     PnoneNo = supplierInfo.PhoneNo,
@@ -866,7 +865,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        supplierInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierInfo.Id = (rdr["Id"].ToString());
                         supplierInfo.SupplierId = rdr["SupplierId"] != DBNull.Value ? rdr["SupplierId"].ToString() : null;
                         supplierInfo.SupplierName = rdr["SupplierName"] != DBNull.Value ? rdr["SupplierName"].ToString() : null;
                         supplierInfo.ContactPerson = rdr["ContactPerson"] != DBNull.Value ? rdr["ContactPerson"].ToString() : null;
@@ -877,11 +876,11 @@ namespace ERPWebApiService.Controllers
                         supplierInfo.SubLedgerName = rdr["Description"] != DBNull.Value ? rdr["Description"].ToString() : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            supplierInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            supplierInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            supplierInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            supplierInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                     }
                 }
@@ -937,7 +936,7 @@ namespace ERPWebApiService.Controllers
             {
                 var manufacture = new Manufacture()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     ManufactureId = manufactureInfo.ManufactureId,
                     ManufactureName = manufactureInfo.ManufactureName,
                     Address = manufactureInfo.Address,
@@ -986,7 +985,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
+                var Id = (id);
                 var manufacture = ERPContext.Manufactures.Where(x => x.Id == Id).Select(x => new ManufactureInfo()
                 {
                     Id = x.Id,
@@ -1042,7 +1041,7 @@ namespace ERPWebApiService.Controllers
                         offerSetupInfo.BundleSize = rdr["BundleSize"] != DBNull.Value ? Convert.ToInt32(rdr["BundleSize"]) : 0;
                         if (rdr["Product_Id"] != DBNull.Value)
                         {
-                            offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
+                            offerSetupInfo.Product_Id = (rdr["Product_Id"].ToString());
                         }                     
                         offerSetupInfos.Add(offerSetupInfo);
                     }
@@ -1064,7 +1063,7 @@ namespace ERPWebApiService.Controllers
                 {
                     OfferSetup offerSetup = new OfferSetup()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.NewGuid().ToString(),
                         OfferId = offerSetupInfo.OfferId,
                         OfferName = offerSetupInfo.OfferName,
                         Product_Id = offerSetupInfo.Product_Id,
@@ -1092,7 +1091,7 @@ namespace ERPWebApiService.Controllers
                     {
                         foreach (var freeProduct in offerSetupInfo.FreeProductList)
                         {
-                            dt.Rows.Add(Guid.NewGuid(), product.Id, freeProduct.Id,
+                            dt.Rows.Add(Guid.NewGuid().ToString(), product.Id, freeProduct.Id,
                                 offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
                                 offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany);
                         }
@@ -1149,7 +1148,7 @@ namespace ERPWebApiService.Controllers
                         {
                             foreach (var freeProduct in offerSetupInfo.FreeProductList)
                             {
-                                dt.Rows.Add(Guid.NewGuid(), product.Id, freeProduct.Id,
+                                dt.Rows.Add(Guid.NewGuid().ToString(), product.Id, freeProduct.Id,
                                     offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
                                     offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany);
                             }
@@ -1182,7 +1181,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        offerSetupInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        offerSetupInfo.Id = (rdr["Id"].ToString());
                         offerSetupInfo.OfferId = rdr["OfferId"] != DBNull.Value ? rdr["OfferId"].ToString() : null;
                         offerSetupInfo.OfferName = rdr["OfferName"] != DBNull.Value ? rdr["OfferName"].ToString() : null;
                         offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;
@@ -1190,7 +1189,7 @@ namespace ERPWebApiService.Controllers
                         offerSetupInfo.BundleSize = rdr["BundleSize"] != DBNull.Value ? Convert.ToInt32(rdr["BundleSize"]) : 0;
                         if (rdr["Product_Id"] != DBNull.Value)
                         {
-                            offerSetupInfo.Product_Id = Guid.Parse(rdr["Product_Id"].ToString());
+                            offerSetupInfo.Product_Id = (rdr["Product_Id"].ToString());
                         }
                         if (rdr["IsSingle"] != DBNull.Value)
                         {
@@ -1256,7 +1255,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         CustomerInfo customerInfo = new CustomerInfo();
-                        customerInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        customerInfo.Id = (rdr["Id"].ToString());
                         customerInfo.CustomerId = rdr["CustomerId"] != DBNull.Value ? rdr["CustomerId"].ToString() : null;
                         customerInfo.CustomerName = rdr["CustomerName"] != DBNull.Value ? rdr["CustomerName"].ToString() : null;
                         customerInfo.PhoneNo = rdr["PhoneNo"] != DBNull.Value ? rdr["PhoneNo"].ToString() : null;
@@ -1282,7 +1281,7 @@ namespace ERPWebApiService.Controllers
             {
                 var customer = new Customer()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     CustomerId = customerInfo.CustomerId,
                     CustomerName = customerInfo.CustomerName,
                     PhoneNo = customerInfo.PhoneNo,
@@ -1348,7 +1347,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        customerInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        customerInfo.Id = (rdr["Id"].ToString());
                         customerInfo.CustomerId = rdr["CustomerId"] != DBNull.Value
                             ? rdr["CustomerId"].ToString()
                             : null;
@@ -1366,11 +1365,11 @@ namespace ERPWebApiService.Controllers
                             : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            customerInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            customerInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            customerInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            customerInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                     }
                 }
@@ -1413,7 +1412,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         InventoryGroupListInfo inventoryGroup=new InventoryGroupListInfo();
-                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.Id = (rdr["Id"].ToString());
                         inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
                         inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
                         inventoryGroup.Quantity = rdr["Quantity"] != DBNull.Value ? Convert.ToInt32(rdr["Quantity"].ToString()) : 0;
@@ -1459,7 +1458,7 @@ namespace ERPWebApiService.Controllers
                 DataTable dt = new DataTable();
                 var groupItem = new GroupItem()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     TransactionId = groupItemInfo.TransactionId,
                     TransactionType = groupItemInfo.TransactionType,
                     Reason = groupItemInfo.Reason,
@@ -1508,7 +1507,7 @@ namespace ERPWebApiService.Controllers
                 {
                     foreach (var item in groupItemInfo.ItemTransactionList)
                     {
-                        dt.Rows.Add(Guid.NewGuid(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
+                        dt.Rows.Add(Guid.NewGuid().ToString(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
                             item.UnitSale, item.Vat, item.Tax, item.DiscountAmount, item.SerialNo, item.DiscountRate, item.LotNo,
                             item.TransactionDate, groupItem.Id, item.Item_Id, item.Location_Id);
                     }
@@ -1520,7 +1519,7 @@ namespace ERPWebApiService.Controllers
                 {
                     var supplierTransaction = new SupplierTransaction()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.NewGuid().ToString(),
                         ChalanNo = groupItemInfo.ChalanNo,
                         InvoiceNo = groupItemInfo.InvoiceNo,
                         Supplier_Id = groupItemInfo.Supplier_Id,
@@ -1536,7 +1535,7 @@ namespace ERPWebApiService.Controllers
                     ERPContext.SaveChanges();
                     var transactionDetails = new CustomerSupplierTransactionDetail()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.NewGuid().ToString(),
                         SupplierTransaction_Id = supplierTransaction.Id,
                         Group_Id = groupItem.Id,
                         InvoiceNo = groupItem.InvoiceNo,
@@ -1551,7 +1550,7 @@ namespace ERPWebApiService.Controllers
                 {
                     var customerTransaction = new PartyTransaction()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.NewGuid().ToString(),
                         ChalanNo = groupItemInfo.ChalanNo,
                         InvoiceNo = groupItemInfo.InvoiceNo,
                         Customer_Id = groupItemInfo.Customer_Id,
@@ -1567,7 +1566,7 @@ namespace ERPWebApiService.Controllers
                     ERPContext.SaveChanges();
                     var transactionDetails = new CustomerSupplierTransactionDetail()
                     {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.NewGuid().ToString(),
                         CustomerTransaction_Id = customerTransaction.Id,
                         Group_Id = groupItem.Id,
                         InvoiceNo = groupItem.InvoiceNo,
@@ -1646,7 +1645,7 @@ namespace ERPWebApiService.Controllers
                     {
                         foreach (var item in groupItemInfo.ItemTransactionList)
                         {
-                            dt.Rows.Add(Guid.NewGuid(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
+                            dt.Rows.Add(Guid.NewGuid().ToString(), item.TransactionId, item.Reason, item.TransactionType, item.Quantity, item.UnitCost,
                                 item.UnitSale, item.Vat, item.Tax, item.DiscountAmount, item.SerialNo, item.DiscountRate, item.LotNo,
                                 item.TransactionDate, oGroupItem.Id, item.Item_Id, item.Location_Id);
                         }
@@ -1660,7 +1659,7 @@ namespace ERPWebApiService.Controllers
                             ERPContext.SupplierTransactions.FirstOrDefault(x => x.IsFirstTransaction == true&&x.Group_Id==oGroupItem.Id);
                         var supplierTransaction = new SupplierTransaction()
                         {
-                            Id = oSupplierTransaction!=null?oSupplierTransaction.Id:Guid.NewGuid(),
+                            Id = oSupplierTransaction!=null?oSupplierTransaction.Id:Guid.NewGuid().ToString().ToString(),
                             ChalanNo = groupItemInfo.ChalanNo,
                             InvoiceNo = groupItemInfo.InvoiceNo,
                             Supplier_Id = groupItemInfo.Supplier_Id,
@@ -1679,7 +1678,7 @@ namespace ERPWebApiService.Controllers
                         DatabaseCommand.ExcuteNonQuery("delete from tblCustomerSupplierTransactionDetail where suppliertransactionId=@id", paramlist1, null);
                         var transactionDetails = new CustomerSupplierTransactionDetail()
                         {
-                            Id = Guid.NewGuid(),
+                            Id = Guid.NewGuid().ToString(),
                             SupplierTransaction_Id = supplierTransaction.Id,
                             Group_Id = groupItem.Id,
                             InvoiceNo = groupItem.InvoiceNo,
@@ -1696,7 +1695,7 @@ namespace ERPWebApiService.Controllers
                             ERPContext.PartyTransactions.FirstOrDefault(x => x.IsFirstTransaction == true && x.Group_Id == oGroupItem.Id);
                         var customerTransaction = new PartyTransaction()
                         {
-                            Id = oCustomerTransaction != null ? oCustomerTransaction.Id : Guid.NewGuid(),
+                            Id = oCustomerTransaction != null ? oCustomerTransaction.Id : Guid.NewGuid().ToString(),
                             ChalanNo = groupItemInfo.ChalanNo,
                             InvoiceNo = groupItemInfo.InvoiceNo,
                             Customer_Id = groupItemInfo.Customer_Id,
@@ -1715,7 +1714,7 @@ namespace ERPWebApiService.Controllers
                         DatabaseCommand.ExcuteNonQuery("delete from tblCustomerSupplierTransactionDetail where customertransaction_Id=@id", paramlist2, null);
                         var transactionDetails = new CustomerSupplierTransactionDetail()
                         {
-                            Id = Guid.NewGuid(),
+                            Id = Guid.NewGuid().ToString(),
                             CustomerTransaction_Id = customerTransaction.Id,
                             Group_Id = groupItem.Id,
                             InvoiceNo = groupItem.InvoiceNo,
@@ -1749,7 +1748,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.Id = (rdr["Id"].ToString());
                         inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
                         inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
                         inventoryGroup.Reason = rdr["Reason"] != DBNull.Value ? rdr["Reason"].ToString() : null;
@@ -1780,23 +1779,23 @@ namespace ERPWebApiService.Controllers
                         }
                         if (rdr["Customer_Id"] != DBNull.Value)
                         {
-                            inventoryGroup.Customer_Id = Guid.Parse(rdr["Customer_Id"].ToString());
+                            inventoryGroup.Customer_Id = rdr["Customer_Id"].ToString();
                         }
                         if (rdr["Supplier_Id"] != DBNull.Value)
                         {
-                            inventoryGroup.Supplier_Id = Guid.Parse(rdr["Supplier_Id"].ToString());
+                            inventoryGroup.Supplier_Id =rdr["Supplier_Id"].ToString();
                         }
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            inventoryGroup.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            inventoryGroup.Ledger_Id = rdr["Ledger_Id"].ToString();
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            inventoryGroup.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            inventoryGroup.SubLedger_Id = rdr["SubLedger_Id"].ToString();
                         }
                         if (rdr["Approver_Id"] != DBNull.Value)
                         {
-                            inventoryGroup.Approver_Id = Guid.Parse(rdr["Approver_Id"].ToString());
+                            inventoryGroup.Approver_Id =rdr["Approver_Id"].ToString();
                         }
                     }
                 }
@@ -1872,7 +1871,7 @@ namespace ERPWebApiService.Controllers
                 {
                     foreach (var sellPrice in sellPriceInfos)
                     {
-                        dt.Rows.Add(Guid.NewGuid(), sellPrice.ItemCode,sellPrice.ItemId,sellPrice.PurchaseDate,sellPrice.PreviousAmount,sellPrice.Amount,sellPrice.Item_Id);
+                        dt.Rows.Add(Guid.NewGuid().ToString(), sellPrice.ItemCode,sellPrice.ItemId,sellPrice.PurchaseDate,sellPrice.PreviousAmount,sellPrice.Amount,sellPrice.Item_Id);
                     }
                 }
                 Dictionary<string, object> paramlist = new Dictionary<string, object>();
@@ -1902,7 +1901,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         SettingSellPriceInfo settingSellPrice=new SettingSellPriceInfo();
-                        settingSellPrice.Id = rdr["Id"] != DBNull.Value ? Guid.Parse(rdr["Id"].ToString()):Guid.Empty;
+                        settingSellPrice.Id = rdr["Id"] != DBNull.Value ? (rdr["Id"].ToString()):Guid.Empty.ToString();
                         settingSellPrice.ItemId = rdr["ItemId"] != DBNull.Value ? rdr["ItemId"].ToString() : null;
                         settingSellPrice.ItemCode = rdr["ItemCode"] != DBNull.Value ? rdr["ItemCode"].ToString() : null;
                         settingSellPrice.ItemName = rdr["ItemName"] != DBNull.Value ? rdr["ItemName"].ToString() : null;
@@ -1914,7 +1913,7 @@ namespace ERPWebApiService.Controllers
                         }
                         if (rdr["Item_Id"] != DBNull.Value)
                         {
-                            settingSellPrice.Item_Id = Guid.Parse(rdr["Item_Id"].ToString());
+                            settingSellPrice.Item_Id = (rdr["Item_Id"].ToString());
                         }
                         settingSellPriceInfos.Add(settingSellPrice);
                     }
@@ -1966,7 +1965,7 @@ namespace ERPWebApiService.Controllers
             {
                 var partyTransaction = new PartyTransaction()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     //ChalanNo = partyTransactionInfo.ChalanNo,
                     //InvoiceNo = partyTransactionInfo.InvoiceNo,
                     //OrderNo = partyTransactionInfo.OrderNo,
@@ -1995,7 +1994,7 @@ namespace ERPWebApiService.Controllers
                     foreach (var transactionDetails in partyTransactionInfo.TransactionDetailsList)
                     {
                         var trasactionId = DatabaseCommand.GetAutoGeneratedCode("transactionDetails", null);
-                        dt.Rows.Add(Guid.NewGuid(), transactionDetails.InvoiceNo, trasactionId,
+                        dt.Rows.Add(Guid.NewGuid().ToString(), transactionDetails.InvoiceNo, trasactionId,
                             transactionDetails.Group_Id, partyTransaction.Id, null, transactionDetails.PaymentDate,
                             transactionDetails.PaidAmount);
                     }
@@ -2048,7 +2047,7 @@ namespace ERPWebApiService.Controllers
                         dt.Columns.Add("PaidAmount", typeof(decimal));
                         foreach (var transactionDetails in partyTransactionInfo.TransactionDetailsList)
                         {
-                            dt.Rows.Add(Guid.NewGuid(), transactionDetails.InvoiceNo, transactionDetails.TransactionId,
+                            dt.Rows.Add(Guid.NewGuid().ToString(), transactionDetails.InvoiceNo, transactionDetails.TransactionId,
                                 transactionDetails.Group_Id, partyTransaction.Id, null, transactionDetails.PaymentDate,
                                 transactionDetails.PaidAmount);
                         }
@@ -2087,7 +2086,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         PartyTransactionInfo partyTransactionInfo=new PartyTransactionInfo();
-                        partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyTransactionInfo.Id = (rdr["Id"].ToString());
                         //partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
                         //    ? rdr["ChalanNo"].ToString()
                         //    : null;
@@ -2105,11 +2104,11 @@ namespace ERPWebApiService.Controllers
                         }                      
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            partyTransactionInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            partyTransactionInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                         customerInfoList.Add(partyTransactionInfo);
                     }
@@ -2138,7 +2137,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        partyTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        partyTransactionInfo.Id = (rdr["Id"].ToString());
                         //partyTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
                         //    ? rdr["ChalanNo"].ToString()
                         //    : null;
@@ -2158,19 +2157,19 @@ namespace ERPWebApiService.Controllers
                         partyTransactionInfo.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
                         if (rdr["Group_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.Group_Id = Guid.Parse(rdr["Group_Id"].ToString());
+                            partyTransactionInfo.Group_Id = (rdr["Group_Id"].ToString());
                         }
                         if (rdr["Customer_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.Customer_Id = Guid.Parse(rdr["Customer_Id"].ToString());
+                            partyTransactionInfo.Customer_Id = (rdr["Customer_Id"].ToString());
                         }  
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            partyTransactionInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            partyTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            partyTransactionInfo.SubLedger_Id = rdr["SubLedger_Id"].ToString();
                         }
                         partyTransactionInfo.TransactionDetailsList =
                             ERPContext.CustomerSupplierTransactionDetailsList.Where(y=>y.CustomerTransaction_Id==partyTransactionInfo.Id).Select(
@@ -2215,7 +2214,7 @@ namespace ERPWebApiService.Controllers
             {
                 var supplierTransaction = new SupplierTransaction()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     ChalanNo = supplierTransactionInfo.ChalanNo,
                     InvoiceNo = supplierTransactionInfo.InvoiceNo,
                     OrderNo = supplierTransactionInfo.OrderNo,
@@ -2293,7 +2292,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         SupplierTransactionInfo supplierTransactionInfo = new SupplierTransactionInfo();
-                        supplierTransactionInfo.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierTransactionInfo.Id = (rdr["Id"].ToString());
                         supplierTransactionInfo.ChalanNo = rdr["ChalanNo"] != DBNull.Value
                             ? rdr["ChalanNo"].ToString()
                             : null;
@@ -2302,7 +2301,7 @@ namespace ERPWebApiService.Controllers
                             : null;
                         if (rdr["PhoneNo"] != DBNull.Value)
                         {
-                            supplierTransactionInfo.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                            supplierTransactionInfo.Group_Id = (rdr["PhoneNo"].ToString());
                         }
                         if (rdr["PaymentDate"] != DBNull.Value)
                         {
@@ -2312,11 +2311,11 @@ namespace ERPWebApiService.Controllers
                         supplierTransactionInfo.PaymentMode = rdr["PaymentMode"] != DBNull.Value ? Convert.ToInt32(rdr["PaymentMode"]) : 0;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            supplierTransactionInfo.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            supplierTransactionInfo.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            supplierTransactionInfo.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            supplierTransactionInfo.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                         supplierInfoList.Add(supplierTransactionInfo);
                     }
@@ -2346,7 +2345,7 @@ namespace ERPWebApiService.Controllers
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
-                        supplierTransaction.Id = Guid.Parse(rdr["Id"].ToString());
+                        supplierTransaction.Id = (rdr["Id"].ToString());
                         supplierTransaction.ChalanNo = rdr["ChalanNo"] != DBNull.Value
                             ? rdr["ChalanNo"].ToString()
                             : null;
@@ -2355,7 +2354,7 @@ namespace ERPWebApiService.Controllers
                             : null;
                         if (rdr["PhoneNo"] != DBNull.Value)
                         {
-                            supplierTransaction.Group_Id = Guid.Parse(rdr["PhoneNo"].ToString());
+                            supplierTransaction.Group_Id = (rdr["PhoneNo"].ToString());
                         }
                         if (rdr["PaymentDate"] != DBNull.Value)
                         {
@@ -2367,15 +2366,15 @@ namespace ERPWebApiService.Controllers
                         //supplierTransaction.SubLedgerName = rdr["SubLedgerName"] != DBNull.Value ? rdr["SubLedgerName"].ToString() : null;
                         if (rdr["Ledger_Id"] != DBNull.Value)
                         {
-                            supplierTransaction.Ledger_Id = Guid.Parse(rdr["Ledger_Id"].ToString());
+                            supplierTransaction.Ledger_Id = (rdr["Ledger_Id"].ToString());
                         }
                         if (rdr["SubLedger_Id"] != DBNull.Value)
                         {
-                            supplierTransaction.SubLedger_Id = Guid.Parse(rdr["SubLedger_Id"].ToString());
+                            supplierTransaction.SubLedger_Id = (rdr["SubLedger_Id"].ToString());
                         }
                         if (rdr["Supplier_Id"] != DBNull.Value)
                         {
-                            supplierTransaction.Supplier_Id = Guid.Parse(rdr["Supplier_Id"].ToString());
+                            supplierTransaction.Supplier_Id = (rdr["Supplier_Id"].ToString());
                         }
                     }
                 }
@@ -2426,7 +2425,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         InventoryGroupListInfo inventoryGroup = new InventoryGroupListInfo();
-                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.Id = (rdr["Id"].ToString());
                         inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
                         inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
                         inventoryGroup.Quantity = rdr["Quantity"] != DBNull.Value ? Convert.ToInt32(rdr["Quantity"].ToString()) : 0;
@@ -2484,7 +2483,7 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         InventoryGroupListInfo inventoryGroup = new InventoryGroupListInfo();
-                        inventoryGroup.Id = Guid.Parse(rdr["Id"].ToString());
+                        inventoryGroup.Id = (rdr["Id"].ToString());
                         inventoryGroup.TransactionId = rdr["TransactionId"] != DBNull.Value ? rdr["TransactionId"].ToString() : null;
                         inventoryGroup.TransactionType = rdr["TransactionType"] != DBNull.Value ? rdr["TransactionType"].ToString() : null;
                         inventoryGroup.Quantity = rdr["Quantity"] != DBNull.Value ? Convert.ToInt32(rdr["Quantity"].ToString()) : 0;
@@ -2523,9 +2522,8 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var Id = Guid.Parse(id);
                 var itemTransactionList =
-                    ERPContext.ItemTransactions.Where(y => y.Group_Id == Id)
+                    ERPContext.ItemTransactions.Where(y => y.Group_Id == id)
                         .Select(y => new ItemTransactionInfo()
                         {
                             Id = y.Id,
