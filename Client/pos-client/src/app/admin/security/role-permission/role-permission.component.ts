@@ -132,12 +132,12 @@ createNewRolePermission(){
 deleteRole($event:string){
   alert($event)
 }
-getRolePermissionDetailsById(Id:string){
+getRolePermissionDetailsById($event:Role){
   this.blockUI.start("Loading ... Please wait");
-  this._securityService.getRolePermissionsRoleById(Id).subscribe(response=>{
+  this._securityService.getRolePermissionsRoleById($event.Id).subscribe(response=>{
     this.blockUI.stop();
     this.tree=response.json();
-    let index=this.roleList.findIndex(role=>role.Id==Id);
+    let index=this.roleList.findIndex(role=>role.Id==$event.Id);
     let role=this.roleList[index];
     this.rolePermissionData.tree=this.tree
     this.rolePermissionData.role=role

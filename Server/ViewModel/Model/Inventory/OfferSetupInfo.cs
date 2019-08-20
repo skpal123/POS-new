@@ -15,6 +15,7 @@ namespace ViewModel.Model.Inventory
         public string ProductName { set; get; }
         public bool IsSingle { set; get; }
         public bool IsOneToMany { set; get; }
+        public bool IsManyToOne { set; get; }
         public List<FreeProductInfo> FreeProductList { set; get; }
         public List<FreeProductInfo> ProductList { set; get; }
         public decimal? DiscountRate { set; get; }

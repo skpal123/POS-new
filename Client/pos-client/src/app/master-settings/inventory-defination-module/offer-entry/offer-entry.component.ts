@@ -62,11 +62,17 @@ export class OfferEntryComponent implements OnInit {
       })
     })
     this.offerTypeControl.valueChanges.subscribe(data=>{
+      debugger
       if(data=="single"){
         this.offerSetup.IsSingle=true
       }
-      else{
+      else if(data=="oneToMany"){
         this.offerSetup.IsSingle=false;
+        this.offerSetup.IsOneToMany=true;
+      }
+      else if(data=="manyToOne"){
+        this.offerSetup.IsSingle=false;
+        this.offerSetup.IsManyToOne=true;
       }
     })
     if(this.offerSetup.OfferId==null){      
@@ -180,11 +186,11 @@ export class OfferEntryComponent implements OnInit {
   getSelectedItemParent($event:MultiSelectDropdown){
     debugger
     this.offerSetup.FreeProductList.push($event)
-    this.offerSetup.BundleSize=this.freeItemSelectedItems.length
   }
   getSelectedProductParent($event:MultiSelectDropdown){
     debugger
     this.offerSetup.ProductList.push($event)
+    this.offerSetup.BundleSize=this.offerSetup.ProductList.length
   }
   ItemOnSeletedItem($event:MultiSelectDropdown){
     if($event.id!="0"){

@@ -16,6 +16,7 @@ import { Unit } from '../../../models/master-settings/inventory-defination/unit.
 import { AddUnitComponent } from '../add-unit/add-unit.component';
 import { InventoryItemValidation } from '../../../models/validation/inventory/item-validation.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-item-entry',
@@ -58,6 +59,7 @@ export class ItemEntryComponent implements OnInit {
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
   private _newDropdownService:NewDropdownDataService,
+  private _navigationData:NavigationDataService,
   private _inventotyDefinationService:InventoryDefinationServiceService,
 ) { }
 
@@ -95,7 +97,8 @@ export class ItemEntryComponent implements OnInit {
     if(this.item.Id==null){
       console.log(this.item);
       this._inventotyDefinationService.CreateInventoryItem(this.item).subscribe(response=>{
-        let result=response
+        let result=response;
+        this._navigationData.IsSaved=true
         if(result){
           this.matDialogRef.close(response);
           let dialogData=new DialogData();

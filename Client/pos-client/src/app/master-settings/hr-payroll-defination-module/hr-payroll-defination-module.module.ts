@@ -4,12 +4,20 @@ import { CommonModule } from '@angular/common';
 import { HrPayrollDefinationModuleRoutingModule } from './hr-payroll-defination-module-routing.module';
 import { HrPayrollLayoutComponent } from './hr-payroll-layout/hr-payroll-layout.component';
 import { LeaveTypeComponent } from './leave-type/leave-type.component';
+import { DesignationComponent } from './designation/designation.component';
+import { SalaryItemComponent } from './salary-item/salary-item.component';
+import { GradeComponent } from './grade/grade.component';
+import { GradeListComponent } from './grade-list/grade-list.component';
+import { SalaryItemListComponent } from './salary-item-list/salary-item-list.component';
+import { DesignationListComponent } from './designation-list/designation-list.component';
+import { SubgradeComponent } from './subgrade/subgrade.component';
+import { SubgradeListComponent } from './subgrade-list/subgrade-list.component';
 
 @NgModule({
   imports: [
     CommonModule,
     HrPayrollDefinationModuleRoutingModule
   ],
-  declarations: [HrPayrollLayoutComponent, LeaveTypeComponent]
+  declarations: [HrPayrollLayoutComponent, LeaveTypeComponent, DesignationComponent, SalaryItemComponent, GradeComponent, GradeListComponent, SalaryItemListComponent, DesignationListComponent, SubgradeComponent, SubgradeListComponent]
 })
 export class HrPayrollDefinationModuleModule { }

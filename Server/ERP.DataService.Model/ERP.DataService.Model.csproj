@@ -295,6 +295,10 @@
     <Compile Include="Migrations\201908191736447_ChangeGuidToStringAllForignKey.Designer.cs">
       <DependentUpon>201908191736447_ChangeGuidToStringAllForignKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908200633228_addManyToOneInOfferSetup.cs" />
+    <Compile Include="Migrations\201908200633228_addManyToOneInOfferSetup.Designer.cs">
+      <DependentUpon>201908200633228_addManyToOneInOfferSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -526,6 +530,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908191736447_ChangeGuidToStringAllForignKey.resx">
       <DependentUpon>201908191736447_ChangeGuidToStringAllForignKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908200633228_addManyToOneInOfferSetup.resx">
+      <DependentUpon>201908200633228_addManyToOneInOfferSetup.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

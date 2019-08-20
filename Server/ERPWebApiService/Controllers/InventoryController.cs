@@ -1026,8 +1026,8 @@ namespace ERPWebApiService.Controllers
                 List<OfferSetupInfo> offerSetupInfos = new List<OfferSetupInfo>();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd = new SqlCommand(@"select distinct a.Product_Id,a.DiscountRate,a.BundleSize,a.OfferId,
-                                                    a.OfferName,b.ItemName ProductName from tblofferSetup 
+                    SqlCommand cmd = new SqlCommand(@"select distinct a.DiscountRate,a.BundleSize,a.OfferId,
+                                                    a.OfferName from tblofferSetup 
                                                     a inner join tblInventoryItem b on a.Product_Id=b.Id", con);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -1036,13 +1036,13 @@ namespace ERPWebApiService.Controllers
                         OfferSetupInfo offerSetupInfo = new OfferSetupInfo();
                         offerSetupInfo.OfferId = rdr["OfferId"] != DBNull.Value ? rdr["OfferId"].ToString() : null;
                         offerSetupInfo.OfferName = rdr["OfferName"] != DBNull.Value ? rdr["OfferName"].ToString() : null;
-                        offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;          
+                        //offerSetupInfo.ProductName = rdr["ProductName"] != DBNull.Value ? rdr["ProductName"].ToString() : null;          
                         offerSetupInfo.DiscountRate = rdr["DiscountRate"] != DBNull.Value ? Convert.ToDecimal(rdr["DiscountRate"]) : 0;
                         offerSetupInfo.BundleSize = rdr["BundleSize"] != DBNull.Value ? Convert.ToInt32(rdr["BundleSize"]) : 0;
-                        if (rdr["Product_Id"] != DBNull.Value)
-                        {
-                            offerSetupInfo.Product_Id = (rdr["Product_Id"].ToString());
-                        }                     
+                        //if (rdr["Product_Id"] != DBNull.Value)
+                        //{
+                        //    offerSetupInfo.Product_Id = (rdr["Product_Id"].ToString());
+                        //}                     
                         offerSetupInfos.Add(offerSetupInfo);
                     }
                 }
@@ -1087,13 +1087,14 @@ namespace ERPWebApiService.Controllers
                     dt.Columns.Add("OfferId", typeof(string));
                     dt.Columns.Add("IsSingle", typeof(bool));
                     dt.Columns.Add("IsOneToMany", typeof(bool));
+                    dt.Columns.Add("IsManyToOne", typeof(bool));
                     foreach (var product in offerSetupInfo.ProductList)
                     {
                         foreach (var freeProduct in offerSetupInfo.FreeProductList)
                         {
                             dt.Rows.Add(Guid.NewGuid().ToString(), product.Id, freeProduct.Id,
                                 offerSetupInfo.DiscountRate, offerSetupInfo.BundleSize, offerSetupInfo.OfferName,
-                                offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany);
+                                offerSetupInfo.OfferId, false,offerSetupInfo.IsOneToMany,offerSetupInfo.IsManyToOne);
                         }
                     }
                     Dictionary<string, object> paramlist = new Dictionary<string, object>();

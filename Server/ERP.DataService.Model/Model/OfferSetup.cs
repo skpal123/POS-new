@@ -24,6 +24,7 @@ namespace ERP.DataService.Model.Model
         public string Product_Id { set; get; }
         public bool? IsSingle { set; get; }
         public bool? IsOneToMany { set; get; }
+        public bool? IsManyToOne { set; get; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string FreeProduct_Id { set; get; }

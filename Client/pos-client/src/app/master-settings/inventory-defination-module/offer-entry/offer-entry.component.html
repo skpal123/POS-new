@@ -18,7 +18,11 @@
               </label>
               <label class="radio-inline">
                 <input type="radio" name="offerType" [(ngModel)]="offerSetup.OfferType" #offerTypeControl="ngModel"
-                  value="multiple">Multiple<br>
+                  value="manyToOne">Multiple(many to one)<br>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="offerType" [(ngModel)]="offerSetup.OfferType" #offerTypeControl="ngModel"
+                  value="oneToMany">Multiple(one to many)<br>
               </label>
             </div>
           </div>

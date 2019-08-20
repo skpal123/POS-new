@@ -13,6 +13,7 @@ export class OfferSetup{
     public ProductList?:MultiSelectDropdown[]
     public DiscountRate ?:number
     public BundleSize?:number
-    public IsOneToMany?:boolean
+    public IsOneToMany?:boolean;
+    public IsManyToOne?:boolean;
     public ViewFreeProduct?:string;
 }

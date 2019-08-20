@@ -27,7 +27,7 @@ import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/
     SharedModule  
   ],
   declarations: [
-     DynamicTableEntryComponent, 
+    DynamicTableEntryComponent, 
     DynamicFormBuilderComponent, 
     CustomDatatableComponent, 
     CategoryDropdownComponent, 

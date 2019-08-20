@@ -26,7 +26,7 @@ export class OfferSetupComponent implements OnInit {
   offerSetupList:OfferSetup[]=[];
   offerSetup:OfferSetup={Id:null,OfferId:null,OfferName:null,DiscountRate:0,IsSingle:false,OfferType:"single",
     Product_Id:null,FreeProduct_Id:null,ProductName:null,FreeProductList:null,ViewFreeProduct:null,
-    ProductList:[],IsOneToMany:false
+    ProductList:[],IsOneToMany:false,IsManyToOne:false
   }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
