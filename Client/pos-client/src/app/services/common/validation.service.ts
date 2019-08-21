@@ -70,4 +70,16 @@ export class ValidationService {
       var url=this._defaultRoute.CommonService+'designationValidation';
       return this._httpClient.get(url)
     }
+    public getGradeValidationData(){
+      var url=this._defaultRoute.CommonService+'gradeValidation';
+      return this._httpClient.get(url)
+    }
+    public getSubGradeValidationData(){
+      var url=this._defaultRoute.CommonService+'subGradeValidation';
+      return this._httpClient.get(url)
+    }
+    public getSalaryItemValidationData(){
+      var url=this._defaultRoute.CommonService+'salaryItemValidation';
+      return this._httpClient.get(url)
+    }
 }

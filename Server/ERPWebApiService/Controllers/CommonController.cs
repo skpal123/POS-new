@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Web.Http;
 using ERPWebApiService.Exceptions;
 using ViewModel.Model;
+using ViewModel.Model.Validation.HrPayroll;
 using ViewModel.Model.Validation.Inventory;
 
 namespace ERPWebApiService.Controllers
@@ -757,6 +758,135 @@ namespace ERPWebApiService.Controllers
                         fromValidation.LocationId = Convert.ToBoolean(rdr["LocationId"]);
                         fromValidation.LocationName = Convert.ToBoolean(rdr["LocationName"]);
                         fromValidation.Description = Convert.ToBoolean(rdr["Description"]);                    
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("designationValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetDesignationValidation()
+        {
+            try
+            {
+                List<DesignationValidation> formValidationList = new List<DesignationValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "designation-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        DesignationValidation fromValidation = new DesignationValidation();
+                        fromValidation.DesignationId = Convert.ToBoolean(rdr["DesignationId"]);
+                        fromValidation.DesignationName = Convert.ToBoolean(rdr["DesignationName"]);
+                        fromValidation.Description = Convert.ToBoolean(rdr["Description"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("gradeValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetGradeValidation()
+        {
+            try
+            {
+                List<GradeValidation> formValidationList = new List<GradeValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "grade-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        GradeValidation fromValidation = new GradeValidation();
+                        fromValidation.GradeId = Convert.ToBoolean(rdr["GradeId"]);
+                        fromValidation.GradeName = Convert.ToBoolean(rdr["GradeName"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subGradeValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetSubGradeValidation()
+        {
+            try
+            {
+                List<SubGradeValidation> formValidationList = new List<SubGradeValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "subgrade-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SubGradeValidation fromValidation = new SubGradeValidation();
+                        fromValidation.SubGradeId = Convert.ToBoolean(rdr["SubGradeId"]);
+                        fromValidation.SubGradeName = Convert.ToBoolean(rdr["SubGradeName"]);
+                        fromValidation.Grade_Id = Convert.ToBoolean(rdr["Grade_Id"]);
+                        fromValidation.EeectiveDate = Convert.ToBoolean(rdr["EeectiveDate"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("salaryItemValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetSalaryItemValidation()
+        {
+            try
+            {
+                List<SalaryItemValidation> formValidationList = new List<SalaryItemValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "salary-item-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SalaryItemValidation fromValidation = new SalaryItemValidation();
+                        fromValidation.ItemId = Convert.ToBoolean(rdr["ItemId"]);
+                        fromValidation.ItemName = Convert.ToBoolean(rdr["ItemName"]);
+                        fromValidation.ItemType = Convert.ToBoolean(rdr["ItemType"]);
+                        fromValidation.ItemTypeName = Convert.ToBoolean(rdr["ItemTypeName"]);
+                        fromValidation.IsDefault = Convert.ToBoolean(rdr["IsDefault"]);
+                        fromValidation.IsBasic = Convert.ToBoolean(rdr["IsBasic"]);
+                        fromValidation.IsDaily = Convert.ToBoolean(rdr["IsDaily"]);
+                        fromValidation.IsLeave = Convert.ToBoolean(rdr["IsLeave"]);
+                        fromValidation.IsPension = Convert.ToBoolean(rdr["IsPension"]);
+                        fromValidation.IsTax = Convert.ToBoolean(rdr["EeectiveDate"]);
+                        fromValidation.IsLoan = Convert.ToBoolean(rdr["IsLoan"]);
+                        fromValidation.DefaultAmount = Convert.ToBoolean(rdr["DefaultAmount"]);
                         formValidationList.Add(fromValidation);
                     }
                 }

@@ -13,106 +13,56 @@ export class DropdownService {
     private _defaultRoute:DefaultRouteService,
     private _httpClient:HttpClient) 
     { }
-    private handleError(error: HttpErrorResponse) {
-      debugger
-
-      if (error.error instanceof ErrorEvent) {
-        console.error('An error occurred:', error.error.message);
-        return throwError(error.error.message) 
-      } 
-      else 
-      {
-        let message=error.error.Message;       
-        return throwError(message+'<br/>'+error.message) 
-      }
-      // return an observable with a user-facing error message
-    };
   public getUnitDropdownList(){
     var url=this._defaultRoute.DropdownService+'UnitDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getCategoryDropdownList(){
     var url=this._defaultRoute.DropdownService+'CategoryDropdown'; 
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getSubCategoryDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'SubCategoryDropdown/'+Id;
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getItemDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'ItemDropdown/'+Id;
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getLedgerDropdownList(){
     var url=this._defaultRoute.DropdownService+'LedgerDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getSubledgerDropdownList(Id:string){
     var url=this._defaultRoute.DropdownService+'SubledgerDropdown/'+Id;
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getLocationDropdownList(){
     var url=this._defaultRoute.DropdownService+'LocationDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getSupplierDropdownList(){
     var url=this._defaultRoute.DropdownService+'supplierDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getCustomerDropdownList(){
     var url=this._defaultRoute.DropdownService+'customerDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getPartyDropdownList(){
     var url=this._defaultRoute.DropdownService+'partyDropdown';
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
   public getLedgerDropdownListByPaymentMode(paymentMode:string){
     var url=this._defaultRoute.DropdownService+'getLedgerByPaymentMode/'+paymentMode;
-    return this._httpClient.get<SelectDropdown[]>(url).pipe(
-      catchError(
-        this.handleError
-      )
-    )
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
+  public getDesignationDropdownList(){
+    var url=this._defaultRoute.DropdownService+'designationDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
+  public getGradeDropdownList(){
+    var url=this._defaultRoute.DropdownService+'gradeDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
   }
 }

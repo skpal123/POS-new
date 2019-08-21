@@ -11,6 +11,7 @@ export class DefaultRouteService {
   DropdownService:string="http://localhost:1849//api/DropdownService/";
   FinanceService:string="http://localhost:1849//api/FinanceService/";
   CommonService:string="http://localhost:1849//api/CommonService/";
+  hrPayrollService:string="http://localhost:1849//api/HrPayrollService/";
   convertDate(date:Date):string{
     let month=date.getMonth()+1;
     let day=date.getDate();

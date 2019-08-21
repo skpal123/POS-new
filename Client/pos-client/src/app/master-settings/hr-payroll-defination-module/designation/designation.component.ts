@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Designation } from '../../../models/master-settings/hr-payroll/designation.model';
@@ -16,11 +16,11 @@ import { HrPayrollDefinationServiceService } from '../../../services/master-sett
   styleUrls: ['./designation.component.css']
 })
 export class DesignationComponent implements OnInit {
-  @ViewChild('designationForm') categoryForm:NgForm
+  @ViewChild('designationForm') designationForm:NgForm
   designationValidation:DesignationValidation[]=[]
-  itemName:string="categoryId"
+  itemName:string="designationId"
   constructor(public matDialogRef:MatDialogRef<DesignationComponent>,
-  @inject(MAT_DIALOG_DATA) public designation:Designation,
+  @Inject(MAT_DIALOG_DATA) public designation:Designation,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
   private _navigationData:NavigationDataService,
@@ -31,7 +31,7 @@ export class DesignationComponent implements OnInit {
   ngOnInit() {
     debugger
     if(this.designation.Id!=null){
-      this.categoryForm.control.markAsDirty();
+      this.designationForm.control.markAsDirty();
     }
     this.getItemFormInfo();
   }
@@ -48,6 +48,7 @@ export class DesignationComponent implements OnInit {
     })
   }
   saveDesignation(){
+    debugger
     if(this.designation.Id==null){
       this._hrpayrollDefinationService.CreateDesignation(this.designation).subscribe(response=>{
         let result=response
@@ -84,12 +85,12 @@ export class DesignationComponent implements OnInit {
     this.designation.Id=null;
     this.designation.DesignationId=null;
     this.designation.DesignationName=null;
-    this.categoryForm.reset();
+    this.designationForm.reset();
   }
   controlGroupItemForm(){
     debugger
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
-      data:"designation-entry",
+      data:"designation-form",
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',

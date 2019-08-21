@@ -275,5 +275,43 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("designationDropdown")]
+        [HttpGet]
+        public HttpResponseMessage GetDesignationDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Designations.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.DesignationId,
+                    Text = x.DesignationName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("gradeDropdown")]
+        [HttpGet]
+        public HttpResponseMessage GetGradeDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.EmployeeGrades.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.GradeId,
+                    Text = x.GradeName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

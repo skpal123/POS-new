@@ -23,7 +23,16 @@ export class HrPayrollDefinationServiceService {
     
   }
   public UpdateDesignation(designation:Designation){
-    var url=this._defaultRoute.InventoryService+'Designation/'+designation.Id;
-    return this._httpClient.put(url,location)
+    var url=this._defaultRoute.InventoryService+'Designation'+designation.Id;
+    return this._httpClient.put<Designation>(url,designation)
+    
+  }
+  public getDesignationById(id:string){
+    var url=this._defaultRoute.InventoryService+'Designation/'+id;
+    return this._httpClient.get(url)
+  }
+  public deleteDesignation(id:string){
+    var url=this._defaultRoute.InventoryService+'Designation/'+id;
+    return this._httpClient.delete(url)
   }
 }

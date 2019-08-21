@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -11,6 +12,7 @@ using ERP.DataService.Model.Model;
 using ERPWebApiService.Authentication;
 using ERPWebApiService.DataConnection;
 using ERPWebApiService.Exceptions;
+using ViewModel.Model;
 using ViewModel.Model.HrPayroll;
 
 namespace ERPWebApiService.Controllers
@@ -20,7 +22,7 @@ namespace ERPWebApiService.Controllers
     {
         public ActionLogger actionLogger = new ActionLogger();
         SumonERPContext ERPContext = new SumonERPContext();
-        [Route("Desigantion")]
+        [Route("Designation")]
         [HttpPost]
         public HttpResponseMessage CreateDesignation(DesignationInfo desigantionInfo)
         {
@@ -38,7 +40,7 @@ namespace ERPWebApiService.Controllers
                 };
                 ERPContext.Designations.Add(designation);
                 ERPContext.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.OK, designation);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -53,7 +55,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("Desigantion/{id}")]
+        [Route("Designation/{id}")]
         [HttpPut]
         public HttpResponseMessage UpdateDesignation(string id,DesignationInfo desigantionInfo)
         {
@@ -91,7 +93,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("Desigantions")]
+        [Route("Designations")]
         [HttpGet]
         public HttpResponseMessage GetDesignationList()
         {
@@ -122,7 +124,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("Desigantion/{id}")]
+        [Route("Designation/{id}")]
         [HttpGet]
         public HttpResponseMessage GetDesignationById(string id)
         {
@@ -137,7 +139,7 @@ namespace ERPWebApiService.Controllers
                     DesignationId = x.DesignationId,
                     DesignationName = x.DesignationName,
                     Description = x.Description
-                }).ToList();
+                }).ToList().FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, designations);
             }
             catch (InvalidSessionFailure ex)
@@ -153,7 +155,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("Desigantion/{id}")]
+        [Route("Designation/{id}")]
         [HttpDelete]
         public HttpResponseMessage DeleteDesigantion(string id)
         {
@@ -161,7 +163,7 @@ namespace ERPWebApiService.Controllers
             {
                 Dictionary<string, string> paramlist = new Dictionary<string, string>();
                 paramlist.Add("@id", id);
-                DatabaseCommand.ExcuteNonQuery("delete from Desigantion where id=@id", paramlist, null);
+                DatabaseCommand.ExcuteNonQuery("delete from Designation where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
@@ -186,7 +188,7 @@ namespace ERPWebApiService.Controllers
                 };
                 ERPContext.EmployeeGrades.Add(grade);
                 ERPContext.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.OK, grade);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -210,7 +212,7 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                var oGrade = ERPContext.Designations.FirstOrDefault(x => x.Id == gradeInfo.Id);
+                var oGrade = ERPContext.EmployeeGrades.FirstOrDefault(x => x.Id == gradeInfo.Id);
                 if (oGrade != null)
                 {
                     var grade = new EmployeeGrade()
@@ -282,7 +284,7 @@ namespace ERPWebApiService.Controllers
                     Id = x.Id,
                     GradeId = x.GradeId,
                     GradeName = x.GradeName,
-                }).ToList();
+                }).ToList().FirstOrDefault();
                 return Request.CreateResponse(HttpStatusCode.OK, designations);
             }
             catch (InvalidSessionFailure ex)
@@ -316,20 +318,22 @@ namespace ERPWebApiService.Controllers
         }
         [Route("SubGrade")]
         [HttpPost]
-        public HttpResponseMessage CreateEmployeeSubGrade(EmployeeGradeInfo employeeGradeInfo)
+        public HttpResponseMessage CreateEmployeeSubGrade(EmployeeSubGradeInfo employeeGradeInfo)
         {
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                var grade = new EmployeeGrade()
+                var subgrade = new EmployeeSubGrade()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    GradeId = employeeGradeInfo.GradeId,
-                    GradeName = employeeGradeInfo.GradeName,
+                    SubGradeId = employeeGradeInfo.SubGradeId,
+                    Grade_Id = employeeGradeInfo.Grade_Id,
+                    SubGradeName = employeeGradeInfo.SubGradeName,
+                    EeectiveDate = employeeGradeInfo.EeectiveDate
                 };
-                ERPContext.EmployeeGrades.Add(grade);
+                ERPContext.EmployeeSubGrades.Add(subgrade);
                 ERPContext.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
@@ -348,23 +352,25 @@ namespace ERPWebApiService.Controllers
         }
         [Route("SubGrade/{id}")]
         [HttpPut]
-        public HttpResponseMessage UpdateEmployeeSubGrade(string id, EmployeeGradeInfo gradeInfo)
+        public HttpResponseMessage UpdateEmployeeSubGrade(string id, EmployeeSubGradeInfo employeeGradeInfo)
         {
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                var oGrade = ERPContext.Designations.FirstOrDefault(x => x.Id == gradeInfo.Id);
-                if (oGrade != null)
+                var oSubGrade = ERPContext.EmployeeSubGrades.FirstOrDefault(x => x.Id == employeeGradeInfo.Id);
+                if (oSubGrade != null)
                 {
-                    var grade = new EmployeeGrade()
+                    var subgrade = new EmployeeSubGrade()
                     {
-                        Id = oGrade.Id,
-                        GradeId = gradeInfo.GradeId,
-                        GradeName = gradeInfo.GradeName,
+                        Id = oSubGrade.Id,
+                        SubGradeId = employeeGradeInfo.SubGradeId,
+                        Grade_Id = employeeGradeInfo.Grade_Id,
+                        SubGradeName = employeeGradeInfo.SubGradeName,
+                        EeectiveDate = employeeGradeInfo.EeectiveDate
                     };
-                    ERPContext.EmployeeGrades.AddOrUpdate(grade);
+                    ERPContext.EmployeeSubGrades.Add(subgrade);
                     ERPContext.SaveChanges();
                 }
 
@@ -392,13 +398,29 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                var designations = ERPContext.EmployeeGrades.Select(x => new EmployeeGradeInfo()
+                List<EmployeeSubGradeInfo> employeeSubGradeInfos = new List<EmployeeSubGradeInfo>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    Id = x.Id,
-                    GradeId = x.GradeId,
-                    GradeName = x.GradeName,
-                }).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, designations);
+                    SqlCommand cmd = new SqlCommand(@"select b.Id,b.SubGradeId,b.SubGradeName,b.Grade_Id,b.EeectiveDate,a.GradeName from EmployeeGrade
+                                                    a inner join EmployeeSubGrade b on a.Id=b.Grade_Id", con);
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        EmployeeSubGradeInfo employeeSubGradeInfo = new EmployeeSubGradeInfo();
+                        employeeSubGradeInfo.Id = (rdr["Id"].ToString());
+                        employeeSubGradeInfo.SubGradeId = rdr["SubGradeId"] != DBNull.Value ? rdr["SubGradeId"].ToString() : null;
+                        employeeSubGradeInfo.SubGradeName = rdr["SubGradeName"] != DBNull.Value ? rdr["SubGradeName"].ToString() : null;
+                        employeeSubGradeInfo.Grade_Id = rdr["Grade_Id"] != DBNull.Value ? rdr["Grade_Id"].ToString() : null;
+                        employeeSubGradeInfo.GradeName = rdr["GradeName"] != DBNull.Value ? rdr["GradeName"].ToString() : null;
+                        if (rdr["EeectiveDate"] != DBNull.Value)
+                        {
+                            employeeSubGradeInfo.EeectiveDate = Convert.ToDateTime(rdr["EeectiveDate"]);
+                        }
+                        employeeSubGradeInfos.Add(employeeSubGradeInfo);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, employeeSubGradeInfos);
             }
             catch (InvalidSessionFailure ex)
             {

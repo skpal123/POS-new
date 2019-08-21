@@ -20,7 +20,9 @@ import { AutocodeGenerateComponent } from './autocode-generate/autocode-generate
 import { CustomDatatableControlSettingsComponent } from './custom-datatable-control-settings/custom-datatable-control-settings.component';
 import { FormControlInfoSettingsComponent } from './form-control-info-settings/form-control-info-settings.component';
 import { CustomMultiSelectComponent } from './custom-multi-select/custom-multi-select.component';
-import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/custom-serachable-dropdown.component'
+import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/custom-serachable-dropdown.component';
+import { DesignationDropdownComponent } from './designation-dropdown/designation-dropdown.component';
+import { GradeDropdownComponent } from './grade-dropdown/grade-dropdown.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -46,7 +48,9 @@ import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/
     CustomDatatableControlSettingsComponent,
     FormControlInfoSettingsComponent,
     CustomMultiSelectComponent,
-    CustomSerachableDropdownComponent
+    CustomSerachableDropdownComponent,
+    DesignationDropdownComponent,
+    GradeDropdownComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -67,7 +71,9 @@ import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/
     AutocodeGenerateComponent,
     CustomDatatableControlSettingsComponent,
     FormControlInfoSettingsComponent,
-    CustomMultiSelectComponent
+    CustomMultiSelectComponent,
+    DesignationDropdownComponent,
+    GradeDropdownComponent
   ]
 })
 export class CommonModuleModule { }

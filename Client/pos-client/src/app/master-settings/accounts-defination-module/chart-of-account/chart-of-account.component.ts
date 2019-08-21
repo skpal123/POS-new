@@ -221,7 +221,7 @@ export class ChartOfAccountComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result=true){
-
+        this.getChartOfaccountTreeList();
       }
     })
   }

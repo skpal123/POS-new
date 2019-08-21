@@ -91,6 +91,10 @@
     <Compile Include="Model\Administration\UserInfoView.cs" />
     <Compile Include="Model\Finance\VoucherDetailInfo.cs" />
     <Compile Include="Model\Finance\VoucherInfo.cs" />
+    <Compile Include="Model\Validation\HrPayroll\DesignationValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\GradeValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\SalaryItemValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\SubGradeValidation.cs" />
     <Compile Include="Model\Validation\Inventory\CustomerTransactionValidation.cs" />
     <Compile Include="Model\Validation\Inventory\LocationValidation.cs" />
     <Compile Include="Model\Validation\Inventory\UnitValidation.cs" />
