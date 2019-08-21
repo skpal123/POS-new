@@ -12,12 +12,33 @@ import { SalaryItemListComponent } from './salary-item-list/salary-item-list.com
 import { DesignationListComponent } from './designation-list/designation-list.component';
 import { SubgradeComponent } from './subgrade/subgrade.component';
 import { SubgradeListComponent } from './subgrade-list/subgrade-list.component';
+import { CommonModuleModule } from '../../common-module/common-module.module';
+import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
+import { FormDetailsControlComponent } from '../../common-module/form-details-control/form-details-control.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    CommonModuleModule,
     HrPayrollDefinationModuleRoutingModule
   ],
-  declarations: [HrPayrollLayoutComponent, LeaveTypeComponent, DesignationComponent, SalaryItemComponent, GradeComponent, GradeListComponent, SalaryItemListComponent, DesignationListComponent, SubgradeComponent, SubgradeListComponent]
+  declarations: [HrPayrollLayoutComponent, 
+    LeaveTypeComponent, DesignationComponent, 
+    SalaryItemComponent, 
+    GradeComponent, 
+    GradeListComponent, 
+    SalaryItemListComponent, 
+    DesignationListComponent, 
+    SubgradeComponent, 
+    SubgradeListComponent
+  ],
+  entryComponents:[
+    CustomDatatableControlComponent,
+    FormDetailsControlComponent,
+    DesignationComponent, 
+    GradeComponent,
+    SubgradeComponent,
+    SalaryItemComponent
+  ]
 })
 export class HrPayrollDefinationModuleModule { }

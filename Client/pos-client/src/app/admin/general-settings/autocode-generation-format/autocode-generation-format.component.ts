@@ -78,6 +78,7 @@ export class AutocodeGenerationFormatComponent implements OnInit {
     })
   }
   createNewCodeFormater(){
+    this.clearCodeFormater();
     const dialogRef=this.matDialog.open(CodeFormaterEntryComponent,{
       data:this.codeFormater,
       disableClose:true,
@@ -89,5 +90,19 @@ export class AutocodeGenerationFormatComponent implements OnInit {
         this.getCodFormaterList();
       }
     })
+  }
+  clearCodeFormater(){
+    this.codeFormater.Id=null;
+    this.codeFormater.Name=null;
+    this.codeFormater.ItemLength=null;
+    this.codeFormater.ItemName=null;
+    this.codeFormater.IsSerial=null;
+    this.codeFormater.IsTodaysDate=null;
+    this.codeFormater.IsSymbol=null;
+    this.codeFormater.SymbolName=null;
+    this.codeFormater.Prefix=null;
+    this.codeFormater.StartPossition=null;
+    this.codeFormater.LastNumber=null;
+    this.codeFormater.StringLength=null;
   }
 }

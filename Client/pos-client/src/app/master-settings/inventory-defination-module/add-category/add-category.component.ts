@@ -16,7 +16,6 @@ import { NavigationDataService } from '../../../services/common/navigation-data.
   styleUrls: ['./add-category.component.css']
 })
 export class AddCategoryComponent implements OnInit {
-
   @ViewChild('categoryForm') categoryForm:NgForm
   categoryValidation:CategoryValidation[]=[]
   itemName:string="categoryId"
