@@ -32,3 +32,4 @@ E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\bin\Debug\ViewModel.dl
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\bin\Debug\ViewModel.pdb
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.pdb
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache

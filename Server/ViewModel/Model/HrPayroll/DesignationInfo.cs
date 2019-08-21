@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ViewModel.Model.HrPayroll
 {
-    public class DesigantionInfo
+    public class DesignationInfo
     {
         public string Id { get; set; }
         public string DesignationId { set; get; }

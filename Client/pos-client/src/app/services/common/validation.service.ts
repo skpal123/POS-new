@@ -18,90 +18,56 @@ export class ValidationService {
     private _httpClient:HttpClient,
     ) 
     { }
-    private handleError(error: HttpErrorResponse) {
-      debugger
-
-      if (error.error instanceof ErrorEvent) {
-        console.error('An error occurred:', error.error.message);
-        return throwError(error.error.message) 
-      } 
-      else 
-      {
-        let message=error.error.Message;       
-        return throwError(message+'<br/>'+error.message) 
-      }
-      // return an observable with a user-facing error message
-    };
     public getFormInfoList(formName:string){
       var url=this._defaultRoute.CommonService+'getFormInfo/'+formName;
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public saveFormInfoList(formInfoList:FormInfo[]){
       var url=this._defaultRoute.CommonService+'formInfo/'+formInfoList[0].FormName;
-      return this._httpClient.put(url,formInfoList).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.put(url,formInfoList)
     }
     public getMaufactureValidationData(){
       var url=this._defaultRoute.CommonService+'manufactureValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getItemValidationData(){
       var url=this._defaultRoute.CommonService+'itemValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getItemPurchaseValidationData(formName:string){
       var url=this._defaultRoute.CommonService+'itemPurchaseSalesValidation/'+formName;
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getCategoryValidationData(){
       var url=this._defaultRoute.CommonService+'categoryValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getSubCategoryValidationData(){
       var url=this._defaultRoute.CommonService+'subcategoryValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getCustomerValidationData(){
       var url=this._defaultRoute.CommonService+'customerValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getSupplierValidationData(){
       var url=this._defaultRoute.CommonService+'supplierValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getUnitValidationData(){
       var url=this._defaultRoute.CommonService+'unitValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getCustomerTransactionValidationData(){
       var url=this._defaultRoute.CommonService+'customerTransactionValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
     }
     public getLocationValidationData(){
       var url=this._defaultRoute.CommonService+'locationValidation';
-      return this._httpClient.get(url).pipe(
-        catchError(this.handleError)
-      )
+      return this._httpClient.get(url)
+    }
+    public getDesignationValidationData(){
+      var url=this._defaultRoute.CommonService+'designationValidation';
+      return this._httpClient.get(url)
     }
 }

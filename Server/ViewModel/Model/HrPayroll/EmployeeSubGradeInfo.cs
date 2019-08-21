@@ -11,6 +11,7 @@ namespace ViewModel.Model.HrPayroll
         public string Id { get; set; }
         public string SubGradeId { get; set; }
         public string SubGradeName { get; set; }
+        public string GradeName { get; set; }
         public string Grade_Id { get; set; }
         public DateTime? EeectiveDate { get; set; }
     }
