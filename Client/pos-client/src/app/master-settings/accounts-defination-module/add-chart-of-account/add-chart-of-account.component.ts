@@ -44,7 +44,7 @@ export class AddChartOfAccountComponent implements OnInit {
           var dialogData=new DialogData();
           dialogData.message="Chart of account create succesfully";
           this._alertBox.openDialog(dialogData);
-          this.dialogRef.close(true)
+          this.dialogRef.close(response)
         }
       },error=>{
         var dialogData=new DialogData();
@@ -60,7 +60,7 @@ export class AddChartOfAccountComponent implements OnInit {
           var dialogData=new DialogData();
           dialogData.message="Chart of account updated succesfully";
           this._alertBox.openDialog(dialogData);
-          this.dialogRef.close(true);
+          this.dialogRef.close(result);
         }
       },error=>{
         var dialogData=new DialogData();

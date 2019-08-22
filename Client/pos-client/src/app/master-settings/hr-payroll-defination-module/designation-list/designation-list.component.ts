@@ -95,7 +95,7 @@ export class DesignationListComponent implements OnInit {
   }
   deleteDesignation($event:Designation){
     this.blockUi.start("Loading....,Please wait")
-    this._hrPayrollDefinationService.deleteDesignation($event.Id).subscribe(response=>{
+    this._hrPayrollDefinationService.DeleteDesignation($event.Id).subscribe(response=>{
       this.blockUi.stop();
       let result=response
       if(result){

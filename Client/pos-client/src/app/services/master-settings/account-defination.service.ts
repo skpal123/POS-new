@@ -10,6 +10,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AccountOpeningView } from '../../models/master-settings/account-defination/account-opening-view.model';
 import { AccountDetails } from '../../models/master-settings/account-defination/account-details.model';
+import { ChartOfAccountTree } from '../../models/master-settings/account-defination/chart-of-account-tree.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,76 +23,42 @@ export class AccountDefinationService {
     { }
   public getChartOfAccountListForTree(){
     var url=this._defaultRoute.FinanceService+'getChartOfAccountList/';
-    return this._httpClient.get<AccountDetails>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<AccountDetails>(url)
   }
   public CreateChartOfAccount(account:ChartOfaccount){
     var url=this._defaultRoute.FinanceService+'createChartOfAccount';
-    return this._httpClient.post<boolean>(url,account).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.post<ChartOfAccountTree>(url,account)
   }
   public UpdateChartOfAccount(account:ChartOfaccount){
     var url=this._defaultRoute.FinanceService+'createChartOfAccount/'+account.Id;
-    return this._httpClient.post<boolean>(url,account).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.post<ChartOfAccountTree>(url,account)
   }
   public getMaxAccidByGroupIdAndLevelId(groupId:number,levelId:number){
     var url=this._defaultRoute.FinanceService+'getMaxAccid/'+levelId+"/"+groupId;
-    return this._httpClient.get<number>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<number>(url)
   }
   public getAccountListForAccountOpening(){
     var url=this._defaultRoute.FinanceService+'getAccountListForopening';
-    return this._httpClient.get<AccountOpeningView[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<AccountOpeningView[]>(url)
   }
   public AddSubleder(subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger';
-    return this._httpClient.post<boolean>(url,subledger).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.post<boolean>(url,subledger)
   }
   public UpdateSubleder(Id:string,subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger/'+Id;
-    return this._httpClient.put<boolean>(url,subledger).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.put<boolean>(url,subledger)
   }
   public GetSublederList(Id:string){
     var url=this._defaultRoute.FinanceService+'getSubledgerList/'+Id;
-    return this._httpClient.get<Subledger[]>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<Subledger[]>(url)
   }
   public GetSublederById(Id:string){
     var url=this._defaultRoute.FinanceService+'getSubledgerById/'+Id;
-    return this._httpClient.get<Subledger>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<Subledger>(url)
   }
   public DeleteGetSublederById(Id:string){
     var url=this._defaultRoute.FinanceService+'deleteSubledger/'+Id;
-    return this._httpClient.get<boolean>(url).pipe(
-      catchError(this.handleError)
-    )
+    return this._httpClient.get<boolean>(url)
   }
-  private handleError(error: HttpErrorResponse) {
-    debugger
-
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-      return throwError(error.error.message) 
-    } 
-    else 
-    {
-      let message=error.error.Message;       
-      return throwError(message+'<br/>'+error.message) 
-    }
-    // return an observable with a user-facing error message
-  };
 }

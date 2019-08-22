@@ -26,7 +26,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-               // var userSession=AuthorizationHelper.GetSession();
+                // var userSession=AuthorizationHelper.GetSession();
                 var accountDetails = new AccountDetails();
                 List<AccountParentChildRelationInfo> ChartOfAccountListTree = new List<AccountParentChildRelationInfo>();
                 List<AccountParentChildRelationInfo> ChartOfAccountListTree2 = new List<AccountParentChildRelationInfo>();
@@ -39,9 +39,9 @@ namespace ERPWebApiService.Controllers
                                        AccountDescription = acc.AccountDescription,
                                        AutoAccountCode = acc.AutoAccountCode,
                                        ManualAccountCode = acc.ManualAccountCode,
-                                       IsLeaf=acc.IsLeaf,
-                                      // HasSubleder=acc.HasSubLedger,
-                                       AccountType=acc.AccountType,
+                                       IsLeaf = acc.IsLeaf,
+                                       // HasSubleder=acc.HasSubLedger,
+                                       AccountType = acc.AccountType,
                                        ParentGroupId = pcr.ParentGroupId,
                                        ParentLevelId = pcr.ParentLevelId,
                                        ParentAccount_Id = pcr.ParentAccount_Id,
@@ -62,14 +62,14 @@ namespace ERPWebApiService.Controllers
                                               AccountDescription = acc.AccountDescription,
                                               AutoAccountCode = acc.AutoAccountCode,
                                               ManualAccountCode = acc.ManualAccountCode,
-                                              ChildGroupId=acc.GroupId,
+                                              ChildGroupId = acc.GroupId,
                                               AccountType = acc.AccountType,
-                                              ChildLevelId=acc.LevelId,
-                                              ChildAccId=acc.AccId,
-                                              IsLeaf=acc.IsLeaf,
+                                              ChildLevelId = acc.LevelId,
+                                              ChildAccId = acc.AccId,
+                                              IsLeaf = acc.IsLeaf,
                                               Status = false,
                                               IsClicked = false
-                                             // HasSubleder=acc.HasSubLedger
+                                              // HasSubleder=acc.HasSubLedger
                                           }).ToList();
                 foreach (var account in ChartOfAccountListTree)
                 {
@@ -125,10 +125,10 @@ namespace ERPWebApiService.Controllers
                     ChildGroupId = x.ChildGroupId,
                     ChildLevelId = x.ChildLevelId,
                     ChildAccount_Id = x.ChildAccount_Id,
-                    IsLeaf=x.IsLeaf,
+                    IsLeaf = x.IsLeaf,
                     Status = x.Status,
                     IsClicked = x.IsClicked,
-                   // HasSubleder=x.HasSubleder,
+                    // HasSubleder=x.HasSubleder,
                     Children = genterateAccountTree(accoountList, x.ChildAccount_Id)
                 }).ToList();
             return accountList2;
@@ -142,43 +142,63 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                    var chartOfAccount = new Account()
-                    {
-                        Id=Guid.NewGuid().ToString().ToString().ToString(),
-                        AccId=accountInfo.AccId,
-                        GroupId=accountInfo.GroupId,
-                        LevelId=accountInfo.LevelId,
-                        AccountType=accountInfo.AccountType,
-                        AccountDescription=accountInfo.AccountDescription,
-                        AutoAccountCode=accountInfo.AutoAccountCode,
-                        ManualAccountCode=accountInfo.ManualAccountCode,
-                        IsLeaf=true,
-                        IsProfitLoss=accountInfo.IsProfitLoss,
-                        IsReciptsPayment=accountInfo.IsProfitLoss,
-                        IsSale=accountInfo.IsSale
-                        //BranchId=userSession.SelectedBranchId
-                    };
-                    ERPContext.Accounts.AddOrUpdate(chartOfAccount);
-                    ERPContext.SaveChanges();
-                    var parentAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == accountInfo.ParentAccountId);
-                    var childParentRelation=new AccountParentChildRelation(){
-                        Id=Guid.NewGuid().ToString().ToString(),
-                        ParentAccId=parentAccount.AccId,
-                        ParentGroupId=parentAccount.GroupId,
-                        ParentLevelId=parentAccount.LevelId,
-                        ChildAccId=chartOfAccount.AccId,
-                        ChildGroupId=chartOfAccount.GroupId,
-                        ChildLevelId=chartOfAccount.LevelId,
-                        ParentAccount_Id=parentAccount.Id,
-                        ChildAccount_Id=chartOfAccount.Id
-                        //Branch_Id=userSession.SelectedBranchId
-                    };
-                    ERPContext.AccountParentChildRelations.AddOrUpdate(childParentRelation);
-                    ERPContext.SaveChanges();
-                    ERPContext.Database.ExecuteSqlCommand("update tblaccount set Isleaf=0 where id='" + parentAccount.Id + "'");
+                var chartOfAccount = new Account()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    AccId = accountInfo.AccId,
+                    GroupId = accountInfo.GroupId,
+                    LevelId = accountInfo.LevelId,
+                    AccountType = accountInfo.AccountType,
+                    AccountDescription = accountInfo.AccountDescription,
+                    AutoAccountCode = accountInfo.AutoAccountCode,
+                    ManualAccountCode = accountInfo.ManualAccountCode,
+                    IsLeaf = true,
+                    IsProfitLoss = accountInfo.IsProfitLoss,
+                    IsReciptsPayment = accountInfo.IsProfitLoss,
+                    IsSale = accountInfo.IsSale
+                    //BranchId=userSession.SelectedBranchId
+                };
+                ERPContext.Accounts.AddOrUpdate(chartOfAccount);
+                ERPContext.SaveChanges();
+                var parentAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == accountInfo.ParentAccountId);
+                var childParentRelation = new AccountParentChildRelation()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ParentAccId = parentAccount.AccId,
+                    ParentGroupId = parentAccount.GroupId,
+                    ParentLevelId = parentAccount.LevelId,
+                    ChildAccId = chartOfAccount.AccId,
+                    ChildGroupId = chartOfAccount.GroupId,
+                    ChildLevelId = chartOfAccount.LevelId,
+                    ParentAccount_Id = parentAccount.Id,
+                    ChildAccount_Id = chartOfAccount.Id
+                    //Branch_Id=userSession.SelectedBranchId
+                };
+                ERPContext.AccountParentChildRelations.AddOrUpdate(childParentRelation);
+                ERPContext.SaveChanges();
+                ERPContext.Database.ExecuteSqlCommand("update tblaccount set Isleaf=0 where id='" + parentAccount.Id + "'");
                 //}
-                
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                AccountParentChildRelationInfo account = new AccountParentChildRelationInfo()
+                {
+                    Id = childParentRelation.Id,
+                    AccountId = chartOfAccount.Id,
+                    AccountDescription = chartOfAccount.AccountDescription,
+                    AutoAccountCode = chartOfAccount.AutoAccountCode,
+                    ManualAccountCode = chartOfAccount.ManualAccountCode,
+                    ParentGroupId = childParentRelation.ParentGroupId,
+                    ParentLevelId = childParentRelation.ParentLevelId,
+                    ParentAccount_Id = childParentRelation.ParentAccount_Id,
+                    AccountType = chartOfAccount.AccountType,
+                    ChildAccId = childParentRelation.ChildAccId,
+                    ParentAccId = childParentRelation.ParentAccId,
+                    ChildGroupId = childParentRelation.ChildGroupId,
+                    ChildLevelId = childParentRelation.ChildLevelId,
+                    ChildAccount_Id = childParentRelation.ChildAccount_Id,
+                    IsLeaf = chartOfAccount.IsLeaf,
+                    Status = true,
+                    IsClicked = true,
+                };
+                return Request.CreateResponse(HttpStatusCode.OK, account);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -195,36 +215,60 @@ namespace ERPWebApiService.Controllers
         }
         [Route("createChartOfAccount/{id}")]
         [HttpPost]
-        public HttpResponseMessage CreateChartOfAccount(string id,AccountInfo accountInfo)
+        public HttpResponseMessage CreateChartOfAccount(string id, AccountInfo accountInfo)
         {
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                    var oChartOfAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == id);
-                    var chartOfAccount = new Account()
-                    {
-                        Id = oChartOfAccount.Id,
-                        AccountType = accountInfo.AccountType,
-                        AccountDescription = accountInfo.AccountDescription,
-                        AutoAccountCode = accountInfo.AutoAccountCode,
-                        ManualAccountCode = accountInfo.ManualAccountCode,
-                        AccId=oChartOfAccount.AccId,
-                        GroupId=oChartOfAccount.GroupId,
-                        LevelId=oChartOfAccount.LevelId,
-                        CloseingStatus=oChartOfAccount.CloseingStatus,
-                        IsLeaf=oChartOfAccount.IsLeaf,
-                        IsProfitLoss=oChartOfAccount.IsProfitLoss,
-                        HasSubLedger=oChartOfAccount.HasSubLedger,
-                        IsReciptsPayment=oChartOfAccount.IsReciptsPayment,
-                        IsSale=oChartOfAccount.IsSale
-                    };
-                    ERPContext.Accounts.AddOrUpdate(chartOfAccount);
-                    ERPContext.SaveChanges();
+                var oChartOfAccount = ERPContext.Accounts.FirstOrDefault(x => x.Id == id);
+                var chartOfAccount = new Account()
+                {
+                    Id = oChartOfAccount.Id,
+                    AccountType = accountInfo.AccountType,
+                    AccountDescription = accountInfo.AccountDescription,
+                    AutoAccountCode = accountInfo.AutoAccountCode,
+                    ManualAccountCode = accountInfo.ManualAccountCode,
+                    AccId = oChartOfAccount.AccId,
+                    GroupId = oChartOfAccount.GroupId,
+                    LevelId = oChartOfAccount.LevelId,
+                    CloseingStatus = oChartOfAccount.CloseingStatus,
+                    IsLeaf = oChartOfAccount.IsLeaf,
+                    IsProfitLoss = oChartOfAccount.IsProfitLoss,
+                    HasSubLedger = oChartOfAccount.HasSubLedger,
+                    IsReciptsPayment = oChartOfAccount.IsReciptsPayment,
+                    IsSale = oChartOfAccount.IsSale
+                };
+                ERPContext.Accounts.AddOrUpdate(chartOfAccount);
+                ERPContext.SaveChanges();
+                var childParentRelation =
+                    ERPContext.AccountParentChildRelations.FirstOrDefault(x => x.ChildAccount_Id == chartOfAccount.Id);
+                AccountParentChildRelationInfo accounttree = new AccountParentChildRelationInfo();
+                if (childParentRelation != null)
+                {
+                    accounttree.Id = childParentRelation.Id;
+                    accounttree.AccountId = chartOfAccount.Id;
+                    accounttree.AccountDescription = chartOfAccount.AccountDescription;
+                    accounttree.AutoAccountCode = chartOfAccount.AutoAccountCode;
+                    accounttree.ManualAccountCode = chartOfAccount.ManualAccountCode;
+                    accounttree.ParentGroupId = childParentRelation.ParentGroupId;
+                    accounttree.ParentLevelId = childParentRelation.ParentLevelId;
+                    accounttree.ParentAccount_Id = childParentRelation.ParentAccount_Id;
+                    accounttree.AccountType = chartOfAccount.AccountType;
+                    accounttree.ChildAccId = childParentRelation.ChildAccId;
+                    accounttree.ParentAccId = childParentRelation.ParentAccId;
+                    accounttree.ChildGroupId = childParentRelation.ChildGroupId;
+                    accounttree.ChildLevelId = childParentRelation.ChildLevelId;
+                    accounttree.ChildAccount_Id = childParentRelation.ChildAccount_Id;
+                    accounttree.IsLeaf = chartOfAccount.IsLeaf;
+                    accounttree.Status = true;
+                    accounttree.IsClicked = true;
+                }
+
                 //}
 
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.OK, accounttree);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -248,25 +292,25 @@ namespace ERPWebApiService.Controllers
 
                 var date = 1551627350005;
                 var a = new DateTime(1551627350005);
-               // var userSession = AuthorizationHelper.GetSession();
+                // var userSession = AuthorizationHelper.GetSession();
                 var voucherList = ERPContext.Vouchers.Select(x => new VoucherInfo()
                 {
-                    Id=x.Id,
-                    VoucherType=x.Vouchertype,
-                    VoucherNo=x.Voucherno,
-                    VoucherDate=x.Voucherdate,
-                    VoucherStatus=x.Voucherstatus,
-                    ChequeNo=x.Chequeno,
-                    ChequeDate=x.Chequedate,
-                    BranchID=x.BranchID,
-                    Bankname=x.Bankname,
-                    BankAccountNo=x.BankAccountNo,
-                    ApprovedBy=x.ApprovedBy,
-                    CheckedBy=x.CheckedBy,
-                    IsAutoGenerated=x.IsAutoGenerated,
-                    Particulars=x.Particulars,
-                    PostingStatus=x.PostingStatus,
-                    Amount=x.TotalAmount                 
+                    Id = x.Id,
+                    VoucherType = x.Vouchertype,
+                    VoucherNo = x.Voucherno,
+                    VoucherDate = x.Voucherdate,
+                    VoucherStatus = x.Voucherstatus,
+                    ChequeNo = x.Chequeno,
+                    ChequeDate = x.Chequedate,
+                    BranchID = x.BranchID,
+                    Bankname = x.Bankname,
+                    BankAccountNo = x.BankAccountNo,
+                    ApprovedBy = x.ApprovedBy,
+                    CheckedBy = x.CheckedBy,
+                    IsAutoGenerated = x.IsAutoGenerated,
+                    Particulars = x.Particulars,
+                    PostingStatus = x.PostingStatus,
+                    Amount = x.TotalAmount
                 }).ToList();
 
                 return Request.CreateResponse(HttpStatusCode.OK, voucherList);
@@ -292,7 +336,7 @@ namespace ERPWebApiService.Controllers
             {
                 //var userSession = AuthorizationHelper.GetSession();
                 var voucherid = (voucherId);
-                var voucherInfo = ERPContext.Vouchers.Where(x=>x.Id==voucherid).Select(x => new VoucherInfo()
+                var voucherInfo = ERPContext.Vouchers.Where(x => x.Id == voucherid).Select(x => new VoucherInfo()
                 {
                     Id = x.Id,
                     VoucherType = x.Vouchertype,
@@ -322,13 +366,13 @@ namespace ERPWebApiService.Controllers
                     while (rdr.Read())
                     {
                         VoucherDetailInfo voucherDetailInfo = new VoucherDetailInfo();
-                        voucherDetailInfo.Id =rdr["Id"].ToString();
+                        voucherDetailInfo.Id = rdr["Id"].ToString();
                         voucherDetailInfo.Lineno = Convert.ToInt32(rdr["Lineno"].ToString());
                         voucherDetailInfo.Amount = Convert.ToDouble(rdr["Amount"].ToString());
                         voucherDetailInfo.Vat = Convert.ToDouble(rdr["Vat"].ToString());
                         voucherDetailInfo.Tax = Convert.ToDouble(rdr["Tax"].ToString());
                         voucherDetailInfo.AccountDescription = rdr["AccountDescription"].ToString();
-                        voucherDetailInfo.AccountId =rdr["Account_Id"].ToString();
+                        voucherDetailInfo.AccountId = rdr["Account_Id"].ToString();
                         voucherDetailInfo.SubLedgerTransactions = GetSubledgerTransactionListByVoucherDetailsId(voucherDetailInfo.Id);
                         VoucherDetailList.Add(voucherDetailInfo);
                     }
@@ -385,51 +429,51 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 var voucher = new Voucher()
                 {
-                    Id=Guid.NewGuid().ToString().ToString(),
-                    Voucherdate=voucherInfo.VoucherDate,
-                    Voucherno=voucherInfo.VoucherNo,
-                    Vouchertype=voucherInfo.VoucherType,
-                    TotalAmount=voucherInfo.Amount,
-                    Voucherstatus=false,
-                    Chequedate=voucherInfo.ChequeDate,
-                    Chequeno=voucherInfo.ChequeNo
+                    Id = Guid.NewGuid().ToString().ToString(),
+                    Voucherdate = voucherInfo.VoucherDate,
+                    Voucherno = voucherInfo.VoucherNo,
+                    Vouchertype = voucherInfo.VoucherType,
+                    TotalAmount = voucherInfo.Amount,
+                    Voucherstatus = false,
+                    Chequedate = voucherInfo.ChequeDate,
+                    Chequeno = voucherInfo.ChequeNo
                 };
                 ERPContext.Vouchers.Add(voucher);
                 ERPContext.SaveChanges();
-                Dictionary<string,string> paramlist=new Dictionary<string,string>();
-                paramlist.Add("@voucherid",voucher.Id.ToString());
-                paramlist.Add("@voucherDate",voucher.Voucherdate.ToString());
-                paramlist.Add("@branch_id",null);
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@voucherid", voucher.Id.ToString());
+                paramlist.Add("@voucherDate", voucher.Voucherdate.ToString());
+                paramlist.Add("@branch_id", null);
                 DatabaseCommand.ExcuteNonQuery("proc_generate_voucher_no", paramlist, "procedure");
-                var oVoucher=ERPContext.Vouchers.FirstOrDefault(x=>x.Id==voucher.Id);
+                var oVoucher = ERPContext.Vouchers.FirstOrDefault(x => x.Id == voucher.Id);
                 foreach (var vd in voucherInfo.VoucherDetailsList)
                 {
                     var account = ERPContext.Accounts.FirstOrDefault(x => x.Id == vd.AccountId);
                     var voucherDetail = new VoucherDetails()
                     {
-                        Id=Guid.NewGuid().ToString().ToString().ToString(),
-                        Lineno=vd.Lineno,
-                        Account_Id=vd.AccountId,
-                        AccId=account.AccId,
-                        LevelId=account.LevelId,
-                        GroupId=account.GroupId,
-                        Amount=vd.Amount,
-                        Vat=vd.Vat,
-                        Tax=vd.Tax,
+                        Id = Guid.NewGuid().ToString().ToString().ToString(),
+                        Lineno = vd.Lineno,
+                        Account_Id = vd.AccountId,
+                        AccId = account.AccId,
+                        LevelId = account.LevelId,
+                        GroupId = account.GroupId,
+                        Amount = vd.Amount,
+                        Vat = vd.Vat,
+                        Tax = vd.Tax,
                         Voucher_Id = oVoucher.Id,
-                        VoucherNo=oVoucher.Voucherno,
+                        VoucherNo = oVoucher.Voucherno,
                     };
                     ERPContext.VoucherDetailList.Add(voucherDetail);
                     ERPContext.SaveChanges();
                     foreach (var subledgerTransactionInfo in vd.SubLedgerTransactions)
                     {
-                        var subledgerTransaction = new SubledgerTransaction() 
-                        { 
-                            Id=Guid.NewGuid().ToString().ToString(),
-                            Amount=subledgerTransactionInfo.Amount,
-                            Account_Id=account.Id,
-                            Subledger_Id=subledgerTransactionInfo.SubLedger_Id,
-                            Voucher_Id=oVoucher.Id,
+                        var subledgerTransaction = new SubledgerTransaction()
+                        {
+                            Id = Guid.NewGuid().ToString().ToString(),
+                            Amount = subledgerTransactionInfo.Amount,
+                            Account_Id = account.Id,
+                            Subledger_Id = subledgerTransactionInfo.SubLedger_Id,
+                            Voucher_Id = oVoucher.Id,
                             Voucher_Detail_Id = voucherDetail.Id
                         };
                         ERPContext.SubledgerTransactions.Add(subledgerTransaction);
@@ -467,7 +511,7 @@ namespace ERPWebApiService.Controllers
                         Voucherdate = voucherInfo.VoucherDate,
                         Voucherno = voucherInfo.VoucherNo,
                         Vouchertype = voucherInfo.VoucherType,
-                        TotalAmount=voucherInfo.Amount,
+                        TotalAmount = voucherInfo.Amount,
                         Voucherstatus = false,
                         Chequedate = voucherInfo.ChequeDate,
                         Chequeno = voucherInfo.ChequeNo
@@ -559,14 +603,14 @@ namespace ERPWebApiService.Controllers
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
-                var accountList = ERPContext.Accounts.Where(x=>x.IsLeaf==true && x.LevelId!=1).Select(x => new AccountInfo()
+                var accountList = ERPContext.Accounts.Where(x => x.IsLeaf == true && x.LevelId != 1).Select(x => new AccountInfo()
                 {
-                    Id=x.Id,
-                    AccountDescription=x.AccountDescription,
-                    AutoAccountCode=x.AutoAccountCode,
-                    ManualAccountCode=x.ManualAccountCode,
-                    HasSubLedger=x.HasSubLedger,
-                    AccountType=x.AccountType
+                    Id = x.Id,
+                    AccountDescription = x.AccountDescription,
+                    AutoAccountCode = x.AutoAccountCode,
+                    ManualAccountCode = x.ManualAccountCode,
+                    HasSubLedger = x.HasSubLedger,
+                    AccountType = x.AccountType
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, accountList);
             }
@@ -592,12 +636,12 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 var accountList = ERPContext.Accounts.Where(x => x.IsLeaf == true && x.LevelId != 1).Select(x => new AccountOpeningTableView()
                 {
-                    AccountDescription =x.AutoAccountCode+"-"+ x.AccountDescription,
+                    AccountDescription = x.AutoAccountCode + "-" + x.AccountDescription,
                     Group = x.GroupId.ToString(),
                     DebitAmount = 0,
                     CreditAmount = 0,
-                    AccountType=x.AccountType,
-                    AccountId=x.Id
+                    AccountType = x.AccountType,
+                    AccountId = x.Id
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, accountList);
             }
@@ -616,17 +660,17 @@ namespace ERPWebApiService.Controllers
         }
         [Route("getMaxAccid/{levelId}/{groupId}")]
         [HttpGet]
-        public HttpResponseMessage GetMaxAccidByLevelAndGroupId(int levelId,int groupId)
+        public HttpResponseMessage GetMaxAccidByLevelAndGroupId(int levelId, int groupId)
         {
             try
             {
                 //var userSession = AuthorizationHelper.GetSession();
-                int MaxAccId=0;
+                int MaxAccId = 0;
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
-                    SqlCommand cmd=new SqlCommand(@"select isnull(max(accid),0) from tblaccount where groupId=@groupId and LevelId=@levelId",con);
-                    cmd.Parameters.AddWithValue("@levelId",levelId);
-                    cmd.Parameters.AddWithValue("@groupId",groupId);
+                    SqlCommand cmd = new SqlCommand(@"select isnull(max(accid),0) from tblaccount where groupId=@groupId and LevelId=@levelId", con);
+                    cmd.Parameters.AddWithValue("@levelId", levelId);
+                    cmd.Parameters.AddWithValue("@groupId", groupId);
                     //cmd.Parameters.AddWithValue("@branchId",groupId);
                     con.Open();
                     MaxAccId = Convert.ToInt32(cmd.ExecuteScalar());
@@ -646,7 +690,7 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        
+
         [Route("addSubledger")]
         [HttpPost]
         public HttpResponseMessage AddSubledger(SubledgerInfo subledgerInfo)
@@ -657,16 +701,16 @@ namespace ERPWebApiService.Controllers
                 {
                     var subledger = new Subledger()
                     {
-                        Id=Guid.NewGuid().ToString().ToString(),
-                        SubledgerCode=subledgerInfo.SublederCode,
-                        Description=subledgerInfo.Description,
-                        Account_Id=subledgerInfo.AccountId
+                        Id = Guid.NewGuid().ToString().ToString(),
+                        SubledgerCode = subledgerInfo.SublederCode,
+                        Description = subledgerInfo.Description,
+                        Account_Id = subledgerInfo.AccountId
                     };
                     ERPContext.Subledgers.Add(subledger);
                     ERPContext.SaveChanges();
                     ERPContext.Database.ExecuteSqlCommand("update tblAccount set hasSubledger=1 where id='" + subledgerInfo.AccountId + "'");
                 }
- 
+
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (InvalidSessionFailure ex)
@@ -684,7 +728,7 @@ namespace ERPWebApiService.Controllers
         }
         [Route("addSubledger/{id}")]
         [HttpPut]
-        public HttpResponseMessage AddSubledger(string id,SubledgerInfo subledgerInfo)
+        public HttpResponseMessage AddSubledger(string id, SubledgerInfo subledgerInfo)
         {
             try
             {
@@ -722,7 +766,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var subledgerList = ERPContext.Subledgers.Where(x=>x.Account_Id==id).Select(x => new SubledgerInfo
+                var subledgerList = ERPContext.Subledgers.Where(x => x.Account_Id == id).Select(x => new SubledgerInfo
                 {
                     Id = x.Id,
                     Description = x.Description,
@@ -750,7 +794,7 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var subledger = ERPContext.Subledgers.Where(x=>x.Id==id).Select(x => new SubledgerInfo
+                var subledger = ERPContext.Subledgers.Where(x => x.Id == id).Select(x => new SubledgerInfo
                 {
                     Id = x.Id,
                     Description = x.Description,

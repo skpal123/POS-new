@@ -13,7 +13,7 @@ export class ChartOfAccountTree{
     public ChildLevelId?:number;
     public ParentAccount_Id?:string;
     public ChildAccount_Id?:string;
-    public Children:ChartOfAccountTree[];
+    public Children?:ChartOfAccountTree[];
     public Status?:boolean;
     public IsLeaf?:boolean;
     public IsClicked?:boolean;

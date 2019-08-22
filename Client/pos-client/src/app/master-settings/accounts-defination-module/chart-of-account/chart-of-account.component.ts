@@ -21,6 +21,13 @@ export class ChartOfAccountComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   accountClicked:boolean=false;
   chartOfAccountTreeList:ChartOfAccountTree[]=[];
+  oldChartOfAccountTreeList:ChartOfAccountTree[]=[];
+  selectedAccount:ChartOfAccountTree={
+    Children:[]
+  }
+  savedAcoount:ChartOfAccountTree={
+    Children:[]
+  }
   accountDetails:AccountDetails;
   account:ChartOfaccount={AccountType:"0",};
   Status:string="add";
@@ -94,6 +101,7 @@ export class ChartOfAccountComponent implements OnInit {
        }
       })
     }
+    this.oldChartOfAccountTreeList=JSON.parse(JSON.stringify(this.chartOfAccountTreeList));
   }
   expandAllChildNode(node:ChartOfAccountTree){
     this.isFound=false;
@@ -142,6 +150,7 @@ export class ChartOfAccountComponent implements OnInit {
        }
       })
     }
+    this.oldChartOfAccountTreeList=JSON.parse(JSON.stringify(this.chartOfAccountTreeList));
   }
   findChildPosition(trees:ChartOfAccountTree[],node:ChartOfAccountTree){
     trees.forEach((coa,index,array)=>{
@@ -183,6 +192,7 @@ export class ChartOfAccountComponent implements OnInit {
   addNewAccount(status:string,selectedNode:ChartOfAccountTree){
     debugger
     this.Status=status;
+    this.selectedAccount=selectedNode;
     if(this.Status=="add"){
       var AutoAccountCode;
       this.account.Id=null;
@@ -219,49 +229,12 @@ export class ChartOfAccountComponent implements OnInit {
       height:'auto',
       width:window.screen.width*.5+'px'
     });
-    dialogRef.afterClosed().subscribe(result=>{
-      if(result=true){
-        this.getChartOfaccountTreeList();
+    dialogRef.afterClosed().subscribe((result:ChartOfAccountTree)=>{
+      if(result){
+        this.findSelectedAccount(this.selectedAccount)
+        this.savedAcoount=result;
       }
     })
-  }
-  selectedNode(selectedNode:ChartOfAccountTree){
-    // console.log(selectedNode)
-    // this.accountClicked=true;
-    // if(this.Status=="add"){
-    //   var AutoAccountCode;
-    //   this.account.Id=null;
-    //   this._service.getMaxAccidByGroupIdAndLevelId(selectedNode.ChildGroupId,selectedNode.ChildLevelId+1).subscribe(response=>{
-    //     let maxAccid=response
-    //     let newAccid=maxAccid+1;
-    //     let newlevel=selectedNode.ChildLevelId+1;
-    //     this.account.LevelId=newlevel;
-    //     this.account.AccId=newAccid;
-    //     this.account.GroupId=selectedNode.ChildGroupId
-    //     AutoAccountCode=selectedNode.ChildGroupId+"0"+newlevel+"00"+newAccid.toString();
-    //     this.account.AutoAccountCode=AutoAccountCode;
-    //     this.account.ManualAccountCode=AutoAccountCode;
-    //     this.account.AccountDescription=null;
-    //     this.account.ParentAccountId=selectedNode.AccountId;
-    //   },error=>{
-    //     var dialogData=new DialogData();
-    //     dialogData.message=error
-    //     this._alertBoxService.openDialog(dialogData);
-    //   })
-    // }
-    // else{
-    //   this.account.Id=selectedNode.AccountId;
-    //   this.account.ManualAccountCode=selectedNode.ManualAccountCode;
-    //   this.account.AutoAccountCode=selectedNode.AutoAccountCode;
-    //   this.account.AccountDescription=selectedNode.AccountDescription;
-    //   if(selectedNode.IsLeaf){
-    //     this.IsSubledgerEnable=true;
-    //     this.subledger.AccountId=selectedNode.AccountId;
-    //   }
-    //   else{
-    //     this.IsSubledgerEnable=false;
-    //   }
-    // }
   }
   createChartOfAccount(){
     if(this.account.Id==null){
@@ -273,7 +246,8 @@ export class ChartOfAccountComponent implements OnInit {
           var dialogData=new DialogData();
           dialogData.message="Chart of account create succesfully";
           this._alertBoxService.openDialog(dialogData);
-          this.getChartOfaccountTreeList();
+          //this.getChartOfaccountTreeList();
+          this.findSelectedAccount(result);
         }
       },error=>{
         var dialogData=new DialogData();
@@ -290,7 +264,8 @@ export class ChartOfAccountComponent implements OnInit {
           var dialogData=new DialogData();
           dialogData.message="Chart of account updated succesfully";
           this._alertBoxService.openDialog(dialogData);
-          this.getChartOfaccountTreeList();
+         //this.getChartOfaccountTreeList();
+          this.findSelectedAccount(result);
         }
       },error=>{
         var dialogData=new DialogData();
@@ -298,6 +273,44 @@ export class ChartOfAccountComponent implements OnInit {
         this._alertBoxService.openDialog(dialogData);
       })
     }
+  }
+  findSelectedAccount(node:ChartOfAccountTree){
+    debugger
+    this.isFound=false;
+    this.oldChartOfAccountTreeList.forEach((chartOfAcc,index,array)=>{
+      if(chartOfAcc.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
+        this.isFound=true;
+        alert('found')
+      }
+      else{
+        if(chartOfAcc.Children!=null&&chartOfAcc.Children.length>0){
+          chartOfAcc.Children.forEach((chartOfAcc2,index,array)=>{
+            if(chartOfAcc2.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
+              this.isFound=true;
+              //chartOfAcc.Children[position].Children.push(this.savedAcoount)
+              //this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+              alert('found')
+           }
+           else{
+              this.findChildAccount(chartOfAcc2.Children,node)
+           }
+          })
+        } 
+      }
+    })
+
+  }
+  findChildAccount(trees:ChartOfAccountTree[],node:ChartOfAccountTree){
+    trees.forEach((coa,index,array)=>{
+      if(coa.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
+          this.isFound=true;
+          alert('found')
+          //this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+      }
+      else{
+        this.findChildPosition(coa.Children,node)
+      }
+    })
   }
   clearChartOfAccountForm(){
     this.account.AccountDescription=null;
