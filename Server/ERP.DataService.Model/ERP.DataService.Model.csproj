@@ -299,6 +299,10 @@
     <Compile Include="Migrations\201908200633228_addManyToOneInOfferSetup.Designer.cs">
       <DependentUpon>201908200633228_addManyToOneInOfferSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908220627517_ChangeDataTypeDoubleToBool.cs" />
+    <Compile Include="Migrations\201908220627517_ChangeDataTypeDoubleToBool.Designer.cs">
+      <DependentUpon>201908220627517_ChangeDataTypeDoubleToBool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -533,6 +537,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908200633228_addManyToOneInOfferSetup.resx">
       <DependentUpon>201908200633228_addManyToOneInOfferSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908220627517_ChangeDataTypeDoubleToBool.resx">
+      <DependentUpon>201908220627517_ChangeDataTypeDoubleToBool.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

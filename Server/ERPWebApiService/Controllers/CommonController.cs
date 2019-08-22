@@ -884,7 +884,7 @@ namespace ERPWebApiService.Controllers
                         fromValidation.IsDaily = Convert.ToBoolean(rdr["IsDaily"]);
                         fromValidation.IsLeave = Convert.ToBoolean(rdr["IsLeave"]);
                         fromValidation.IsPension = Convert.ToBoolean(rdr["IsPension"]);
-                        fromValidation.IsTax = Convert.ToBoolean(rdr["EeectiveDate"]);
+                        fromValidation.IsTax = Convert.ToBoolean(rdr["IsTax"]);
                         fromValidation.IsLoan = Convert.ToBoolean(rdr["IsLoan"]);
                         fromValidation.DefaultAmount = Convert.ToBoolean(rdr["DefaultAmount"]);
                         formValidationList.Add(fromValidation);

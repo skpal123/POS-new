@@ -230,9 +230,12 @@ export class ChartOfAccountComponent implements OnInit {
       width:window.screen.width*.5+'px'
     });
     dialogRef.afterClosed().subscribe((result:ChartOfAccountTree)=>{
+      debugger
       if(result){
-        this.findSelectedAccount(this.selectedAccount)
         this.savedAcoount=result;
+        this.savedAcoount.Status=true;
+        this.savedAcoount.Children=[]
+        this.findSelectedAccount(this.selectedAccount)
       }
     })
   }
@@ -280,18 +283,23 @@ export class ChartOfAccountComponent implements OnInit {
     this.oldChartOfAccountTreeList.forEach((chartOfAcc,index,array)=>{
       if(chartOfAcc.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
         this.isFound=true;
-        alert('found')
+        chartOfAcc.IsClicked=true;
+        chartOfAcc.Children.push(this.savedAcoount)
+        this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+        console.log(this.chartOfAccountTreeList)
       }
       else{
         if(chartOfAcc.Children!=null&&chartOfAcc.Children.length>0){
           chartOfAcc.Children.forEach((chartOfAcc2,index,array)=>{
             if(chartOfAcc2.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
               this.isFound=true;
-              //chartOfAcc.Children[position].Children.push(this.savedAcoount)
-              //this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
-              alert('found')
+              chartOfAcc2.IsClicked=true;
+              chartOfAcc2.Children.push(this.savedAcoount)
+              this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+              console.log(this.chartOfAccountTreeList);
            }
            else{
+             if(chartOfAcc2.Children!=null&&chartOfAcc2.Children.length>0)
               this.findChildAccount(chartOfAcc2.Children,node)
            }
           })
@@ -304,11 +312,15 @@ export class ChartOfAccountComponent implements OnInit {
     trees.forEach((coa,index,array)=>{
       if(coa.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
           this.isFound=true;
-          alert('found')
-          //this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+          coa.IsClicked=true;
+          coa.Children.push(this.savedAcoount)
+          this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
+          console.log(this.chartOfAccountTreeList)
       }
       else{
-        this.findChildPosition(coa.Children,node)
+        if(coa.Children!=null&&coa.Children.length>0){
+          this.findChildAccount(coa.Children,node)
+        }
       }
     })
   }

@@ -23,11 +23,11 @@ namespace ERP.DataService.Model.Model
         public string ItemType { get; set; }
           [StringLength(100)]
         public string ItemTypeName { get; set; }
-        public double? IsPension { get; set; }
-        public double? IsTax { get; set; }
-        public double? IsDefault { get; set; }
-        public double? IsBasic { get; set; }
-        public double? IsDaily { get; set; }
+        public bool? IsPension { get; set; }
+        public bool? IsTax { get; set; }
+        public bool? IsDefault { get; set; }
+        public bool? IsBasic { get; set; }
+        public bool? IsDaily { get; set; }
         public string Percentage { get; set; }
           [StringLength(20)]
         public string OperatorString { get; set; }

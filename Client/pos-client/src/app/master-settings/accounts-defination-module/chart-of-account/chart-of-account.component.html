@@ -56,6 +56,34 @@
                               <a style="float: right;" class="pull-rgiht" (click)="addNewAccount('add',ttttt)">Add</a>
                               <a style="margin-right: 10px;float: right;" (click)="addNewAccount('edit',ttttt)"
                                 class="pull-rgiht">Edit</a>
+                                <ul *ngFor="let tttttt of ttttt.Children">
+                                  <li *ngIf="tttttt.Status">
+                                    <span class="glyphicon glyphicon-play"
+                                      [ngClass]="tttttt.Children&&tttttt.Children.length>0?'btn-success': ''"
+                                      [class.pointer]="tttttt.Children&&tttttt.Children.length>0"
+                                      (mouseover)="expandAllChildNode(tttttt)"></span>
+                                    <span id="displayHeadDiv"
+                                      (click)="selectedNode(tttttt)">{{tttttt.AutoAccountCode+"-"+tttttt.AccountDescription}}
+                                    </span>
+                                    <a style="float: right;" class="pull-rgiht" (click)="addNewAccount('add',tttttt)">Add</a>
+                                    <a style="margin-right: 10px;float: right;" (click)="addNewAccount('edit',tttttt)"
+                                      class="pull-rgiht">Edit</a>
+                                      <ul *ngFor="let ttttttt of tttttt.Children">
+                                        <li *ngIf="ttttttt.Status">
+                                          <span class="glyphicon glyphicon-play"
+                                            [ngClass]="ttttttt.Children&&ttttttt.Children.length>0?'btn-success': ''"
+                                            [class.pointer]="ttttttt.Children&&ttttttt.Children.length>0"
+                                            (mouseover)="expandAllChildNode(ttttttt)"></span>
+                                          <span id="displayHeadDiv"
+                                            (click)="selectedNode(ttttttt)">{{ttttttt.AutoAccountCode+"-"+ttttttt.AccountDescription}}
+                                          </span>
+                                          <a style="float: right;" class="pull-rgiht" (click)="addNewAccount('add',ttttttt)">Add</a>
+                                          <a style="margin-right: 10px;float: right;" (click)="addNewAccount('edit',ttttttt)"
+                                            class="pull-rgiht">Edit</a>
+                                        </li>
+                                      </ul>
+                                  </li>
+                                </ul>
                             </li>
                           </ul>
                         </li>

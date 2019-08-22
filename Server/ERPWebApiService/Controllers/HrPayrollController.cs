@@ -483,5 +483,190 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("SalaryItem")]
+        [HttpPost]
+        public HttpResponseMessage CreateEmployeeSalaryItem(SalaryItemInfo salaryItemInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var salaryItem = new SalaryItem()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ItemId = salaryItemInfo.ItemId,
+                    ItemName = salaryItemInfo.ItemName,
+                    IsBasic = salaryItemInfo.IsBasic,
+                    IsDaily = salaryItemInfo.IsBasic,
+                    IsDefault = salaryItemInfo.IsDefault,
+                    IsLeave = salaryItemInfo.IsLeave,
+                    IsLoan = salaryItemInfo.IsLoan,
+                    IsPension = salaryItemInfo.IsPension,
+                    IsTax = salaryItemInfo.IsTax,
+                    ItemType = salaryItemInfo.ItemType,
+                    ItemTypeName = salaryItemInfo.ItemTypeName,
+                    DefaultAmount = salaryItemInfo.DefaultAmount
+                };
+                ERPContext.SalaryItems.Add(salaryItem);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("SalaryItem/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateEmployeeSalaryItem(string id, SalaryItemInfo salaryItemInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var oSalaryItem = ERPContext.SalaryItems.FirstOrDefault(x => x.Id == salaryItemInfo.Id);
+                if (oSalaryItem != null)
+                {
+                    var salaryItem = new SalaryItem()
+                    {
+                        Id = oSalaryItem.Id,
+                        ItemId = salaryItemInfo.ItemId,
+                        ItemName = salaryItemInfo.ItemName,
+                        IsBasic = salaryItemInfo.IsBasic,
+                        IsDaily = salaryItemInfo.IsBasic,
+                        IsDefault = salaryItemInfo.IsDefault,
+                        IsLeave = salaryItemInfo.IsLeave,
+                        IsLoan = salaryItemInfo.IsLoan,
+                        IsPension = salaryItemInfo.IsPension,
+                        IsTax = salaryItemInfo.IsTax,
+                        ItemType = salaryItemInfo.ItemType,
+                        ItemTypeName = salaryItemInfo.ItemTypeName,
+                        DefaultAmount = salaryItemInfo.DefaultAmount
+                    };
+                    ERPContext.SalaryItems.Add(salaryItem);
+                    ERPContext.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("SalaryItems")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeSalaryItemList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var salaryItemList = ERPContext.SalaryItems.Select(x => new SalaryItemInfo()
+                {
+                    Id = x.Id,
+                    ItemId = x.ItemId,
+                    ItemName = x.ItemName,
+                    IsBasic = x.IsBasic,
+                    IsDaily = x.IsBasic,
+                    IsDefault = x.IsDefault,
+                    IsLeave = x.IsLeave,
+                    IsLoan = x.IsLoan,
+                    IsPension = x.IsPension,
+                    IsTax = x.IsTax,
+                    ItemType = x.ItemType,
+                    ItemTypeName = x.ItemTypeName,
+                    DefaultAmount = x.DefaultAmount
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, salaryItemList);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("SalaryItem/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeSalaryItemById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var salaryItem = ERPContext.SalaryItems.Where(x => x.Id == id).Select(x => new SalaryItemInfo()
+                {
+                    Id = x.Id,
+                    ItemId = x.ItemId,
+                    ItemName = x.ItemName,
+                    IsBasic = x.IsBasic,
+                    IsDaily = x.IsBasic,
+                    IsDefault = x.IsDefault,
+                    IsLeave = x.IsLeave,
+                    IsLoan = x.IsLoan,
+                    IsPension = x.IsPension,
+                    IsTax = x.IsTax,
+                    ItemType = x.ItemType,
+                    ItemTypeName = x.ItemTypeName,
+                    DefaultAmount = x.DefaultAmount
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, salaryItem);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("SalaryItem/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteSalaryItem(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from SalaryItem where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 	}
 }
