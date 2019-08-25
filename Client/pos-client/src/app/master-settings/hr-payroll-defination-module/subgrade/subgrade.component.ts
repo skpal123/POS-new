@@ -44,7 +44,7 @@ export class SubgradeComponent implements OnInit {
       this.gradeSelectedItems.push({id:this.subgrade.Grade_Id,itemName:this.subgrade.GradeName}) 
     }
     else if(this.subgrade.Id==null){
-      this.gradeSelectedItems.push({id:"0",itemName:"SELECT"})   
+      this.gradeSelectedItems.push({id:"0",itemName:"SELECT"}) 
     }
     else{
       this.subgradeForm.control.markAsDirty();

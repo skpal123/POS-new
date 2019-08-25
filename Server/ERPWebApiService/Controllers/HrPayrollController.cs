@@ -370,7 +370,7 @@ namespace ERPWebApiService.Controllers
                         SubGradeName = employeeGradeInfo.SubGradeName,
                         EeectiveDate = employeeGradeInfo.EeectiveDate
                     };
-                    ERPContext.EmployeeSubGrades.Add(subgrade);
+                    ERPContext.EmployeeSubGrades.AddOrUpdate(subgrade);
                     ERPContext.SaveChanges();
                 }
 
@@ -444,15 +444,20 @@ namespace ERPWebApiService.Controllers
                 //var userSession = AuthorizationHelper.GetSession();
                 //if (userSession != null)
                 //{
-                var designations = ERPContext.EmployeeSubGrades.Where(x => x.Id == id).Select(x => new EmployeeSubGradeInfo()
+                var subgrade = ERPContext.EmployeeSubGrades.Where(x => x.Id == id).Select(x => new EmployeeSubGradeInfo()
                 {
                     Id = x.Id,
                     SubGradeId = x.SubGradeId,
                     Grade_Id = x.Grade_Id,
                     SubGradeName = x.SubGradeName,
                     EeectiveDate = x.EeectiveDate
-                }).ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, designations);
+                }).FirstOrDefault();
+                if (subgrade!=null)
+                {
+                    var grade = ERPContext.EmployeeGrades.FirstOrDefault(x => x.Id == subgrade.Grade_Id);
+                    subgrade.GradeName = grade!=null?grade.GradeName:null;
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, subgrade);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -553,7 +558,7 @@ namespace ERPWebApiService.Controllers
                         ItemTypeName = salaryItemInfo.ItemTypeName,
                         DefaultAmount = salaryItemInfo.DefaultAmount
                     };
-                    ERPContext.SalaryItems.Add(salaryItem);
+                    ERPContext.SalaryItems.AddOrUpdate(salaryItem);
                     ERPContext.SaveChanges();
                 }
 

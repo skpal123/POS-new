@@ -93,7 +93,7 @@ export class HrPayrollDefinationServiceService {
   }
   public UpdateSalaryItem(slaryItem:SalaryItem){
     var url=this._defaultRoute.hrPayrollService+'SalaryItem/'+slaryItem.Id;
-    return this._httpClient.put(url,SalaryItem)
+    return this._httpClient.put(url,slaryItem)
   }
   public DeleteSalaryItem(id:string){
     var url=this._defaultRoute.hrPayrollService+'SalaryItem/'+id;

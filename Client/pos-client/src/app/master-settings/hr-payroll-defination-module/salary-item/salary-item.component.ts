@@ -67,6 +67,7 @@ export class SalaryItemComponent implements OnInit {
     }
     else{
       this._hrpayrollDefinationService.UpdateSalaryItem(this.salaryItem).subscribe(response=>{
+        debugger
         let result=response
         if(result){
           this.matDialogRef.close(true);

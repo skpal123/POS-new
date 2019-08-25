@@ -24,7 +24,7 @@ export class SalaryItemListComponent implements OnInit {
   DataList:any[]=[];
   salaryItemList:SalaryItem[]=[];
   salaryItem:SalaryItem={
-    Id:null,ItemId:null,ItemName:null,ItemTypeName:"0",IsBasic:false,IsDefault:false,
+    Id:null,ItemId:null,ItemName:'0',IsBasic:false,IsDefault:true,
     IsDaily:false,IsLeave:false,IsLoan:false,IsPension:false,IsTax:false,DefaultAmount:0
   }
   constructor(private _alertBox:AlertBoxService,
@@ -69,7 +69,7 @@ export class SalaryItemListComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getCustomerDetails($event:SalaryItem){
+  getSalaryItemDetails($event:SalaryItem){
     debugger
     this.blockUi.start("Loading....,Please wait")
     this._hrPayrollDefinationService.getSalaryItemById($event.Id).subscribe(response=>{
@@ -117,7 +117,7 @@ export class SalaryItemListComponent implements OnInit {
       data:this.salaryItem,
       disableClose:true,
       height:'auto',
-      width:window.screen.width*.5+'px'
+      width:window.screen.width*.35+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
@@ -128,11 +128,11 @@ export class SalaryItemListComponent implements OnInit {
   clearSalaryItem(){
     this.salaryItem.Id=null;
     this.salaryItem.ItemId=null;
-    this.salaryItem.ItemType=null;
-    this.salaryItem.ItemTypeName="0";
+    this.salaryItem.ItemName=null;
+    this.salaryItem.ItemType="0"
     this.salaryItem.IsBasic=false;
     this.salaryItem.IsDaily=false;
-    this.salaryItem.IsDefault=false;
+    this.salaryItem.IsDefault=true;
     this.salaryItem.IsLeave=false;
     this.salaryItem.IsLoan=false;
     this.salaryItem.IsPension=false;
