@@ -15,6 +15,13 @@ import { SubgradeListComponent } from './subgrade-list/subgrade-list.component';
 import { CommonModuleModule } from '../../common-module/common-module.module';
 import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
 import { FormDetailsControlComponent } from '../../common-module/form-details-control/form-details-control.component';
+import { LeaveTypeListComponent } from './leave-type-list/leave-type-list.component';
+import { DepartmentComponent } from './department/department.component';
+import { DepartmentListComponent } from './department-list/department-list.component';
+import { EducationLevelComponent } from './education-level/education-level.component';
+import { EducationLevelListComponent } from './education-level-list/education-level-list.component';
+import { OccupationComponent } from './occupation/occupation.component';
+import { OccupationListComponent } from './occupation-list/occupation-list.component';
 
 @NgModule({
   imports: [
@@ -30,7 +37,7 @@ import { FormDetailsControlComponent } from '../../common-module/form-details-co
     SalaryItemListComponent, 
     DesignationListComponent, 
     SubgradeComponent, 
-    SubgradeListComponent
+    SubgradeListComponent, LeaveTypeListComponent, DepartmentComponent, DepartmentListComponent, EducationLevelComponent, EducationLevelListComponent, OccupationComponent, OccupationListComponent
   ],
   entryComponents:[
     CustomDatatableControlComponent,
@@ -38,7 +45,11 @@ import { FormDetailsControlComponent } from '../../common-module/form-details-co
     DesignationComponent, 
     GradeComponent,
     SubgradeComponent,
-    SalaryItemComponent
+    SalaryItemComponent,
+    DepartmentComponent,
+    LeaveTypeComponent,
+    EducationLevelComponent,
+    OccupationComponent
   ]
 })
 export class HrPayrollDefinationModuleModule { }

@@ -303,6 +303,10 @@
     <Compile Include="Migrations\201908220627517_ChangeDataTypeDoubleToBool.Designer.cs">
       <DependentUpon>201908220627517_ChangeDataTypeDoubleToBool.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908250757382_addindTable.cs" />
+    <Compile Include="Migrations\201908250757382_addindTable.Designer.cs">
+      <DependentUpon>201908250757382_addindTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -315,7 +319,9 @@
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\CustomerOffer.cs" />
     <Compile Include="Model\CustomerSupplierTransactionDetail.cs" />
+    <Compile Include="Model\Department.cs" />
     <Compile Include="Model\Designation.cs" />
+    <Compile Include="Model\EducationLevel.cs" />
     <Compile Include="Model\EmployeeGrade.cs" />
     <Compile Include="Model\EmployeeSubGrade.cs" />
     <Compile Include="Model\FormInfo.cs" />
@@ -323,8 +329,10 @@
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
     <Compile Include="Model\ItemTransaction.cs" />
+    <Compile Include="Model\LeaveType.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Manufacture.cs" />
+    <Compile Include="Model\Occupation.cs" />
     <Compile Include="Model\Offer.cs" />
     <Compile Include="Model\OfferSetup.cs" />
     <Compile Include="Model\Party.cs" />
@@ -540,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908220627517_ChangeDataTypeDoubleToBool.resx">
       <DependentUpon>201908220627517_ChangeDataTypeDoubleToBool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908250757382_addindTable.resx">
+      <DependentUpon>201908250757382_addindTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

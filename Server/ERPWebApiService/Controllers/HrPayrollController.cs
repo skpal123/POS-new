@@ -673,5 +673,590 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("Department")]
+        [HttpPost]
+        public HttpResponseMessage CreateDepartment(DepartmentInfo departmentInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var department = new Department()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    DepartmentId = departmentInfo.DepartmentId,
+                    DepartmentName = departmentInfo.DepartmentName,
+                    Description = departmentInfo.Description
+                };
+                ERPContext.Departments.Add(department);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, department);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Department/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateDepartment(string id, DepartmentInfo departmentInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var oDepartment = ERPContext.Departments.FirstOrDefault(x => x.Id == departmentInfo.Id);
+                if (oDepartment != null)
+                {
+                    var department = new Department()
+                    {
+                        Id = oDepartment.Id,
+                        DepartmentId = departmentInfo.DepartmentId,
+                        DepartmentName = departmentInfo.DepartmentName,
+                        Description = departmentInfo.Description
+                    };
+                    ERPContext.Departments.AddOrUpdate(department);
+                    ERPContext.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Departments")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeDepartmentList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var designations = ERPContext.Departments.Select(x => new DesignationInfo()
+                {
+                    Id = x.Id,
+                    DesignationId = x.DepartmentId,
+                    DesignationName = x.DepartmentName,
+                    Description = x.Description
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, designations);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Department/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeDepartmentById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var departments = ERPContext.Departments.Where(x => x.Id == id).Select(x => new DepartmentInfo()
+                {
+                    Id = x.Id,
+                    DepartmentId = x.DepartmentId,
+                    DepartmentName = x.DepartmentName,
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, departments);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Department/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteDepartment(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from Department where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Occupation")]
+        [HttpPost]
+        public HttpResponseMessage CreateOccupation(OccupationInfo occupationInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var occupation = new Occupation()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    OccupationId = occupationInfo.OccupationId,
+                    OccupationName = occupationInfo.OccupationName,
+                };
+                ERPContext.Occupations.Add(occupation);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, occupation);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Occupation/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateOccupation(string id, OccupationInfo occupationInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var oOccupation = ERPContext.Occupations.FirstOrDefault(x => x.Id == occupationInfo.Id);
+                if (oOccupation != null)
+                {
+                    var occupation = new Occupation()
+                    {
+                        Id = oOccupation.Id,
+                        OccupationId = occupationInfo.OccupationId,
+                        OccupationName = occupationInfo.OccupationName,
+                    };
+                    ERPContext.Occupations.AddOrUpdate(occupation);
+                    ERPContext.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Occupations")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeOccupationList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var occupations = ERPContext.Occupations.Select(x => new OccupationInfo()
+                {
+                    Id = x.Id,
+                    OccupationId = x.OccupationId,
+                    OccupationName = x.OccupationName,
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, occupations);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Occupation/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeOccupationById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var occupation = ERPContext.Occupations.Where(x => x.Id == id).Select(x => new OccupationInfo()
+                {
+                    Id = x.Id,
+                    OccupationId = x.OccupationId,
+                    OccupationName = x.OccupationName,
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, occupation);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("Occupation/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteOccupation(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from Occupation where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("EducationLevel")]
+        [HttpPost]
+        public HttpResponseMessage CreateEducationLevel(EducationLevelInfo educationLevelInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var educationLevel = new EducationLevel()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    LevelId = educationLevelInfo.LevelId,
+                    LevelName = educationLevelInfo.LevelName,
+                };
+                ERPContext.EducationLevels.Add(educationLevel);
+                ERPContext.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, educationLevel);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("EducationLevel/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateEducationLevel(string id, EducationLevelInfo educationLevelInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var oEducationLevel = ERPContext.EducationLevels.FirstOrDefault(x => x.Id == educationLevelInfo.Id);
+                if (oEducationLevel != null)
+                {
+                    var educationLevel = new EducationLevel()
+                    {
+                        Id = oEducationLevel.Id,
+                        LevelId = educationLevelInfo.LevelId,
+                        LevelName = educationLevelInfo.LevelName,
+                    };
+                    ERPContext.EducationLevels.AddOrUpdate(educationLevel);
+                    ERPContext.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("EducationLevels")]
+        [HttpGet]
+        public HttpResponseMessage GetEducationLevelList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var educationLevels = ERPContext.EducationLevels.Select(x => new EducationLevelInfo()
+                {
+                    Id = x.Id,
+                    LevelId = x.LevelId,
+                    LevelName = x.LevelName,
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, educationLevels);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("EducationLevel/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeEducationLevelById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var educationLevel = ERPContext.EducationLevels.Where(x => x.Id == id).Select(x => new EducationLevelInfo()
+                {
+                    Id = x.Id,
+                    LevelId = x.LevelId,
+                    LevelName = x.LevelName,
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, educationLevel);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("EducationLevel/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteEducationLevel(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from EducationLevel where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("LeaveType")]
+        [HttpPost]
+        public HttpResponseMessage CreateEducationLevel(LeaveTypeInfo leaveTypeInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var leaveType = new LeaveType()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        LeaveTypeId = leaveTypeInfo.LeaveTypeId,
+                        LeaveTypeName = leaveTypeInfo.LeaveTypeName,
+                    };
+                    ERPContext.LeaveTypes.AddOrUpdate(leaveType);
+                    ERPContext.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK, leaveType);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("LeaveType/{id}")]
+        [HttpPut]
+        public HttpResponseMessage UpdateLeaveType(string id, LeaveTypeInfo leaveTypeInfo)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var oLeaveType = ERPContext.LeaveTypes.FirstOrDefault(x => x.Id == leaveTypeInfo.Id);
+                if (oLeaveType != null)
+                {
+                    var leaveType = new LeaveType()
+                    {
+                        Id = oLeaveType.Id,
+                        LeaveTypeId = leaveTypeInfo.LeaveTypeId,
+                        LeaveTypeName = leaveTypeInfo.LeaveTypeName,
+                    };
+                    ERPContext.LeaveTypes.AddOrUpdate(leaveType);
+                    ERPContext.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("LeaveTypes")]
+        [HttpGet]
+        public HttpResponseMessage GetLeaveTypeList()
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var educationLevels = ERPContext.LeaveTypes.Select(x => new LeaveTypeInfo()
+                {
+                    Id = x.Id,
+                    LeaveTypeId = x.LeaveTypeId,
+                    LeaveTypeName = x.LeaveTypeName,
+                    IsPaid = x.IsPaid
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, educationLevels);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("LeaveType/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetEmployeeLeaveTypeById(string id)
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                var educationLevel = ERPContext.LeaveTypes.Where(x => x.Id == id).Select(x => new LeaveTypeInfo()
+                {
+                    Id = x.Id,
+                    LeaveTypeId = x.LeaveTypeId,
+                    LeaveTypeName = x.LeaveTypeName,
+                    IsPaid = x.IsPaid
+                }).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, educationLevel);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("LeaveType/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteLeaveType(string id)
+        {
+            try
+            {
+                Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                paramlist.Add("@id", id);
+                DatabaseCommand.ExcuteNonQuery("delete from LeaveType where id=@id", paramlist, null);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
 	}
 }

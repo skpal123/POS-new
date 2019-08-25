@@ -82,4 +82,20 @@ export class ValidationService {
       var url=this._defaultRoute.CommonService+'salaryItemValidation';
       return this._httpClient.get(url)
     }
+    public getDepartmentValidationData(){
+      var url=this._defaultRoute.CommonService+'departmentValidation';
+      return this._httpClient.get(url)
+    }
+    public getOccupationValidationData(){
+      var url=this._defaultRoute.CommonService+'occupationValidation';
+      return this._httpClient.get(url)
+    }
+    public getLeaveTypeValidationData(){
+      var url=this._defaultRoute.CommonService+'leaveTypeValidation';
+      return this._httpClient.get(url)
+    }
+    public getEducationLevelValidationData(){
+      var url=this._defaultRoute.CommonService+'educationLevelValidation';
+      return this._httpClient.get(url)
+    }
 }

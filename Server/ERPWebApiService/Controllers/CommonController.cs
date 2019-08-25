@@ -897,5 +897,122 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("departmentValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetDepartmentValidation()
+        {
+            try
+            {
+                List<DepartmentValidation> formValidationList = new List<DepartmentValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "department-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        DepartmentValidation fromValidation = new DepartmentValidation();
+                        fromValidation.DepartmentId = Convert.ToBoolean(rdr["DepartmentId"]);
+                        fromValidation.DepartmentName = Convert.ToBoolean(rdr["DepartmentName"]);
+                        fromValidation.Description = Convert.ToBoolean(rdr["Description"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("leaveTypeValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetLeaveTypeValidation()
+        {
+            try
+            {
+                List<LeaveTypeValidation> formValidationList = new List<LeaveTypeValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "leave-type-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        LeaveTypeValidation fromValidation = new LeaveTypeValidation();
+                        fromValidation.LeaveTypeId = Convert.ToBoolean(rdr["LeaveTypeId"]);
+                        fromValidation.LeaveTypeName = Convert.ToBoolean(rdr["LeaveTypeName"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("occupationValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetOccupationValidation()
+        {
+            try
+            {
+                List<OccupationValidation> formValidationList = new List<OccupationValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "occupation-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        OccupationValidation fromValidation = new OccupationValidation();
+                        fromValidation.OccupationId = Convert.ToBoolean(rdr["OccupationId"]);
+                        fromValidation.OccupationName = Convert.ToBoolean(rdr["OccupationName"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("educationLevelValidation")]
+        [HttpGet]
+        public HttpResponseMessage GetEducationLevelValidation()
+        {
+            try
+            {
+                List<EducationLevelValidation> formValidationList = new List<EducationLevelValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "education-level-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        EducationLevelValidation fromValidation = new EducationLevelValidation();
+                        fromValidation.LevelId = Convert.ToBoolean(rdr["LevelId"]);
+                        fromValidation.LevelName = Convert.ToBoolean(rdr["LevelName"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

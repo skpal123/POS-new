@@ -45,10 +45,14 @@
     <Compile Include="Model\Finance\AccountOpeningTableView.cs" />
     <Compile Include="Model\Finance\AccountParentChildRelationInfo.cs" />
     <Compile Include="Model\Common\BranchInfo.cs" />
+    <Compile Include="Model\HrPayroll\DepartmentInfo.cs" />
     <Compile Include="Model\HrPayroll\DesignationInfo.cs" />
+    <Compile Include="Model\HrPayroll\EducationLevelInfo.cs" />
     <Compile Include="Model\HrPayroll\EmployeeGradeInfo.cs" />
     <Compile Include="Model\HrPayroll\EmployeeSubGradeInfo.cs" />
     <Compile Include="Model\HrPayroll\GradeStepSalaryItemInfo.cs" />
+    <Compile Include="Model\HrPayroll\LeaveTypeInfo.cs" />
+    <Compile Include="Model\HrPayroll\OccupationInfo.cs" />
     <Compile Include="Model\HrPayroll\SalaryItemInfo.cs" />
     <Compile Include="Model\Inventory\CategoryInfo.cs" />
     <Compile Include="Model\Common\CodeFormaterInfo.cs" />
@@ -91,8 +95,12 @@
     <Compile Include="Model\Administration\UserInfoView.cs" />
     <Compile Include="Model\Finance\VoucherDetailInfo.cs" />
     <Compile Include="Model\Finance\VoucherInfo.cs" />
+    <Compile Include="Model\Validation\HrPayroll\DepartmentValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\DesignationValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\EducationLevelValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\GradeValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\LeaveTypeValidation.cs" />
+    <Compile Include="Model\Validation\HrPayroll\OccupationValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\SalaryItemValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\SubGradeValidation.cs" />
     <Compile Include="Model\Validation\Inventory\CustomerTransactionValidation.cs" />

@@ -69,5 +69,9 @@ namespace ERP.DataService.Model
         public DbSet<EmployeeSubGrade> EmployeeSubGrades { set; get; }
         public DbSet<SalaryItem> SalaryItems { set; get; }
         public DbSet<GradeStepSalaryItem> GradeStepSalaryItems { set; get; }
+        public DbSet<EducationLevel> EducationLevels { set; get; }
+        public DbSet<Department> Departments { set; get; }
+        public DbSet<Occupation> Occupations { set; get; }
+        public DbSet<LeaveType> LeaveTypes { set; get; }
     }
 }
