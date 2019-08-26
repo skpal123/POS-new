@@ -313,5 +313,85 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Route("departmentDropdown")]
+        [HttpGet]
+        public HttpResponseMessage GetDepartmentDropdownList()
+        {
+            try
+            {
+                var datalist = ERPContext.Departments.Select(x => new SelectListItem
+                {
+                    Value = x.Id,
+                    Code = x.DepartmentId,
+                    Text = x.DepartmentName
+                }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, datalist);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+         [Route("occupationDropdown")]
+         [HttpGet]
+         public HttpResponseMessage GetOccupationDropdownList()
+         {
+             try
+             {
+                 var datalist = ERPContext.Occupations.Select(x => new SelectListItem
+                 {
+                     Value = x.Id,
+                     Code = x.OccupationId,
+                     Text = x.OccupationName
+                 }).ToList();
+                 return Request.CreateResponse(HttpStatusCode.OK, datalist);
+             }
+             catch (Exception ex)
+             {
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+             }
+
+         }
+         [Route("educationLevelDropdown")]
+         [HttpGet]
+         public HttpResponseMessage GetEducationLevelDropdownList()
+         {
+             try
+             {
+                 var datalist = ERPContext.EducationLevels.Select(x => new SelectListItem
+                 {
+                     Value = x.Id,
+                     Code = x.LevelId,
+                     Text = x.LevelName
+                 }).ToList();
+                 return Request.CreateResponse(HttpStatusCode.OK, datalist);
+             }
+             catch (Exception ex)
+             {
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+             }
+
+         }
+         [Route("salaryItemDropdown")]
+         [HttpGet]
+         public HttpResponseMessage GetSalaryItemDropdownList()
+         {
+             try
+             {
+                 var datalist = ERPContext.SalaryItems.Select(x => new SelectListItem
+                 {
+                     Value = x.Id,
+                     Code = x.ItemId,
+                     Text = x.ItemName
+                 }).ToList();
+                 return Request.CreateResponse(HttpStatusCode.OK, datalist);
+             }
+             catch (Exception ex)
+             {
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+             }
+
+         }
     }
 }

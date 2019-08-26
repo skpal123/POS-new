@@ -509,9 +509,12 @@ namespace ERPWebApiService.Controllers
                     IsLoan = salaryItemInfo.IsLoan,
                     IsPension = salaryItemInfo.IsPension,
                     IsTax = salaryItemInfo.IsTax,
+                    OperatorString = salaryItemInfo.OperatorString,
+                    InheritedItem = salaryItemInfo.InheritedItem,
+                    Percentage = salaryItemInfo.Percentage??0,
                     ItemType = salaryItemInfo.ItemType,
                     ItemTypeName = salaryItemInfo.ItemTypeName,
-                    DefaultAmount = salaryItemInfo.DefaultAmount
+                    DefaultAmount = salaryItemInfo.DefaultAmount??0
                 };
                 ERPContext.SalaryItems.Add(salaryItem);
                 ERPContext.SaveChanges();
@@ -553,10 +556,13 @@ namespace ERPWebApiService.Controllers
                         IsLeave = salaryItemInfo.IsLeave,
                         IsLoan = salaryItemInfo.IsLoan,
                         IsPension = salaryItemInfo.IsPension,
+                        OperatorString = salaryItemInfo.OperatorString,
+                        InheritedItem = salaryItemInfo.InheritedItem,
+                        Percentage = salaryItemInfo.Percentage??0,
                         IsTax = salaryItemInfo.IsTax,
                         ItemType = salaryItemInfo.ItemType,
                         ItemTypeName = salaryItemInfo.ItemTypeName,
-                        DefaultAmount = salaryItemInfo.DefaultAmount
+                        DefaultAmount = salaryItemInfo.DefaultAmount??0
                     };
                     ERPContext.SalaryItems.AddOrUpdate(salaryItem);
                     ERPContext.SaveChanges();
@@ -599,6 +605,9 @@ namespace ERPWebApiService.Controllers
                     IsPension = x.IsPension,
                     IsTax = x.IsTax,
                     ItemType = x.ItemType,
+                    OperatorString = x.OperatorString,
+                    InheritedItem = x.InheritedItem,
+                    Percentage = x.Percentage,
                     ItemTypeName = x.ItemTypeName,
                     DefaultAmount = x.DefaultAmount
                 }).ToList();
@@ -637,11 +646,19 @@ namespace ERPWebApiService.Controllers
                     IsLeave = x.IsLeave,
                     IsLoan = x.IsLoan,
                     IsPension = x.IsPension,
+                    OperatorString = x.OperatorString,
+                    InheritedItem = x.InheritedItem,
+                    Percentage = x.Percentage,
                     IsTax = x.IsTax,
                     ItemType = x.ItemType,
                     ItemTypeName = x.ItemTypeName,
                     DefaultAmount = x.DefaultAmount
                 }).FirstOrDefault();
+                if (salaryItem != null)
+                {
+                    var salaryItem2 = ERPContext.SalaryItems.FirstOrDefault(x => x.Id == salaryItem.InheritedItem);
+                    salaryItem.InheritedItemName = salaryItem2 != null ? salaryItem2.ItemName : null;
+                }
                 return Request.CreateResponse(HttpStatusCode.OK, salaryItem);
             }
             catch (InvalidSessionFailure ex)

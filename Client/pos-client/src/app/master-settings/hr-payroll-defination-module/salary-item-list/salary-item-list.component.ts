@@ -25,7 +25,8 @@ export class SalaryItemListComponent implements OnInit {
   salaryItemList:SalaryItem[]=[];
   salaryItem:SalaryItem={
     Id:null,ItemId:null,ItemName:'0',IsBasic:false,IsDefault:true,
-    IsDaily:false,IsLeave:false,IsLoan:false,IsPension:false,IsTax:false,DefaultAmount:0
+    IsDaily:false,IsLeave:false,IsLoan:false,IsPension:false,IsTax:false,DefaultAmount:0,
+    Percentage:null,InheritedItem:null,OperatorString:null
   }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,

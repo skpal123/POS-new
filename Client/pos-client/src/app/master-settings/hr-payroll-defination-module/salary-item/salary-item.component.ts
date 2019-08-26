@@ -9,6 +9,7 @@ import { ValidationService } from '../../../services/common/validation.service';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
+import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
 
 @Component({
   selector: 'app-salary-item',
@@ -19,6 +20,9 @@ export class SalaryItemComponent implements OnInit {
   @ViewChild('salaryItemForm') salaryItemForm:NgForm
   salaryItemValidation:SalaryItemValidation[]=[]
   itemName:string="salaryItemId"
+  salaryItemTouch:boolean=false;
+  salaryItemSelectedItems :MultiSelectDropdown[]= [
+  ];
   constructor(public matDialogRef:MatDialogRef<SalaryItemComponent>,
   @Inject(MAT_DIALOG_DATA) public salaryItem:SalaryItem,
   private _alertBox:AlertBoxService,
@@ -30,9 +34,21 @@ export class SalaryItemComponent implements OnInit {
 
   ngOnInit() {
     debugger
+    if(this.salaryItem.Id!=null&&this.salaryItem.InheritedItem!=null){
+      this.salaryItemSelectedItems.push({id:this.salaryItem.InheritedItem,itemName:this.salaryItem.InheritedItemName})
+    }
     if(this.salaryItem.Id!=null){
       this.salaryItemForm.control.markAsDirty();
     }
+    // else{
+    //   this.salaryItemSelectedItems.push({id:this.salaryItem.InheritedItem,itemName:this.salaryItem.InheritedItemName})
+    // }
+    this.salaryItemForm.valueChanges.subscribe(data=>{
+    const control=this.salaryItemForm.control.get('Percentage');
+      if(control&&control.value!=null&&this.salaryItem.InheritedItem!=null){
+        this.salaryItem.OperatorString=control.value+" % Of "+ this.salaryItem.InheritedItemName
+      }
+    })
     this.getItemFormInfo();
   }
   onNoClick(){
@@ -41,6 +57,7 @@ export class SalaryItemComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getSalaryItemValidationData().subscribe((response:SalaryItemValidation[])=>{
       this.salaryItemValidation=response
+      console.log(this.salaryItemValidation)
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error
@@ -90,6 +107,9 @@ export class SalaryItemComponent implements OnInit {
     this.salaryItem.IsBasic=false;
     this.salaryItem.IsDaily=false;
     this.salaryItem.IsDefault=false;
+    this.salaryItem.OperatorString=null;
+    this.salaryItem.Percentage=null;
+    this.salaryItem.InheritedItem=null;
     this.salaryItem.IsLeave=false;
     this.salaryItem.IsLoan=false;
     this.salaryItem.IsPension=false;
@@ -116,5 +136,17 @@ export class SalaryItemComponent implements OnInit {
     debugger
     this.salaryItem.ItemId=$event;
   }
-
+  OnSeletedItem($event:MultiSelectDropdown){
+    debugger
+    this.salaryItemTouch=true;
+    if($event.id=="0"){
+      this.salaryItem.InheritedItem=null;
+    }
+    else{
+      this.salaryItem.InheritedItem=$event.id
+      this.salaryItem.InheritedItemName=$event.itemName
+      let value=this.salaryItem.Percentage==null?0:this.salaryItem.Percentage;
+      this.salaryItem.OperatorString=value+" % Of "+ $event.itemName
+    }
+  }
 }

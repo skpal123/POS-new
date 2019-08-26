@@ -12,7 +12,6 @@ import { DialogData } from '../../models/common/dialog-data.model';
   styleUrls: ['./customer-dropdown.component.css']
 })
 export class CustomerDropdownComponent implements OnChanges {
-
   customerList:SelectDropdown[]=[]
   @ViewChild('category') category:FormControl;
   @Input() IsNewCustomerAdd:boolean=false;

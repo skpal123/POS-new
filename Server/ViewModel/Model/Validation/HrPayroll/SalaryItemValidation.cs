@@ -19,6 +19,7 @@ namespace ViewModel.Model.Validation.HrPayroll
         public bool IsBasic { get; set; }
         public bool IsDaily { get; set; }
         public bool Percentage { get; set; }
+        public bool InheritedItem { get; set; }
         public bool OperatorString { get; set; }
         public bool DefaultAmount { get; set; }
         public bool IsLoan { get; set; }

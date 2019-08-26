@@ -15,6 +15,7 @@
               [ColumnList]="ColumnList"
               (EditSelectedRowClicked)="getGradeDetails($event)"
               (DeleteDataRowClicked)="deleteGrade($event)"
+              (customButtonClick)="customButtonClicked($event)"
               >
               </app-custom-datatable>
             </div>

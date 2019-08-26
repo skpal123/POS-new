@@ -307,6 +307,18 @@
     <Compile Include="Migrations\201908250757382_addindTable.Designer.cs">
       <DependentUpon>201908250757382_addindTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908260500235_addInheritedItem.cs" />
+    <Compile Include="Migrations\201908260500235_addInheritedItem.Designer.cs">
+      <DependentUpon>201908260500235_addInheritedItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908260557224_changeDataTypeDouble.cs" />
+    <Compile Include="Migrations\201908260557224_changeDataTypeDouble.Designer.cs">
+      <DependentUpon>201908260557224_changeDataTypeDouble.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908260602297_changeDataTypeDouble2.cs" />
+    <Compile Include="Migrations\201908260602297_changeDataTypeDouble2.Designer.cs">
+      <DependentUpon>201908260602297_changeDataTypeDouble2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -551,6 +563,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908250757382_addindTable.resx">
       <DependentUpon>201908250757382_addindTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908260500235_addInheritedItem.resx">
+      <DependentUpon>201908260500235_addInheritedItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908260557224_changeDataTypeDouble.resx">
+      <DependentUpon>201908260557224_changeDataTypeDouble.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908260602297_changeDataTypeDouble2.resx">
+      <DependentUpon>201908260602297_changeDataTypeDouble2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

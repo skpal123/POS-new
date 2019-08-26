@@ -11,6 +11,8 @@ export class SalaryItem {
     public IsDaily?:boolean
     public Percentage?:number
     public OperatorString?:string
+    public InheritedItem?:string
+    public InheritedItemName?:string
     public DefaultAmount?:number
     public IsLoan?:boolean
     public IsLeave?:boolean

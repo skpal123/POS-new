@@ -422,3 +422,6 @@ E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addManyToOneInOfferSetup.resources
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeDataTypeDoubleToBool.resources
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addindTable.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addInheritedItem.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble2.resources

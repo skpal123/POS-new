@@ -10,6 +10,7 @@ export class SalaryItemValidation{
     public IsDaily?:boolean
     public Percentage?:boolean
     public OperatorString?:boolean
+    public InheritedItem?:boolean
     public DefaultAmount?:boolean
     public IsLoan?:boolean
     public IsLeave?:boolean

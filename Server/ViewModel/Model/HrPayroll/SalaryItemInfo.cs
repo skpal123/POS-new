@@ -19,8 +19,10 @@ namespace ViewModel.Model.HrPayroll
         public bool? IsDefault { get; set; }
         public bool? IsBasic { get; set; }
         public bool? IsDaily { get; set; }
-        public string Percentage { get; set; }
+        public double? Percentage { get; set; }
         public string OperatorString { get; set; }
+        public string InheritedItem { get; set; }
+        public string InheritedItemName { get; set; }
         public double? DefaultAmount { get; set; }
         public bool? IsLoan { get; set; }
         public bool? IsLeave { get; set; }

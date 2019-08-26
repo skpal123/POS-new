@@ -65,4 +65,20 @@ export class DropdownService {
     var url=this._defaultRoute.DropdownService+'gradeDropdown';
     return this._httpClient.get<SelectDropdown[]>(url)
   }
+  public getDepartmentDropdownList(){
+    var url=this._defaultRoute.DropdownService+'departmentDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
+  public getEducationLevelDropdownList(){
+    var url=this._defaultRoute.DropdownService+'educationLevelDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
+  public getSalaryItemDropdownList(){
+    var url=this._defaultRoute.DropdownService+'salaryItemDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
+  public getOccupationDropdownList(){
+    var url=this._defaultRoute.DropdownService+'occupationDropdown';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
 }

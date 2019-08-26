@@ -1,4 +1,3 @@
-<cdk-virtual-scroll-viewport itemSize="50" minBufferPx="200" maxBufferPx="400" class="example-viewport">
   <table class="table table-bordered">
     <tr>
       <td style="text-align: center" *ngFor="let col of ColumnList;let i=index;">
@@ -7,7 +6,7 @@
       <!-- <td><b>Action</b></td> -->
     </tr>
     <tbody>
-      <tr *cdkVirtualFor="let data of Datalist;let i=index;" class="example-item">
+      <tr *ngFor="let data of Datalist;let i=index;" >
         <td *ngFor="let col2 of ColumnList">
           <div *ngIf="col2.IsEnable&&!col2.Editable&&col2.Type!='none'&&col2.Type.toLowerCase()!='date'">
               {{Datalist[i][col2.Name]}}
@@ -16,7 +15,7 @@
             {{Datalist[i][col2.Name]|date}}
           </div>
           <div *ngIf="col2.IsEnable&&col2.Editable">
-              <input *ngIf="col2.Type=='text'" [(ngModel)]="Datalist[i][col2.Name]" type="text">
+              <input *ngIf="col2.Type=='text'" [(ngModel)]="Datalist[i][col2.Name]" (blur)="datatableTextColumnClicked(Datalist[i][col2.Name],col2.Name)" type="text">
               <input *ngIf="col2.Type=='number'" (blur)="GetColumnValue(Datalist[i][col2.Name],col2.Name,i)" class="form-control" [(ngModel)]="Datalist[i][col2.Name]" type="number">
               <ng2-completer class="form-control" *ngIf="col2.Type=='Autocomplete'" (click)="AutoCompleteClick(Datalist[i][col2.Name])" [(ngModel)]="Datalist[i][col2.Name]" [datasource]="AutoCompleteDataSource" [minSearchLength]="0"></ng2-completer>
               <select class="form-control" *ngIf="col2.Type=='select'" (change)="onchange($event)" [(ngModel)]="Datalist[i][col2.Name]">
@@ -28,5 +27,5 @@
       </tr>
     </tbody>
   </table>
-</cdk-virtual-scroll-viewport>
+
 

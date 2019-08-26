@@ -22,7 +22,11 @@ import { FormControlInfoSettingsComponent } from './form-control-info-settings/f
 import { CustomMultiSelectComponent } from './custom-multi-select/custom-multi-select.component';
 import { CustomSerachableDropdownComponent } from './custom-serachable-dropdown/custom-serachable-dropdown.component';
 import { DesignationDropdownComponent } from './designation-dropdown/designation-dropdown.component';
-import { GradeDropdownComponent } from './grade-dropdown/grade-dropdown.component'
+import { GradeDropdownComponent } from './grade-dropdown/grade-dropdown.component';
+import { DepartmentDropdownComponent } from './department-dropdown/department-dropdown.component';
+import { EducationLevelDropdownComponent } from './education-level-dropdown/education-level-dropdown.component';
+import { OccupationDropdownComponent } from './occupation-dropdown/occupation-dropdown.component';
+import { SalaryItemDropdownComponent } from './salary-item-dropdown/salary-item-dropdown.component'
 @NgModule({
   imports: [
     CommonModule,
@@ -50,7 +54,11 @@ import { GradeDropdownComponent } from './grade-dropdown/grade-dropdown.componen
     CustomMultiSelectComponent,
     CustomSerachableDropdownComponent,
     DesignationDropdownComponent,
-    GradeDropdownComponent
+    GradeDropdownComponent,
+    DepartmentDropdownComponent,
+    EducationLevelDropdownComponent,
+    OccupationDropdownComponent,
+    SalaryItemDropdownComponent
   ],
   exports:[
     DynamicTableEntryComponent,
@@ -73,7 +81,9 @@ import { GradeDropdownComponent } from './grade-dropdown/grade-dropdown.componen
     FormControlInfoSettingsComponent,
     CustomMultiSelectComponent,
     DesignationDropdownComponent,
-    GradeDropdownComponent
+    GradeDropdownComponent,
+    DepartmentDropdownComponent,EducationLevelDropdownComponent,OccupationDropdownComponent,
+    SalaryItemDropdownComponent
   ]
 })
 export class CommonModuleModule { }

@@ -28,9 +28,12 @@ namespace ERP.DataService.Model.Model
         public bool? IsDefault { get; set; }
         public bool? IsBasic { get; set; }
         public bool? IsDaily { get; set; }
-        public string Percentage { get; set; }
+        public double? Percentage { get; set; }
           [StringLength(20)]
         public string OperatorString { get; set; }
+         [Column(TypeName = "VARCHAR")]
+         [StringLength(100)]
+         public string InheritedItem { get; set; }
         public double? DefaultAmount { get; set; }
         public bool? IsLoan { get; set; }
         public bool? IsLeave { get; set; }

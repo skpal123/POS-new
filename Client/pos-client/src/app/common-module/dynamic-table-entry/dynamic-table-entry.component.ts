@@ -1,4 +1,5 @@
 import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
+import { DatatableTextOutput } from '../../models/common/datatable-text-click.model';
 @Component({
   selector: 'app-dynamic-table-entry',
   templateUrl: './dynamic-table-entry.component.html',
@@ -16,7 +17,9 @@ export class DynamicTableEntryComponent implements OnInit {
   @Output() AutoCompleteDataSourceClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() GetColumnValueClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() GetDatatableColumnTextClicked:EventEmitter <any>=new EventEmitter <any>();
   data={value:0,name:"",index:0}
+  datatableTextOutput:DatatableTextOutput={ColumnName:null,RowData:null};
   constructor() { 
     
   }
@@ -42,6 +45,11 @@ export class DynamicTableEntryComponent implements OnInit {
   sendDataToParentComponent() {
     debugger
     alert(this.Datalist[0].Name)
+  }
+  datatableTextColumnClicked($data:any,columnName:string){
+    this.datatableTextOutput.ColumnName=columnName;
+    this.datatableTextOutput.RowData=$data;
+    this.GetDatatableColumnTextClicked.emit(this.datatableTextOutput);
   }
   onchange($event){
     debugger

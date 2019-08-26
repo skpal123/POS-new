@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5> LeaveType entry
+          <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+          <span (click)="controlGroupItemForm()" title="view from control" class="pointer pull-left"><img height="30px"
+              width="30px" src="./assets/Img/settings.png"></span>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <div *ngIf="gradeSubGradeSalItemDetails&&gradeSubGradeSalItemDetails.GradeName!=null">
+          <label for="LeaveTypeName" class="col-sm-3 col-form-label control-label">Grade Name</label>
+          <div class="col-sm-9">
+            <input class="form-control" type="text" [value]="gradeSubGradeSalItemDetails.GradeName">
+          </div>
+        </div>
+        <div *ngIf="gradeSubGradeSalItemDetails&&gradeSubGradeSalItemDetails.SubGradeName!=null">
+          <label for="LeaveTypeName" class="col-sm-3 col-form-label control-label">Sub Grade Name</label>
+          <div class="col-sm-9">
+            <input class="form-control" type="text" [value]="gradeSubGradeSalItemDetails.SubGradeName">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form #leaveTypeForm="ngForm">
+              <app-dynamic-table-entry [ColumnList]="ColumnList" [Datalist]="DataList"
+                [AutoCompleteDataSource]="autoCompleteData"
+                (AutoCompleteDataSourceClicked)="ParentAutoCompleteDataSource($event)"
+                (GetDatatableColumnTextClicked)="GetDatatableColumnTextClicked($event)"
+                (DeleteDataRowClicked)="deleteVoucherDetailsRow($event)">
+              </app-dynamic-table-entry>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

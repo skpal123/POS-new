@@ -22,6 +22,8 @@ import { EducationLevelComponent } from './education-level/education-level.compo
 import { EducationLevelListComponent } from './education-level-list/education-level-list.component';
 import { OccupationComponent } from './occupation/occupation.component';
 import { OccupationListComponent } from './occupation-list/occupation-list.component';
+import { BuildFormulaComponent } from './build-formula/build-formula.component';
+import { GradeSalaryItemComponent } from './grade-salary-item/grade-salary-item.component';
 
 @NgModule({
   imports: [
@@ -37,7 +39,7 @@ import { OccupationListComponent } from './occupation-list/occupation-list.compo
     SalaryItemListComponent, 
     DesignationListComponent, 
     SubgradeComponent, 
-    SubgradeListComponent, LeaveTypeListComponent, DepartmentComponent, DepartmentListComponent, EducationLevelComponent, EducationLevelListComponent, OccupationComponent, OccupationListComponent
+    SubgradeListComponent, LeaveTypeListComponent, DepartmentComponent, DepartmentListComponent, EducationLevelComponent, EducationLevelListComponent, OccupationComponent, OccupationListComponent, BuildFormulaComponent, GradeSalaryItemComponent
   ],
   entryComponents:[
     CustomDatatableControlComponent,
@@ -49,7 +51,8 @@ import { OccupationListComponent } from './occupation-list/occupation-list.compo
     DepartmentComponent,
     LeaveTypeComponent,
     EducationLevelComponent,
-    OccupationComponent
+    OccupationComponent,
+    GradeSalaryItemComponent
   ]
 })
 export class HrPayrollDefinationModuleModule { }

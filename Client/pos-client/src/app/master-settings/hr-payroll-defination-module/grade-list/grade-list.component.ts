@@ -9,6 +9,10 @@ import { HrPayrollDefinationServiceService } from '../../../services/master-sett
 import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { GradeComponent } from '../grade/grade.component';
+import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
+import { GradeSalaryItemComponent } from '../grade-salary-item/grade-salary-item.component';
+import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem.model';
+import { GradeSubGradeSalItemDetails } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem-details.model';
 
 @Component({
   selector: 'app-grade-list',
@@ -25,6 +29,9 @@ export class GradeListComponent implements OnInit {
   DataList:any[]=[];
   gradeList:Grade[]=[];
   grade:Grade={Id:null,GradeId:null,GradeName:null}
+  gradeSubGradeSalItemDetails:GradeSubGradeSalItemDetails={ 
+    Grade_Id:null,SubGrade_Id:null,GradeName:null,SubGradeName:null,GradeSubGradeSalItemList:[]
+  }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
@@ -57,6 +64,9 @@ export class GradeListComponent implements OnInit {
       this.blockUi.stop();
       this.gradeList=response
       this.DataList=this.gradeList
+      this.gradeList.forEach(a=>{
+        a.GradeSalaryItem="Add grade salary item";
+      })
       this._customDatatableService.DataList=this.gradeList;
       this.dataReady=true;
       this.reload=true;
@@ -131,5 +141,26 @@ export class GradeListComponent implements OnInit {
     this.grade.GradeId=null;
     this.grade.GradeName=null;
   }
-
+  customButtonClicked($event:DatatableButtonOutput){
+    debugger
+    this.grade=$event.RowData;
+    if($event.ColumnName=="GradeSalaryItem"){
+      this.gradeSubGradeSalItemDetails.Grade_Id=this.grade.Id
+      this.gradeSubGradeSalItemDetails.GradeName=this.grade.GradeName;
+      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push({
+        SalaryItemName:null,Amount:0,BuiildFormula:null
+      })
+      const dialogRef=this.matDialog.open(GradeSalaryItemComponent,{
+        data:this.gradeSubGradeSalItemDetails,
+        disableClose:true,
+        maxWidth:'100vw',
+        maxHeight:'100vh',
+        height:'auto',
+        width:'50%'
+      });
+      dialogRef.afterClosed().subscribe(result=>{
+        
+      })
+    }
+  }
 }
