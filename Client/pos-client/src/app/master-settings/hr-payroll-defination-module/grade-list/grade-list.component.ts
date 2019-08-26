@@ -145,10 +145,11 @@ export class GradeListComponent implements OnInit {
     debugger
     this.grade=$event.RowData;
     if($event.ColumnName=="GradeSalaryItem"){
+      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[];
       this.gradeSubGradeSalItemDetails.Grade_Id=this.grade.Id
       this.gradeSubGradeSalItemDetails.GradeName=this.grade.GradeName;
       this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push({
-        SalaryItemName:null,Amount:0,BuiildFormula:null
+        SalaryItemName:null,Amount:0,BuildFormula:null
       })
       const dialogRef=this.matDialog.open(GradeSalaryItemComponent,{
         data:this.gradeSubGradeSalItemDetails,

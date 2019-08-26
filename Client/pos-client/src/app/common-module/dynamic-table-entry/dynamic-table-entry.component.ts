@@ -18,6 +18,7 @@ export class DynamicTableEntryComponent implements OnInit {
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() GetColumnValueClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() GetDatatableColumnTextClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() AddNewRow:EventEmitter <any>=new EventEmitter <any>();
   data={value:0,name:"",index:0}
   datatableTextOutput:DatatableTextOutput={ColumnName:null,RowData:null};
   constructor() { 
@@ -46,10 +47,14 @@ export class DynamicTableEntryComponent implements OnInit {
     debugger
     alert(this.Datalist[0].Name)
   }
-  datatableTextColumnClicked($data:any,columnName:string){
+  datatableTextColumnClicked($data:any,columnName:string,index:number){
     this.datatableTextOutput.ColumnName=columnName;
     this.datatableTextOutput.RowData=$data;
+    this.datatableTextOutput.Index=index;
     this.GetDatatableColumnTextClicked.emit(this.datatableTextOutput);
+  }
+  addNewRow(){
+    this.AddNewRow.emit();
   }
   onchange($event){
     debugger

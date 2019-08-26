@@ -45,6 +45,7 @@ export class SalaryItemDropdownComponent implements OnChanges {
     }
   }
   getSalaryItemList(){
+    this.salaryItemDropdownList=[]
     this._dopdownService.getSalaryItemDropdownList().subscribe(response=>{
       this.salaryItemList=response
       if(this.salaryItemList.length>0){

@@ -10,6 +10,7 @@ import { HrPayrollDefinationServiceService } from '../../../services/master-sett
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown.model';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-salary-item',
@@ -17,6 +18,7 @@ import { MultiSelectDropdown } from '../../../models/common/multiselect.dropdown
   styleUrls: ['./salary-item.component.css']
 })
 export class SalaryItemComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   @ViewChild('salaryItemForm') salaryItemForm:NgForm
   salaryItemValidation:SalaryItemValidation[]=[]
   itemName:string="salaryItemId"
@@ -66,8 +68,10 @@ export class SalaryItemComponent implements OnInit {
   }
   saveSalaryItem(){
     debugger
+    this.blockUi.start("Loading..., Please wait")
     if(this.salaryItem.Id==null){
       this._hrpayrollDefinationService.CreateSalaryItem(this.salaryItem).subscribe(response=>{
+        this.blockUi.stop();
         let result=response
         if(result){
           this._navigationData.IsSaved=true;
@@ -77,6 +81,7 @@ export class SalaryItemComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
+        this.blockUi.stop();
         let dialogData=new DialogData();
         dialogData.message=error
         this._alertBox.openDialog(dialogData);
@@ -85,6 +90,7 @@ export class SalaryItemComponent implements OnInit {
     else{
       this._hrpayrollDefinationService.UpdateSalaryItem(this.salaryItem).subscribe(response=>{
         debugger
+        this.blockUi.stop();
         let result=response
         if(result){
           this.matDialogRef.close(true);
@@ -93,6 +99,7 @@ export class SalaryItemComponent implements OnInit {
           this._alertBox.openDialog(dialogData);
         }
       },error=>{
+        this.blockUi.stop();
         let dialogData=new DialogData();
         dialogData.message=error
         this._alertBox.openDialog(dialogData);

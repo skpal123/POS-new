@@ -10,6 +10,9 @@ import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { SubgradeComponent } from '../subgrade/subgrade.component';
 import { CustomDatatableControlComponent } from '../../../common-module/custom-datatable-control/custom-datatable-control.component';
+import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
+import { GradeSubGradeSalItemDetails } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem-details.model';
+import { GradeSalaryItemComponent } from '../grade-salary-item/grade-salary-item.component';
 
 @Component({
   selector: 'app-subgrade-list',
@@ -24,8 +27,11 @@ export class SubgradeListComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   ColumnList:any[]=[];
   DataList:any[]=[];
-  subcategoryList:SubGrade[]=[];
-  grade:SubGrade={Id:null,SubGradeId:null,SubGradeName:null,GradeName:null,Grade_Id:null,EeectiveDate:null}
+  subgradeList:SubGrade[]=[];
+  subgrade:SubGrade={Id:null,SubGradeId:null,SubGradeName:null,GradeName:null,Grade_Id:null,EeectiveDate:null}
+  gradeSubGradeSalItemDetails:GradeSubGradeSalItemDetails={ 
+    Grade_Id:null,SubGrade_Id:null,GradeName:null,SubGradeName:null,GradeSubGradeSalItemList:[]
+  }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
@@ -56,9 +62,12 @@ export class SubgradeListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._hrPayrollDefinationService.getSubGradeList().subscribe(response=>{
       this.blockUi.stop();
-      this.subcategoryList=response
-      this.DataList=this.subcategoryList;
-      this._customDatatableService.DataList=this.subcategoryList;
+      this.subgradeList=response
+      this.subgradeList.forEach(a=>{
+        a.SubGradeSalaryItem="Add sub grade salary item"
+      })
+      this.DataList=this.subgradeList;
+      this._customDatatableService.DataList=this.subgradeList;
       this.reload=true;
       this.dataReady=true;
     },error=>{
@@ -72,9 +81,9 @@ export class SubgradeListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._hrPayrollDefinationService.getSubGradeById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.grade=response
+      this.subgrade=response
       const dialogRef=this.matDialog.open(SubgradeComponent,{
-        data:this.grade,
+        data:this.subgrade,
         disableClose:true,
         height:'auto', 
         width:window.screen.width*.4+'px'
@@ -112,7 +121,7 @@ export class SubgradeListComponent implements OnInit {
   createNewSubgrade(){
    this.clearSubgrade();
     const dialogRef=this.matDialog.open(SubgradeComponent,{
-      data:this.grade,
+      data:this.subgrade,
       disableClose:true,
       height:'auto',
       width:window.screen.width*.4+'px'
@@ -124,11 +133,11 @@ export class SubgradeListComponent implements OnInit {
     })
   }
   clearSubgrade(){
-    this.grade.Id=null;
-    this.grade.SubGradeId=null;
-    this.grade.SubGradeName=null;
-    this.grade.Grade_Id=null;
-    this.grade.EeectiveDate=null;
+    this.subgrade.Id=null;
+    this.subgrade.SubGradeId=null;
+    this.subgrade.SubGradeName=null;
+    this.subgrade.Grade_Id=null;
+    this.subgrade.EeectiveDate=null;
   }
   getDatatableControl(){
     // this.columnChange=false;
@@ -145,4 +154,28 @@ export class SubgradeListComponent implements OnInit {
       }
      })
    }
+   customButtonClicked($event:DatatableButtonOutput){
+    debugger
+    this.subgrade=$event.RowData;
+    if($event.ColumnName=="SubGradeSalaryItem"){
+      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[];
+      this.gradeSubGradeSalItemDetails.Grade_Id=this.subgrade.Id
+      this.gradeSubGradeSalItemDetails.GradeName=this.subgrade.GradeName;
+      this.gradeSubGradeSalItemDetails.SubGradeName=this.subgrade.SubGradeName
+      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push({
+        SalaryItemName:null,Amount:0,BuildFormula:null
+      })
+      const dialogRef=this.matDialog.open(GradeSalaryItemComponent,{
+        data:this.gradeSubGradeSalItemDetails,
+        disableClose:true,
+        maxWidth:'100vw',
+        maxHeight:'100vh',
+        height:'auto',
+        width:'50%'
+      });
+      dialogRef.afterClosed().subscribe(result=>{
+        
+      })
+    }
+  }
 }

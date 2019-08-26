@@ -52,7 +52,8 @@ import { GradeSalaryItemComponent } from './grade-salary-item/grade-salary-item.
     LeaveTypeComponent,
     EducationLevelComponent,
     OccupationComponent,
-    GradeSalaryItemComponent
+    GradeSalaryItemComponent,
+    BuildFormulaComponent
   ]
 })
 export class HrPayrollDefinationModuleModule { }

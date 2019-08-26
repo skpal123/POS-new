@@ -11,4 +11,6 @@
   .example-alternate {
     background: rgba(127, 127, 127, 0.3);
   }
-  
+  .width{
+    width: 300px;
+  }

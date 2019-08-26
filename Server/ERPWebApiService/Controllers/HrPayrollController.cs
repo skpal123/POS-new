@@ -518,7 +518,7 @@ namespace ERPWebApiService.Controllers
                 };
                 ERPContext.SalaryItems.Add(salaryItem);
                 ERPContext.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.OK, salaryItem);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -745,7 +745,6 @@ namespace ERPWebApiService.Controllers
                     ERPContext.Departments.AddOrUpdate(department);
                     ERPContext.SaveChanges();
                 }
-
                 return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (InvalidSessionFailure ex)
