@@ -162,16 +162,13 @@ export class SubgradeListComponent implements OnInit {
       this.gradeSubGradeSalItemDetails.Grade_Id=this.subgrade.Id
       this.gradeSubGradeSalItemDetails.GradeName=this.subgrade.GradeName;
       this.gradeSubGradeSalItemDetails.SubGradeName=this.subgrade.SubGradeName
-      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push({
-        SalaryItemName:null,Amount:0,BuildFormula:null
-      })
       const dialogRef=this.matDialog.open(GradeSalaryItemComponent,{
         data:this.gradeSubGradeSalItemDetails,
         disableClose:true,
         maxWidth:'100vw',
         maxHeight:'100vh',
         height:'auto',
-        width:'50%'
+        width:'70%'
       });
       dialogRef.afterClosed().subscribe(result=>{
         

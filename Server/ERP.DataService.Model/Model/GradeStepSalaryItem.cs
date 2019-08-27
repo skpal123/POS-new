@@ -8,31 +8,31 @@ using System.Threading.Tasks;
 
 namespace ERP.DataService.Model.Model
 {
-     [Table("GradeStepSalaryItem")]
+    [Table("GradeStepSalaryItem")]
     public class GradeStepSalaryItem
     {
-         [Key]
-         [Column(TypeName = "VARCHAR")]
-         [StringLength(100)]
-         public string Id { set; get; }
+        [Key]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Id { set; get; }
         public string SalaryItemId { get; set; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string SalaryItem_Id { get; set; }
         public double? SalaryAmount { get; set; }
+        public bool? HasComparator { get; set; }
          [StringLength(100)]
-        public string HasComparator { get; set; }
-          [StringLength(100)]
-        public string ComparatorItemName { get; set; }
-          [Column(TypeName = "VARCHAR")]
-          [StringLength(100)]
-        public string ComparatorItem_id { get; set; }
-          [Column(TypeName = "VARCHAR")]
-          [StringLength(100)]
+        public string ComparatorString { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string InheritedItem_Id { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
         public string Grade_id { get; set; }
-          [Column(TypeName = "VARCHAR")]
-          [StringLength(100)]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
         public string GradeStep_id { get; set; }
+        public double? Percentage { get; set; }
         public double? SingleItemAmount { get; set; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]

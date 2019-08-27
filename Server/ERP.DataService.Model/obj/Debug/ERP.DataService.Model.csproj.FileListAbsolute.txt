@@ -425,3 +425,5 @@ E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addInheritedItem.resources
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble.resources
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble2.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItemtable.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItem.resources

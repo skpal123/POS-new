@@ -319,6 +319,14 @@
     <Compile Include="Migrations\201908260602297_changeDataTypeDouble2.Designer.cs">
       <DependentUpon>201908260602297_changeDataTypeDouble2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908270335454_changeGradeStepSalaryItemtable.cs" />
+    <Compile Include="Migrations\201908270335454_changeGradeStepSalaryItemtable.Designer.cs">
+      <DependentUpon>201908270335454_changeGradeStepSalaryItemtable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908270902337_changeGradeStepSalaryItem.cs" />
+    <Compile Include="Migrations\201908270902337_changeGradeStepSalaryItem.Designer.cs">
+      <DependentUpon>201908270902337_changeGradeStepSalaryItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -572,6 +580,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908260602297_changeDataTypeDouble2.resx">
       <DependentUpon>201908260602297_changeDataTypeDouble2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908270335454_changeGradeStepSalaryItemtable.resx">
+      <DependentUpon>201908270335454_changeGradeStepSalaryItemtable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908270902337_changeGradeStepSalaryItem.resx">
+      <DependentUpon>201908270902337_changeGradeStepSalaryItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

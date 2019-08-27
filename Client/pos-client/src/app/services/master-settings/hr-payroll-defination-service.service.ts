@@ -10,6 +10,7 @@ import { Department } from '../../models/master-settings/hr-payroll/department.m
 import { Occupation } from '../../models/master-settings/hr-payroll/occupation.model';
 import { EducationLevel } from '../../models/master-settings/hr-payroll/education-level.model';
 import { LeaveType } from '../../models/master-settings/hr-payroll/leave-type.model';
+import { GradeSubGradeSalaryItem } from '../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
 
 @Injectable({
   providedIn: 'root'
@@ -186,5 +187,18 @@ export class HrPayrollDefinationServiceService {
   public DeleteLeaveType(id:string){
     var url=this._defaultRoute.hrPayrollService+'LeaveType/'+id;
     return this._httpClient.delete(url)
+  }
+  public CreateGradeStepSalaryItem(gradeSubGradeSalaryItem:GradeSubGradeSalaryItem[]){
+    var url=this._defaultRoute.hrPayrollService+'GradeStepSalaryItem';
+    return this._httpClient.post<boolean>(url,gradeSubGradeSalaryItem)
+
+  }
+  public GetGradeStepSalaryItemByGradeId(gradeId:string){
+    var url=this._defaultRoute.hrPayrollService+'gradeStepSalaryItemByGradeId/'+gradeId;
+    return this._httpClient.get<GradeSubGradeSalaryItem[]>(url)
+  }
+  public GradeStepSalaryItemBySubgradeId(subGradeId:string){
+    var url=this._defaultRoute.hrPayrollService+'gradeStepSalaryItemBySubgradeId/'+subGradeId;
+    return this._httpClient.get<GradeSubGradeSalaryItem[]>(url)
   }
 }

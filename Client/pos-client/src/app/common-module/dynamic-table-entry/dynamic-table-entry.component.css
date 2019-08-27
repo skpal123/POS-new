@@ -14,3 +14,7 @@
   .width{
     width: 300px;
   }
+  .example-box {
+    cursor: move;
+    background: wheat;
+  }
