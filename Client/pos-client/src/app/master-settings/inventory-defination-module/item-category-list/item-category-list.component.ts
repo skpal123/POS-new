@@ -9,6 +9,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 @Component({
   selector: 'app-item-category-list',
   templateUrl: './item-category-list.component.html',
@@ -27,6 +28,7 @@ export class ItemCategoryListComponent implements OnInit {
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
+    private _navgationDataService:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -71,7 +73,9 @@ export class ItemCategoryListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getCategoryById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.category=response
+      this.category=response;
+      this._navgationDataService.IsUpdate=true;
+      this._navgationDataService.PreviousData=this.category.CategoryId;
       const dialogRef=this.matDialog.open(AddCategoryComponent,{
         data:this.category,
         disableClose:true,

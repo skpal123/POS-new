@@ -13,6 +13,7 @@ import { BuildFormulaComponent } from '../build-formula/build-formula.component'
 import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem.model';
 import { GradeSubGradeSalaryItem } from '../../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
 import { SalaryItemComponent } from '../salary-item/salary-item.component';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-grade-salary-item',
@@ -20,6 +21,7 @@ import { SalaryItemComponent } from '../salary-item/salary-item.component';
   styleUrls: ['./grade-salary-item.component.css']
 })
 export class GradeSalaryItemComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   IsSaveButtonClick:boolean=false;
   reload:boolean=false;
   columnReady:boolean=false;
@@ -110,11 +112,13 @@ export class GradeSalaryItemComponent implements OnInit {
           this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].BuildFormula=result.OperatorString;
           this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].InheritedItemId=result.InheritedItem;
           let parentItemPosstion=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.findIndex(f=>f.SalaryItem_Id==result.InheritedItem)
-          let parentItem=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[parentItemPosstion];
-          if(parentItem.Amount!=0&&result.Percentage!=0){
-            let amount=parentItem.Amount*(result.Percentage/100)
-            this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].SingleItemAmount=amount;
-            this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Amount=amount;
+          if(parentItemPosstion!=-1){
+            let parentItem=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[parentItemPosstion];
+            if(parentItem&&parentItem.Amount!=0&&result.Percentage!=0){
+              let amount=parentItem.Amount*(result.Percentage/100)
+              this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].SingleItemAmount=amount;
+              this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Amount=amount;
+            }
           }
           this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Percentage=result.Percentage;
           console.log(this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[0]);
@@ -137,12 +141,14 @@ export class GradeSalaryItemComponent implements OnInit {
     const dialogRef=this.matDialog.open(SalaryItemComponent,{
       data:this.salaryItem,
       disableClose:true,
+      maxHeight:window.screen.height*.8+'px',
       height:'auto',
       width:window.screen.width*.35+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        //this.getSalaryItemList();
+        this.gradeSubGradeSalItemDetails.SalaryItemList.push(result);
+        this.getAutoCompleteData();
       }
     })
   }
@@ -162,15 +168,17 @@ export class GradeSalaryItemComponent implements OnInit {
       gradeSubGradeSalItem.Grade_id=this.gradeSubGradeSalItemDetails.Grade_Id;
       gradeSubGradeSalItem.GradeStep_id=this.gradeSubGradeSalItemDetails.SubGrade_Id;
       let possition=this.salaryItemList.findIndex(i=>i.ItemId==a.SalaryItemName.split('-')[0]);
-      if(possition!=-1){
+      if(a.SalaryItem_Id==null&&possition!=-1){
         gradeSubGradeSalItem.SalaryItem_Id=this.salaryItemList[possition].Id;
+      }
+      else{
+        gradeSubGradeSalItem.SalaryItem_Id=a.SalaryItem_Id;
       }
       gradeSubGradeSalItem.InheritedItem_Id=a.InheritedItemId;
       gradeSubGradeSalItem.HasComparator=a.BuildFormula!=null?true:false;
       gradeSubGradeSalItem.Percentage=a.Percentage;
       gradeSubGradeSalItem.SalaryItemId=a.SalaryItemName.split('-')[0]
       gradeSubGradeSalItem.SalaryAmount=a.Amount;
-      gradeSubGradeSalItem.SalaryItem_Id=a.SalaryItem_Id;
       gradeSubGradeSalItem.SingleItemAmount=a.SingleItemAmount;
       gradeSubGradeSalItem.ComparatorString=a.BuildFormula;
       this.gradeSubGradeSalaryItemList.push(gradeSubGradeSalItem);
@@ -178,12 +186,15 @@ export class GradeSalaryItemComponent implements OnInit {
     this.CreateGradeStepSalaryItem()
   }
   CreateGradeStepSalaryItem(){
+    this.blockUi.start("Loading, Please wait...")
     this._hrPayrollDefinationService.CreateGradeStepSalaryItem(this.gradeSubGradeSalaryItemList).subscribe(response=>{
      let result=response;
+     this.blockUi.stop();
      let dialogData=new DialogData();
      dialogData.message="Created successfully";
      this._alertBox.openDialog(dialogData);
     },error=>{
+      this.blockUi.stop();
       let dialogData=new DialogData();
       dialogData.message=error
       this._alertBox.openDialog(dialogData);

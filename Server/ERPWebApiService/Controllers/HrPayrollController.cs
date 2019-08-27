@@ -611,7 +611,7 @@ namespace ERPWebApiService.Controllers
                     Percentage = x.Percentage,
                     ItemTypeName = x.ItemTypeName,
                     DefaultAmount = x.DefaultAmount
-                }).ToList();
+                }).OrderByDescending(m=>m.IsBasic).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, salaryItemList);
             }
             catch (InvalidSessionFailure ex)
@@ -1332,22 +1332,25 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-              var gradeStepSalaryItems=  ERPContext.GradeStepSalaryItems.Where(x => x.Grade_id == gradeId)
-                    .Select(x => new GradeStepSalaryItemInfo()
+                var gradeStepSalaryItems=(from gradeStepSal in ERPContext.GradeStepSalaryItems 
+                    join salItem in ERPContext.SalaryItems on gradeStepSal.SalaryItem_Id equals salItem.Id
+                    where gradeStepSal.Grade_id == gradeId
+                    select new GradeStepSalaryItemInfo()
                     {
-                        Id = x.Id,
-                        Grade_id = x.Grade_id,
-                        GradeStep_id = x.GradeStep_id,
-                        SalaryItemId = x.SalaryItemId,
-                        SalaryItem_Id = x.SalaryItem_Id,
-                        SingleItemAmount = x.SingleItemAmount,
-                        SalaryAmount = x.SalaryAmount,
-                        HasComparator = x.HasComparator,
-                        InheritedItem_Id = x.InheritedItem_Id,
-                        ComparatorString = x.ComparatorString,
-                        Percentage = x.Percentage,
-                        Salary_id = x.Salary_id
-                    }).ToList();
+                        Id = gradeStepSal.Id,
+                        Grade_id = gradeStepSal.Grade_id,
+                        GradeStep_id = gradeStepSal.GradeStep_id,
+                        SalaryItemId = gradeStepSal.SalaryItemId,
+                        SalaryItem_Id = gradeStepSal.SalaryItem_Id,
+                        SingleItemAmount = gradeStepSal.SingleItemAmount,
+                        SalaryAmount = gradeStepSal.SalaryAmount,
+                        HasComparator = gradeStepSal.HasComparator,
+                        InheritedItem_Id = gradeStepSal.InheritedItem_Id,
+                        ComparatorString = gradeStepSal.ComparatorString,
+                        Percentage = gradeStepSal.Percentage,
+                        Salary_id = gradeStepSal.Salary_id,
+                        IsBasic = salItem.IsBasic
+                    }).OrderByDescending(y=>y.IsBasic).ToList();
               return Request.CreateResponse(HttpStatusCode.OK, gradeStepSalaryItems);
             }
             catch (InvalidSessionFailure ex)
@@ -1369,22 +1372,25 @@ namespace ERPWebApiService.Controllers
         {
             try
             {
-                var gradeStepSalaryItems = ERPContext.GradeStepSalaryItems.Where(x => x.GradeStep_id == subGradeId)
-                      .Select(x => new GradeStepSalaryItemInfo()
-                      {
-                          Id = x.Id,
-                          Grade_id = x.Grade_id,
-                          GradeStep_id = x.GradeStep_id,
-                          SalaryItemId = x.SalaryItemId,
-                          SalaryItem_Id = x.SalaryItem_Id,
-                          SingleItemAmount = x.SingleItemAmount,
-                          SalaryAmount = x.SalaryAmount,
-                          HasComparator = x.HasComparator,
-                          ComparatorString = x.ComparatorString,
-                          InheritedItem_Id = x.InheritedItem_Id,
-                          Percentage = x.Percentage,
-                          Salary_id = x.Salary_id
-                      }).ToList();
+                var gradeStepSalaryItems = (from gradeStepSal in ERPContext.GradeStepSalaryItems
+                                            join salItem in ERPContext.SalaryItems on gradeStepSal.SalaryItem_Id equals salItem.Id
+                                            where gradeStepSal.GradeStep_id == subGradeId
+                                            select new GradeStepSalaryItemInfo()
+                                            {
+                                                Id = gradeStepSal.Id,
+                                                Grade_id = gradeStepSal.Grade_id,
+                                                GradeStep_id = gradeStepSal.GradeStep_id,
+                                                SalaryItemId = gradeStepSal.SalaryItemId,
+                                                SalaryItem_Id = gradeStepSal.SalaryItem_Id,
+                                                SingleItemAmount = gradeStepSal.SingleItemAmount,
+                                                SalaryAmount = gradeStepSal.SalaryAmount,
+                                                HasComparator = gradeStepSal.HasComparator,
+                                                InheritedItem_Id = gradeStepSal.InheritedItem_Id,
+                                                ComparatorString = gradeStepSal.ComparatorString,
+                                                Percentage = gradeStepSal.Percentage,
+                                                Salary_id = gradeStepSal.Salary_id,
+                                                IsBasic = salItem.IsBasic
+                                            }).OrderByDescending(y => y.IsBasic).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, gradeStepSalaryItems);
             }
             catch (InvalidSessionFailure ex)

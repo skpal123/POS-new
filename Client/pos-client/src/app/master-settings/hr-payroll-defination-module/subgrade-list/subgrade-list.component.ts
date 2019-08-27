@@ -13,6 +13,9 @@ import { CustomDatatableControlComponent } from '../../../common-module/custom-d
 import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
 import { GradeSubGradeSalItemDetails } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem-details.model';
 import { GradeSalaryItemComponent } from '../grade-salary-item/grade-salary-item.component';
+import { SalaryItem } from '../../../models/master-settings/hr-payroll/salary-item.model';
+import { GradeSubGradeSalaryItem } from '../../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
+import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem.model';
 
 @Component({
   selector: 'app-subgrade-list',
@@ -28,6 +31,8 @@ export class SubgradeListComponent implements OnInit {
   ColumnList:any[]=[];
   DataList:any[]=[];
   subgradeList:SubGrade[]=[];
+  salaryItemList:SalaryItem[]=[]
+  gradeStepSalaryItemList:GradeSubGradeSalaryItem[]=[]
   subgrade:SubGrade={Id:null,SubGradeId:null,SubGradeName:null,GradeName:null,Grade_Id:null,EeectiveDate:null}
   gradeSubGradeSalItemDetails:GradeSubGradeSalItemDetails={ 
     Grade_Id:null,SubGrade_Id:null,GradeName:null,SubGradeName:null,GradeSubGradeSalItemList:[]
@@ -40,11 +45,12 @@ export class SubgradeListComponent implements OnInit {
   ) { }
   ngOnInit() {
     debugger
+    this.getSalaryItemList();
     this.getSubgradeList();
     this.getUserFormControlByFormName();
   }
   getUserFormControlByFormName(){
-    this.blockUi.start("Loading....,Please wait.")
+    this.blockUi.start("Loading, Please wait...")
     this._commonService.getUserFormControlByFormName('subgrade-list').subscribe(response=>{
       this.blockUi.stop();
       this.userControlList=response
@@ -57,6 +63,17 @@ export class SubgradeListComponent implements OnInit {
       dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
+  }
+  getSalaryItemList(){
+    this._hrPayrollDefinationService.getSalaryItemList().subscribe(response=>{
+      this.salaryItemList=response
+      this.gradeSubGradeSalItemDetails.SalaryItemList=this.salaryItemList;
+    },
+  error=>{
+    let dialogData=new DialogData();
+    dialogData.message=error
+    this._alertBox.openDialog(dialogData);
+  })
   }
   getSubgradeList(){
     this.blockUi.start("Loading....,Please wait.")
@@ -154,14 +171,64 @@ export class SubgradeListComponent implements OnInit {
       }
      })
    }
-   customButtonClicked($event:DatatableButtonOutput){
+  customButtonClicked($event:DatatableButtonOutput){
     debugger
     this.subgrade=$event.RowData;
     if($event.ColumnName=="SubGradeSalaryItem"){
-      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[];
-      this.gradeSubGradeSalItemDetails.Grade_Id=this.subgrade.Id
-      this.gradeSubGradeSalItemDetails.GradeName=this.subgrade.GradeName;
-      this.gradeSubGradeSalItemDetails.SubGradeName=this.subgrade.SubGradeName
+      this.getGradeSepSalaryItemListByGradeId(this.subgrade.Id)
+    }
+  }
+  getGradeSepSalaryItemListByGradeId(subGradeId:string){
+    this.blockUi.start("Loading....,Please wait.")
+    this._hrPayrollDefinationService.GradeStepSalaryItemBySubgradeId(subGradeId).subscribe(response=>{
+      this.blockUi.stop();
+      this.gradeStepSalaryItemList=response;
+      if(this.gradeStepSalaryItemList.length>0){
+        this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[];  
+        this.gradeStepSalaryItemList.forEach(sal=>{
+          let gradeSubGradeSalItem=new GradeSubGradeSalItem();
+            let salary=this.salaryItemList.filter(x=>x.ItemId==sal.SalaryItemId)[0]
+            gradeSubGradeSalItem.SalaryItem_Id=sal.SalaryItem_Id
+            gradeSubGradeSalItem.SalaryItemName=sal.SalaryItemId+'-'+salary.ItemName;
+            gradeSubGradeSalItem.Amount=sal.SalaryAmount
+            gradeSubGradeSalItem.SingleItemAmount=sal.SingleItemAmount
+            gradeSubGradeSalItem.InheritedItemId=sal.InheritedItem_Id
+            gradeSubGradeSalItem.Percentage=sal.Percentage
+            gradeSubGradeSalItem.BuildFormula=sal.ComparatorString
+          this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push(gradeSubGradeSalItem)
+        })
+         this.openGradeStepSalaryItemDialog() 
+      }
+      else{
+        this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[]; 
+        this.salaryItemList.forEach((sal,index,array)=>{
+          //this.autoCompleteData.push(sal.ItemId+"-"+sal.ItemName)
+          if(sal.IsDefault){
+            let gradeSubGradeSalItem=new GradeSubGradeSalItem();
+            gradeSubGradeSalItem.SalaryItemName=sal.ItemId+'-'+sal.ItemName;
+            gradeSubGradeSalItem.Amount=0
+            gradeSubGradeSalItem.SalaryItem_Id=sal.Id
+            gradeSubGradeSalItem.SingleItemAmount=0
+            gradeSubGradeSalItem.InheritedItemId=null;
+            gradeSubGradeSalItem.Percentage=0;
+            gradeSubGradeSalItem.BuildFormula=null;
+            this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push(gradeSubGradeSalItem)
+          }
+        });
+        this.openGradeStepSalaryItemDialog()
+      }
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  openGradeStepSalaryItemDialog(){     
+    this.gradeSubGradeSalItemDetails.Grade_Id=this.subgrade.Grade_Id
+    this.gradeSubGradeSalItemDetails.GradeName=this.subgrade.GradeName;
+    this.gradeSubGradeSalItemDetails.SubGrade_Id=this.subgrade.Id;
+    this.gradeSubGradeSalItemDetails.SubGradeName=this.subgrade.SubGradeName;
       const dialogRef=this.matDialog.open(GradeSalaryItemComponent,{
         data:this.gradeSubGradeSalItemDetails,
         disableClose:true,
@@ -173,6 +240,5 @@ export class SubgradeListComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result=>{
         
       })
-    }
   }
 }
