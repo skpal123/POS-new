@@ -1,11 +1,18 @@
 import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
 import { DatatableTextOutput } from '../../models/common/datatable-text-click.model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { UserFormControl } from '../../models/common/user-form-control.model';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { CommonService } from '../../services/common/common.service';
+import { DialogData } from '../../models/common/dialog-data.model';
+import { AlertBoxService } from '../../shared/alert-box.service';
 @Component({
   selector: 'app-dynamic-table-entry',
   templateUrl: './dynamic-table-entry.component.html',
   styleUrls: ['./dynamic-table-entry.component.css']
 })
 export class DynamicTableEntryComponent implements OnInit {
+  @BlockUI() blockUi:NgBlockUI
   @Input() Datalist: any = [];
   @Input() ColumnList: any = [];
   @Input() selectList: any = [];
@@ -14,21 +21,28 @@ export class DynamicTableEntryComponent implements OnInit {
   @Input() AutoCompleteDataSource: any = [];
   @Input() AutoCompleteList2: any = [];
   @Input() AutoCompleteList3: any = [];
+  newOrderColumnList:UserFormControl[]=[];
+  searchTerm:string=null;
+  enableSaveButton:boolean=false;
   @Output() AutoCompleteDataSourceClicked:EventEmitter <any>=new EventEmitter <any>();
+  @Output() AutoCompleteNewEntry:EventEmitter <any>=new EventEmitter <any>();
   @Output() DeleteDataRowClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() GetColumnValueClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() GetDatatableColumnTextClicked:EventEmitter <any>=new EventEmitter <any>();
   @Output() AddNewRow:EventEmitter <any>=new EventEmitter <any>();
   data={value:0,name:"",index:0}
   datatableTextOutput:DatatableTextOutput={ColumnName:null,RowData:null};
-  constructor() { 
-    
-  }
+  constructor(private _commonService:CommonService,
+    private _alertBox:AlertBoxService
+  ) { }
   ngOnInit() {
     debugger
   }
   AutoCompleteClick($data){
     this.AutoCompleteDataSourceClicked.emit($data)
+  }
+  autoCompleteNewEntry(col:any){
+    this.AutoCompleteNewEntry.emit(col)
   }
   deleteRow(index:number,$data){
     debugger
@@ -58,5 +72,25 @@ export class DynamicTableEntryComponent implements OnInit {
   }
   onchange($event){
     debugger
+  }
+  drop(event: CdkDragDrop<any[]>) {
+    moveItemInArray(this.ColumnList, event.previousIndex, event.currentIndex);
+    this.newOrderColumnList=this.ColumnList;
+    this.enableSaveButton=true;
+  }
+  saveNewOrder(){
+    this.newOrderColumnList.forEach((a,index)=>{
+      a.OrderNo=index+1
+    })
+    this.blockUi.start("Loading....,Please wait.")
+    this._commonService.saveColumnInfoList(this.newOrderColumnList).subscribe((response:boolean)=>{
+      this.blockUi.stop();
+      this.enableSaveButton=false;    
+    },error=>{
+      this.blockUi.stop();
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
   }
 }

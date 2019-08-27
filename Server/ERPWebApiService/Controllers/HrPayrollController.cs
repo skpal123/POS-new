@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Linq;
@@ -1268,6 +1269,131 @@ namespace ERPWebApiService.Controllers
                 paramlist.Add("@id", id);
                 DatabaseCommand.ExcuteNonQuery("delete from LeaveType where id=@id", paramlist, null);
                 return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("GradeStepSalaryItem")]
+        [HttpPost]
+        public HttpResponseMessage CreateGradeStepSalaryItem(List<GradeStepSalaryItemInfo> gradeStepSalaryItemInfos )
+        {
+            try
+            {
+                //var userSession = AuthorizationHelper.GetSession();
+                //if (userSession != null)
+                //{
+                string id = Guid.Empty.ToString();
+                DataTable dt=new DataTable();
+                dt.Columns.Add("Id", typeof(string));
+                dt.Columns.Add("SalaryItemId", typeof(string));
+                dt.Columns.Add("SalaryItem_Id", typeof(string));
+                dt.Columns.Add("SalaryAmount", typeof(double));
+                dt.Columns.Add("HasComparator", typeof(bool));
+                dt.Columns.Add("Grade_id", typeof(string));
+                dt.Columns.Add("GradeStep_id", typeof(string));
+                dt.Columns.Add("SingleItemAmount", typeof(decimal));
+                dt.Columns.Add("Salary_id", typeof(string));
+                dt.Columns.Add("InheritedItem_Id", typeof(string));
+                dt.Columns.Add("Percentage", typeof(double));
+                dt.Columns.Add("ComparatorString", typeof(string));
+                foreach (var gradeStepInfo in gradeStepSalaryItemInfos)
+                {
+                    id = gradeStepInfo.Id ?? Guid.NewGuid().ToString();
+                    dt.Rows.Add(id, gradeStepInfo.SalaryItemId, gradeStepInfo.SalaryItem_Id, gradeStepInfo.SalaryAmount,
+                        gradeStepInfo.HasComparator,
+                        gradeStepInfo.Grade_id, gradeStepInfo.GradeStep_id, gradeStepInfo.SingleItemAmount,
+                        gradeStepInfo.Salary_id, gradeStepInfo.InheritedItem_Id,
+                        gradeStepInfo.Percentage,gradeStepInfo.ComparatorString);
+                }
+                Dictionary<string, object> paramlist = new Dictionary<string, object>();
+                paramlist.Add("@TypeGradeStepSalaryItem", dt);
+                DatabaseCommand.ExcuteObjectNonQuery("proc_SaveGradeStepSalaryItemTransaction", paramlist, "procedure");
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+       
+        [Route("gradeStepSalaryItemByGradeId/{gradeId}")]
+        [HttpGet]
+        public HttpResponseMessage GetGradeStepSalaryItemByGradeId(string gradeId)
+        {
+            try
+            {
+              var gradeStepSalaryItems=  ERPContext.GradeStepSalaryItems.Where(x => x.Grade_id == gradeId)
+                    .Select(x => new GradeStepSalaryItemInfo()
+                    {
+                        Id = x.Id,
+                        Grade_id = x.Grade_id,
+                        GradeStep_id = x.GradeStep_id,
+                        SalaryItemId = x.SalaryItemId,
+                        SalaryItem_Id = x.SalaryItem_Id,
+                        SingleItemAmount = x.SingleItemAmount,
+                        SalaryAmount = x.SalaryAmount,
+                        HasComparator = x.HasComparator,
+                        InheritedItem_Id = x.InheritedItem_Id,
+                        ComparatorString = x.ComparatorString,
+                        Percentage = x.Percentage,
+                        Salary_id = x.Salary_id
+                    }).ToList();
+              return Request.CreateResponse(HttpStatusCode.OK, gradeStepSalaryItems);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("gradeStepSalaryItemBySubgradeId/{subGradeId}")]
+        [HttpGet]
+        public HttpResponseMessage GradeStepSalaryItemBySubgradeId(string subGradeId)
+        {
+            try
+            {
+                var gradeStepSalaryItems = ERPContext.GradeStepSalaryItems.Where(x => x.GradeStep_id == subGradeId)
+                      .Select(x => new GradeStepSalaryItemInfo()
+                      {
+                          Id = x.Id,
+                          Grade_id = x.Grade_id,
+                          GradeStep_id = x.GradeStep_id,
+                          SalaryItemId = x.SalaryItemId,
+                          SalaryItem_Id = x.SalaryItem_Id,
+                          SingleItemAmount = x.SingleItemAmount,
+                          SalaryAmount = x.SalaryAmount,
+                          HasComparator = x.HasComparator,
+                          ComparatorString = x.ComparatorString,
+                          InheritedItem_Id = x.InheritedItem_Id,
+                          Percentage = x.Percentage,
+                          Salary_id = x.Salary_id
+                      }).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, gradeStepSalaryItems);
+            }
+            catch (InvalidSessionFailure ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex.Message);
             }
             catch (Exception ex)
             {

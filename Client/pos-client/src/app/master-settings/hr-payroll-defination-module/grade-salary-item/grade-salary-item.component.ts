@@ -11,6 +11,8 @@ import { GradeSubGradeSalItemDetails } from '../../../models/master-settings/hr-
 import { DatatableTextOutput } from '../../../models/common/datatable-text-click.model';
 import { BuildFormulaComponent } from '../build-formula/build-formula.component';
 import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem.model';
+import { GradeSubGradeSalaryItem } from '../../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
+import { SalaryItemComponent } from '../salary-item/salary-item.component';
 
 @Component({
   selector: 'app-grade-salary-item',
@@ -26,7 +28,9 @@ export class GradeSalaryItemComponent implements OnInit {
   ColumnList:any[]=[];
   DataList:any[]=[];
   salaryItemList:SalaryItem[]=[];
-  salaryItem:SalaryItem={InheritedItem:null,InheritedItemName:null,Percentage:null,OperatorString:null}
+  selectedRow:GradeSubGradeSalItem;
+  gradeSubGradeSalaryItemList:GradeSubGradeSalaryItem[]=[]
+  salaryItem:SalaryItem={Id:null,InheritedItem:null,InheritedItemName:null,Percentage:null,OperatorString:null}
   autoCompleteData=[];
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
@@ -39,24 +43,16 @@ export class GradeSalaryItemComponent implements OnInit {
   ngOnInit() {
     debugger
     this.getDataList();
-    this.getSalaryItemList();
+    this.getAutoCompleteData();
     this.getUserFormControlByFormName();
   }
   onNoClick():void{
     this.matDialogRef.close(this.IsSaveButtonClick);
   }
-  getSalaryItemList(){
-    this._hrPayrollDefinationService.getSalaryItemList().subscribe(response=>{
-      this.salaryItemList=response
-      this.salaryItemList.forEach((sal,index,array)=>{
-        this.autoCompleteData.push(sal.ItemId+"-"+sal.ItemName)
-      })     
-    },
-  error=>{
-    let dialogData=new DialogData();
-    dialogData.message=error
-    this._alertBox.openDialog(dialogData);
-  })
+  getAutoCompleteData(){
+    this.gradeSubGradeSalItemDetails.SalaryItemList.forEach(sal=>{
+      this.autoCompleteData.push(sal.ItemId+"-"+sal.ItemName)
+    })
   }
   getDataList(){
     this.DataList=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList;
@@ -81,9 +77,26 @@ export class GradeSalaryItemComponent implements OnInit {
     })
   }
   GetDatatableColumnTextClicked($event:DatatableTextOutput){
+    debugger
+    this.selectedRow=$event.RowData;
     if($event.ColumnName=="BuildFormula"){
       //this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList=[];
       //this.addNewRow()
+      if(this.selectedRow.BuildFormula!=null){
+        this.salaryItem.OperatorString=this.selectedRow.BuildFormula;
+        this.salaryItem.ItemName=this.selectedRow.SalaryItemName;
+        this.salaryItem.InheritedItem=this.selectedRow.InheritedItemId;
+        this.salaryItem.Percentage=this.selectedRow.Percentage;
+        let salaryItem=this.gradeSubGradeSalItemDetails.SalaryItemList.filter(f=>f.Id==this.selectedRow.InheritedItemId)[0];
+        if(salaryItem){
+          this.salaryItem.Id=salaryItem.Id
+          this.salaryItem.ItemId=salaryItem.ItemId;
+          this.salaryItem.ItemName=salaryItem.ItemName
+        }
+      }
+      else{
+        this.clearSalaryItem()
+      }
       const dialog=this.matDialog.open(BuildFormulaComponent,{
         data:this.salaryItem,
         disableClose:true,
@@ -93,18 +106,87 @@ export class GradeSalaryItemComponent implements OnInit {
       });
       dialog.afterClosed().subscribe((result:SalaryItem)=>{
         debugger
-        this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].BuildFormula=result.OperatorString;
-        //this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].SalaryItemName=result.InheritedItemName;
-        //this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Amount=10
-        console.log(this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[0]);
+        if(result){
+          this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].BuildFormula=result.OperatorString;
+          this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].InheritedItemId=result.InheritedItem;
+          let parentItemPosstion=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.findIndex(f=>f.SalaryItem_Id==result.InheritedItem)
+          let parentItem=this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[parentItemPosstion];
+          if(parentItem.Amount!=0&&result.Percentage!=0){
+            let amount=parentItem.Amount*(result.Percentage/100)
+            this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].SingleItemAmount=amount;
+            this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Amount=amount;
+          }
+          this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Percentage=result.Percentage;
+          console.log(this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[0]);
+        }
       })
     }
+  }
+  clearSalaryItem(){
+    this.salaryItem.Id=null;
+    this.salaryItem.Percentage=0;
+    this.salaryItem.ItemName=null;
+    this.salaryItem.InheritedItem=null;
+    this.salaryItem.OperatorString=null;
+    this.salaryItem.InheritedItemName=null;
+
+    this.salaryItem.DefaultAmount=0;
+  }
+  autoCompleteNewEntry($event:UserFormControl){
+    this.clearSalaryItem();
+    const dialogRef=this.matDialog.open(SalaryItemComponent,{
+      data:this.salaryItem,
+      disableClose:true,
+      height:'auto',
+      width:window.screen.width*.35+'px'
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result){
+        //this.getSalaryItemList();
+      }
+    })
   }
   addNewRow(){
     var gradeSubGradeSalItem=new GradeSubGradeSalItem()
     gradeSubGradeSalItem.SalaryItemName=null;
     gradeSubGradeSalItem.Amount=0;
     gradeSubGradeSalItem.BuildFormula=null;
+    gradeSubGradeSalItem.InheritedItemId=null;
+    gradeSubGradeSalItem.SalaryItem_Id=null;
     this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.push(gradeSubGradeSalItem);
+  }
+  saveGradeSubGradeSalaryItem(){
+    debugger
+    this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList.forEach(a=>{
+      var gradeSubGradeSalItem=new GradeSubGradeSalaryItem();
+      gradeSubGradeSalItem.Grade_id=this.gradeSubGradeSalItemDetails.Grade_Id;
+      gradeSubGradeSalItem.GradeStep_id=this.gradeSubGradeSalItemDetails.SubGrade_Id;
+      let possition=this.salaryItemList.findIndex(i=>i.ItemId==a.SalaryItemName.split('-')[0]);
+      if(possition!=-1){
+        gradeSubGradeSalItem.SalaryItem_Id=this.salaryItemList[possition].Id;
+      }
+      gradeSubGradeSalItem.InheritedItem_Id=a.InheritedItemId;
+      gradeSubGradeSalItem.HasComparator=a.BuildFormula!=null?true:false;
+      gradeSubGradeSalItem.Percentage=a.Percentage;
+      gradeSubGradeSalItem.SalaryItemId=a.SalaryItemName.split('-')[0]
+      gradeSubGradeSalItem.SalaryAmount=a.Amount;
+      gradeSubGradeSalItem.SalaryItem_Id=a.SalaryItem_Id;
+      gradeSubGradeSalItem.SingleItemAmount=a.SingleItemAmount;
+      gradeSubGradeSalItem.ComparatorString=a.BuildFormula;
+      this.gradeSubGradeSalaryItemList.push(gradeSubGradeSalItem);
+    })
+    this.CreateGradeStepSalaryItem()
+  }
+  CreateGradeStepSalaryItem(){
+    this._hrPayrollDefinationService.CreateGradeStepSalaryItem(this.gradeSubGradeSalaryItemList).subscribe(response=>{
+     let result=response;
+     let dialogData=new DialogData();
+     dialogData.message="Created successfully";
+     this._alertBox.openDialog(dialogData);
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
   }
 }

@@ -33,6 +33,15 @@ export class BuildFormulaComponent implements OnInit {
 
   ngOnInit() {
     debugger
+    this.buildFormulaForm.valueChanges.subscribe(data=>{
+      const control=this.buildFormulaForm.control.get('Percentage');
+      if(control&&control.value!=null&&this.salaryItem.Id==null&&this.salaryItem.InheritedItem!=null){
+        this.salaryItem.OperatorString=control.value+" % Of "+ this.salaryItem.InheritedItemName
+      }
+    });
+    if(this.salaryItem.Id!=null&&this.salaryItem.OperatorString!=null&&this.salaryItem.InheritedItem!=null){
+      this.salaryItemSelectedItems.push({id:this.salaryItem.Id,itemName:this.salaryItem.ItemId+"-"+this.salaryItem.ItemName})
+    }
     this.getItemFormInfo();
   }
   onNoClick(){
