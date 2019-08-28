@@ -22,7 +22,7 @@ export class CustomDatatableControlSettingsComponent implements OnInit {
        disableClose:true,
        height:'auto',
        maxHeight:window.screen.height*.9+'px',
-       width:window.screen.width*.8+'px'
+       width:window.screen.width*.45+'px'
      });
      dialogRef.afterClosed().subscribe(result=>{
       if(result){

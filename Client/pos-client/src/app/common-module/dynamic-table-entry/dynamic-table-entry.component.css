@@ -17,4 +17,8 @@
   .example-box {
     cursor: move;
     background: wheat;
+    height: 30px;
+  }
+  .form-control{
+    height: 25px;
   }

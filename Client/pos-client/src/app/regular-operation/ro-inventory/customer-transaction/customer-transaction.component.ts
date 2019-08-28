@@ -34,10 +34,10 @@ export class CustomerTransactionComponent implements OnInit,OnDestroy {
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
   @ViewChild('PaidAmountControl') PaidAmountControl:FormControl
   @ViewChild('formDateControl') formDateControl:FormControl;
+  @ViewChild('paymentMethodControl') paymentMethodControl:FormControl;
   @ViewChild('toDateControl') toDateControl:FormControl;
   ledgerTouch:boolean=false;
   formName:string="customer-transaction"
-  checkedItems:CheckedItem[]=[];
   paymentModeFilter:boolean=true;
   ledgerSelectedItems :MultiSelectDropdown[]= [
   ];
@@ -320,7 +320,7 @@ export class CustomerTransactionComponent implements OnInit,OnDestroy {
     if(totalAmount!=0){
       let isFound=false;
       this.groupItemList.forEach((a,index)=>{
-        if(this.checkedItems[index].IsChecked){
+        if(this.groupItemList[index].IsChecked){
           if(totalAmount>(a.NetPayableAmount-a.PaidAmount)){
             totalAmount-=(a.NetPayableAmount-a.PaidAmount)
             a.PayAmount=(a.NetPayableAmount-a.PaidAmount);
@@ -365,7 +365,12 @@ export class CustomerTransactionComponent implements OnInit,OnDestroy {
   dueAmountPaymentMethod(){
     debugger
     if(this.customerTransaction.PaymentMethod=="specific"){
-      this.customerTransaction.PaidAmount=0;
+      this.customerTransaction.PaidAmount=0
+      this.groupItemList.forEach(a=>{
+        if(a.IsChecked){
+          this.customerTransaction.PaidAmount+=a.PayAmount;
+        }
+      })
     }
   }
   fullPayChange($event){
@@ -384,7 +389,7 @@ export class CustomerTransactionComponent implements OnInit,OnDestroy {
         disableClose:true,
         maxWidth:'100vw',
         maxHeight:'100vh',
-        height:'70%',
+        height:'auto',
         width:'95%'
       });
       dialogRef.afterClosed().subscribe(result=>{

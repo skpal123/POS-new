@@ -81,8 +81,9 @@ export class VoucherListComponent implements OnInit {
    const dialogRef=this.matDialog.open(AddVoucherDialogComponent,{
       data:this.voucher,
       disableClose:true,
-      height:window.screen.height*.8+'px',
-      width:window.screen.width*1+'px'
+      maxHeight:window.screen.height*.8+'px',
+      height:'auto',
+      width:window.screen.width*.8+'px'
     });
     dialogRef.afterClosed().subscribe(response=>{
       if(response){
@@ -99,7 +100,8 @@ export class VoucherListComponent implements OnInit {
         const dialogRef=this.matDialog.open(AddVoucherDialogComponent,{
           data:this.voucher,
           disableClose:true,
-          height:window.screen.height*.8+'px',
+          maxHeight:window.screen.height*.8+'px',
+          height:'auto',
           width:window.screen.width*.8+'px'
         });
         dialogRef.afterClosed().subscribe(response=>{
@@ -152,7 +154,8 @@ export class VoucherListComponent implements OnInit {
     const dialogRef2=this.matDialog.open(SubledgerTransactionComponent,{
       data:this.subledgerData,
       disableClose:true,
-      height:window.screen.height*.6+'px',
+      maxHeight:window.screen.height*.6+'px',
+      height:'auto',
       width:window.screen.width*.4+'px'
     });
     dialogRef2.afterClosed().subscribe(response=>{

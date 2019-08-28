@@ -3,15 +3,17 @@
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h5> subledger
-                <button type="button" class="close pull-right" (click)="onNoClick()">&times;</button>
+                <app-custom-datatable-control-settings [userControlList]="userControlList"></app-custom-datatable-control-settings>
+                <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
             </h5>
           </div>
           <div class="panel-body">
-            <span (click)="createNewSubledger()" title="Create new" id="pointer" class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
             <app-dynamic-table-entry
             [ColumnList]="columnlist" 
             [Datalist]="Datalist" 
             [AutoCompleteDataSource]="autoCompleteData"
+            (AutoCompleteNewEntry)="autoCompleteNewEntry($event)"
+            (AddNewRow)="addNewSubledgerEntry()"
             (AutoCompleteDataSourceClicked)="ParentAutoCompleteDataSource($event)"
             (DeleteDataRowClicked)="deleteVoucherDetailsRow($event)"
             >

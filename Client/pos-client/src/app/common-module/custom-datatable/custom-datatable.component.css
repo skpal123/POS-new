@@ -43,4 +43,6 @@
   ul li{
     cursor: pointer;
   }
-  
+  td{
+    height: 32px;
+  }

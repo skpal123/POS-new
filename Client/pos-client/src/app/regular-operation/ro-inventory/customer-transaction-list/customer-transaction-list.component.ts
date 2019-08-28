@@ -117,7 +117,7 @@ export class CustomerTransactionListComponent implements OnInit {
         disableClose:true,
         maxWidth:'100vw',
         maxHeight:'100vh',
-        height:'100%',
+        height:'auto',
         width:'95%'
       });
       dialogRef.afterClosed().subscribe(result=>{
@@ -172,7 +172,7 @@ export class CustomerTransactionListComponent implements OnInit {
       disableClose:true,
       maxWidth:'100vw',
       maxHeight:'100vh',
-      height:'100%',
+      height:'auto',
       width:'95%'
     });
     dialogRef.afterClosed().subscribe(result=>{
@@ -186,5 +186,6 @@ export class CustomerTransactionListComponent implements OnInit {
     this.customerTransaction.Id=null;
     this.customerTransaction.TotalDueAdvanceAmount=0;
     this.customerTransaction.PaidAmount=0;
+    this.customerTransaction.PaymentMethod="general";
   }
 }

@@ -9,4 +9,5 @@ export class UserFormControl{
     public IsCheckbox?:boolean
     public FormName?:string;
     public OrderNo?:number;
+    public IsReadOnly?:boolean
 }

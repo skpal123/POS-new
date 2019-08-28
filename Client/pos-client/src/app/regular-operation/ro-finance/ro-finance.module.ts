@@ -8,6 +8,8 @@ import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { AddVoucherDialogComponent } from './add-voucher-dialog/add-voucher-dialog.component';
 import { VoucherListInsideVoucherComponent } from './voucher-list-inside-voucher/voucher-list-inside-voucher.component';
 import { SubledgerTransactionComponent } from './subledger-transaction/subledger-transaction.component';
+import { CustomDatatableControlComponent } from '../../common-module/custom-datatable-control/custom-datatable-control.component';
+import { AddSubledgerComponent } from '../../master-settings/accounts-defination-module/add-subledger/add-subledger.component';
 
 @NgModule({
   imports: [
@@ -18,6 +20,11 @@ import { SubledgerTransactionComponent } from './subledger-transaction/subledger
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   declarations: [FinanceLayoutComponent,VoucherEntryComponent, VoucherListComponent, AddVoucherDialogComponent,
      VoucherListInsideVoucherComponent, SubledgerTransactionComponent],
-  entryComponents:[AddVoucherDialogComponent,SubledgerTransactionComponent]
+  entryComponents:[
+    AddVoucherDialogComponent,
+    SubledgerTransactionComponent,
+    CustomDatatableControlComponent,
+    AddSubledgerComponent
+  ]
 })
 export class RoFinanceModule { }

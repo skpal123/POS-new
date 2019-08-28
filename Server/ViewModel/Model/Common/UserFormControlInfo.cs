@@ -18,5 +18,6 @@ namespace ViewModel.Model
         public bool IsCheckbox { set; get; }
         public string FormName { set; get; }
         public int? OrderNo { set; get; }
+        public bool? IsReadOnly { set; get; }
     }
 }

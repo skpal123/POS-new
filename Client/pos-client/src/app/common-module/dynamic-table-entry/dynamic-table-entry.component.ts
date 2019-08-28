@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit,Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { DatatableTextOutput } from '../../models/common/datatable-text-click.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { UserFormControl } from '../../models/common/user-form-control.model';
@@ -11,7 +11,7 @@ import { AlertBoxService } from '../../shared/alert-box.service';
   templateUrl: './dynamic-table-entry.component.html',
   styleUrls: ['./dynamic-table-entry.component.css']
 })
-export class DynamicTableEntryComponent implements OnInit {
+export class DynamicTableEntryComponent implements OnInit,OnChanges {
   @BlockUI() blockUi:NgBlockUI
   @Input() Datalist: any = [];
   @Input() ColumnList: any = [];
@@ -37,6 +37,12 @@ export class DynamicTableEntryComponent implements OnInit {
   ) { }
   ngOnInit() {
     debugger
+    
+  }
+  ngOnChanges(){
+    this.ColumnList=this.ColumnList.filter(a=>{
+      return a.IsEnable==true
+     });
   }
   AutoCompleteClick($data){
     this.AutoCompleteDataSourceClicked.emit($data)

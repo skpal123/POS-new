@@ -12,6 +12,8 @@ import { SubledgerTransactionComponent } from '../subledger-transaction/subledge
 import { SubledgerTransaction } from '../../../models/regular-operation/finance/subledger-transaction.model';
 import { SubledgerDialogData } from '../../../models/regular-operation/finance/subledger-dialog-data.model';
 import { SubledgerTransactionDataService } from 'src/app/regular-operation/ro-finance/subledger-transaction-data.service';
+import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
+import { DatatableTextOutput } from '../../../models/common/datatable-text-click.model';
 
 @Component({
   selector: 'app-add-voucher-dialog',
@@ -23,6 +25,8 @@ export class AddVoucherDialogComponent implements OnInit {
   userControlList:UserFormControl[]=[];
   account:ChartOfaccount;
   voucherList:Voucher[]=[];
+  selectedVoucher:Voucher;
+  TotalAmount:number=0;
   startDate = new Date();
   vDate:Date=new Date();
   cDate:Date=new Date();
@@ -37,6 +41,7 @@ export class AddVoucherDialogComponent implements OnInit {
   };
   subledgerTransactionist:SubledgerTransaction[]=[];
   accountList:ChartOfaccount[]=[];
+  filterAccountList:ChartOfaccount[]=[];
   debitAcccountList:ChartOfaccount[]=[];
   columnlist:any=[];
   autoCompleteData=[];
@@ -57,6 +62,7 @@ export class AddVoucherDialogComponent implements OnInit {
     if(this.voucher.VoucherDetailsList.length==0){
 
     }
+    this.TotalAmount=this.getVoucherAmount()
     this.getAccountList();
     //this.getColumnList();
     this.getUserFormControlByFormName();
@@ -68,9 +74,7 @@ export class AddVoucherDialogComponent implements OnInit {
   getAccountList(){
     this._accountService.getChildAccountList().subscribe(response=>{
       this.accountList=response
-      this.accountList.forEach((account,index,array)=>{
-        this.autoCompleteData.push(account.AccountDescription+"-"+account.AutoAccountCode)
-      })
+      this.getAutoCompleteData()
       this.getOneSideAccountForVoucher(this.voucher.VoucherType);
       if(this.voucher.VoucherDetailsList.length==0){
         var voucherDetail=new VoucherDeatils();
@@ -80,7 +84,6 @@ export class AddVoucherDialogComponent implements OnInit {
         this.voucher.VoucherDetailsList.push(voucherDetail);
       }
       else{
-
       }
     },
   error=>{
@@ -89,10 +92,14 @@ export class AddVoucherDialogComponent implements OnInit {
     this._alertBox.openDialog(dialogData);
   })
   }
-  // getColumnList(){
-  //   this.columnlist.push({Name:"AccountDescription",LabelName:"Account Code & Description",Type:'Autocomplete',Editable:true,Autocomplete:true})
-  //   this.columnlist.push({Name:"Amount",LabelName:"Amount",Type:'number',Editable:true,Autocomplete:false})
-  // }
+  getAutoCompleteData(){  
+    if(this.voucher.VoucherType=="0"||this.voucher.VoucherType=="1"||this.voucher.VoucherType=="2"||this.voucher.VoucherType=="3"){
+      this.filterAccountList= this.accountList.filter(x=>x.AccountType.toString()!="1"&&x.AccountType.toString()!="2");
+     }
+    this.filterAccountList.forEach((account,index,array)=>{
+      this.autoCompleteData.push(account.AccountDescription+"-"+account.AutoAccountCode)
+    })
+  }
   ParentAutoCompleteDataSource($event:string){
     debugger
     if($event!=null &&!this._subledgerDataService.isDialogOpen){
@@ -122,7 +129,8 @@ export class AddVoucherDialogComponent implements OnInit {
           const dialogRef2=this.matDialog.open(SubledgerTransactionComponent,{
             data:this.subledgerDialogData,
             disableClose:true,
-            height:window.screen.height*.6+'px',
+            height:"auto",
+            maxHeight:window.screen.height*.6+'px',
             width:window.screen.width*.4+'px'
           });
           dialogRef2.afterClosed().subscribe((response:SubledgerDialogData)=>{
@@ -253,5 +261,10 @@ export class AddVoucherDialogComponent implements OnInit {
         }
     });
     return sum;
+  }
+  GetDatatableColumnTextClicked($event:DatatableTextOutput){
+    debugger
+    this.selectedVoucher=$event.RowData;
+    this.TotalAmount=this.getVoucherAmount();
   }
 }

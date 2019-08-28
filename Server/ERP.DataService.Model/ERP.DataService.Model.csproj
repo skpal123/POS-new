@@ -327,6 +327,10 @@
     <Compile Include="Migrations\201908270902337_changeGradeStepSalaryItem.Designer.cs">
       <DependentUpon>201908270902337_changeGradeStepSalaryItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908280719235_AddIsReadOnly.cs" />
+    <Compile Include="Migrations\201908280719235_AddIsReadOnly.Designer.cs">
+      <DependentUpon>201908280719235_AddIsReadOnly.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -586,6 +590,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908270902337_changeGradeStepSalaryItem.resx">
       <DependentUpon>201908270902337_changeGradeStepSalaryItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908280719235_AddIsReadOnly.resx">
+      <DependentUpon>201908280719235_AddIsReadOnly.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

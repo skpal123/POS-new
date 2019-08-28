@@ -125,6 +125,9 @@ export class GradeSalaryItemComponent implements OnInit {
         }
       })
     }
+    else if($event.ColumnName=="Amount"){
+      this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].SingleItemAmount= this.gradeSubGradeSalItemDetails.GradeSubGradeSalItemList[$event.Index].Amount
+    }
   }
   clearSalaryItem(){
     this.salaryItem.Id=null;
@@ -167,9 +170,9 @@ export class GradeSalaryItemComponent implements OnInit {
       var gradeSubGradeSalItem=new GradeSubGradeSalaryItem();
       gradeSubGradeSalItem.Grade_id=this.gradeSubGradeSalItemDetails.Grade_Id;
       gradeSubGradeSalItem.GradeStep_id=this.gradeSubGradeSalItemDetails.SubGrade_Id;
-      let possition=this.salaryItemList.findIndex(i=>i.ItemId==a.SalaryItemName.split('-')[0]);
+      let possition=this.gradeSubGradeSalItemDetails.SalaryItemList.findIndex(i=>i.ItemId==a.SalaryItemName.split('-')[0]);
       if(a.SalaryItem_Id==null&&possition!=-1){
-        gradeSubGradeSalItem.SalaryItem_Id=this.salaryItemList[possition].Id;
+        gradeSubGradeSalItem.SalaryItem_Id=this.gradeSubGradeSalItemDetails.SalaryItemList[possition].Id;
       }
       else{
         gradeSubGradeSalItem.SalaryItem_Id=a.SalaryItem_Id;

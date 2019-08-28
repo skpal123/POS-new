@@ -99,7 +99,8 @@ namespace ERPWebApiService.Controllers
                     FormName = x.FormName,
                     IsCheckbox = x.IsCheckbox,
                     Type = x.Type,
-                    OrderNo = x.OrderNo
+                    OrderNo = x.OrderNo,
+                    IsReadOnly = x.IsReadOnly
                 }).OrderBy(m=>m.OrderNo).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, userControlList);
             }
@@ -165,12 +166,13 @@ namespace ERPWebApiService.Controllers
                 dt.Columns.Add("Type", typeof(string));
                 dt.Columns.Add("IsCheckbox", typeof(Boolean));
                 dt.Columns.Add("OrderNo", typeof(int));
+                dt.Columns.Add("IsReadOnly", typeof(int));
                 if (userFormControls.Any())
                 {                
                     foreach (UserFormControlInfo forminfo in userFormControls)
                     {
                         dt.Rows.Add(forminfo.Name, forminfo.LabelName, forminfo.Autocomplete, forminfo.Editable,
-                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox,forminfo.OrderNo);
+                            forminfo.IsEnable, forminfo.FormName, forminfo.Type, forminfo.IsCheckbox,forminfo.OrderNo,forminfo.IsReadOnly);
                     }  Dictionary<string, object> paramlist = new Dictionary<string, object>();
                      paramlist.Add("@TypeUserFormControl", dt);
                      DatabaseCommand.ExcuteObjectNonQuery("proc_saveUserFormControl", paramlist, "procedure");

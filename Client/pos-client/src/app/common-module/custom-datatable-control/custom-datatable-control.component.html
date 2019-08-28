@@ -10,15 +10,17 @@
       <div class="panel-body">
         <table class="table">
           <thead>
-            <th>Name</th>
-            <th>Label Name</th>
-            <th>Is Enable</th>
+            <th style="text-align: center">Name</th>
+            <th style="text-align: center">Label Name</th>
+            <th style="text-align: center">Is Enable</th>
+            <th style="text-align: center">Is Read Only</th>
           </thead>
           <tbody>
             <tr *ngFor="let a of data">
-              <td>{{a.Name}}</td>
-              <td><input type="text" class="form-control" [(ngModel)]="a.LabelName"></td>
-              <td><input type="checkbox" [(ngModel)]="a.IsEnable"></td>
+              <td style="text-align: center">{{a.Name}}</td>
+              <td style="text-align: center"><input type="text" class="form-control" [(ngModel)]="a.LabelName"></td>
+              <td style="text-align: center"><input type="checkbox" [(ngModel)]="a.IsEnable"></td>
+              <td style="text-align: center"><input type="checkbox" [(ngModel)]="a.IsReadOnly"></td>
             </tr>
           </tbody>
       </table>

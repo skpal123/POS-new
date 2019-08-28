@@ -21,7 +21,9 @@ import { AddChartOfAccountComponent } from './add-chart-of-account/add-chart-of-
   declarations: [AcountLayoutComponent, ChartOfAccountComponent, 
     AccountOpeningComponent, CoaTreeComponent,
   SubledgerOpeningComponent, AddSubledgerComponent, AddChartOfAccountComponent],
-  entryComponents:[AddSubledgerComponent,AddChartOfAccountComponent]
-  
+  entryComponents:[AddSubledgerComponent,AddChartOfAccountComponent],
+  exports:[
+    AddSubledgerComponent
+  ]
 })
 export class AccountsDefinationModuleModule { }

@@ -71,7 +71,8 @@ export class AddSubledgerComponent implements OnInit {
           let dialogData=new DialogData();
           dialogData.message="Subleder created succesfully";
           this._alertBox.openDialog(dialogData);
-          this.geSubledgerList();     
+          this.sublederList.push(response)
+          this.dialogRef.close(response)   
         }
       },error=>{
         let dialogData=new DialogData();
@@ -114,7 +115,7 @@ export class AddSubledgerComponent implements OnInit {
         let dialogData=new DialogData();
         dialogData.message="Subleder deleted succesfully";
         this._alertBox.openDialog(dialogData);
-        this.geSubledgerList();    
+        this.geSubledgerList();  
       }
     },error=>{
       let dialogData=new DialogData();

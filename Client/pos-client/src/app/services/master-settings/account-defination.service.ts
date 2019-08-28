@@ -43,7 +43,7 @@ export class AccountDefinationService {
   }
   public AddSubleder(subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger';
-    return this._httpClient.post<boolean>(url,subledger)
+    return this._httpClient.post<Subledger>(url,subledger)
   }
   public UpdateSubleder(Id:string,subledger:Subledger){
     var url=this._defaultRoute.FinanceService+'addSubledger/'+Id;

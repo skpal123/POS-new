@@ -708,10 +708,14 @@ namespace ERPWebApiService.Controllers
                     };
                     ERPContext.Subledgers.Add(subledger);
                     ERPContext.SaveChanges();
-                    ERPContext.Database.ExecuteSqlCommand("update tblAccount set hasSubledger=1 where id='" + subledgerInfo.AccountId + "'");
+                    Dictionary<string, string> paramlist = new Dictionary<string, string>();
+                    paramlist.Add("@id", subledgerInfo.AccountId);
+                    DatabaseCommand.ExcuteNonQuery("update tblAccount set hasSubledger=1 where id=@id", paramlist, null);
+                    subledgerInfo.Id = subledger.Id;
+                    // ERPContext.Database.ExecuteSqlCommand("update tblAccount set hasSubledger=1 where id='" + subledgerInfo.AccountId + "'");
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, true);
+                return Request.CreateResponse(HttpStatusCode.OK, subledgerInfo);
             }
             catch (InvalidSessionFailure ex)
             {
@@ -728,7 +732,7 @@ namespace ERPWebApiService.Controllers
         }
         [Route("addSubledger/{id}")]
         [HttpPut]
-        public HttpResponseMessage AddSubledger(string id, SubledgerInfo subledgerInfo)
+        public HttpResponseMessage UpadateSubledger(string id, SubledgerInfo subledgerInfo)
         {
             try
             {

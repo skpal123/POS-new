@@ -124,7 +124,7 @@ export class ItemPurchaseComponent implements OnInit {
       this.logValidationMessages(this.itemPurchaseForm)
     })
     this.itemPurchaseForm.get('PaymentMode').valueChanges.subscribe(data=>{
-     
+     this.groupItem.PaymentMode=data
     })
     if(this.groupItem.Id==null){
       this.ledgerSelectedItems.push({id:"0",itemName:"SELECT"})

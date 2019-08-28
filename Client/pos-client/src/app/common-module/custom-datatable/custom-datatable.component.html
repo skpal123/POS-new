@@ -23,7 +23,7 @@
 <div>
   <table cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)"  class="table table-bordered">
     <tr>
-      <td (click)="sortColumn(column.Name)" cdkDrag *ngFor="let column of ColumnList;let i=index;" class="example-box">
+      <td style="text-align: center" (click)="sortColumn(column.Name)" cdkDrag *ngFor="let column of ColumnList;let i=index;" class="example-box">
         <span *ngIf="column.IsEnable&&column.Name!='Status'">{{column.LabelName}}</span>
         <i *ngIf="IsAscendingOrder" class="fas fa-arrow-down" style="float: left"></i>
         <i *ngIf="!IsAscendingOrder" class="fas fa-arrow-up" style="float: left"></i>
@@ -32,9 +32,9 @@
       </td>
     </tr>
     <tr *ngFor="let a of pagedItems;let i=index;" id="pointer">
-      <td *ngFor="let b of ColumnList; let j=index;">  
+      <td *ngFor="let b of ColumnList; let j=index;" style="text-align: center">  
         <div *ngIf="b.IsEnable&&b.Editable">
-            <input *ngIf="b.Type=='text'" class="form-control" type="number" [(ngModel)]="pagedItems[i][b.Name]">
+            <input *ngIf="b.Type=='text'" [readonly]="b.IsReadOnly" class="form-control" type="number" [(ngModel)]="pagedItems[i][b.Name]">
             <input type="checkbox" (click)="checkboxClick(b.Name,a,$event)" *ngIf="b.Type=='checkbox'" [(ngModel)]="pagedItems[i][b.Name]">
             <input type="button" class="btn-success" *ngIf="b.Type=='custom-btn'" (click)="btnClicked(b.Name,a)" value="{{pagedItems[i][b.Name]}}">
         </div>
