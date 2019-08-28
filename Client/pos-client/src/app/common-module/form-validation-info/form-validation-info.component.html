@@ -1,17 +1,21 @@
 <table class="table">
   <thead>
-    <th>Input feild name</th>
+    <th>Name</th>
     <th>Enable Disabled</th>
-    <th>Required validation</th>
-    <th>Minlength validation</th>
-    <th>Maxlength validation</th>
-    <th>Email validation</th>
+    <th>Required</th>
+    <th>Is auto code</th>
+    <th>Is readonly</th>
+    <th>Minlength</th>
+    <th>Maxlength</th>
+    <th>Email</th>
   </thead>
   <tbody>
     <tr *ngFor="let a of formInfoList">
       <td>{{a.Name}}</td>
       <td><input type="checkbox" [(ngModel)]="a.IsEnable"></td>
       <td><input type="checkbox" [(ngModel)]="a.IsValidationActive"></td>
+      <td><input type="checkbox" [(ngModel)]="a.IsAutoCode"></td>
+      <td><input type="checkbox" [(ngModel)]="a.IsReadOnly"></td>
       <td><input type="checkbox" [(ngModel)]="a.IsMinLength"></td>
       <td><input type="checkbox" [(ngModel)]="a.IsMaxLength"></td>
       <td><input type="checkbox" [(ngModel)]="a.IsEmail"></td>

@@ -340,6 +340,18 @@ E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.csproj.GenerateResource.Cache
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.dll
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddingEmployeeGrade.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToString.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToStringAllForignKey.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addManyToOneInOfferSetup.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeDataTypeDoubleToBool.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addindTable.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addInheritedItem.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble2.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItemtable.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItem.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsReadOnly.resources
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\bin\Debug\ERP.DataService.Model.dll.config
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\bin\Debug\ERP.DataService.Model.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\bin\Debug\ERP.DataService.Model.pdb
@@ -411,20 +423,18 @@ E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changestringlength.resources
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.altertabletblOfferSetupaddonetomay.resources
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddingEmployeeGrade.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToString.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToStringAllForignKey.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addManyToOneInOfferSetup.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeDataTypeDoubleToBool.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addindTable.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addInheritedItem.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble2.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItemtable.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItem.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsReadOnly.resources
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.csproj.GenerateResource.Cache
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
-E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToString.resources
-E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToStringAllForignKey.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddingEmployeeGrade.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToString.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeGuidToStringAllForignKey.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addManyToOneInOfferSetup.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.ChangeDataTypeDoubleToBool.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addindTable.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.addInheritedItem.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeDataTypeDouble2.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItemtable.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.changeGradeStepSalaryItem.resources
-E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsReadOnly.resources
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsreadOnlyIsAutoCode.resources

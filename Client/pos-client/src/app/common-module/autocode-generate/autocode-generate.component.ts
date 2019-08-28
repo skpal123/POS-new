@@ -11,11 +11,12 @@ import { NavigationDataService } from '../../services/common/navigation-data.ser
 })
 export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
   @Input() itemName: string
-  @Input()  IsSaved:boolean
+  @Input()  IsSaved:boolean;
+  @Input() IsAutoCode:boolean;
   @Output() getGenerateAutoCode:EventEmitter <any>=new EventEmitter <any>();
   code:string=null;
   IsCreated:boolean=false;
-  IsAutoCode:boolean=false;
+  //IsAutoCode:boolean=false;
   constructor(private _alertBox:AlertBoxService,
     private _navigationData:NavigationDataService,
     private _commonService:CommonService,) { }
@@ -25,10 +26,11 @@ export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
   }
   ngOnChanges(){
     if( this.IsAutoCode&&!this.IsSaved){
-      alert('Not saved');
+      this.getAutoCode(this.itemName)
     }
   }
   generatedAutoCode($event){
+    debugger
     if($event.target.checked){
       if(!this.IsCreated){
         this.getAutoCode(this.itemName)
@@ -48,7 +50,7 @@ export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
   }
   ngOnDestroy(){
     debugger
-    if(!this._navigationData.IsSaved&&this.IsAutoCode){
+    if(!this._navigationData.IsSaved&&!this.IsAutoCode){
       this.resetCode(this.itemName);
     }
     this._navigationData.IsSaved=false;

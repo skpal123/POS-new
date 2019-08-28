@@ -311,6 +311,9 @@ E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERPWebApiService\bin\System.Web.
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERPWebApiService\bin\System.Web.WebPages.Deployment.xml
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERPWebApiService\bin\System.Web.WebPages.Razor.xml
 E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERPWebApiService\bin\Antlr3.Runtime.pdb
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\ERPWebApiService.csprojResolveAssemblyReference.cache
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\RdlCompile.cache
+E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\RdlCompile.compiled
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\ERPWebApiService.dll.config
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\ERPWebApiService.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\ERPWebApiService.pdb
@@ -351,8 +354,5 @@ E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\System.Web.
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\System.Web.WebPages.Deployment.xml
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\System.Web.WebPages.Razor.xml
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\bin\Antlr3.Runtime.pdb
-E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\ERPWebApiService.csprojResolveAssemblyReference.cache
-E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\RdlCompile.cache
-E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\RdlCompile.compiled
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\ERPWebApiService.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERPWebApiService\obj\Debug\ERPWebApiService.pdb

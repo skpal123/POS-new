@@ -14,12 +14,14 @@ namespace ERP.DataService.Model.Model
         public int Id{set;get;}
         [StringLength(100)]
         public string Name{set;get;}
-        public Boolean? IsEnable{set;get;}
-        public Boolean? IsValidationActive{set;get;}
+        public bool? IsEnable{set;get;}
+        public bool? IsValidationActive { set; get; }
          [StringLength(100)]
         public string FormName{set;get;}
-        public Boolean? IsMinLength{set;get;}
-        public Boolean? IsMaxLength{set;get;}
-        public Boolean? IsEmail { set; get; }
+         public bool? IsMinLength { set; get; }
+         public bool? IsMaxLength { set; get; }
+         public bool? IsEmail { set; get; }
+         public bool? IsAutoCode { set; get; }
+         public bool? IsReadOnly { set; get; }
     }
 }

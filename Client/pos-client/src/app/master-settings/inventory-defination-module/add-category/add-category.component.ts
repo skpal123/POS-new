@@ -18,7 +18,8 @@ import { NavigationDataService } from '../../../services/common/navigation-data.
 export class AddCategoryComponent implements OnInit {
   @ViewChild('categoryForm') categoryForm:NgForm
   categoryValidation:CategoryValidation[]=[]
-  itemName:string="categoryId"
+  itemName:string="categoryId";
+  IsAutoCode:boolean=false;
   constructor(public matDialogRef:MatDialogRef<AddCategoryComponent>,
   @Inject(MAT_DIALOG_DATA) public category:Category,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class AddCategoryComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getCategoryValidationData().subscribe((response:CategoryValidation[])=>{
-      this.categoryValidation=response
+      this.categoryValidation=response;
+      if(this.categoryValidation[2].CategoryId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error
@@ -93,7 +97,7 @@ export class AddCategoryComponent implements OnInit {
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){
@@ -105,5 +109,4 @@ export class AddCategoryComponent implements OnInit {
     debugger
     this.category.CategoryId=$event;
   }
-  
 }

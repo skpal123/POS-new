@@ -52,13 +52,13 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { Ng2CompleterModule } from "ng2-completer";
 import { AlertComponent } from '../alert/alert.component';
 import { TestComponent } from 'src/app/test/test.component';
-import {SelectListRequiredValidator} from 'src/app/shared/select-list-required-validator.directive';
-import {DuplicateCheckDirective} from 'src/app/shared/duplicate-check.directive'
-import {CategoryExistingCheckAsyncValidator} from 'src/app/shared/categoryid-duplicaion-check.directive'
-import {SubcategoryExistingCheckAsyncValidator} from 'src/app/shared/subcategory-duplication-check.directive'
-import {ItemExistingCheckAsyncValidator} from 'src/app/shared/itemId-duplication-check.directive'
-import {SupplierExistingCheckAsyncValidator} from 'src/app/shared/supplierid-duplication.directive'
-import {CustomerExistingCheckAsyncValidator} from 'src/app/shared/customerid-duplication-check.directive'
+import {SelectListRequiredValidator} from '../directive/select-list-required-validator.directive'
+import {DuplicateCheckDirective} from '../directive/duplicate-check.directive'
+import {CategoryExistingCheckAsyncValidator} from '../directive/categoryid-duplicaion-check.directive'
+import {SubcategoryExistingCheckAsyncValidator} from '../directive/subcategory-duplication-check.directive'
+import {ItemExistingCheckAsyncValidator} from '../directive/itemId-duplication-check.directive'
+import {SupplierExistingCheckAsyncValidator} from '../directive/supplierid-duplication.directive'
+import {CustomerExistingCheckAsyncValidator} from '../directive/customerid-duplication-check.directive'
 @NgModule({
   imports: [
     CommonModule,
@@ -84,7 +84,7 @@ import {CustomerExistingCheckAsyncValidator} from 'src/app/shared/customerid-dup
     Ng2CompleterModule,TestComponent,
     NgbModule,
     AngularMultiSelectModule,
-    SelectListRequiredValidator,DuplicateCheckDirective,
+    SelectListRequiredValidator,DuplicateCheckDirective, 
     CategoryExistingCheckAsyncValidator,SubcategoryExistingCheckAsyncValidator,
     SupplierExistingCheckAsyncValidator,ItemExistingCheckAsyncValidator,
     CustomerExistingCheckAsyncValidator

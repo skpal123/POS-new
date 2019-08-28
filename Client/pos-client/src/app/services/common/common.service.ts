@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { UserFormControl } from '../../models/common/user-form-control.model';
+import { DuplicateCheck } from '../../models/common/duplicate-check.model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,9 +52,9 @@ export class CommonService {
       catchError(this.handleError)
     )
   }
-  public getDuplicateById(tableName:string,itemName:string,value){
-    var url=this._defaultRoute.CommonService+'duplicateCheck/'+tableName+'/'+itemName+'/'+value;
-    return this._httpClient.get(url).pipe(
+  public getDuplicateById(duplicateCheck:DuplicateCheck){
+    var url=this._defaultRoute.CommonService+'duplicateCheck';
+    return this._httpClient.post(url,duplicateCheck).pipe(
       catchError(this.handleError)
     )
   }

@@ -6,4 +6,6 @@ export class FormInfo{
     public IsMinLength?:string;
     public IsMaxLength?:string;
     public IsEmail?:string;
+    public IsAutoCode?:string;
+    public IsReadOnly?:string;
 }

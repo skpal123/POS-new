@@ -331,6 +331,10 @@
     <Compile Include="Migrations\201908280719235_AddIsReadOnly.Designer.cs">
       <DependentUpon>201908280719235_AddIsReadOnly.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908281556425_AddIsreadOnlyIsAutoCode.cs" />
+    <Compile Include="Migrations\201908281556425_AddIsreadOnlyIsAutoCode.Designer.cs">
+      <DependentUpon>201908281556425_AddIsreadOnlyIsAutoCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -593,6 +597,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908280719235_AddIsReadOnly.resx">
       <DependentUpon>201908280719235_AddIsReadOnly.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908281556425_AddIsreadOnlyIsAutoCode.resx">
+      <DependentUpon>201908281556425_AddIsreadOnlyIsAutoCode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

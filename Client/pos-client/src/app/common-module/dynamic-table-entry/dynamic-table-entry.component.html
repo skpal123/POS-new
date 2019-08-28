@@ -22,7 +22,7 @@
           <div *ngIf="col2.IsEnable&&col2.Editable">
               <input *ngIf="col2.Type=='text'" [readonly]="col2.IsReadOnly" [(ngModel)]="Datalist[i][col2.Name]" (blur)="datatableTextColumnClicked(Datalist[i],col2.Name,i)" type="text" class="form-control" >
               <input *ngIf="col2.Type=='number'" [readonly]="col2.IsReadOnly" (blur)="datatableTextColumnClicked(Datalist[i],col2.Name,i)" class="form-control" [(ngModel)]="Datalist[i][col2.Name]" type="number">
-              <ng2-completer class="form-control" *ngIf="col2.Type=='Autocomplete'" (click)="AutoCompleteClick(Datalist[i][col2.Name])" [(ngModel)]="Datalist[i][col2.Name]" [datasource]="AutoCompleteDataSource" [minSearchLength]="0">               
+              <ng2-completer *ngIf="col2.Type=='Autocomplete'" (click)="AutoCompleteClick(Datalist[i][col2.Name])" [(ngModel)]="Datalist[i][col2.Name]" [datasource]="AutoCompleteDataSource" [minSearchLength]="0">               
               </ng2-completer>
               <select class="form-control" *ngIf="col2.Type=='select'" (change)="onchange($event)" [(ngModel)]="Datalist[i][col2.Name]">
                 <option [value]="select.Id" *ngFor="let select of selectList">{{select.Name}}</option>

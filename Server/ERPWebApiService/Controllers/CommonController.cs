@@ -12,7 +12,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ERPWebApiService.Exceptions;
+using ERPWebApiService.ExrensionMethod;
 using ViewModel.Model;
+using ViewModel.Model.Common;
 using ViewModel.Model.Validation.HrPayroll;
 using ViewModel.Model.Validation.Inventory;
 
@@ -40,7 +42,9 @@ namespace ERPWebApiService.Controllers
                     IsValidationActive=x.IsValidationActive,
                     IsMinLength=x.IsMinLength,
                     IsMaxLength=x.IsMaxLength,
-                    IsEmail=x.IsEmail
+                    IsEmail=x.IsEmail,
+                    IsAutoCode = x.IsAutoCode,
+                    IsReadOnly = x.IsReadOnly
                 }).ToList();
                 return Request.CreateResponse(HttpStatusCode.OK, formInfoList);
             }
@@ -63,12 +67,14 @@ namespace ERPWebApiService.Controllers
                 dt.Columns.Add("IsMinLength", typeof(Boolean));
                 dt.Columns.Add("IsMaxLength", typeof(Boolean));
                 dt.Columns.Add("IsEmail", typeof(Boolean));
+                dt.Columns.Add("IsAutoCode", typeof(Boolean));
+                dt.Columns.Add("IsReadOnly", typeof(Boolean));
                 if (formInfoList.Any())
                 {
                     foreach (FormInfoView forminfo in formInfoList)
                     {
                         dt.Rows.Add(forminfo.Name, forminfo.IsEnable, forminfo.IsValidationActive, forminfo.FormName,
-                            forminfo.IsMinLength, forminfo.IsMaxLength, forminfo.IsEmail);
+                            forminfo.IsMinLength, forminfo.IsMaxLength, forminfo.IsEmail,forminfo.IsAutoCode,forminfo.IsReadOnly);
                     }
                     Dictionary<string, object> paramlist = new Dictionary<string, object>();
                     paramlist.Add("@TypeFormInfo", dt);
@@ -117,23 +123,32 @@ namespace ERPWebApiService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        [Route("duplicateCheck/{tableName}/{itemName}/{value}")]
-        [HttpGet]
-        public HttpResponseMessage CheckDuplicateCodeById(string tableName,string columnName,string value )
+        [Route("duplicateCheck")]
+        [HttpPost]
+        public HttpResponseMessage CheckDuplicateCodeById(DuplicateCheck duplicateCheck)
         {
             try
             {
+                
                 //var userSession = AuthorizationHelper.GetSession();
                 using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
                 {
                     SqlCommand cmd = new SqlCommand("proc_checkDuplicateCode", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@@tableName", tableName);
-                    cmd.Parameters.AddWithValue("@columnName", columnName);
-                    cmd.Parameters.AddWithValue("@value",value);
+                    cmd.Parameters.AddWithValue("@tableName", duplicateCheck.TableName);
+                    cmd.Parameters.AddWithValue("@columnName",duplicateCheck.ItemName );
+                    cmd.Parameters.AddWithValue("@value", "'" + duplicateCheck.Value + "'");
                     cmd.CommandType = CommandType.StoredProcedure;
                     con.Open();
-                    return Request.CreateResponse(HttpStatusCode.OK,cmd.ExecuteReader().ToString());
+                    int rowCount = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                    if (rowCount > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, true);  
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, false); 
+                    }
 
                 }
             }

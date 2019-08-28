@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Common\DuplicateCheck.cs" />
     <Compile Include="Model\Finance\AccountDetails.cs" />
     <Compile Include="Model\Finance\AccountInfo.cs" />
     <Compile Include="Model\Finance\AccountOpeningInfo.cs" />
