@@ -19,6 +19,7 @@ export class LeaveTypeComponent implements OnInit {
   @ViewChild('leaveTypeForm') leaveTypeForm:NgForm
   leaveTypeValidation:LeaveTypeValidation[]=[]
   itemName:string="leaveTypeId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<LeaveTypeComponent>,
   @Inject(MAT_DIALOG_DATA) public leaveType:LeaveType,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class LeaveTypeComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getLeaveTypeValidationData().subscribe((response:LeaveTypeValidation[])=>{
-      this.leaveTypeValidation=response
+      this.leaveTypeValidation=response;
+      if(this.leaveTypeValidation[2].LeaveTypeId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

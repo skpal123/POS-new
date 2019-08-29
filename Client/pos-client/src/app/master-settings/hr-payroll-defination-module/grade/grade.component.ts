@@ -19,6 +19,7 @@ export class GradeComponent implements OnInit {
   @ViewChild('gradeForm') gradeForm:NgForm
   gradeValidation:GradeValidation[]=[]
   itemName:string="gradeId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<GradeComponent>,
   @Inject(MAT_DIALOG_DATA) public grade:Grade,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class GradeComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getGradeValidationData().subscribe((response:GradeValidation[])=>{
-      this.gradeValidation=response
+      this.gradeValidation=response;
+      if(this.gradeValidation[2].GradeId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error

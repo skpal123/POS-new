@@ -12,7 +12,7 @@
               <div class="form-group row" *ngIf="supplierValidation[0]?.SupplierId" [class.has-success]="SupplierIdControl.valid&&SupplierIdControl.touched" [class.has-error]="SupplierIdControl.invalid&&SupplierIdControl.touched">
                   <label for="SupplierId" class="col-sm-4 col-form-label control-label" [class.required]="SupplierIdControl.invalid" >Supplier Id</label>
                   <div class="col-sm-6" >
-                      <input class="form-control" [required]="supplierValidation[0]?.SupplierId&&supplierValidation[1]?.SupplierId"  name="SupplierId" #SupplierIdControl="ngModel" id="SupplierId" [(ngModel)]="supplier.SupplierId">
+                      <input class="form-control" [readonly]="supplierValidation[3]?.SupplierId" [required]="supplierValidation[0]?.SupplierId&&supplierValidation[1]?.SupplierId"  name="SupplierId" #SupplierIdControl="ngModel" id="SupplierId" [(ngModel)]="supplier.SupplierId">
                       <span class="help-block" *ngIf="SupplierIdControl.invalid&&SupplierIdControl.touched">
                         Supplier Id feild is required
                       </span>  
@@ -20,6 +20,7 @@
                   <div class="col-sm-2">
                     <app-autocode-generate
                     [itemName]="itemName"
+                    [IsAutoCode]="IsAutoCode"
                     (getGenerateAutoCode)="parentGetGeneratedCode($event)"
                     >
                   </app-autocode-generate>

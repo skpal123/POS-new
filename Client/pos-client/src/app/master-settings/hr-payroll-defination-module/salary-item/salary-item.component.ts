@@ -22,6 +22,7 @@ export class SalaryItemComponent implements OnInit {
   @ViewChild('salaryItemForm') salaryItemForm:NgForm
   salaryItemValidation:SalaryItemValidation[]=[]
   itemName:string="salaryItemId"
+  IsAutoCode:boolean=false
   salaryItemTouch:boolean=false;
   salaryItemSelectedItems :MultiSelectDropdown[]= [
   ];
@@ -59,7 +60,9 @@ export class SalaryItemComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getSalaryItemValidationData().subscribe((response:SalaryItemValidation[])=>{
       this.salaryItemValidation=response
-      console.log(this.salaryItemValidation)
+      if(this.salaryItemValidation[2].ItemId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

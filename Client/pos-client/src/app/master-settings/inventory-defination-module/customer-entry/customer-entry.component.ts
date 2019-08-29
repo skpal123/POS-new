@@ -20,7 +20,8 @@ import { NavigationDataService } from '../../../services/common/navigation-data.
 })
 export class CustomerEntryComponent implements OnInit {
   customerValidation:CustomerValidation[]=[];
-  itemName:string="itemId"
+  itemName:string="customerId"
+  IsAutoCode:boolean=false;
   @BlockUI() blockUi:NgBlockUI
   @ViewChild('customerForm') customerForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -56,7 +57,10 @@ export class CustomerEntryComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getCustomerValidationData().subscribe((response:CustomerValidation[])=>{
-      this.customerValidation=response
+      this.customerValidation=response;
+      if(this.customerValidation[3].CustomerId){
+        this.IsAutoCode=true
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error

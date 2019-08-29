@@ -19,6 +19,7 @@ export class DesignationComponent implements OnInit {
   @ViewChild('designationForm') designationForm:NgForm
   designationValidation:DesignationValidation[]=[]
   itemName:string="designationId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<DesignationComponent>,
   @Inject(MAT_DIALOG_DATA) public designation:Designation,
   private _alertBox:AlertBoxService,
@@ -41,6 +42,9 @@ export class DesignationComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getDesignationValidationData().subscribe((response:DesignationValidation[])=>{
       this.designationValidation=response
+      if(this.designationValidation[2].DesignationId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

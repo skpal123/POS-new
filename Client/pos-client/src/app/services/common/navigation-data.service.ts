@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NavigationDataService {
-  IsSaved:boolean;
+  IsSaved:boolean=false;
   data:any
   IsUpdate:boolean=false;
-  CurrentData:any;
-  PreviousData:any;
+  CurrentData:any="";
+  PreviousData:any="";
   constructor() { }
 }

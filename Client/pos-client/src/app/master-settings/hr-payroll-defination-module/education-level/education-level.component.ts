@@ -19,6 +19,7 @@ export class EducationLevelComponent implements OnInit {
   @ViewChild('educationLevelForm') educationLevelForm:NgForm
   educationLevelValidation:EducationLevelValidation[]=[]
   itemName:string="educationLevelId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<EducationLevelComponent>,
   @Inject(MAT_DIALOG_DATA) public educationLevel:EducationLevel,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class EducationLevelComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getEducationLevelValidationData().subscribe((response:EducationLevelValidation[])=>{
-      this.educationLevelValidation=response
+      this.educationLevelValidation=response;
+      if(this.educationLevelValidation[2].LevelId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

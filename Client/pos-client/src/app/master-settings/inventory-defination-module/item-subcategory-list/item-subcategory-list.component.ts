@@ -126,6 +126,7 @@ export class ItemSubcategoryListComponent implements OnInit {
   }
   clearSubCategory(){
     this.subcategory.Id=null;
+    this.subcategory.Category_Id=null
     this.subcategory.SubCategoryId=null;
     this.subcategory.CategoryName=null;
     this.subcategory.SubCategoryName=null;

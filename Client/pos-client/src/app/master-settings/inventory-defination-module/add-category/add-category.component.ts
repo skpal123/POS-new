@@ -42,7 +42,7 @@ export class AddCategoryComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getCategoryValidationData().subscribe((response:CategoryValidation[])=>{
       this.categoryValidation=response;
-      if(this.categoryValidation[2].CategoryId){
+      if(this.categoryValidation[2].CategoryId&&this.category.Id==null){
         this.IsAutoCode=true;
       }
     },error=>{

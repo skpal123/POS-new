@@ -31,6 +31,7 @@ export class OfferEntryComponent implements OnInit {
   itemNew:boolean=false;
   subCategoryId:string=null;
   showItem:boolean=true
+  IsAutoCode:boolean=false
   itemSelectedItems :MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
   ];

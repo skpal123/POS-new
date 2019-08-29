@@ -20,6 +20,7 @@ import { NavigationDataService } from '../../../services/common/navigation-data.
 export class SupplierEntryComponent implements OnInit {
   supplierValidation:SupplierValidation[]=[];
   itemName:string="supplierId"
+  IsAutoCode:boolean=false
   @BlockUI() blockUi:NgBlockUI;
   @ViewChild('supplierForm') supplierForm:NgForm
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl
@@ -56,6 +57,9 @@ export class SupplierEntryComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getSupplierValidationData().subscribe((response:SupplierValidation[])=>{
       this.supplierValidation=response
+      if(this.supplierValidation[2].SupplierId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error

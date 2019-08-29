@@ -19,6 +19,7 @@ export class OccupationComponent implements OnInit {
   @ViewChild('occupationForm') occupationForm:NgForm
   occupationValidation:OccupationValidation[]=[]
   itemName:string="occupationId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<OccupationComponent>,
   @Inject(MAT_DIALOG_DATA) public occupation:Occupation,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class OccupationComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getOccupationValidationData().subscribe((response:OccupationValidation[])=>{
-      this.occupationValidation=response
+      this.occupationValidation=response;
+      if(this.occupationValidation[2].OccupationId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

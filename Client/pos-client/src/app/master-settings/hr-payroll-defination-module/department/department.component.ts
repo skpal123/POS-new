@@ -19,6 +19,7 @@ export class DepartmentComponent implements OnInit {
   @ViewChild('departmentForm') departmentForm:NgForm
   departmentValidation:DepartmentValidation[]=[]
   itemName:string="departmentId"
+  IsAutoCode:boolean=false
   constructor(public matDialogRef:MatDialogRef<DepartmentComponent>,
   @Inject(MAT_DIALOG_DATA) public department:Department,
   private _alertBox:AlertBoxService,
@@ -40,7 +41,10 @@ export class DepartmentComponent implements OnInit {
   }
   getItemFormInfo(){
     this._validationService.getDepartmentValidationData().subscribe((response:DepartmentValidation[])=>{
-      this.departmentValidation=response
+      this.departmentValidation=response;
+      if(this.departmentValidation[2].DepartmentId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

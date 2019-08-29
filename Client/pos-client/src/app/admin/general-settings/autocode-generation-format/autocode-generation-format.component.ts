@@ -4,8 +4,8 @@ import { GeneralSettingsService } from '../../../services/admin/general-settings
 import { AlertBoxService } from '../../../shared/alert-box.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { DialogData } from '../../../models/common/dialog-data.model';
-import { CodeFormaterEntryComponent } from '../code-formater-entry/code-formater-entry.component';
 import { MatDialog } from '@angular/material';
+import { CodeFormaterEntryComponent } from '../../../common-module/code-formater-entry/code-formater-entry.component';
 
 @Component({
   selector: 'app-autocode-generation-format',

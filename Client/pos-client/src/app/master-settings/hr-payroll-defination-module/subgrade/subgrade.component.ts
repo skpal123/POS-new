@@ -23,7 +23,8 @@ export class SubgradeComponent implements OnInit {
   startDate:Date=new Date()
   gradeSelectedItems :MultiSelectDropdown[]= [
   ];
-  itemName:string="subgradeId"
+  itemName:string="subgradeId";
+  IsAutoCode:boolean=false
   subgradeValidation:SubgradeValidation[]=[];
   gradeTouch:boolean=false;
   gradeNew:boolean=false;
@@ -58,6 +59,9 @@ export class SubgradeComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getSubGradeValidationData().subscribe((response:SubgradeValidation[])=>{
       this.subgradeValidation=response
+      if(this.subgradeValidation[2].SubGradeId){
+        this.IsAutoCode=true
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error

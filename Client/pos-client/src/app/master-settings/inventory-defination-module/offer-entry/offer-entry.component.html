@@ -38,7 +38,10 @@
               </span>
             </div>
             <div class="col-md-2">
-              <app-autocode-generate [itemName]="itemName" (getGenerateAutoCode)="parentGetGeneratedCode($event)">
+              <app-autocode-generate
+              [itemName]="itemName" 
+              [IsAutoCode]="IsAutoCode"
+              (getGenerateAutoCode)="parentGetGeneratedCode($event)">
               </app-autocode-generate>
             </div>
           </div>

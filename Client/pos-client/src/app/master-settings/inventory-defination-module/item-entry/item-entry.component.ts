@@ -32,6 +32,8 @@ export class ItemEntryComponent implements OnInit {
   @ViewChild('ledgerIdControl') ledgerIdControl:FormControl;
   itemName1:string="itemId";
   itemName2:string="itemCode";
+  IsAutoCode1:boolean=false;
+  IsAutoCode2:boolean=false;
   categoryTouch:boolean=false;
   allLedger:boolean=true;
   subcategoryTouch:boolean=false;
@@ -246,6 +248,12 @@ export class ItemEntryComponent implements OnInit {
    getItemFormInfo(){
     this._validationService.getItemValidationData().subscribe((response:InventoryItemValidation[])=>{
       this.itemValidation=response
+      if(this.itemValidation[3].ItemId){
+        this.IsAutoCode1=true;
+      };
+      if(this.itemValidation[3].ItemId){
+        this.IsAutoCode2=true;
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error

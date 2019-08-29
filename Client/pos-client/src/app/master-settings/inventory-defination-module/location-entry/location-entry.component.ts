@@ -17,6 +17,7 @@ export class LocationEntryComponent implements OnInit {
   @ViewChild('locationForm') locationForm: NgForm
   itemName: string = "locationId"
   formName: string = "location-entry"
+  IsAutoCode:boolean=false;
   locationValidation: LocationValidation[] = []
   constructor(public matDialogRef: MatDialogRef<LocationEntryComponent>,
     @Inject(MAT_DIALOG_DATA) public location: InventoryLocation,
@@ -34,6 +35,9 @@ export class LocationEntryComponent implements OnInit {
   getItemFormInfo() {
     this._validationService.getLocationValidationData().subscribe((response: LocationValidation[]) => {
       this.locationValidation = response
+      if(this.locationValidation[3].LocationId){
+        this.IsAutoCode=true;
+      }
     }, error => {
       let message = error;
       let dialogData = new DialogData();

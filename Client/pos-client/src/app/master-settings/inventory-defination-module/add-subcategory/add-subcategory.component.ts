@@ -24,6 +24,7 @@ export class AddSubcategoryComponent implements OnInit {
   categorySelectedItems :MultiSelectDropdown[]= [
   ];
   itemName:string="subcategoryId"
+  IsAutoCode:boolean=false;
   subcategoryValidation:SubcategoryValidation[]=[];
   categoryTouch:boolean=false;
   categoryNew:boolean=false;
@@ -58,6 +59,9 @@ export class AddSubcategoryComponent implements OnInit {
   getItemFormInfo(){
     this._validationService.getSubCategoryValidationData().subscribe((response:SubcategoryValidation[])=>{
       this.subcategoryValidation=response
+      if(this.subcategoryValidation[2].SubCategoryId){
+        this.IsAutoCode=true;
+      }
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error
@@ -67,7 +71,6 @@ export class AddSubcategoryComponent implements OnInit {
   saveSubCategory(){
     debugger
     if(this.subcategory.Id==null){
-      console.log(this.subcategory);
       this._inventotyDefinationService.CreateSubCategory(this.subcategory).subscribe(response=>{
         let result=response;
         this._navigationData.IsSaved=true;
@@ -150,7 +153,7 @@ export class AddSubcategoryComponent implements OnInit {
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){
