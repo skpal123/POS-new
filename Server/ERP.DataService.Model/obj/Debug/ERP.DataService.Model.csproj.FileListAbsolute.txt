@@ -438,3 +438,5 @@ E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.pdb
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsreadOnlyIsAutoCode.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.AddIsreadOnlyIsAutoCode.resources
+E:\development_Sumon\SomanPd\ERP\POS-new\Server\ERP.DataService.Model\obj\Debug\ERP.DataService.Model.Migrations.createItemNameTable.resources

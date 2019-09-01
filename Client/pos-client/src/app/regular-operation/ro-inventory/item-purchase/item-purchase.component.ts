@@ -207,7 +207,7 @@ export class ItemPurchaseComponent implements OnInit {
       TransactionId: [itemTransaction.TransactionId,this.purchaseValidation[0].TransactionId==true&&this.purchaseValidation[1].TransactionId==true? Validators.required:null],
       Item_Id: [itemTransaction.Item_Id,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
       Location_Id: [itemTransaction.Location_Id,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
-      ItemId: [null,this.purchaseValidation[0].Item_Id==true&&this.purchaseValidation[1].Item_Id==true? Validators.required:null],
+      ItemId: [null],
       LocationId: [null,this.purchaseValidation[0].Location_Id==true&&this.purchaseValidation[1].Location_Id==true? Validators.required:null],
       TransactionType: [itemTransaction.TransactionType,this.purchaseValidation[0].TransactionType==true&&this.purchaseValidation[1].TransactionType==true? Validators.required:null],
       Quantity: [itemTransaction.Quantity,this.purchaseValidation[0].Quantity==true&&this.purchaseValidation[1].Quantity==true? Validators.required:null],

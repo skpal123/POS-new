@@ -335,6 +335,10 @@
     <Compile Include="Migrations\201908281556425_AddIsreadOnlyIsAutoCode.Designer.cs">
       <DependentUpon>201908281556425_AddIsreadOnlyIsAutoCode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909010653573_createItemNameTable.cs" />
+    <Compile Include="Migrations\201909010653573_createItemNameTable.Designer.cs">
+      <DependentUpon>201909010653573_createItemNameTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -356,6 +360,7 @@
     <Compile Include="Model\GradeStepSalaryItem.cs" />
     <Compile Include="Model\GroupItem.cs" />
     <Compile Include="Model\InventoryItem.cs" />
+    <Compile Include="Model\ItemName.cs" />
     <Compile Include="Model\ItemTransaction.cs" />
     <Compile Include="Model\LeaveType.cs" />
     <Compile Include="Model\Location.cs" />
@@ -600,6 +605,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908281556425_AddIsreadOnlyIsAutoCode.resx">
       <DependentUpon>201908281556425_AddIsreadOnlyIsAutoCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909010653573_createItemNameTable.resx">
+      <DependentUpon>201909010653573_createItemNameTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

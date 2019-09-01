@@ -81,4 +81,8 @@ export class DropdownService {
     var url=this._defaultRoute.DropdownService+'occupationDropdown';
     return this._httpClient.get<SelectDropdown[]>(url)
   }
+  public getItemNameDropdownList(){
+    var url=this._defaultRoute.DropdownService+'itemNames';
+    return this._httpClient.get<SelectDropdown[]>(url)
+  }
 }

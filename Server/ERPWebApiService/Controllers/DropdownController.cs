@@ -393,5 +393,25 @@ namespace ERPWebApiService.Controllers
              }
 
          }
+         [Route("itemNames")]
+         [HttpGet]
+         public HttpResponseMessage GetItemNameDropdownList()
+         {
+             try
+             {
+                 var datalist = ERPContext.ItemNames.Select(x => new SelectListItem
+                 {
+                     Value = x.Id.ToString(),
+                     Code = null,
+                     Text = x.Name
+                 }).ToList();
+                 return Request.CreateResponse(HttpStatusCode.OK, datalist);
+             }
+             catch (Exception ex)
+             {
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+             }
+
+         }
     }
 }
