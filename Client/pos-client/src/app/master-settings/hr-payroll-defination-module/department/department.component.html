@@ -12,7 +12,7 @@
             <div class="form-group row" *ngIf="departmentValidation[0]?.DepartmentId" [class.has-success]="departmentIdControl.valid&&departmentIdControl.touched" [class.has-error]="departmentIdControl.invalid&&departmentIdControl.touched">
                 <label for="departmentId" class="col-sm-3 col-form-label control-label" [class.required]="departmentIdControl.invalid">Department id</label>
                 <div class="col-sm-7" >
-                    <input class="form-control" departmentCheck [required]="departmentValidation[0]?.DepartmentId&&departmentValidation[1]?.DepartmentId" name="departmentId" #departmentIdControl="ngModel" id="departmentId" [(ngModel)]="department.DepartmentId">
+                    <input class="form-control" [readonly]="departmentValidation[3]?.DepartmentId" departmentCheck [required]="departmentValidation[0]?.DepartmentId&&departmentValidation[1]?.DepartmentId" name="departmentId" #departmentIdControl="ngModel" id="departmentId" [(ngModel)]="department.DepartmentId">
                     <span class="help-block" *ngIf="departmentIdControl.errors?.required&&departmentIdControl.touched">
                         Department id feild is required  
                     </span>

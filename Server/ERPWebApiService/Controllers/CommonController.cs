@@ -966,6 +966,7 @@ namespace ERPWebApiService.Controllers
                         LeaveTypeValidation fromValidation = new LeaveTypeValidation();
                         fromValidation.LeaveTypeId = Convert.ToBoolean(rdr["LeaveTypeId"]);
                         fromValidation.LeaveTypeName = Convert.ToBoolean(rdr["LeaveTypeName"]);
+                        fromValidation.IsPaid = Convert.ToBoolean(rdr["IsPaid"]);
                         formValidationList.Add(fromValidation);
                     }
                 }

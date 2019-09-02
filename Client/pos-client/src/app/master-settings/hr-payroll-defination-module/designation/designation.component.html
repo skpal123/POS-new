@@ -12,7 +12,8 @@
             <div class="form-group row" *ngIf="designationValidation[0]?.DesignationId" [class.has-success]="designationIdControl.valid&&designationIdControl.touched" [class.has-error]="designationIdControl.invalid&&designationIdControl.touched">
                 <label for="designationId" class="col-sm-3 col-form-label control-label" [class.required]="designationIdControl.invalid">Designation id</label>
                 <div class="col-sm-7" >
-                    <input class="form-control" designationCheck [required]="designationValidation[0]?.DesignationId&&designationValidation[1]?.DesignationId" name="designationId" #designationIdControl="ngModel" id="designationId" [(ngModel)]="designation.DesignationId">
+            <div class="form-group row" *ngIf="designationValidation[0]?.DesignationId" [class.has-success]="designationIdControl.valid&&designationIdControl.touched" [class.has-error]="designationIdControl.invalid&&designationIdControl.touched">
+              <input class="form-control" [readonly]="designationValidation[3]?.DesignationId" designationCheck [required]="designationValidation[0]?.DesignationId&&designationValidation[1]?.DesignationId" name="designationId" #designationIdControl="ngModel" id="designationId" [(ngModel)]="designation.DesignationId">
                     <span class="help-block" *ngIf="designationIdControl.errors?.required&&designationIdControl.touched">
                         Designation id feild is required  
                     </span>

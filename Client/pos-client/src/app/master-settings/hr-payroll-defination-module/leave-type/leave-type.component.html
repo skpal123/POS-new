@@ -12,7 +12,7 @@
             <div class="form-group row" *ngIf="leaveTypeValidation[0]?.LeaveTypeId" [class.has-success]="leaveTypeIdControl.valid&&leaveTypeIdControl.touched" [class.has-error]="leaveTypeIdControl.invalid&&leaveTypeIdControl.touched">
                 <label for="leaveTypeId" class="col-sm-3 col-form-label control-label" [class.required]="leaveTypeIdControl.invalid">LeaveType id</label>
                 <div class="col-sm-7" >
-                    <input class="form-control" leaveTypeCheck [required]="leaveTypeValidation[0]?.LeaveTypeId&&leaveTypeValidation[1]?.LeaveTypeId" name="leaveTypeId" #leaveTypeIdControl="ngModel" id="leaveTypeId" [(ngModel)]="leaveType.LeaveTypeId">
+                    <input class="form-control" [readonly]="leaveTypeValidation[3]?.LeaveTypeId" leaveTypeCheck [required]="leaveTypeValidation[0]?.LeaveTypeId&&leaveTypeValidation[1]?.LeaveTypeId" name="leaveTypeId" #leaveTypeIdControl="ngModel" id="leaveTypeId" [(ngModel)]="leaveType.LeaveTypeId">
                     <span class="help-block" *ngIf="leaveTypeIdControl.errors?.required&&leaveTypeIdControl.touched">
                         LeaveType id feild is required  
                     </span>
@@ -38,15 +38,15 @@
                     </span>  
                 </div>
               </div>
-              <!-- <div *ngIf="leaveTypeValidation[0]?.Description" class="form-group row" [class.has-success]="descriptionControl.valid&&descriptionControl.touched" [class.has-error]="descriptionControl.invalid&&descriptionControl.touched">
-                <label for="Description" class="col-sm-3 col-form-label control-label" [class.required]="descriptionControl.invalid">Description</label>
+              <div *ngIf="leaveTypeValidation[0]?.IsPaid" class="form-group row" [class.has-success]="isPaidControl.valid&&isPaidControl.touched" [class.has-error]="isPaidControl.invalid&&isPaidControl.touched">
+                <label for="IsPaid" class="col-sm-3 col-form-label control-label" [class.required]="isPaidControl.invalid">Is paid</label>
                 <div class="col-sm-9" >
-                    <input class="form-control" [required]="leaveTypeValidation[0]?.Description&&leaveTypeValidation[1]?.Description" name="Description" #descriptionControl="ngModel" id="Description" [(ngModel)]="leaveType.Description">
-                    <span class="help-block" *ngIf="descriptionControl.invalid&&descriptionControl.touched">
-                        Description feild is required
+                    <input type="checkbox" [required]="leaveTypeValidation[0]?.IsPaid&&leaveTypeValidation[1]?.IsPaid" name="IsPaid" #isPaidControl="ngModel" id="IsPaid" [(ngModel)]="leaveType.IsPaid">
+                    <span class="help-block" *ngIf="isPaidControl.invalid&&isPaidControl.touched">
+                      IsPaid feild is required
                     </span>  
                 </div>
-              </div> -->
+              </div>
               <div class="row">
                 <div class="col-md-2 pull-right">
                   <input type="button" [disabled]="leaveTypeForm.invalid" (click)="saveLeaveType()" value="{{leaveType.Id==null?'Save':'Update'}}" class="btn btn-primary">
