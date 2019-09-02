@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Designation } from '../../../models/master-settings/hr-payroll/designation.model';
@@ -13,7 +13,8 @@ import { HrPayrollDefinationServiceService } from '../../../services/master-sett
 @Component({
   selector: 'app-designation',
   templateUrl: './designation.component.html',
-  styleUrls: ['./designation.component.css']
+  styleUrls: ['./designation.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class DesignationComponent implements OnInit {
   @ViewChild('designationForm') designationForm:NgForm
@@ -24,6 +25,7 @@ export class DesignationComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public designation:Designation,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _hrpayrollDefinationService:HrPayrollDefinationServiceService,
@@ -45,6 +47,7 @@ export class DesignationComponent implements OnInit {
       if(this.designationValidation[2].DesignationId){
         this.IsAutoCode=true;
       }
+      this.changeRef.markForCheck()
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

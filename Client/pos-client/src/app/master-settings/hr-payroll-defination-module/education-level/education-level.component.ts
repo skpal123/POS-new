@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,Inject } from '@angular/core';
+import { Component, OnInit, ViewChild,Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { EducationLevelValidation } from '../../../models/validation/hr-payroll/educationlevel.validation.model';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
@@ -13,7 +13,8 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
 @Component({
   selector: 'app-education-level',
   templateUrl: './education-level.component.html',
-  styleUrls: ['./education-level.component.css']
+  styleUrls: ['./education-level.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class EducationLevelComponent implements OnInit {
   @ViewChild('educationLevelForm') educationLevelForm:NgForm
@@ -24,6 +25,7 @@ export class EducationLevelComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public educationLevel:EducationLevel,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _hrpayrollDefinationService:HrPayrollDefinationServiceService,
@@ -45,6 +47,7 @@ export class EducationLevelComponent implements OnInit {
       if(this.educationLevelValidation[2].LevelId){
         this.IsAutoCode=true;
       }
+      this.changeRef.markForCheck();
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error
@@ -98,7 +101,7 @@ export class EducationLevelComponent implements OnInit {
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){

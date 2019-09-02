@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { SubgradeValidation } from '../../../models/validation/hr-payroll/subgrade-validation.model';
 import { NgForm } from '@angular/forms';
@@ -16,7 +16,8 @@ import { GradeComponent } from '../grade/grade.component';
 @Component({
   selector: 'app-subgrade',
   templateUrl: './subgrade.component.html',
-  styleUrls: ['./subgrade.component.css']
+  styleUrls: ['./subgrade.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class SubgradeComponent implements OnInit {
   @ViewChild('subgradeForm') subgradeForm:NgForm
@@ -35,6 +36,7 @@ export class SubgradeComponent implements OnInit {
   private _validationService:ValidationService,
   private _navigationData:NavigationDataService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
 ) { }
 
@@ -62,6 +64,7 @@ export class SubgradeComponent implements OnInit {
       if(this.subgradeValidation[2].SubGradeId){
         this.IsAutoCode=true
       }
+      this.changeRef.markForCheck();
     },error=>{
       let dialogData=new DialogData();
       dialogData.message=error
@@ -157,7 +160,7 @@ export class SubgradeComponent implements OnInit {
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){

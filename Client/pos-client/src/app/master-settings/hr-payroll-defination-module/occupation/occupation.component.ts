@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,Inject } from '@angular/core';
+import { Component, OnInit, ViewChild,Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { OccupationValidation } from '../../../models/validation/hr-payroll/occupation-validation.model';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
@@ -13,7 +13,8 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
 @Component({
   selector: 'app-occupation',
   templateUrl: './occupation.component.html',
-  styleUrls: ['./occupation.component.css']
+  styleUrls: ['./occupation.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class OccupationComponent implements OnInit {
   @ViewChild('occupationForm') occupationForm:NgForm
@@ -24,6 +25,7 @@ export class OccupationComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public occupation:Occupation,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _hrpayrollDefinationService:HrPayrollDefinationServiceService,
@@ -45,6 +47,7 @@ export class OccupationComponent implements OnInit {
       if(this.occupationValidation[2].OccupationId){
         this.IsAutoCode=true;
       }
+      this.changeRef.markForCheck();
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error
@@ -98,7 +101,7 @@ export class OccupationComponent implements OnInit {
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){

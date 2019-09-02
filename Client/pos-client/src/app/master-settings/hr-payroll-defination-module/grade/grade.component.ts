@@ -93,11 +93,11 @@ export class GradeComponent implements OnInit {
   controlGroupItemForm(){
     debugger
     const dialogRef=this.matDialog.open(FormDetailsControlComponent,{
-      data:"subgrade-form",
+      data:"grade-form",
       disableClose:true,
       height:'auto',
       maxHeight:window.screen.height*.9+'px',
-      width:window.screen.width*.8+'px'
+      width:window.screen.width*.6+'px'
     });
     dialogRef.afterClosed().subscribe(result=>{
      if(result){

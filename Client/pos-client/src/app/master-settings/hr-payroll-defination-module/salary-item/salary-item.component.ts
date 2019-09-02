@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,Inject } from '@angular/core';
+import { Component, OnInit, ViewChild,Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SalaryItemValidation } from '../../../models/validation/hr-payroll/salaryitem.validation.model';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
@@ -15,7 +15,8 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 @Component({
   selector: 'app-salary-item',
   templateUrl: './salary-item.component.html',
-  styleUrls: ['./salary-item.component.css']
+  styleUrls: ['./salary-item.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class SalaryItemComponent implements OnInit {
   @BlockUI() blockUi:NgBlockUI
@@ -31,6 +32,7 @@ export class SalaryItemComponent implements OnInit {
   private _alertBox:AlertBoxService,
   private _navigationData:NavigationDataService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _validationService:ValidationService,
   private _hrpayrollDefinationService:HrPayrollDefinationServiceService,
 ) { }
@@ -63,6 +65,7 @@ export class SalaryItemComponent implements OnInit {
       if(this.salaryItemValidation[2].ItemId){
         this.IsAutoCode=true;
       }
+      this.changeRef.markForCheck()
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

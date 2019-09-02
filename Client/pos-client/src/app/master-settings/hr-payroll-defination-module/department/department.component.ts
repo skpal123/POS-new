@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild ,Inject} from '@angular/core';
+import { Component, OnInit, ViewChild ,Inject, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DepartmentValidation } from '../../../models/validation/hr-payroll/department-validation.model';
 import { MatDialogRef,MAT_DIALOG_DATA, MatDialog } from '@angular/material';
@@ -13,7 +13,8 @@ import { FormDetailsControlComponent } from '../../../common-module/form-details
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
-  styleUrls: ['./department.component.css']
+  styleUrls: ['./department.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class DepartmentComponent implements OnInit {
   @ViewChild('departmentForm') departmentForm:NgForm
@@ -24,6 +25,7 @@ export class DepartmentComponent implements OnInit {
   @Inject(MAT_DIALOG_DATA) public department:Department,
   private _alertBox:AlertBoxService,
   private matDialog:MatDialog,
+  private changeRef:ChangeDetectorRef,
   private _navigationData:NavigationDataService,
   private _validationService:ValidationService,
   private _hrpayrollDefinationService:HrPayrollDefinationServiceService,
@@ -31,6 +33,7 @@ export class DepartmentComponent implements OnInit {
   
   ngOnInit() {
     debugger
+    console.log("test")
     if(this.department.Id!=null){
       this.departmentForm.control.markAsDirty();
     }
@@ -45,6 +48,7 @@ export class DepartmentComponent implements OnInit {
       if(this.departmentValidation[2].DepartmentId){
         this.IsAutoCode=true;
       }
+      this.changeRef.markForCheck();
     },error=>{
       let dialogData=new DialogData(); 
       dialogData.message=error

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,Output,EventEmitter, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input,Output,EventEmitter, OnChanges, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CustomDatatableService } from '../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { PostLoginService } from '../../services/common/post-login.service';
@@ -16,7 +16,8 @@ import { dashCaseToCamelCase } from '@angular/animations/browser/src/util';
 @Component({
   selector: 'app-custom-datatable',
   templateUrl: './custom-datatable.component.html',
-  styleUrls: ['./custom-datatable.component.css']
+  styleUrls: ['./custom-datatable.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
   @BlockUI() blockUi:NgBlockUI
@@ -67,9 +68,10 @@ export class CustomDatatableComponent implements OnChanges,OnDestroy,OnInit {
     private commonService:CommonService
   ) { }
   ngOnInit(){
-
+    console.log("Datatable called")
   }
   ngOnChanges() {
+    console.log("Datatable called changes")
     debugger
     this.DataList1=this.DataList;
     this.ColumnList=this.ColumnList.filter(a=>{

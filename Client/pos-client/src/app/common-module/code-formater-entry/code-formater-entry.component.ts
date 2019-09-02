@@ -153,7 +153,6 @@ export class CodeFormaterEntryComponent implements OnInit {
     this.codeFormater = this.codeFormaterForm.value;
     this.codeFormater.Id = id;
     if (this.codeFormater.Id == null) {
-
       this.blockUi.start("Loading....,Please wait")
       this._generalSettingService.SaveCodeFormater(this.codeFormater).subscribe(response => {
         this.blockUi.stop();
