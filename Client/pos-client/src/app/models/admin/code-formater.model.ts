@@ -12,4 +12,5 @@ export class CodeFormater{
     public Prefix ?:string;
     public StringLength ?:number;
     public MiddleSymbol ?:string;
+    public FromEntry ?:boolean;
 }

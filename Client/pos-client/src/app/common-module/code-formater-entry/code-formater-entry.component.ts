@@ -19,7 +19,8 @@ export class CodeFormaterEntryComponent implements OnInit {
   @BlockUI() blockUi: NgBlockUI
   codeFormaterForm: FormGroup
   priview: string = null;
-  minLength:number=null
+  minLength:number=null;
+  fromEntry:boolean=false;
   selectList:SelectDropdown[]=[];
   itemNameDropdownList: MultiSelectDropdown[] = [
     { id: "0", itemName: "Select" }
@@ -46,6 +47,9 @@ export class CodeFormaterEntryComponent implements OnInit {
     this.matDialogRef.close();
   }
   ngOnInit() {
+    if(this.codeFormater.FromEntry){
+      this.fromEntry=true
+    }
     this.codeFormaterForm = this.fb.group({
       Name: ['', Validators.required],
       Name_Id: [this.itemNameSelectedItems],
@@ -149,9 +153,12 @@ export class CodeFormaterEntryComponent implements OnInit {
     }
   }
   saveCodeFormater() {
+    debugger
     let id = this.codeFormater.Id;
     this.codeFormater = this.codeFormaterForm.value;
     this.codeFormater.Id = id;
+    if(this.fromEntry)
+    this.codeFormater.LastNumber=this.codeFormater.LastNumber+1
     if (this.codeFormater.Id == null) {
       this.blockUi.start("Loading....,Please wait")
       this._generalSettingService.SaveCodeFormater(this.codeFormater).subscribe(response => {

@@ -14,7 +14,7 @@ import { CodeFormaterEntryComponent } from '../../../common-module/code-formater
 })
 export class AutocodeGenerationFormatComponent implements OnInit {
   @BlockUI() blockUi:NgBlockUI
-  codeFormater:CodeFormater={Id:null,Name:null,ItemLength:0,ItemName:null,IsSerial:true,IsTodaysDate:false,
+  codeFormater:CodeFormater={Id:null,Name:null,ItemLength:0,ItemName:null,FromEntry:false,IsSerial:true,IsTodaysDate:false,
   IsSymbol:false,SymbolName:null,Prefix:null,StartPossition:0,LastNumber:0,StringLength:0};
   codeformaterList:CodeFormater[]=[];
   constructor(private _generalSettingService:GeneralSettingsService,

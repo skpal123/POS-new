@@ -59,6 +59,17 @@ import {SubcategoryExistingCheckAsyncValidator} from '../directive/subcategory-d
 import {ItemExistingCheckAsyncValidator} from '../directive/itemId-duplication-check.directive'
 import {SupplierExistingCheckAsyncValidator} from '../directive/supplierid-duplication.directive'
 import {CustomerExistingCheckAsyncValidator} from '../directive/customerid-duplication-check.directive'
+import { DepartmentExistingCheckAsyncValidator } from '../directive/department-duplicate-cheeck.directive';
+import { DesignationExistingCheckAsyncValidator } from '../directive/designation-duplicate-check.directive';
+import { EducationLevelExistingCheckAsyncValidator } from '../directive/educationlevel-duplicate-check.directive';
+import { OccupationExistingCheckAsyncValidator } from '../directive/occupation-duplicate-check.directive';
+import { EmployeeGradeExistingCheckAsyncValidator } from '../directive/grade-duplicate-check.directive';
+import { EmployeeSubGradeExistingCheckAsyncValidator } from '../directive/subgrade-duplicate-check.directive';
+import { SalaryItemExistingCheckAsyncValidator } from '../directive/salaryitem-duplicate-check.directive';
+import { SubledgerExistingCheckAsyncValidator } from '../directive/subledger-duplicate-check.directive';
+import { ManualAccountCodeExistingCheckAsyncValidator } from '../directive/manualcode-duplicate-check.directive';
+import { InvoicenoExistingCheckAsyncValidator } from '../directive/invoice-duplicate-check.directive';
+import { ChalannoExistingCheckAsyncValidator } from '../directive/chalanno-duplicate-check.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -69,7 +80,13 @@ import {CustomerExistingCheckAsyncValidator} from '../directive/customerid-dupli
     DuplicateCheckDirective,
     CategoryExistingCheckAsyncValidator,SubcategoryExistingCheckAsyncValidator,
     ItemExistingCheckAsyncValidator,SupplierExistingCheckAsyncValidator,
-    CustomerExistingCheckAsyncValidator
+    CustomerExistingCheckAsyncValidator,
+    DepartmentExistingCheckAsyncValidator,
+    DesignationExistingCheckAsyncValidator,EducationLevelExistingCheckAsyncValidator,
+    OccupationExistingCheckAsyncValidator,EmployeeGradeExistingCheckAsyncValidator,
+    EmployeeSubGradeExistingCheckAsyncValidator,SalaryItemExistingCheckAsyncValidator,
+    SubledgerExistingCheckAsyncValidator,ManualAccountCodeExistingCheckAsyncValidator,
+    InvoicenoExistingCheckAsyncValidator,ChalannoExistingCheckAsyncValidator
   ],
   exports:[ FormsModule,ReactiveFormsModule,DataTablesModule, 
     A11yModule,CdkStepperModule,CdkTableModule,CdkTreeModule,DragDropModule,MatAutocompleteModule,
@@ -87,7 +104,12 @@ import {CustomerExistingCheckAsyncValidator} from '../directive/customerid-dupli
     SelectListRequiredValidator,DuplicateCheckDirective, 
     CategoryExistingCheckAsyncValidator,SubcategoryExistingCheckAsyncValidator,
     SupplierExistingCheckAsyncValidator,ItemExistingCheckAsyncValidator,
-    CustomerExistingCheckAsyncValidator
+    CustomerExistingCheckAsyncValidator,DepartmentExistingCheckAsyncValidator,
+    DesignationExistingCheckAsyncValidator,EducationLevelExistingCheckAsyncValidator,
+    OccupationExistingCheckAsyncValidator,EmployeeGradeExistingCheckAsyncValidator,
+    EmployeeSubGradeExistingCheckAsyncValidator,SalaryItemExistingCheckAsyncValidator,
+    SubledgerExistingCheckAsyncValidator,ManualAccountCodeExistingCheckAsyncValidator,
+    InvoicenoExistingCheckAsyncValidator,ChalannoExistingCheckAsyncValidator
   ],
  entryComponents:[AlertComponent]
   

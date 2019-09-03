@@ -25,10 +25,9 @@ export class DuplicateCheckDirective implements AsyncValidator{
         let index=this.data.indexOf('-');
         if(index!=0){
             let array=this.data.split('-')
-            return this._commonService.getDuplicateById(this.duplicatecheck).pipe(
+            this._commonService.getDuplicateById(this.duplicatecheck).pipe(
                 map(response=>{
-                   // return users.json&&users.json().length>0?{'emailExists':true}:null
-                   return response&&response!=0&&response!=4?{'exists':true}:null
+                   return response==true?{'emailExists':true}:null
                 })
             )
         }

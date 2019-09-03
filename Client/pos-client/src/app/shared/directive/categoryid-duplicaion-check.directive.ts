@@ -1,7 +1,7 @@
 import {Input,Directive}from '@angular/core'
 import {AsyncValidator,AbstractControl, NG_ASYNC_VALIDATORS, ValidationErrors}from '@angular/forms'
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, debounceTime } from 'rxjs/operators';
 import { CommonService } from '../../services/common/common.service';
 import { NavigationDataService } from '../../services/common/navigation-data.service';
 import { DuplicateCheck } from '../../models/common/duplicate-check.model';

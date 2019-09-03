@@ -17,7 +17,7 @@ export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
   @Input() itemName: string
   @Input()  IsSaved:boolean;
   @Input() IsAutoCode:boolean;
-  codeFormater:CodeFormater={Id:null,Name:null,ItemLength:0,ItemName:null,IsSerial:true,IsTodaysDate:false,
+  codeFormater:CodeFormater={Id:null,Name:null,ItemLength:0,FromEntry:true,ItemName:null,IsSerial:true,IsTodaysDate:false,
     IsSymbol:false,SymbolName:null,Prefix:null,StartPossition:0,LastNumber:0,StringLength:0};
   @Output() getGenerateAutoCode:EventEmitter <any>=new EventEmitter <any>();
   code:string=null;
@@ -86,6 +86,7 @@ export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
+        debugger
         this.createNewCodeFormater();
       }
     })
@@ -117,5 +118,6 @@ export class AutocodeGenerateComponent implements OnInit,OnChanges,OnDestroy {
     this.codeFormater.StartPossition=null;
     this.codeFormater.LastNumber=null;
     this.codeFormater.StringLength=null;
+    this.codeFormater.FromEntry=false
   }
 }
