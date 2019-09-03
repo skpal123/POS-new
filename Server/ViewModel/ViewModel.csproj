@@ -97,6 +97,7 @@
     <Compile Include="Model\Administration\UserInfoView.cs" />
     <Compile Include="Model\Finance\VoucherDetailInfo.cs" />
     <Compile Include="Model\Finance\VoucherInfo.cs" />
+    <Compile Include="Model\Validation\Accounts\SubledgerValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\DepartmentValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\DesignationValidation.cs" />
     <Compile Include="Model\Validation\HrPayroll\EducationLevelValidation.cs" />

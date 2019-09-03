@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { SalaryItemComponent } from '../salary-item/salary-item.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 @Component({
   selector: 'app-salary-item-list',
   templateUrl: './salary-item-list.component.html',
@@ -32,6 +33,7 @@ export class SalaryItemListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -75,7 +77,9 @@ export class SalaryItemListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._hrPayrollDefinationService.getSalaryItemById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.salaryItem=response
+      this.salaryItem=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.salaryItem.ItemId
       const dialogRef=this.matDialog.open(SalaryItemComponent,{
         data:this.salaryItem,
         disableClose:true,

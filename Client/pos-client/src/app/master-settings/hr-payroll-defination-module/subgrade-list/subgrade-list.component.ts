@@ -16,6 +16,7 @@ import { GradeSalaryItemComponent } from '../grade-salary-item/grade-salary-item
 import { SalaryItem } from '../../../models/master-settings/hr-payroll/salary-item.model';
 import { GradeSubGradeSalaryItem } from '../../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
 import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-subgrade-list',
@@ -41,7 +42,8 @@ export class SubgradeListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
-    private matDialog:MatDialog
+    private matDialog:MatDialog,
+    private _navigationData:NavigationDataService
   ) { }
   ngOnInit() {
     debugger
@@ -98,7 +100,9 @@ export class SubgradeListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._hrPayrollDefinationService.getSubGradeById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.subgrade=response
+      this.subgrade=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.subgrade.SubGradeId
       const dialogRef=this.matDialog.open(SubgradeComponent,{
         data:this.subgrade,
         disableClose:true,

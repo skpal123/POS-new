@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { EducationLevelComponent } from '../education-level/education-level.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-education-level-list',
@@ -31,6 +32,7 @@ export class EducationLevelListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -74,7 +76,9 @@ export class EducationLevelListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._hrPayrollDefinationService.getEducationLevelById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.educationLevel=response
+      this.educationLevel=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.educationLevel.LevelId
       const dialogRef=this.matDialog.open(EducationLevelComponent,{
         data:this.educationLevel,
         disableClose:true,

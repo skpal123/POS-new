@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { SupplierEntryComponent } from '../supplier-entry/supplier-entry.component';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-supplier-list',
@@ -32,6 +33,7 @@ export class SupplierListComponent implements OnInit {
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -76,6 +78,8 @@ export class SupplierListComponent implements OnInit {
     this._inventotyDefinationService.getSupplierById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.supplier=response
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.supplier.SupplierId;
       const dialogRef=this.matDialog.open(SupplierEntryComponent,{
         data:this.supplier,
         disableClose:true,

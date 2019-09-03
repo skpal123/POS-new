@@ -9,6 +9,7 @@ import { InventoryDefinationServiceService } from '../../../services/master-sett
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { CustomerEntryComponent } from '../customer-entry/customer-entry.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
@@ -31,6 +32,7 @@ export class CustomerListComponent implements OnInit {
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -75,6 +77,8 @@ export class CustomerListComponent implements OnInit {
     this._inventotyDefinationService.getCustomerById($event.Id).subscribe(response=>{
       this.blockUi.stop();
       this.customer=response
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.customer.CustomerId
       const dialogRef=this.matDialog.open(CustomerEntryComponent,{
         data:this.customer,
         disableClose:true,

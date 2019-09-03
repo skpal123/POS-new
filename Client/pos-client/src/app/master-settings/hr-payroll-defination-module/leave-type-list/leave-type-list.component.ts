@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { LeaveTypeComponent } from '../leave-type/leave-type.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-leave-type-list',
@@ -31,6 +32,7 @@ export class LeaveTypeListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -74,7 +76,9 @@ export class LeaveTypeListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._hrPayrollDefinationService.getLeaveTypeById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.leaveType=response
+      this.leaveType=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.leaveType.LeaveTypeId
       const dialogRef=this.matDialog.open(LeaveTypeComponent,{
         data:this.leaveType,
         disableClose:true,

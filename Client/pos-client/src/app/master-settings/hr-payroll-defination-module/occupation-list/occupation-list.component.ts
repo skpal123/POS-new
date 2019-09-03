@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { OccupationComponent } from '../occupation/occupation.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-occupation-list',
@@ -31,6 +32,7 @@ export class OccupationListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
   ) { }
   ngOnInit() {
@@ -74,7 +76,9 @@ export class OccupationListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait")
     this._hrPayrollDefinationService.getOccupationById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.occupation=response
+      this.occupation=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.occupation.OccupationId
       const dialogRef=this.matDialog.open(OccupationComponent,{
         data:this.occupation,
         disableClose:true,

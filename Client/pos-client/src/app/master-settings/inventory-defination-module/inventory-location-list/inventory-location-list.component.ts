@@ -9,6 +9,7 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { LocationEntryComponent } from '../location-entry/location-entry.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-inventory-location-list',
@@ -28,6 +29,7 @@ export class InventoryLocationListComponent implements OnInit {
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -73,7 +75,9 @@ export class InventoryLocationListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getLocationById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.location=response
+      this.location=response;
+      this._navigationData.IsUpdate=true
+      this._navigationData.PreviousData=this.location.LocationId;
       const dialogRef=this.matDialog.open(LocationEntryComponent,{
         data:this.location,
         disableClose:true,

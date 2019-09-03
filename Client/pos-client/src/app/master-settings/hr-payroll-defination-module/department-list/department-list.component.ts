@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { HrPayrollDefinationServiceService } from '../../../services/master-settings/hr-payroll-defination-service.service';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { DepartmentComponent } from '../department/department.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-department-list',
@@ -31,6 +32,7 @@ export class DepartmentListComponent implements OnInit {
     private _commonService:CommonService,
     private _customDatatableService:CustomDatatableService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
   ) { }
   ngOnInit() {

@@ -98,4 +98,8 @@ export class ValidationService {
       var url=this._defaultRoute.CommonService+'educationLevelValidation';
       return this._httpClient.get(url)
     }
+    public getSubledgerValidationData(){
+      var url=this._defaultRoute.CommonService+'subledgerValidation';
+      return this._httpClient.get(url)
+    }
 }

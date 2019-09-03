@@ -19,20 +19,29 @@
       </div>
       <div class="col-md-5">
         <form #subledgerForm="ngForm">
-        <div class="form-group row" [class.has-success]="sublederCodeControl.valid" [class.has-error]="sublederCodeControl.invalid&&sublederCodeControl.touched">
+        <div *ngIf="subledgerValidation[0]?.SublederCode" class="form-group row" [class.has-success]="sublederCodeControl.valid" [class.has-error]="sublederCodeControl.invalid&&sublederCodeControl.touched">
           <label for="sublederCode" class="col-sm-4 col-form-label">Code</label>
-          <div class="col-sm-8">
-              <input #sublederCodeControl="ngModel" id="sublederCode" required name="SublederCode" [(ngModel)]="subledger.SublederCode" class="form-control"
+          <div class="col-sm-6">
+              <input [readonly]="subledgerValidation[3]?.SublederCode" subledgerCheck [required]="subledgerValidation[0]?.SublederCode&&subledgerValidation[1]?.SublederCode" #sublederCodeControl="ngModel" id="sublederCode" name="SublederCode" 
+              [(ngModel)]="subledger.SublederCode" class="form-control"
                 placeholder="subleder code">
                 <span class="help-block" *ngIf="sublederCodeControl.invalid&&sublederCodeControl.touched">
                     Subleder code feild is required
                 </span>       
           </div>
+          <div class="col-md-2"> 
+            <app-autocode-generate
+            [itemName]="itemName"
+            [IsAutoCode]="IsAutoCode"                 
+            (getGenerateAutoCode)="parentGetGeneratedCode($event)"
+            >
+            </app-autocode-generate>
+          </div>
         </div>
-        <div class="form-group row" [class.has-success]="DescriptionControl.valid" [class.has-error]="DescriptionControl.invalid&&DescriptionControl.touched">
+        <div *ngIf="subledgerValidation[0]?.Description" class="form-group row" [class.has-success]="DescriptionControl.valid" [class.has-error]="DescriptionControl.invalid&&DescriptionControl.touched">
           <label for="Description" class="col-sm-4 col-form-label">Description</label>
           <div class="col-sm-8">
-              <textarea #DescriptionControl="ngModel" id="Description" required name="Description" [(ngModel)]="subledger.Description" class="form-control"
+              <textarea #DescriptionControl="ngModel"  [required]="subledgerValidation[0]?.Description&&subledgerValidation[1]?.Description" id="Description" required name="Description" [(ngModel)]="subledger.Description" class="form-control"
                 placeholder="Description"></textarea>
                 <span class="help-block" *ngIf="DescriptionControl.invalid&&DescriptionControl.touched">
                     Description feild is required

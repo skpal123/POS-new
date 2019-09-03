@@ -15,6 +15,7 @@ using ERPWebApiService.Exceptions;
 using ERPWebApiService.ExrensionMethod;
 using ViewModel.Model;
 using ViewModel.Model.Common;
+using ViewModel.Model.Validation.Accounts;
 using ViewModel.Model.Validation.HrPayroll;
 using ViewModel.Model.Validation.Inventory;
 
@@ -1025,6 +1026,37 @@ namespace ERPWebApiService.Controllers
                         EducationLevelValidation fromValidation = new EducationLevelValidation();
                         fromValidation.LevelId = Convert.ToBoolean(rdr["LevelId"]);
                         fromValidation.LevelName = Convert.ToBoolean(rdr["LevelName"]);
+                        formValidationList.Add(fromValidation);
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, formValidationList);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [Route("subledgerValidation")]
+        [HttpGet]
+        public HttpResponseMessage SubledgerValidation()
+        {
+            try
+            {
+                List<SubledgerValidation> formValidationList = new List<SubledgerValidation>();
+                using (SqlConnection con = new SqlConnection(ConnectionString.getConnectionString()))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_get_formControlNameByFormName", con);
+                    cmd.Parameters.AddWithValue("@formName", "subledger-entry-form");
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        SubledgerValidation fromValidation = new SubledgerValidation();
+                        fromValidation.SublederCode = Convert.ToBoolean(rdr["SublederCode"]);
+                        fromValidation.AccountId = Convert.ToBoolean(rdr["AccountId"]);
+                        fromValidation.AccountDescription = Convert.ToBoolean(rdr["AccountDescription"]);
+                        fromValidation.Description = Convert.ToBoolean(rdr["Description"]);
                         formValidationList.Add(fromValidation);
                     }
                 }

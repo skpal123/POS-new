@@ -24,34 +24,34 @@
             Account type is required
           </span>
         </div>
+        <div class="form-group row" [class.has-success]="AutoAccountCodeControl.valid"
+        [class.has-error]="AutoAccountCodeControl.invalid&&AutoAccountCodeControl.touched">
+        <label for="AutoAccountCode" class="col-sm-2 col-form-label control-label" [class.required]="AutoAccountCodeControl.invalid">Auto code</label>
+        <div class="col-sm-10">
+          <input #AutoAccountCodeControl="ngModel" readonly required name="AutoAccountCode" type="text"
+            [(ngModel)]="account.AutoAccountCode" class="form-control" placeholder="Auto account code">
+          <span class="help-block" *ngIf="AutoAccountCodeControl.invalid&&AutoAccountCodeControl.touched">
+            Role Name feild is required
+          </span>
+        </div>
+      </div>
         <div class="form-group row" [class.has-success]="AccountManualCodeControl.valid"
           [class.has-error]="AccountManualCodeControl.invalid&&AccountManualCodeControl.touched">
           <label for="AccountManualCode" class="col-sm-2 col-form-label control-label"  [class.required]="AccountManualCodeControl.invalid">Manual Code</label>
           <div class="col-sm-10">
-            <input #AccountManualCodeControl="ngModel" id="AccountManualCode" required name="AccountManualCode"
+            <input #AccountManualCodeControl="ngModel"  id="AccountManualCode" required name="AccountManualCode"
               type="text" manualAccountCodeCheck [(ngModel)]="account.ManualAccountCode" class="form-control" placeholder="Manual code">
             <span class="help-block" *ngIf="AccountManualCodeControl.errors?.required&&AccountManualCodeControl.touched">
               Account manual code feild is required
             </span>
-            <span class="help-block" *ngIf="AccountManualCodeControl.errors?.exists">
+            <span  class="help-block" *ngIf="AccountManualCodeControl.errors?.exists">
               Category id already taken
-            </span>
-          </div>
-        </div>
-        <div class="form-group row" [class.has-success]="AutoAccountCodeControl.valid"
-          [class.has-error]="AutoAccountCodeControl.invalid&&AutoAccountCodeControl.touched">
-          <label for="AutoAccountCode" class="col-sm-2 col-form-label">Manual code</label>
-          <div class="col-sm-10">
-            <input #AutoAccountCodeControl="ngModel" required name="AutoAccountCode" type="text"
-              [(ngModel)]="account.AutoAccountCode" class="form-control" placeholder="Auto account code">
-            <span class="help-block" *ngIf="AutoAccountCodeControl.invalid&&AutoAccountCodeControl.touched">
-              Role Name feild is required
             </span>
           </div>
         </div>
         <div class="form-group row" [class.has-success]="AccountDescriptionControl.valid"
           [class.has-error]="AccountDescriptionControl.invalid&&AccountDescriptionControl.touched">
-          <label for="AccountDescription" class="col-sm-4 col-form-label">Account Description</label>
+          <label for="AccountDescription" class="col-sm-4 col-form-label control-label" [class.required]="AccountDescriptionControl.invalid">Account Description</label>
           <div class="col-sm-8">
             <textarea #AccountDescriptionControl="ngModel" required name="AccountDescription"
               [(ngModel)]="account.AccountDescription" class="form-control" placeholder="Description"></textarea>

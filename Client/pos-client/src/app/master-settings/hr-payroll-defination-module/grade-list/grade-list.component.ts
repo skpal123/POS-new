@@ -15,6 +15,7 @@ import { GradeSubGradeSalItem } from '../../../models/master-settings/hr-payroll
 import { GradeSubGradeSalItemDetails } from '../../../models/master-settings/hr-payroll/grade-subgrade-salitem-details.model';
 import { SalaryItem } from '../../../models/master-settings/hr-payroll/salary-item.model';
 import { GradeSubGradeSalaryItem } from '../../../models/master-settings/hr-payroll/grade-sub-grade-salaryitem.model';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-grade-list',
@@ -38,6 +39,7 @@ export class GradeListComponent implements OnInit {
   }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
+    private _navigationData:NavigationDataService,
     private _customDatatableService:CustomDatatableService,
     private _hrPayrollDefinationService:HrPayrollDefinationServiceService,
     private matDialog:MatDialog
@@ -98,7 +100,9 @@ export class GradeListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._hrPayrollDefinationService.getGradeById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.grade=response
+      this.grade=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.grade.GradeId
       const dialogRef=this.matDialog.open(GradeComponent,{
         data:this.grade,
         disableClose:true,

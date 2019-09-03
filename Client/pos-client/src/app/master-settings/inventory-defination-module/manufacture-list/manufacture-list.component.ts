@@ -10,6 +10,7 @@ import { ManufactureEntryComponent } from '../manufacture-entry/manufacture-entr
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-manufacture-list',
@@ -29,6 +30,7 @@ export class ManufactureListComponent implements OnInit {
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -73,7 +75,9 @@ export class ManufactureListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getManufactureById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.manufacture=response
+      this.manufacture=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.manufacture.ManufactureId;
       const dialogRef=this.matDialog.open(ManufactureEntryComponent,{
         data:this.manufacture,
         disableClose:true,

@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { DialogData } from '../../../models/common/dialog-data.model';
 import { OfferEntryComponent } from '../offer-entry/offer-entry.component';
 import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 
 @Component({
   selector: 'app-offer-setup',
@@ -30,6 +31,7 @@ export class OfferSetupComponent implements OnInit {
   }
   constructor(private _alertBox:AlertBoxService,
     private _commonService:CommonService,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -76,6 +78,8 @@ export class OfferSetupComponent implements OnInit {
     this._inventotyDefinationService.getOfferSetupById($event.OfferId).subscribe(response=>{
       this.blockUi.stop();
       this.offerSetup=response
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.offerSetup.OfferId;
       this.offerSetup.IsSingle?this.offerSetup.OfferType="single":this.offerSetup.OfferType="multiple"
       const dialogRef=this.matDialog.open(OfferEntryComponent,{
         data:this.offerSetup,

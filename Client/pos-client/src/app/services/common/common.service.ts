@@ -54,7 +54,7 @@ export class CommonService {
   }
   public getDuplicateById(duplicateCheck:DuplicateCheck){
     var url=this._defaultRoute.CommonService+'duplicateCheck';
-    return this._httpClient.post<boolean>(url,duplicateCheck).pipe(
+    return this._httpClient.post(url,duplicateCheck).pipe(
       catchError(this.handleError)
     )
   }

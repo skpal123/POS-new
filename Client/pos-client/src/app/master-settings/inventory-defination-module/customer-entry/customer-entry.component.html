@@ -11,10 +11,13 @@
               <div class="form-group row" *ngIf="customerValidation[0]?.CustomerId" [class.has-success]="CustomerIdControl.valid&&CustomerIdControl.touched" [class.has-error]="CustomerIdControl.invalid&&CustomerIdControl.touched">
                   <label for="CustomerId" class="col-sm-4 col-form-label control-label" [class.required]="CustomerIdControl.invalid">Customer Id</label>
                   <div class="col-sm-5" >
-                      <input class="form-control" [required]="customerValidation[0]?.CustomerId&&customerValidation[1]?.CustomerId" name="CustomerId" #CustomerIdControl="ngModel" id="CustomerId" [(ngModel)]="customer.CustomerId">
-                      <span class="help-block" *ngIf="CustomerIdControl.invalid&&CustomerIdControl.touched">
+                      <input class="form-control" customerCheck [required]="customerValidation[0]?.CustomerId&&customerValidation[1]?.CustomerId" name="CustomerId" #CustomerIdControl="ngModel" id="CustomerId" [(ngModel)]="customer.CustomerId">
+                      <span class="help-block" *ngIf="CustomerIdControl.errors?.required&&CustomerIdControl.touched">
                         Customer Id feild is required
-                      </span>  
+                      </span>
+                      <span class="help-block" *ngIf="CustomerIdControl.errors?.exists&&CustomerIdControl.touched">
+                        Customer Id already taken
+                      </span>    
                   </div>
                   <div class="col-md-2"> 
                     <app-autocode-generate

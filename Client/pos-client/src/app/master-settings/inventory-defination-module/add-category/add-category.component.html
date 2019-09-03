@@ -12,11 +12,11 @@
             <div class="form-group row" *ngIf="categoryValidation[0]?.CategoryId" [class.has-success]="categoryIdControl.valid&&categoryIdControl.touched" [class.has-error]="categoryIdControl.invalid&&categoryIdControl.touched">
                 <label for="categoryId" class="col-sm-3 col-form-label control-label" [class.required]="categoryIdControl.invalid">Category id</label>
                 <div class="col-sm-7" >
-                    <input class="form-control" [readonly]="categoryValidation[3]?.CategoryId" categoryCheck [required]="categoryValidation[0]?.CategoryId&&categoryValidation[1]?.CategoryId" name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
+                    <input class="form-control" categoryCheck1 [readonly]="categoryValidation[3]?.CategoryId" categoryCheck [required]="categoryValidation[0]?.CategoryId&&categoryValidation[1]?.CategoryId" name="categoryId" #categoryIdControl="ngModel" id="categoryId" [(ngModel)]="category.CategoryId">
                     <span class="help-block" *ngIf="categoryIdControl.errors?.required&&categoryIdControl.touched">
                         Category id feild is required  
                     </span>
-                    <span [class.required]="categoryIdControl.invalid" class="help-block" *ngIf="categoryIdControl.errors?.exists">
+                    <span [class.required]="categoryIdControl.errors?.exists" class="help-block" *ngIf="categoryIdControl.errors?.exists">
                       Category id already taken
                     </span>
                 </div>

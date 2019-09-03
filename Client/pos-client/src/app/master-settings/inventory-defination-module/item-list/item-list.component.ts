@@ -10,6 +10,7 @@ import { ItemEntryComponent } from '../item-entry/item-entry.component';
 import { FormDetailsControlComponent } from '../../../common-module/form-details-control/form-details-control.component';
 import { CustomDatatableService } from '../../../services/common/custom-datatable.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
@@ -31,6 +32,7 @@ export class ItemListComponent implements OnInit {
   constructor(private _alertBox:AlertBoxService,
     private _postLoginservice:PostLoginService,
     private _customDatatableService:CustomDatatableService,
+    private _navigationData:NavigationDataService,
     private _inventotyDefinationService:InventoryDefinationServiceService,
     private matDialog:MatDialog
   ) { }
@@ -75,7 +77,10 @@ export class ItemListComponent implements OnInit {
     this.blockUi.start("Loading....,Please wait.")
     this._inventotyDefinationService.getInventoryItemById($event.Id).subscribe(response=>{
       this.blockUi.stop();
-      this.inventoryItem=response
+      this.inventoryItem=response;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.inventoryItem.ItemId;
+      this._navigationData.PreviousData=this.inventoryItem.ItemCode;
       const dialogRef=this.matDialog.open(ItemEntryComponent,{
         data:this.inventoryItem,
         disableClose:true,

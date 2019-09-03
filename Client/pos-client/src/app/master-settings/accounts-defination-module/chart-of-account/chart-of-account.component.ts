@@ -11,6 +11,7 @@ import { AddSubledgerComponent } from '../add-subledger/add-subledger.component'
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgForm } from '@angular/forms';
 import { AddChartOfAccountComponent } from '../add-chart-of-account/add-chart-of-account.component';
+import { NavigationDataService } from '../../../services/common/navigation-data.service';
 @Component({
   selector: 'app-chart-of-account',
   templateUrl: './chart-of-account.component.html',
@@ -35,6 +36,7 @@ export class ChartOfAccountComponent implements OnInit {
   constructor(private _accountDeninationService:AccountDefinationService,
     private _service:AccountDefinationService,
     private matDialog:MatDialog,
+    private _navigationData:NavigationDataService,
   private _alertBoxService:AlertBoxService){}
   ngOnInit(){
     debugger
@@ -222,6 +224,8 @@ export class ChartOfAccountComponent implements OnInit {
       //let position=this.accountDetails.AccountList.findIndex(fea=>fea.a)
       this.account.AccountType=selectedNode.AccountType.toString();
       this.account.IsLeaf=selectedNode.IsLeaf;
+      this._navigationData.IsUpdate=true;
+      this._navigationData.PreviousData=this.account.ManualAccountCode;
     }
     const dialogRef=this.matDialog.open(AddChartOfAccountComponent,{
       data:this.account,
@@ -284,7 +288,13 @@ export class ChartOfAccountComponent implements OnInit {
       if(chartOfAcc.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
         this.isFound=true;
         chartOfAcc.IsClicked=true;
-        chartOfAcc.Children.push(this.savedAcoount)
+        if(this.Status=="add"){
+          chartOfAcc.Children.push(this.savedAcoount)
+        }
+        else{
+          chartOfAcc.AccountDescription=this.savedAcoount.AccountDescription;
+          chartOfAcc.ManualAccountCode=this.savedAcoount.ManualAccountCode;
+        }
         this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
         console.log(this.chartOfAccountTreeList)
       }
@@ -294,7 +304,13 @@ export class ChartOfAccountComponent implements OnInit {
             if(chartOfAcc2.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
               this.isFound=true;
               chartOfAcc2.IsClicked=true;
-              chartOfAcc2.Children.push(this.savedAcoount)
+              if(this.Status=="add"){
+                chartOfAcc2.Children.push(this.savedAcoount)
+              }
+              else{
+                chartOfAcc2.AccountDescription=this.savedAcoount.AccountDescription;
+                chartOfAcc2.ManualAccountCode=this.savedAcoount.ManualAccountCode;
+              }
               this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
               console.log(this.chartOfAccountTreeList);
            }
@@ -313,7 +329,13 @@ export class ChartOfAccountComponent implements OnInit {
       if(coa.AccountId.toLowerCase()==node.AccountId.toLowerCase()){
           this.isFound=true;
           coa.IsClicked=true;
-          coa.Children.push(this.savedAcoount)
+          if(this.Status=="add"){
+            coa.Children.push(this.savedAcoount)
+          }
+          else{
+            coa.AccountDescription=this.savedAcoount.AccountDescription;
+            coa.ManualAccountCode=this.savedAcoount.ManualAccountCode;
+          }
           this.chartOfAccountTreeList=this.oldChartOfAccountTreeList;
           console.log(this.chartOfAccountTreeList)
       }
