@@ -61,4 +61,5 @@ select{
   margin-bottom: 3px;
   margin-top: 2px;
 }
- 
+.navbar-nav > li > a {padding-top:5px !important; padding-bottom:5px !important;}
+.navbar {min-height:32px !important}

@@ -1054,8 +1054,6 @@ namespace ERPWebApiService.Controllers
                     {
                         SubledgerValidation fromValidation = new SubledgerValidation();
                         fromValidation.SublederCode = Convert.ToBoolean(rdr["SublederCode"]);
-                        fromValidation.AccountId = Convert.ToBoolean(rdr["AccountId"]);
-                        fromValidation.AccountDescription = Convert.ToBoolean(rdr["AccountDescription"]);
                         fromValidation.Description = Convert.ToBoolean(rdr["Description"]);
                         formValidationList.Add(fromValidation);
                     }

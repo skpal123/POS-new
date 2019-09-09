@@ -16,6 +16,7 @@ import { ManufactureListComponent } from './manufacture-list/manufacture-list.co
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { SettingPriceComponent } from './setting-price/setting-price.component';
 import { OfferSetupComponent } from './offer-setup/offer-setup.component';
+import { OfferListComponent } from './offer-list/offer-list.component';
 
 const routes: Routes = [
   {
@@ -33,7 +34,8 @@ const routes: Routes = [
       {path:'add-manufacture',component:ManufactureListComponent},
       {path:'add-customer',component:CustomerListComponent},
       {path:'setting-price',component:SettingPriceComponent},
-      {path:'offer-setup',component:OfferSetupComponent}
+      {path:'offer-setup',component:OfferSetupComponent},
+      {path:'offer-entry',component:OfferListComponent}
     ]
 
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { UserFormControl } from '../../../models/common/user-form-control.model';
 import { OfferSetup } from '../../../models/master-settings/inventory-defination/offer-setup.model';
@@ -10,145 +10,142 @@ import { DialogData } from '../../../models/common/dialog-data.model';
 import { OfferEntryComponent } from '../offer-entry/offer-entry.component';
 import { DatatableButtonOutput } from '../../../models/common/datatable-button-output';
 import { NavigationDataService } from '../../../services/common/navigation-data.service';
+import { FormControl } from '@angular/forms';
+import { InventoryItem } from '../../../models/master-settings/inventory-defination/inventory-item.model';
+import { OfferSetupDte } from '../../../models/master-settings/inventory-defination/offer-setup-dtn.model';
+import { SelectList } from '../../../models/common/select-list.model';
 
 @Component({
   selector: 'app-offer-setup',
   templateUrl: './offer-setup.component.html',
-  styleUrls: ['./offer-setup.component.css']
+  styleUrls: ['./offer-setup.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OfferSetupComponent implements OnInit {
-  @BlockUI() blockUi:NgBlockUI
-  reload:boolean=false;
-  columnReady:boolean=false;
-  dataReady:boolean=false;
-  userControlList:UserFormControl[]=[];
-  ColumnList:any[]=[];
-  DataList:any[]=[];
-  offerSetupList:OfferSetup[]=[];
-  offerSetup:OfferSetup={Id:null,OfferId:null,OfferName:null,DiscountRate:0,IsSingle:false,OfferType:"single",
-    Product_Id:null,FreeProduct_Id:null,ProductName:null,FreeProductList:null,ViewFreeProduct:null,
-    ProductList:[],IsOneToMany:false,IsManyToOne:false
-  }
-  constructor(private _alertBox:AlertBoxService,
-    private _commonService:CommonService,
-    private _navigationData:NavigationDataService,
-    private _inventotyDefinationService:InventoryDefinationServiceService,
-    private matDialog:MatDialog
+  @BlockUI() blockUi: NgBlockUI;
+  @ViewChild('offerSettingsControl') offerSettingsControl: FormControl;
+  offerSettings: string = "product-wise"
+  userControlList: UserFormControl[] = [];
+  oldUserControlList: UserFormControl[] = [];
+  reload: boolean = false;
+  columnReady: boolean = false;
+  dataReady: boolean = false;
+  ColumnList: any[] = [];
+  selectList: SelectList[] = [{ Id: "0", Name: "SELECT" }];
+  offerSetupDtn: OfferSetupDte[] = [];
+  DataList: any[] = [];
+  oldDataList: any[] = [];
+  customerTypes: string[] = ["Platinum", "Gold", "Silver"]
+  productList: InventoryItem[] = [];
+  offerSetupList: OfferSetup[] = [];
+  constructor(private _alertBox: AlertBoxService,
+    private _commonService: CommonService,
+    private _navigationData: NavigationDataService,
+    private changeRef: ChangeDetectorRef,
+    private _inventotyDefinationService: InventoryDefinationServiceService,
+    private matDialog: MatDialog
   ) { }
   ngOnInit() {
     debugger
-    this.getOfferSetupList();
-    this.getUserFormControlByFormName();
+    this.offerSettingsControl.valueChanges.subscribe(data => {
+      debugger
+      if (data == "product-wise" && this.userControlList.length > 0) {
+        this.userControlList = this.oldUserControlList;
+        this.oldUserControlList = JSON.parse(JSON.stringify(this.userControlList));
+        let index = this.userControlList.findIndex(m => m.Name == "CustomerName");
+        this.userControlList[index].IsEnable = false;
+        this.ColumnList = this.userControlList;
+        this.DataList = this.oldDataList;
+        this.oldDataList = JSON.parse(JSON.stringify(this.DataList));
+        this.changeRef.markForCheck()
+      }
+      else if (data == "customer-wise" && this.userControlList.length > 0) {
+        this.userControlList = this.oldUserControlList;
+        this.oldUserControlList = JSON.parse(JSON.stringify(this.userControlList));
+        let index = this.userControlList.findIndex(m => m.Name == "ProductName");
+        this.userControlList[index].IsEnable = false;
+        this.ColumnList = this.userControlList;
+        this.getCustomerTypeDataList();
+        this.changeRef.markForCheck()
+      }
+    })
+    this.getUserFormControlByFormName()
+    this.getProductList()
+    this.getOfferList();
   }
-  getUserFormControlByFormName(){
+  getUserFormControlByFormName() {
     this.blockUi.start("Loading....,Please wait.")
-    this._commonService.getUserFormControlByFormName('offer-setup-list').subscribe(response=>{
+    this._commonService.getUserFormControlByFormName('offer-setup').subscribe(response => {
       this.blockUi.stop();
-      this.userControlList=response;
-      this.ColumnList=this.userControlList
-      this.columnReady=true;
-    },error=>{
+      this.userControlList = response;
+      this.oldUserControlList = JSON.parse(JSON.stringify(this.userControlList))
+      if (this.offerSettings == "product-wise" && this.userControlList.length > 0) {
+        let index = this.userControlList.findIndex(m => m.Name == "CustomerName");
+        this.userControlList[index].IsEnable = false;
+      }
+      else if (this.userControlList.length > 0) {
+        let index = this.userControlList.findIndex(m => m.Name == "ProductName");
+        this.userControlList[index].IsEnable = false;
+      }
+      this.ColumnList = this.userControlList;
+      this.columnReady = true;
+      this.changeRef.markForCheck();
+    }, error => {
       this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
+      let dialogData = new DialogData();
+      dialogData.message = error
       this._alertBox.openDialog(dialogData);
     })
   }
-  getOfferSetupList(){
+  getOfferList() {
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getOfferSetupList().subscribe(response=>{
+    this._inventotyDefinationService.getOfferSetupList().subscribe(response => {
       this.blockUi.stop();
-      this.offerSetupList=response
-      this.offerSetupList.forEach(a=>{
-        a.ViewFreeProduct="View product list"
+      this.offerSetupList = response;
+      this.offerSetupList.forEach(a => {
+        this.selectList.push({ Id: a.Id, Name: a.OfferName })
       })
-      this.DataList=this.offerSetupList
-      this.dataReady=true;
-      this.reload=true;
-    },error=>{
+      this.changeRef.markForCheck();
+    }, error => {
       this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
+      let dialogData = new DialogData();
+      dialogData.message = error
       this._alertBox.openDialog(dialogData);
     })
   }
-  getOfferSetUpDetails($event:OfferSetup){
+  getProductList() {
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getOfferSetupById($event.OfferId).subscribe(response=>{
+    this._inventotyDefinationService.getInventoryItemList().subscribe(response => {
       this.blockUi.stop();
-      this.offerSetup=response
-      this._navigationData.IsUpdate=true;
-      this._navigationData.PreviousData=this.offerSetup.OfferId;
-      this.offerSetup.IsSingle?this.offerSetup.OfferType="single":this.offerSetup.OfferType="multiple"
-      const dialogRef=this.matDialog.open(OfferEntryComponent,{
-        data:this.offerSetup,
-        disableClose:true,
-        height:'auto',
-        maxHeight:window.screen.height*.6+'px',
-        width:window.screen.width*.4+'px'
+      this.productList = response;
+      this.DataList = [];
+      this.productList.forEach(a => {
+        let b = new OfferSetupDte();
+        b.ProductName = a.ItemName;
+        b.Offer_Id = "0"
+        b.DiscountRate = 0;
+        this.DataList.push(b);
       });
-      dialogRef.afterClosed().subscribe(result=>{
-        if(result){
-          this.getOfferSetupList();
-        }
-      })
-    },error=>{
+      this.oldDataList = JSON.parse(JSON.stringify(this.DataList));
+      this.reload = true;
+      this.dataReady = true
+      this.changeRef.markForCheck();
+    }, error => {
       this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
+      let dialogData = new DialogData();
+      dialogData.message = error
       this._alertBox.openDialog(dialogData);
     })
   }
-  deleteOfferSetup($event:OfferSetup){
-    this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.deleteOfferSetup($event.OfferId).subscribe(response=>{
-      this.blockUi.stop();
-      let result=response
-      if(result){
-        this.getOfferSetupList();
-        let dialogData=new DialogData();
-        dialogData.message="Category deleted succesfully";
-        this._alertBox.openDialog(dialogData);
-      }
-    },error=>{
-      this.blockUi.stop();
-      let dialogData=new DialogData();
-      dialogData.message=error
-      this._alertBox.openDialog(dialogData);
-    })
-  }
-  createNewOfferSetup(){
-   this.clearOfferSetup();
-    const dialogRef=this.matDialog.open(OfferEntryComponent,{
-      data:this.offerSetup,
-      disableClose:true,
-      height:'auto',
-      maxHeight:window.screen.height*.6+'px',
-      width:window.screen.width*.4+'px'
+  getCustomerTypeDataList() {
+    this.DataList = [];
+    this.customerTypes.forEach(a => {
+      let b = new OfferSetupDte();
+      b.CustomerName = a;
+      b.Offer_Id = "0"
+      b.DiscountRate = 0;
+      this.DataList.push(b);
     });
-    dialogRef.afterClosed().subscribe(result=>{
-      if(result){
-        this.getOfferSetupList();
-      }
-    })
   }
-  customButtonClick($event:DatatableButtonOutput){
-    if($event.ColumnName="ViewFreeProduct"){
-      alert("tttt")
-    }
-  }
-  clearOfferSetup(){
-    this.offerSetup.Id=null;
-    this.offerSetup.OfferId=null;
-    this.offerSetup.OfferName=null;
-    this.offerSetup.IsSingle=true;
-    this.offerSetup.BundleSize=null;
-    this.offerSetup.IsOneToMany=false;
-    this.offerSetup.OfferType="single";
-    this.offerSetup.FreeProductList=[];
-    this.offerSetup.ProductList=[];
-    this.offerSetup.DiscountRate=0;
-  }
-
 }

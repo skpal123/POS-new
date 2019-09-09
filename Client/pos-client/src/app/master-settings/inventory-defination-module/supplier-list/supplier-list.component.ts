@@ -63,8 +63,7 @@ export class SupplierListComponent implements OnInit {
       this.supplierList=response
       this.DataList=this.supplierList;
       this._customDatatableService.DataList=this.supplierList;
-      this.reload=true;
-      this.dataReady=true;
+      //this.reload=true;
     },error=>{
       this.blockUi.stop();
       let dialogData=new DialogData();

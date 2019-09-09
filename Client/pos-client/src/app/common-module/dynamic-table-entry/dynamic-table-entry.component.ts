@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit,Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { DatatableTextOutput } from '../../models/common/datatable-text-click.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { UserFormControl } from '../../models/common/user-form-control.model';
@@ -6,16 +6,19 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { CommonService } from '../../services/common/common.service';
 import { DialogData } from '../../models/common/dialog-data.model';
 import { AlertBoxService } from '../../shared/alert-box.service';
+import { SelectList } from '../../models/common/select-list.model';
 @Component({
   selector: 'app-dynamic-table-entry',
   templateUrl: './dynamic-table-entry.component.html',
-  styleUrls: ['./dynamic-table-entry.component.css']
+  styleUrls: ['./dynamic-table-entry.component.css'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class DynamicTableEntryComponent implements OnInit,OnChanges {
   @BlockUI() blockUi:NgBlockUI
   @Input() Datalist: any = [];
+  @Input() reload:boolean;
   @Input() ColumnList: any = [];
-  @Input() selectList: any = [];
+  @Input() selectList: SelectList[] = [];
   @Input() EditableStatus: any = [];
   @Input() AutoCompleteStatus: any = [];
   @Input() AutoCompleteDataSource: any = [];
