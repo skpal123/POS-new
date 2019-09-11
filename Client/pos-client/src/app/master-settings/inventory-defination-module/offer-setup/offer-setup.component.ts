@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
 import { InventoryItem } from '../../../models/master-settings/inventory-defination/inventory-item.model';
 import { OfferSetupDte } from '../../../models/master-settings/inventory-defination/offer-setup-dtn.model';
 import { SelectList } from '../../../models/common/select-list.model';
+import { Tree } from '../../../models/common/tree.model';
 
 @Component({
   selector: 'app-offer-setup',
@@ -38,6 +39,8 @@ export class OfferSetupComponent implements OnInit {
   customerTypes: string[] = ["Platinum", "Gold", "Silver"]
   productList: InventoryItem[] = [];
   offerSetupList: OfferSetup[] = [];
+  itemTree:Tree[]=[];
+  ollItemTree:Tree[]=[];
   constructor(private _alertBox: AlertBoxService,
     private _commonService: CommonService,
     private _navigationData: NavigationDataService,
@@ -50,14 +53,7 @@ export class OfferSetupComponent implements OnInit {
     this.offerSettingsControl.valueChanges.subscribe(data => {
       debugger
       if (data == "product-wise" && this.userControlList.length > 0) {
-        this.userControlList = this.oldUserControlList;
-        this.oldUserControlList = JSON.parse(JSON.stringify(this.userControlList));
-        let index = this.userControlList.findIndex(m => m.Name == "CustomerName");
-        this.userControlList[index].IsEnable = false;
-        this.ColumnList = this.userControlList;
-        this.DataList = this.oldDataList;
-        this.oldDataList = JSON.parse(JSON.stringify(this.DataList));
-        this.changeRef.markForCheck()
+        
       }
       else if (data == "customer-wise" && this.userControlList.length > 0) {
         this.userControlList = this.oldUserControlList;
@@ -70,7 +66,7 @@ export class OfferSetupComponent implements OnInit {
       }
     })
     this.getUserFormControlByFormName()
-    this.getProductList()
+    this.getItemTree()
     this.getOfferList();
   }
   getUserFormControlByFormName() {
@@ -113,23 +109,13 @@ export class OfferSetupComponent implements OnInit {
       this._alertBox.openDialog(dialogData);
     })
   }
-  getProductList() {
+  getItemTree() {
     debugger
     this.blockUi.start("Loading....,Please wait.")
-    this._inventotyDefinationService.getInventoryItemList().subscribe(response => {
+    this._inventotyDefinationService.getitemTree().subscribe(response => {
       this.blockUi.stop();
-      this.productList = response;
-      this.DataList = [];
-      this.productList.forEach(a => {
-        let b = new OfferSetupDte();
-        b.ProductName = a.ItemName;
-        b.Offer_Id = "0"
-        b.DiscountRate = 0;
-        this.DataList.push(b);
-      });
-      this.oldDataList = JSON.parse(JSON.stringify(this.DataList));
-      this.reload = true;
-      this.dataReady = true
+      this.itemTree=response;
+      this.ollItemTree = JSON.parse(JSON.stringify(this.itemTree));
       this.changeRef.markForCheck();
     }, error => {
       this.blockUi.stop();

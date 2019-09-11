@@ -14,6 +14,7 @@ import { InventoryItem } from '../../models/master-settings/inventory-defination
 import { Customer } from '../../models/master-settings/inventory-defination/customer.model';
 import { SettingSellprice } from '../../models/master-settings/inventory-defination/setting-sell-price.model';
 import { OfferSetup } from '../../models/master-settings/inventory-defination/offer-setup.model';
+import { Tree } from '../../models/common/tree.model';
 
 @Injectable({
   providedIn: 'root'
@@ -237,5 +238,12 @@ export class InventoryDefinationServiceService {
     var url=this._defaultRoute.InventoryService+'settingSellPrice';
     return this._httpClient.post<boolean>(url,sellprices)
   }
-
+  public getitemTree(){
+    var url=this._defaultRoute.InventoryService+'getItemTree';
+    return this._httpClient.get<Tree[]>(url)
+  }
+  public getitemTreeByOfferId(offerId:string){
+    var url=this._defaultRoute.InventoryService+'getItemTree/'+offerId;
+    return this._httpClient.get<Tree[]>(url)
+  }
 }

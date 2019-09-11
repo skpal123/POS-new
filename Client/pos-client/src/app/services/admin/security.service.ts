@@ -3,6 +3,7 @@ import { Http, RequestOptions,Headers } from '@angular/http';
 import { DefaultRouteService } from '../common/default-route.service';
 import { HttpService } from '../common/http.service';
 import { RolePermissionDataInfo } from '../../models/admin/role-permissionlist.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,54 +12,34 @@ export class SecurityService {
 
   constructor(private _http:Http,
     private _defaultRoute:DefaultRouteService,
-    private _httpService:HttpService) { }
-    setCustomHeader(header:Headers){
-      header.append('Content-Type', 'application/json');
-      header.append('sessionId', sessionStorage.getItem("sessionId"));
-    }
-  
+    private _httpClient:HttpClient) { }
+   
   getRolePermissionsRoleById(roleId:string){
     var url=this._defaultRoute.administrationService+'getRolePermissionsByRoleId/'+roleId;
-    return this._httpService.get(url)
+    return this._httpClient.get(url)
   }
   getAllRolePermissions(){
     var url=this._defaultRoute.administrationService+'getRolePermissions';
-    return this._httpService.get(url)
+    return this._httpClient.get(url)
   }
   getMenusSubMenus(){
     var url=this._defaultRoute.administrationService+'getMainMenuSubMenu';
-    const headers = new Headers();
-    headers.append('ActionName', 'get');
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get(url)
   }
   geSubMenus(MenuSeqId:string){
     var url=this._defaultRoute.administrationService+'getSubMenusByMenuId/'+MenuSeqId;
-    const headers = new Headers();
-    headers.append('ActionName', 'get');
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get(url)
   }
   getRoleList(){
     var url=this._defaultRoute.administrationService+'getRules/';
-    const headers = new Headers();
-    headers.append('ActionName', 'get');
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get(url)
   }
   getRoleControlList(formName:string){
     var url=this._defaultRoute.administrationService+'getRuleControl/'+formName;
-    const headers = new Headers();
-    headers.append('ActionName', 'get');
-    const options = new RequestOptions({ headers: headers });
-    return this._http.get(url,options)
+    return this._httpClient.get(url)
   }
   saveRolePermission(rolePermissions:RolePermissionDataInfo){
     var url=this._defaultRoute.administrationService+'saveRolePermission';
-    let headers=new Headers()
-    this.setCustomHeader(headers);
-    headers.append("ActionName","post");
-    const options = new RequestOptions({ headers: headers });
-    return this._http.post(url,rolePermissions,options)
+    return this._httpClient.post(url,rolePermissions)
   }
 }

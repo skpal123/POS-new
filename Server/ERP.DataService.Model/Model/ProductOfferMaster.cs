@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 
 namespace ERP.DataService.Model.Model
 {
-    [Table("tblOfferSetup")]
-    public class OfferSetup
+    [Table("ProductOfferMaster")]
+    public class ProductOfferMaster
     {
         [Key]
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string Id { set; get; }
-        [StringLength(1500)]
-        public string OfferName { set; get; }
-        [StringLength(30)]
-        public string OfferId { set; get; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string Product_Id { set; get; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Offer_Id { set; get; }
         public bool? IsSingle { set; get; }
         public bool? IsOneToMany { set; get; }
         public bool? IsManyToOne { set; get; }

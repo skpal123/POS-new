@@ -60,6 +60,7 @@
     <Compile Include="Model\Common\CodeFormaterInfo.cs" />
     <Compile Include="Model\Common\ColumnInfo.cs" />
     <Compile Include="Model\Inventory\CustomerInfo.cs" />
+    <Compile Include="Model\Inventory\CustomerOfferInfo.cs" />
     <Compile Include="Model\Inventory\CustomerSupplierTransactionDetailsInfo.cs" />
     <Compile Include="Model\Common\FormInfoView.cs" />
     <Compile Include="Model\Inventory\FreeProductInfo.cs" />
@@ -70,10 +71,12 @@
     <Compile Include="Model\Inventory\ItemTransactionInfo.cs" />
     <Compile Include="Model\Common\ItemView.cs" />
     <Compile Include="Model\Common\Login.cs" />
+    <Compile Include="Model\Inventory\ItemTree.cs" />
     <Compile Include="Model\Inventory\ManufactureInfo.cs" />
     <Compile Include="Model\Common\MenuView.cs" />
     <Compile Include="Model\Common\ModuleView.cs" />
     <Compile Include="Model\Inventory\OfferInfo.cs" />
+    <Compile Include="Model\Inventory\OfferItemInfo.cs" />
     <Compile Include="Model\Inventory\OfferSetupInfo.cs" />
     <Compile Include="Model\Inventory\PartyInfo.cs" />
     <Compile Include="Model\Inventory\PartyTransactionInfo.cs" />

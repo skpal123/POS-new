@@ -16,14 +16,10 @@ namespace ERP.DataService.Model.Model
         public string Id { set; get; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
-        public string ValuableCustomer_Id { set; get; }
+        public string ValuableCustomerType_Id { set; get; }
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string Offer_Id { set; get; }
-        public int? OfferType { set; get; }
-        public bool? IsDiscount { set; get; }
-        public bool? IsMultiple { set; get; }
-        public bool? IsSingle { set; get; }
 
     }
 }

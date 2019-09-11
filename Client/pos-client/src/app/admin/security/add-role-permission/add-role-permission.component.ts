@@ -229,7 +229,7 @@ createRoleAndRolePermission(){
   this.blockUI.start("Loading ... Please wait");
   this._securityService.saveRolePermission(this.rolePermissionDataInfo).subscribe(response=>{
     this.blockUI.stop();
-    let result=response.json();
+    let result=response
     if(result){
       var dialogData=new DialogData();
       dialogData.message="Role permission created successfully";
@@ -238,9 +238,8 @@ createRoleAndRolePermission(){
   },
     error=>{
       this.blockUI.stop();
-      let message=error.json();
       var dialogData=new DialogData();
-      dialogData.message=message.Message;
+      dialogData.message=error
       this._alertBox.openDialog(dialogData);
     })
  }

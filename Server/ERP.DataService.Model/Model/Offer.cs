@@ -15,14 +15,15 @@ namespace ERP.DataService.Model.Model
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string Id { set; get; }
-        [Column(TypeName = "VARCHAR")]
+        [StringLength(30)]
+        public string OfferId { set; get; }
         [StringLength(100)]
-        public string ValuableCustomerType_Id { set; get; }
-        [Column(TypeName = "VARCHAR")]
-        [StringLength(100)]
-        public string OfferSetup_Id { set; get; }
+        public string OfferName { set; get; }
+         [StringLength(100)]
         public string OfferType { set; get; }
-        public bool? IsMultiple { set; get; }
+        public DateTime? CreatedDate { set; get; }
+        public DateTime? EffectiveDate { set; get; }
+        public DateTime? ExpiredDate { set; get; }
         public bool? IsDiscountRate { set; get; }
         public bool? IsSingle { set; get; }
     }

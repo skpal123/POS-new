@@ -63,8 +63,9 @@ namespace ERP.DataService.Model
         public DbSet<SupplierTransaction> SupplierTransactions { set; get; }
         public DbSet<PartyTransaction> PartyTransactions { set; get; }
         public DbSet<CustomerSupplierTransactionDetail> CustomerSupplierTransactionDetailsList { set; get; }
-        public DbSet<OfferSetup> OfferSetups { set; get; }
         public DbSet<Offer> Offers { set; get; }
+        public DbSet<CustomerOffer> CustomerOffers { set; get; }
+        public DbSet<ProductOfferMaster> ProductOfferMasters { set; get; }
         public DbSet<Designation> Designations { set; get; }
         public DbSet<EmployeeGrade> EmployeeGrades { set; get; }
         public DbSet<EmployeeSubGrade> EmployeeSubGrades { set; get; }

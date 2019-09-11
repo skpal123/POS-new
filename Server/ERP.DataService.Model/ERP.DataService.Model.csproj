@@ -339,6 +339,10 @@
     <Compile Include="Migrations\201909010653573_createItemNameTable.Designer.cs">
       <DependentUpon>201909010653573_createItemNameTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909110403465_ChangeOfferModule.cs" />
+    <Compile Include="Migrations\201909110403465_ChangeOfferModule.Designer.cs">
+      <DependentUpon>201909110403465_ChangeOfferModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AccountOpening.cs" />
     <Compile Include="Model\AccountParentChildRelation.cs" />
@@ -367,9 +371,9 @@
     <Compile Include="Model\Manufacture.cs" />
     <Compile Include="Model\Occupation.cs" />
     <Compile Include="Model\Offer.cs" />
-    <Compile Include="Model\OfferSetup.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\PartyTransaction.cs" />
+    <Compile Include="Model\ProductOfferMaster.cs" />
     <Compile Include="Model\SalaryItem.cs" />
     <Compile Include="Model\SettingSellPrice.cs" />
     <Compile Include="Model\Subcategory.cs" />
@@ -608,6 +612,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909010653573_createItemNameTable.resx">
       <DependentUpon>201909010653573_createItemNameTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909110403465_ChangeOfferModule.resx">
+      <DependentUpon>201909110403465_ChangeOfferModule.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
