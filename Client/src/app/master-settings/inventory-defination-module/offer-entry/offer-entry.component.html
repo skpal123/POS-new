@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5> Offer setup entry
+          <button type="button" class="btn btn-danger btn-sm pull-right" (click)="onNoClick()">&times;</button>
+          <app-form-control-info-settings [formName]="formName"></app-form-control-info-settings>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <form #offerSetupForm="ngForm">
+          <div class="form-group row" [class.has-success]="offerTypeControl.valid">
+            <label class="col-sm-4  control-label" for="offerType">Offer type</label>
+            <div class="col-sm-7">
+              <label class="radio-inline">
+                <input type="radio" name="offerType" [(ngModel)]="offerSetup.OfferType" #offerTypeControl="ngModel"
+                  value="single">Single<br>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="offerType" [(ngModel)]="offerSetup.OfferType" #offerTypeControl="ngModel"
+                  value="manyToOne">Multiple(many to one)<br>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="offerType" [(ngModel)]="offerSetup.OfferType" #offerTypeControl="ngModel"
+                  value="oneToMany">Multiple(one to many)<br>
+              </label>
+            </div>
+          </div>
+          <div class="form-group row" [class.has-success]="offerIdControl.valid&&offerIdControl.touched"
+            [class.has-error]="offerIdControl.invalid&&offerIdControl.touched">
+            <label for="offerId" class="col-sm-4 col-form-label control-label "
+              [class.required]="offerIdControl.invalid">Offer Id</label>
+            <div class="col-sm-6">
+              <input class="form-control" name="offerId" #offerIdControl="ngModel" id="offerId"
+                [(ngModel)]="offerSetup.OfferId">
+              <span class="help-block" *ngIf="offerIdControl.errors?.required&&offerIdControl.touched">
+                Offer Id feild is required
+              </span>
+            </div>
+            <div class="col-md-2">
+              <app-autocode-generate
+              [itemName]="itemName" 
+              [IsAutoCode]="IsAutoCode"
+              (getGenerateAutoCode)="parentGetGeneratedCode($event)">
+              </app-autocode-generate>
+            </div>
+          </div>
+          <div class="form-group row" [class.has-success]="OfferNameControl.valid&&OfferNameControl.touched"
+            [class.has-error]="OfferNameControl.invalid&&OfferNameControl.touched">
+            <label for="OfferName" class="col-sm-4 col-form-label control-label"
+              [class.required]="OfferNameControl.invalid">Offer Name</label>
+            <div class="col-sm-7">
+              <input class="form-control" name="OfferName" #OfferNameControl="ngModel" id="OfferName"
+                [(ngModel)]="offerSetup.OfferName">
+              <span class="help-block" *ngIf="OfferNameControl.errors?.required&&OfferNameControl.touched">
+                Item name feild is required
+              </span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="ProductId" class="col-md-4"
+              [class.required]="ProductIdControl.invalid">Product Name</label>
+            <div class="col-sm-7">
+              <input style="display: none;" name="ProductId" #ProductIdControl="ngModel"
+                [(ngModel)]="offerSetup.Product_Id">
+                <app-custom-multi-select [selectedItem]="itemSelectedItems" [data]="itemDropdownList"
+                [showItem]="showItem" (getSelectedItemChild)="getSelectedProductParent($event)"
+                (showItemValue)="showItemValueParent($event)">
+               </app-custom-multi-select>
+              <span class="help-block" *ngIf="ProductIdControl.errors?.required">
+                Category name is required
+              </span>
+            </div>
+            <div class="col-md-1">
+              <span id="pointer" (click)="createNewItem()">
+                <img height="30px" width="30px" src="./assets/Img/addicon.png">
+              </span>
+            </div>
+          </div>
+          <div *ngIf="!offerSetup.IsSingle">
+            <div class="form-group row">
+              <label for="FreeProductId" class="col-sm-4 col-form-label control-label"
+                [class.required]="FreeProductIdControl.invalid">Free Product Name</label>
+              <div class="col-sm-7">
+                <input style="display: none;" class="form-control" name="FreeProductId" #FreeProductIdControl="ngModel"
+                  [(ngModel)]="offerSetup.FreeProduct_Id">
+                <!-- <app-item-dropdown 
+                           (itemOnItemSelect)="ItemOnSeletedItem($event)" 
+                           (itemOnItemDeSelect)="OnDeSeletedItem($event)"
+                            [itemSelectedItems]="freeItemSelectedItems"
+                            [IsNewItemAdd]="itemNew"
+                            [subCategoryId]="subCategoryId"
+                            [singleSelection]="singleSelection1"
+                            >
+                           </app-item-dropdown>  -->
+                <app-custom-multi-select [selectedItem]="freeItemSelectedItems" [data]="itemDropdownList"
+                  [showItem]="showItem" (getSelectedItemChild)="getSelectedItemParent($event)"
+                  (showItemValue)="showItemValueParent($event)">
+                </app-custom-multi-select>
+                <span class="help-block" *ngIf="FreeProductIdControl.errors?.required">
+                  Category name is required
+                </span>
+              </div>
+              <div class="col-md-1">
+                <span id="pointer" (click)="createNewItem()">
+                  <img height="30px" width="30px" src="./assets/Img/addicon.png">
+                </span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="BundleSize" class="col-sm-4 col-form-label control-label">Bundle Size</label>
+              <div class="col-sm-7">
+                <input class="form-control" readonly name="BundleSize" id="BundleSize"
+                  [(ngModel)]="offerSetup.BundleSize">
+              </div>
+            </div>
+          </div>
+          <div *ngIf="offerSetup.IsSingle" class="form-group row" [class.has-success]="DiscountRateControl.valid&&DiscountRateControl.touched"
+            [class.has-error]="DiscountRateControl.invalid&&DiscountRateControl.touched">
+            <label for="discountRate" class="col-sm-4 col-form-label control-label"
+              [class.required]="DiscountRateControl.invalid">Discount rate( % )</label>
+            <div class="col-sm-7">
+              <input class="form-control" name="discountRate" #DiscountRateControl="ngModel" id="discountRate"
+                [(ngModel)]="offerSetup.DiscountRate">
+              <span class="help-block" *ngIf="DiscountRateControl.errors?.required&&DiscountRateControl.touched">
+                Discount rate is required
+              </span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2 pull-right">
+              <input type="button" [disabled]="offerSetupForm.invalid" (click)="saveItem()"
+                value="{{offerSetup.Id==null?'Save':'Update'}}" class="btn btn-primary">
+            </div>
+            <div class="col-md-2 pull-right">
+              <input type="button" [disabled]="!offerSetupForm.dirty" (click)="clearItem()" value="Clear"
+                class="btn btn-primary">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 style="text-align: center">Setting Sell Price</h6>
+    </div>
+    <div class="panel-body">
+        <div class="form-group row" >
+            <label for="sellPriceMethod" class="col-sm-3 col-form-label">Price Setting Method</label>
+            <div class="col-sm-9" >
+                <select class="form-control" #sellPriceMethodControl="ngModel" [(ngModel)]="sellPriceMethod" id="sellPriceMethod">
+                    <option value="0">Select</option>
+                    <option value="1">FIFO</option>
+                    <option value="2">LIFO</option>
+                    <option value="3">Average</option>
+              </select>
+            </div>
+          </div>
+
+      <app-dynamic-table-entry
+                [ColumnList]="columnlist" 
+                [Datalist]="DataList" 
+                (GetColumnValueClicked)="GetColumnValueClicked($event)"
+                (DeleteDataRowClicked)="deleteSettingSellPriceDetailsRow($event)"
+                >
+        </app-dynamic-table-entry>
+      <input type="button" class="btn btn-success pull-right" value="Save" (click)="SaveSettingSellPrice()">
+    </div>
+  </div>
+</div>
