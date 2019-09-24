@@ -71,6 +71,7 @@ export class ItemPurchaseComponent implements OnInit {
     
   };
   category:Category={Id:null,CategoryId:null,CategoryName:null}
+  formArray:AbstractControl[]=[];
   supplier:Supplier={
     Id:null,SupplierId:null,SupplierName:null,ContactPerson:null,PhoneNo:null,Email:null,
     Ledger_Id:null,SubLedger_Id:null,LedgerName:null,SubLedgerName:null,Address:null
@@ -119,6 +120,7 @@ export class ItemPurchaseComponent implements OnInit {
         this.addNewItemTransaction()
       ]),
     });
+    this.formArray=(<FormArray>this.itemPurchaseForm.get('ItemTransactionList')).controls;
     this.itemPurchaseForm.valueChanges.subscribe(data=>{
       debugger
       this.logValidationMessages(this.itemPurchaseForm)
@@ -166,6 +168,7 @@ export class ItemPurchaseComponent implements OnInit {
         control[index].get('ItemId').setValue([{id:a.Item_Id,itemName:a.ItemName}]);
         control[index].get('LocationId').setValue([{id:a.Location_Id,itemName:a.LocationName}]);
       });
+      this.formArray=control;
     }
   }
   controlGroupItemForm(){

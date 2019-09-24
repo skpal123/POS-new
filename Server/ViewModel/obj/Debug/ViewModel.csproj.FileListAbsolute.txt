@@ -33,3 +33,8 @@ E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\bin\Debug\ViewModel.pd
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.dll
 E:\My Project\ProjectGit\POS_NEW\POS-new\Server\ViewModel\obj\Debug\ViewModel.pdb
+E:\development_Sumon\SomanPd\desktop\POS-new\Server\ViewModel\bin\Debug\ViewModel.dll
+E:\development_Sumon\SomanPd\desktop\POS-new\Server\ViewModel\bin\Debug\ViewModel.pdb
+E:\development_Sumon\SomanPd\desktop\POS-new\Server\ViewModel\obj\Debug\ViewModel.csprojResolveAssemblyReference.cache
+E:\development_Sumon\SomanPd\desktop\POS-new\Server\ViewModel\obj\Debug\ViewModel.dll
+E:\development_Sumon\SomanPd\desktop\POS-new\Server\ViewModel\obj\Debug\ViewModel.pdb

@@ -1,4 +1,4 @@
-<!-- <form class="form-horizontal" [formGroup]="itemPurchaseForm">
+<form class="form-horizontal" [formGroup]="itemPurchaseForm">
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-success">
@@ -184,7 +184,7 @@
                   <th>{{itemPurchaseForm.get('ItemTransactionList')?.length>1?'Add/Delete':'Action'}}</th>
                 </tr>
                 <tr formArrayName="ItemTransactionList"
-                  *ngFor="let ItemTransaction of itemPurchaseForm.get('ItemTransactionList').controls;let i=index">
+                  *ngFor="let ItemTransaction of formArray;let i=index">
                   <td>{{i+1}}</td>
                  
                   <td formGroupName="{{i}}" *ngIf="purchaseValidation[0]?.Item_Id">
@@ -461,4 +461,4 @@
       </div>
     </div>
   </div>
-</form> -->
+</form>

@@ -69,6 +69,7 @@ export class ItemSalesComponent implements OnInit {
     showCheckbox:true
     
   };
+  formArray:AbstractControl[]=[];
   category:Category={Id:null,CategoryId:null,CategoryName:null}
   subcategory:Subcategory={Id:null,SubCategoryId:null,SubCategoryName:null,Category_Id:null}
   constructor(public matDialogRef:MatDialogRef<ItemSalesComponent>,
@@ -116,6 +117,7 @@ export class ItemSalesComponent implements OnInit {
         this.addNewItemTransaction()
       ]),
     });
+    this.formArray=(<FormArray>this.itemSaleForm.get('ItemTransactionList')).controls;
     this.itemSaleForm.valueChanges.subscribe(data=>{
       debugger
       this.logValidationMessages(this.itemSaleForm)
@@ -165,6 +167,7 @@ export class ItemSalesComponent implements OnInit {
         control[index].get('ItemId').setValue([{id:a.Item_Id,itemName:a.ItemName}]);
         control[index].get('LocationId').setValue([{id:a.Location_Id,itemName:a.LocationName}]);
       });
+      this.formArray=(<FormArray>this.itemSaleForm.get('ItemTransactionList')).controls
     }
   }
   controlGroupItemForm(){

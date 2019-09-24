@@ -14,6 +14,7 @@ import { SelectDropdown } from '../../../models/common/select.dropdown.model';
 import { NavigationDataService } from '../../../services/common/navigation-data.service';
 import { ItemEntryComponent } from '../item-entry/item-entry.component';
 import { InventoryItem } from '../../../models/master-settings/inventory-defination/inventory-item.model';
+import { Tree } from '../../../models/common/tree.model';
 
 @Component({
   selector: 'app-offer-entry',
@@ -32,6 +33,7 @@ export class OfferEntryComponent implements OnInit {
   subCategoryId:string=null;
   showItem:boolean=true
   IsAutoCode:boolean=false
+  isFound:boolean=false;
   itemSelectedItems :MultiSelectDropdown[]= [
     { id: "0", itemName: "Select" }
   ];
@@ -45,6 +47,8 @@ export class OfferEntryComponent implements OnInit {
     Id:null,Category_Id:null,ItemCode:null,ItemId:null,ItemName:null,
     Ledger_Id:null,SubLedger_Id:null,UnitId:null,SubCategory_Id:null
   }
+  itemTree:Tree[]=[];
+  oldItemTree:Tree[]=[];
   constructor(public matDialogRef:MatDialogRef<OfferEntryComponent>,
     private _validationService:ValidationService,
   @Inject(MAT_DIALOG_DATA) public offerSetup:OfferSetup,
@@ -84,10 +88,78 @@ export class OfferEntryComponent implements OnInit {
     }
     this.getItemList(null);
     this.getItemFormInfo();
-
+    this.getItemTree();
   }
   onNoClick(){
     this.matDialogRef.close(false);
+  }
+  getItemTree(){
+    this._inventotyDefinationService.getitemTree().subscribe(response=>{
+      this.itemTree=response;
+      this.oldItemTree=JSON.parse(JSON.stringify(response));
+    },error=>{
+      let dialogData=new DialogData();
+      dialogData.message=error
+      this._alertBox.openDialog(dialogData);
+    })
+  }
+  findSelectedAccount(node:Tree,IsChecked:boolean){
+    debugger
+    this.isFound=false;
+    this.oldItemTree.forEach((chartOfAcc,index,array)=>{
+      if(chartOfAcc.Id.toLowerCase()==node.Id.toLowerCase()){
+        this.isFound=true;
+        chartOfAcc.IsClicked=true;
+        chartOfAcc.Checked=IsChecked;
+        if(chartOfAcc.Children!=null){
+          this.checkedAllChildNode(chartOfAcc.Children,IsChecked)
+        }
+      }
+      else{
+        if(chartOfAcc.Children!=null&&chartOfAcc.Children.length>0){
+          chartOfAcc.Children.forEach((chartOfAcc2,index,array)=>{
+            if(chartOfAcc2.Id.toLowerCase()==node.Id.toLowerCase()){
+              this.isFound=true;
+              chartOfAcc2.IsClicked=true;
+              chartOfAcc2.Checked=IsChecked;
+              if(chartOfAcc2.Children!=null){
+                this.checkedAllChildNode(chartOfAcc2.Children,IsChecked)
+              }
+           }
+           else{
+             if(chartOfAcc2.Children!=null&&chartOfAcc2.Children.length>0)
+              this.findChildAccount(chartOfAcc2.Children,node,IsChecked)
+           }
+          })
+        } 
+      }
+    })
+    this.itemTree=this.oldItemTree;
+  }
+  findChildAccount(trees:Tree[],node:Tree,IsChecked:boolean){
+    trees.forEach((coa,index,array)=>{
+      if(coa.Id.toLowerCase()==node.Id.toLowerCase()){
+          this.isFound=true;
+          coa.IsClicked=true;
+          coa.Checked=IsChecked;
+          if(coa.Children!=null){
+            this.checkedAllChildNode(coa.Children,IsChecked)
+          }
+      }
+      else{
+        if(coa.Children!=null&&coa.Children.length>0){
+          this.findChildAccount(coa.Children,node,IsChecked)
+        }
+      }
+    })
+  }
+  checkedAllChildNode(trees:Tree[],IsChecked:boolean){
+    trees.forEach((coa,index,array)=>{
+      coa.Checked=IsChecked;
+      if(coa.Children!=null){
+        this.checkedAllChildNode(coa.Children,IsChecked)
+      }
+    })
   }
   saveItem(){
     debugger
